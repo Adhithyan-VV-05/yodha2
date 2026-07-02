@@ -51,22 +51,20 @@ export function StackNav({
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: 30, scale: 0.8 },
+    hidden: { opacity: 0, scale: 0.5 },
     visible: (i: number) => ({
       opacity: 1,
-      x: 0,
       scale: 1,
       transition: {
         delay: i * 0.1,
-        type: "spring",
+        type: "spring" as const,
         stiffness: 260,
         damping: 20,
       },
     }),
     exit: (i: number) => ({
       opacity: 0,
-      x: 30,
-      scale: 0.8,
+      scale: 0.5,
       transition: {
         delay: (items.length - 1 - i) * 0.1,
         duration: 0.2,
@@ -77,13 +75,13 @@ export function StackNav({
   return (
     <div
       className={cn(
-        "fixed bottom-8 right-8 z-50 flex flex-row-reverse items-center gap-4",
+        "fixed top-8 right-8 z-50 flex flex-col md:flex-row-reverse items-center gap-4",
         className
       )}
     >
       {/* Toggle Button */}
       <motion.button
-        className="relative z-10 flex items-center justify-center rounded-full bg-white text-black shadow-lg hover:bg-neutral-200 transition-colors"
+        className="relative z-10 flex items-center justify-center rounded-full bg-white text-black shadow-lg hover:bg-neutral-200 transition-colors shrink-0"
         style={{ width: buttonSize, height: buttonSize }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -102,7 +100,7 @@ export function StackNav({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="flex flex-row-reverse items-center gap-3 rounded-full px-3 py-2"
+            className="flex flex-col md:flex-row-reverse items-center gap-3 rounded-full px-3 py-2"
             variants={containerVariants}
             initial="hidden"
             animate="visible"

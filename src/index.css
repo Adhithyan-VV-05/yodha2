@@ -194,3 +194,28 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+@font-face {
+  font-family: "Dusseldot";
+  src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/108082/Dusseldot-variable-web.woff2")
+      format("woff2 supports variations"),
+    url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/108082/Dusseldot-variable-web.woff2")
+      format("woff2-variations");
+  font-display: swap;
+  font-weight: 50 250;
+}
+
+@keyframes font-pulse {
+  0% { font-variation-settings: "wdth" 50; }
+  20% { font-variation-settings: "wdth" 145; }
+  30% { font-variation-settings: "wdth" 155; }
+  50% { font-variation-settings: "wdth" 250; }
+  70% { font-variation-settings: "wdth" 155; }
+  80% { font-variation-settings: "wdth" 145; }
+  100% { font-variation-settings: "wdth" 50; }
+}
+
+@keyframes spin-container {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
