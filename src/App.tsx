@@ -9,13 +9,15 @@ const LOADING_TIME = 13000; // 20 seconds
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isLogoLoaded, setIsLogoLoaded] = useState(false);
 
   useEffect(() => {
+    if (!isLogoLoaded) return;
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, LOADING_TIME);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isLogoLoaded]);
 
   return (
     <main className="min-h-screen bg-black flex flex-col relative overflow-hidden text-white font-sans">
@@ -24,7 +26,7 @@ function App() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {isLoading && (
+        {isLoading && isLogoLoaded && (
           <motion.div
             key="loading-elements"
             className="absolute inset-0 flex flex-col items-center justify-between py-10 pointer-events-none"
@@ -52,7 +54,7 @@ function App() {
 
             {/* Center Circular Text Container */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <CircularText />
+              {isLogoLoaded && <CircularText />}
             </div>
 
             {/* Bottom Sparkles */}
@@ -89,6 +91,8 @@ function App() {
           layout
           src={logo}
           alt="Yodha Logo"
+          onLoad={() => setIsLogoLoaded(true)}
+          style={{ opacity: isLogoLoaded ? 1 : 0 }}
           animate={{
             rotateY: isLoading ? 0 : 360,
           }}
