@@ -1,132 +1,113 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { SparklesCore } from "@/components/ui/sparkles";
-import { CircularText } from "@/components/circular-text";
-import { StackNav } from "@/components/stack-nav";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { IntroLoader } from "./components/IntroLoader";
+import { Navbar } from "./components/Navbar";
+import { HeroSection } from "./components/HeroSection";
+import { TracksSection } from "./components/TracksSection";
+import { TimelineSection } from "./components/TimelineSection";
+import { PrizesSection } from "./components/PrizesSection";
+import { RegistrationSection } from "./components/RegistrationSection";
+import { Globe, Share2, MessageSquare, ArrowUp } from "lucide-react";
 import logo from "./assets/logo.png";
-
-const LOADING_TIME = 13000; // 20 seconds
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isLogoLoaded, setIsLogoLoaded] = useState(false);
+  const [registerModalOpen, setRegisterModalOpen] = useState(false);
+  const [selectedTrack, setSelectedTrack] = useState("AI Interfaces & Generative UI");
 
-  useEffect(() => {
-    if (!isLogoLoaded) return;
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, LOADING_TIME);
-    return () => clearTimeout(timer);
-  }, [isLogoLoaded]);
+  const handleOpenRegisterWithTrack = (trackName?: string) => {
+    if (trackName) setSelectedTrack(trackName);
+    setRegisterModalOpen(true);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <main className="min-h-screen bg-black flex flex-col relative overflow-hidden text-white font-sans">
-      <AnimatePresence>
-        {!isLoading && <StackNav />}
+    <div className="min-h-screen bg-[#03060d] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-hidden">
+      {/* Smooth Continuous Ambient Background Motion Mesh */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-10 left-10 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[140px] ambient-orb-1" />
+        <div className="absolute top-1/2 right-10 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[160px] ambient-orb-2" />
+        <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-purple-500/10 rounded-full blur-[150px] ambient-orb-1" />
+      </div>
+
+      {/* 3-Second Classic Intro Loader */}
+      <AnimatePresence mode="wait">
+        {isLoading && <IntroLoader onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {isLoading && isLogoLoaded && (
-          <motion.div
-            key="loading-elements"
-            className="absolute inset-0 flex flex-col items-center justify-between py-10 pointer-events-none"
-            exit={{ opacity: 0, transition: { duration: 1.2, delay: 0.5 } }} // Parent fades out
-          >
-            {/* Top Sparkles */}
-            <motion.div
-              className="w-full max-w-[40rem] h-40 relative rotate-180 shrink-0 md:hidden"
-              exit={{ y: "-100%", opacity: 0, transition: { duration: 1, ease: "easeInOut" } }}
-            >
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
-              <SparklesCore
-                background="transparent"
-                minSize={0.4}
-                maxSize={1}
-                particleDensity={1200}
-                className="w-full h-full"
-                particleColor="#FFFFFF"
-              />
-              <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
-            </motion.div>
+      {!isLoading && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col min-h-screen relative z-10"
+        >
+          {/* Navbar */}
+          <Navbar onOpenRegister={() => setRegisterModalOpen(true)} />
 
-            {/* Center Circular Text Container */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              {isLogoLoaded && <CircularText />}
+          {/* Main Content Sections */}
+          <main className="flex-grow">
+            <HeroSection onOpenRegister={() => setRegisterModalOpen(true)} />
+            <TracksSection onSelectTrack={handleOpenRegisterWithTrack} />
+            <TimelineSection />
+            <PrizesSection onOpenRegister={() => setRegisterModalOpen(true)} />
+            <RegistrationSection selectedTrack={selectedTrack} />
+          </main>
+
+          {/* Registration Modal */}
+          <RegistrationSection
+            isOpen={registerModalOpen}
+            onClose={() => setRegisterModalOpen(false)}
+            selectedTrack={selectedTrack}
+          />
+
+          {/* Footer */}
+          <footer className="border-t border-white/10 bg-[#020409] py-12 px-6 lg:px-8 relative overflow-hidden">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+              {/* Brand & Subtitle */}
+              <div className="flex items-center gap-3">
+                <img src={logo} alt="Yodha Logo" className="w-8 h-8 object-contain" />
+                <div>
+                  <h4 className="font-bold text-white text-base tracking-tight">
+                    YODHA <span className="text-sky-400 font-extrabold">2.0</span>
+                  </h4>
+                  <p className="text-xs text-slate-400">
+                    The Premier Frontend Hackathon • July 2026
+                  </p>
+                </div>
+              </div>
+
+              {/* Social Links & Back To Top */}
+              <div className="flex items-center gap-4 text-slate-400">
+                <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors" title="GitHub">
+                  <Globe className="w-4 h-4" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-sky-400 transition-colors" title="Twitter / X">
+                  <Share2 className="w-4 h-4" />
+                </a>
+                <a href="https://discord.com" target="_blank" rel="noreferrer" className="hover:text-indigo-400 transition-colors" title="Discord">
+                  <MessageSquare className="w-4 h-4" />
+                </a>
+                <button
+                  onClick={scrollToTop}
+                  className="p-2 bg-white/5 border border-white/10 hover:bg-white/10 rounded-full text-white transition-colors ml-2"
+                  title="Back to top"
+                >
+                  <ArrowUp className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
-            {/* Bottom Sparkles */}
-            <motion.div
-              className="w-full max-w-[40rem] h-40 relative shrink-0 md:hidden"
-              exit={{ y: "100%", opacity: 0, transition: { duration: 1, ease: "easeInOut" } }}
-            >
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
-              <SparklesCore
-                background="transparent"
-                minSize={0.4}
-                maxSize={1}
-                particleDensity={1200}
-                className="w-full h-full"
-                particleColor="#FFFFFF"
-              />
-              <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-
-      {/* Universal Hero Layout */}
-      <div
-        className={`flex-1 w-full flex flex-col transition-all duration-1000 z-10 ${
-          isLoading ? "items-center justify-center pointer-events-none" : "items-center pt-32"
-        }`}
-      >
-        <motion.img
-          layout
-          src={logo}
-          alt="Yodha Logo"
-          onLoad={() => setIsLogoLoaded(true)}
-          style={{ opacity: isLogoLoaded ? 1 : 0 }}
-          animate={{
-            rotateY: isLoading ? 0 : 360,
-          }}
-          transition={{
-            layout: { duration: 1.5, ease: "easeInOut" },
-            rotateY: { duration: 1.5, ease: "easeInOut" },
-          }}
-          className={
-            isLoading
-              ? "z-30 w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-60 lg:h-60 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-              : "z-30 w-24 h-24 md:w-32 md:h-32 object-contain mb-8"
-          }
-        />
-
-        {/* Hero Content (Fades in when !isLoading) */}
-        <AnimatePresence>
-          {!isLoading && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 1 }}
-              className="flex flex-col items-center"
-            >
-              <h1 className="text-4xl md:text-7xl font-bold tracking-wider text-center">
-                WELCOME TO YODHA 2.0
-              </h1>
-              <p className="mt-6 text-xl text-sky-300 max-w-2xl text-center px-4">
-                The ultimate frontend community hackathon is here.
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </main>
+            <div className="mt-8 text-center text-xs text-slate-500 font-mono border-t border-white/5 pt-6">
+              © 2026 YODHA 2.0. All rights reserved.
+            </div>
+          </footer>
+        </motion.div>
+      )}
+    </div>
   );
 }
 
