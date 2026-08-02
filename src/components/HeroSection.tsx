@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Trophy, Clock, Sparkles, Flame, Zap } from "lucide-react";
+import { ArrowRight, Trophy, Clock, Sparkles, Users, Cpu, ShieldCheck } from "lucide-react";
 import { KineticText } from "./KineticText";
 import { ThreeDHeroVisual } from "./ThreeDHeroVisual";
 
@@ -40,6 +40,13 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
     return () => clearInterval(timer);
   }, []);
 
+  const handleExploreThemes = () => {
+    const el = document.getElementById("tracks");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section id="about" className="relative min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-24 flex items-center justify-center overflow-hidden">
       {/* Dynamic Ambient Background Orbs */}
@@ -59,33 +66,33 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
           scale: [1.1, 1, 1.1],
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-1/4 right-1/4 w-[320px] sm:w-[500px] h-[320px] sm:h-[500px] bg-gradient-to-tr from-purple-500/20 via-pink-500/15 to-transparent rounded-full blur-[150px] pointer-events-none"
+        className="absolute bottom-1/4 right-1/4 w-[320px] sm:w-[500px] h-[320px] sm:h-[500px] bg-gradient-to-tr from-emerald-500/20 via-teal-500/15 to-transparent rounded-full blur-[150px] pointer-events-none"
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Split Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
-          {/* LEFT COLUMN: Prominent 3D Black Sphere Visual (Seamless Transition) */}
+          {/* LEFT COLUMN: Prominent 3D Black Sphere Visual */}
           <div className="lg:col-span-5 flex justify-center lg:justify-start order-1 lg:order-1">
             <div className="w-full max-w-md relative flex justify-center items-center overflow-hidden">
               <ThreeDHeroVisual bounceEntrance={true} />
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Kinetic Content & CTAs with Smooth Entrance Stagger */}
+          {/* RIGHT COLUMN: Kinetic Hero Content */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-2">
 
-            {/* Top Date Capsule */}
+            {/* Tagline Capsule */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-sky-500/20 to-indigo-500/20 border border-sky-400/30 backdrop-blur-xl text-xs font-mono text-sky-300 mb-6 shadow-[0_0_25px_rgba(56,189,248,0.3)]"
+              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 via-sky-500/20 to-indigo-500/20 border border-sky-400/30 backdrop-blur-xl text-xs font-mono text-sky-300 mb-6 shadow-[0_0_25px_rgba(56,189,248,0.3)]"
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping" />
-              <span className="font-bold tracking-widest uppercase">
-                SEPTEMBER 11, 2026 • REGISTRATION OPEN
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="font-bold tracking-widest uppercase text-emerald-300">
+                WARRIORS OF AI • HEALTHCARE & SUSTAINABILITY
               </span>
             </motion.div>
 
@@ -96,21 +103,21 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
               transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1]"
             >
-              <KineticText words={["BUILD", "INNOVATE", "CREATE", "CONQUER", "TRANSFORM"]} />
+              <KineticText words={["INNOVATE", "PROTECT", "DIAGNOSE", "TRANSFORM", "CONQUER"]} />
               <br className="hidden sm:block" />
               <span className="block sm:inline mt-2 sm:mt-0 text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-sky-400">
-                THE FUTURE AT YODHA 2.0
+                YODHA Hackathon 2026
               </span>
             </motion.h1>
 
-            {/* Subtitle */}
+            {/* Short Description */}
             <motion.p
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="mt-5 text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed"
             >
-              Join elite creators, engineers, and visionaries for a 24-hour non-stop hackathon starting <span className="text-sky-400 font-bold">September 11, 2026</span>. Build next-generation applications, win prizes, and make your mark.
+              A 24-hour national-level AI hackathon where engineering students build intelligent solutions to solve real-world <span className="text-sky-400 font-bold">healthcare</span> and <span className="text-emerald-400 font-bold">environmental challenges</span>.
             </motion.p>
 
             {/* Countdown Cards targeting 11 September 2026 */}
@@ -137,7 +144,7 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
               ))}
             </motion.div>
 
-            {/* Action CTAs */}
+            {/* Action CTAs - Fully Working Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -151,36 +158,41 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
                 className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold rounded-2xl shadow-[0_10px_30px_rgba(56,189,248,0.4)] transition-all flex items-center justify-center gap-3 text-xs sm:text-sm tracking-widest uppercase cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-sky-200 animate-spin" />
-                <span>Register Team Now</span>
+                <span>Register Now</span>
                 <ArrowRight className="w-4 h-4" />
               </motion.button>
 
-              <a
-                href="#tracks"
-                className="w-full sm:w-auto px-8 py-4 bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-slate-100 font-bold rounded-2xl backdrop-blur-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm tracking-widest uppercase"
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={handleExploreThemes}
+                className="w-full sm:w-auto px-8 py-4 bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-slate-100 font-bold rounded-2xl backdrop-blur-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm tracking-widest uppercase cursor-pointer"
               >
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span>Explore Tracks</span>
-              </a>
+                <Cpu className="w-4 h-4 text-emerald-400" />
+                <span>Explore Themes</span>
+              </motion.button>
             </motion.div>
 
-            {/* Event Stats Grid */}
+            {/* Event Highlights Statistics */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.75 }}
-              className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-lg"
+              className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-lg"
             >
               {[
-                { icon: <Clock className="w-4 h-4 text-sky-400" />, title: "Sep 11, 2026", desc: "24-hr building frenzy" },
-                { icon: <Trophy className="w-4 h-4 text-amber-400" />, title: "₹70,000 Pool", desc: "Grand Prize & bounties" },
-                { icon: <Flame className="w-4 h-4 text-purple-400" />, title: "Hybrid Event", desc: "Online & On-site" },
+                { icon: <Clock className="w-4 h-4 text-sky-400" />, title: "24 Hours", desc: "Non-stop building" },
+                { icon: <Cpu className="w-4 h-4 text-emerald-400" />, title: "AI-Focused", desc: "Healthcare & Nature" },
+                { icon: <Users className="w-4 h-4 text-indigo-400" />, title: "National Level", desc: "Pan-India hackers" },
+                { icon: <ShieldCheck className="w-4 h-4 text-purple-400" />, title: "Prototypes", desc: "Live product demos" },
+                { icon: <Trophy className="w-4 h-4 text-amber-400" />, title: "₹70,000 Pool", desc: "INR Cash Bounties" },
+                { icon: <Sparkles className="w-4 h-4 text-pink-400" />, title: "Mentorship", desc: "Industry experts" },
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 p-3.5 bg-white/[0.03] border border-white/[0.08] backdrop-blur-md rounded-2xl text-left shadow-md hover:border-white/20 transition-all"
+                  className="flex items-center gap-2.5 p-3 bg-white/[0.03] border border-white/[0.08] backdrop-blur-md rounded-2xl text-left shadow-md hover:border-white/20 transition-all"
                 >
-                  <div className="p-2.5 bg-white/5 rounded-xl shrink-0">{item.icon}</div>
+                  <div className="p-2 bg-white/5 rounded-xl shrink-0">{item.icon}</div>
                   <div>
                     <h4 className="text-xs font-bold text-white tracking-wide">{item.title}</h4>
                     <p className="text-[10px] text-slate-400 font-mono mt-0.5">{item.desc}</p>

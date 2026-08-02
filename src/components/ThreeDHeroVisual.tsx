@@ -5,11 +5,12 @@ import logo from "../assets/logo.png";
 
 interface ThreeDHeroVisualProps {
   isLoader?: boolean;
-  progress?: number; // 0 to 100 progress for shrinking loader animation
+  progress?: number;
+  isEnding?: boolean; // When loading finishes, shrink ball to size 0 within 1 sec
   bounceEntrance?: boolean;
 }
 
-export function ThreeDHeroVisual({ isLoader = false, progress = 0, bounceEntrance = true }: ThreeDHeroVisualProps) {
+export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = false }: ThreeDHeroVisualProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -41,7 +42,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, bounceEntranc
     const mainGroup = new THREE.Group();
     scene.add(mainGroup);
 
-    // 4. Prominent 3D Black Sphere (Increased radius to 1.55)
+    // 4. Prominent 3D Black Sphere
     const sphereRadius = 1.55;
     const sphereGeo = new THREE.SphereGeometry(sphereRadius, 64, 64);
 
@@ -113,11 +114,16 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, bounceEntranc
       const mouseX = ((clientX - rect.left) / rect.width - 0.5) * 2;
       const mouseY = ((clientY - rect.top) / rect.height - 0.5) * 2;
 
-      targetRotationY = mouseX * 0.7;
-      targetRotationX = mouseY * 0.7;
+      targetRotationY = mouseX * 0.85;
+      targetRotationX = mouseY * 0.85;
     };
 
     const onMouseMove = (e: MouseEvent) => handleMove(e.clientX, e.clientY);
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
     const onTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         handleMove(e.touches[0].clientX, e.touches[0].clientY);
@@ -125,6 +131,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, bounceEntranc
     };
 
     window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     // Resize Handler
@@ -150,23 +157,34 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, bounceEntranc
     let animationFrameId: number;
     let clock = new THREE.Clock();
 
+    // Scale tracking for size 0 shrink transition
+    let currentScale = 1;
+    let endingStartTime = 0;
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Continuous 360 degree rotation
       sphereMesh.rotation.y = elapsedTime * (isLoader ? 0.85 : 0.45);
 
       if (isLoader) {
-        // GIANT SHRINK ANIMATION: Shrinks dynamically from giant (progress 0%) to normal size (progress 100%)
-        const shrinkFactor = Math.max(1, 10 - 9 * (progress / 100));
-        mainGroup.scale.set(shrinkFactor, shrinkFactor, shrinkFactor);
-        sphereMesh.position.y = Math.sin(elapsedTime * 3) * 0.12;
+        if (isEnding) {
+          // SHRINK TO SIZE 0 WITHIN 1 SEC WHEN LOADING IS ABOUT TO BE OVER
+          if (endingStartTime === 0) endingStartTime = elapsedTime;
+          const endElapsed = elapsedTime - endingStartTime;
+          currentScale = Math.max(0, 1 - endElapsed / 1.0);
+          mainGroup.scale.set(currentScale, currentScale, currentScale);
+        } else {
+          // Dynamic initial shrink from 100x down to 1x as progress goes 0 -> 100%
+          const shrinkFactor = Math.max(1, 10 - 9 * (progress / 100));
+          mainGroup.scale.set(shrinkFactor, shrinkFactor, shrinkFactor);
+        }
+        sphereMesh.position.y = Math.sin(elapsedTime * 3) * 0.1;
       }
 
-      // Smooth mouse tracking
-      mainGroup.rotation.y += (targetRotationY - mainGroup.rotation.y) * 0.06;
-      mainGroup.rotation.x += (targetRotationX - mainGroup.rotation.x) * 0.06;
+      // Smooth tracking lerp
+      mainGroup.rotation.y += (targetRotationY - mainGroup.rotation.y) * 0.08;
+      mainGroup.rotation.x += (targetRotationX - mainGroup.rotation.x) * 0.08;
 
       renderer.render(scene, camera);
     };
@@ -176,41 +194,38 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, bounceEntranc
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
       sphereGeo.dispose();
       sphereMat.dispose();
     };
-  }, [isLoader, progress]);
+  }, [isLoader, progress, isEnding]);
 
   return (
     <motion.div
       initial={
-        bounceEntrance && !isLoader
-          ? { y: -120, scale: 0.6, opacity: 0 }
+        !isLoader
+          ? { y: 40, opacity: 0 }
           : false
       }
       animate={
         isLoader
           ? { opacity: 1 }
-          : { y: [ -90, 18, -6, 0], scale: [0.65, 1.08, 0.96, 1], opacity: 1 }
+          : { y: 0, opacity: 1 }
       }
-      transition={
-        isLoader
-          ? { duration: 0.5 }
-          : { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
-      }
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       ref={containerRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`relative w-full ${
         isLoader ? "h-[320px] sm:h-[400px]" : "h-[340px] sm:h-[420px] lg:h-[480px]"
-      } flex items-center justify-center select-none overflow-hidden`}
+      } flex items-center justify-center select-none overflow-hidden touch-none`}
     >
       <canvas
         ref={canvasRef}
-        className="w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing max-w-full max-h-full"
+        className="w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing max-w-full max-h-full touch-none"
       />
 
       {!isLoader && (

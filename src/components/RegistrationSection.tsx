@@ -6,6 +6,7 @@ import { saveTeamToFirebase, isTeamNameTaken } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
 import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
+import { InteractiveLogoBall } from "./InteractiveLogoBall";
 
 interface RegistrationSectionProps {
   isOpen?: boolean;
@@ -77,56 +78,16 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
 
       setErrorMessage("");
       setCurrentStep(2);
-    } catch (err) {
+    } catch (err: any) {
       setCheckingTeamName(false);
-      setCurrentStep(2);
+      setErrorMessage(err.message || "Failed to check team name availability.");
     }
   };
 
-  const handleNextFromStep2 = () => {
-    if (!leader.fullName || !leader.email || !leader.phone || !leader.organization) {
-      setErrorMessage("Please complete all leader details.");
-      return;
-    }
-    if (!leader.githubUrl) {
-      setErrorMessage("Leader Portfolio / GitHub URL is required.");
-      return;
-    }
-    setErrorMessage("");
-    if (teamSize > 1) {
-      setCurrentStep(3);
-    } else {
-      setCurrentStep(99);
-    }
-  };
-
-  const handleNextFromMemberStep = (memberIdx: number) => {
-    const m = members[memberIdx];
-    if (!m.fullName || !m.email || !m.phone || !m.organization) {
-      setErrorMessage(`Please fill in all details for Member ${memberIdx + 2}.`);
-      return;
-    }
-    setErrorMessage("");
-    const nextMemberNum = memberIdx + 2;
-    if (nextMemberNum < teamSize) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      setCurrentStep(99);
-    }
-  };
-
-  // Final Submission
-  const handleSubmitTeam = async () => {
+  // Final Form Submission
+  const handleSubmitRegistration = async () => {
     setStatus("submitting");
     setErrorMessage("");
-
-    const taken = await isTeamNameTaken(teamName.trim());
-    if (taken) {
-      setStatus("idle");
-      setCurrentStep(1);
-      setErrorMessage("This team name is not available. Please choose another team name.");
-      return;
-    }
 
     const activeMembers = members.slice(0, teamSize - 1);
 
@@ -169,14 +130,6 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
     }
   };
 
-  const handleDismiss = () => {
-    if (onClose) {
-      onClose();
-    } else {
-      setIsCollapsed(true);
-    }
-  };
-
   if (isCollapsed && !onClose) {
     return (
       <section id="register" className="py-12 bg-[#04060b] text-center">
@@ -208,35 +161,34 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
         className="absolute -top-20 -right-20 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"
       />
 
-      {/* Header with Close Button */}
+      {/* Header with 3D Interactive Logo Ball & Close Button */}
       <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-6 relative z-10">
-        <div>
-          <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-1 font-bold flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-sky-400 animate-spin" />
-            <span>TEAM REGISTRATION PORTAL</span>
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-black text-white">
-            Register Team for <span className="text-sky-400">YODHA 2.0</span>
-          </h3>
+        <div className="flex items-center gap-4">
+          <InteractiveLogoBall size="md" />
+          <div>
+            <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-0.5 font-bold flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-sky-400 animate-spin" />
+              <span>TEAM REGISTRATION PORTAL</span>
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black text-white">
+              Register Team for <span className="text-sky-400">YODHA 2.0</span>
+            </h3>
+          </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleDismiss}
-          title="Close Registration"
-          className="p-2.5 text-slate-400 hover:text-white rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors shrink-0 ml-4 cursor-pointer"
-        >
-          <X size={20} />
-        </button>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="p-2 text-slate-400 hover:text-white rounded-full bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
+      {/* Submission Success Screen */}
       {status === "success" ? (
-        /* Success State */
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center text-center py-4 relative z-10"
-        >
+        <div className="py-8 text-center flex flex-col items-center">
           <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-400 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(52,211,153,0.4)]">
             <CheckCircle2 className="w-10 h-10 text-emerald-400" />
           </div>
@@ -300,31 +252,33 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
           >
             Register Another Team
           </button>
-        </motion.div>
+        </div>
       ) : (
-        /* Multi-Step Wizard Flow */
-        <div className="relative z-10">
-          {/* Progress Indicator Dots */}
-          <div className="flex items-center justify-between mb-8 px-2">
-            {[1, 2, ...Array.from({ length: teamSize - 1 }, (_, i) => i + 3), 99].map((stepNum, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <motion.div
-                  animate={{
-                    scale: currentStep === stepNum ? 1.15 : 1,
-                  }}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-all ${
-                    currentStep === stepNum
-                      ? "bg-sky-400 text-black shadow-[0_0_20px_#38bdf8]"
-                      : currentStep > stepNum || (currentStep === 99 && stepNum !== 99)
-                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
-                      : "bg-white/5 text-slate-500 border border-white/10"
-                  }`}
-                >
-                  {stepNum === 99 ? "✓" : stepNum}
-                </motion.div>
-                {idx < teamSize + 1 && <div className="w-6 sm:w-12 h-[2px] bg-white/10 hidden sm:block" />}
-              </div>
-            ))}
+        <>
+          {/* Step Progress Pills */}
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8">
+            {Array.from({ length: teamSize + 1 }).map((_, idx) => {
+              const stepNum = idx + 1;
+              return (
+                <div key={idx} className="flex items-center gap-2">
+                  <motion.div
+                    animate={{
+                      scale: currentStep === stepNum ? 1.15 : 1,
+                    }}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-all ${
+                      currentStep === stepNum
+                        ? "bg-sky-400 text-black shadow-[0_0_20px_#38bdf8]"
+                        : currentStep > stepNum
+                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
+                        : "bg-white/5 text-slate-500 border border-white/10"
+                    }`}
+                  >
+                    {stepNum}
+                  </motion.div>
+                  {idx < teamSize && <div className="w-6 sm:w-12 h-[2px] bg-white/10 hidden sm:block" />}
+                </div>
+              );
+            })}
           </div>
 
           {/* Warning Banner */}
@@ -383,383 +337,295 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                     onChange={(e) => setTrack(e.target.value)}
                     className="w-full px-4 py-3 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
                   >
-                    <option value="AI Interfaces & Generative UI">AI Interfaces & Generative UI</option>
-                    <option value="Web3 & Decentralized Web">Web3 & Decentralized Web</option>
-                    <option value="Immersive Digital Creative">Immersive Digital Creative</option>
-                    <option value="UI Craftsmanship & Open Innovation">UI Craftsmanship & Open Innovation</option>
+                    <option value="AI Interfaces & Generative UI">AI Interfaces & Generative UI (₹25,000)</option>
+                    <option value="Web3 & Decentralized Web">Web3 & Decentralized Web (₹20,000)</option>
+                    <option value="Immersive Digital Creative">Immersive Digital Creative (₹15,000)</option>
+                    <option value="UI Craftsmanship & Open Tech">UI Craftsmanship & Open Tech (₹10,000)</option>
                   </select>
                 </div>
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="button"
-                disabled={checkingTeamName}
-                onClick={handleNextFromStep1}
-                className="w-full mt-4 py-4 bg-gradient-to-r from-sky-400 to-indigo-500 text-black font-extrabold rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider disabled:opacity-50 cursor-pointer"
-              >
-                {checkingTeamName ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-black" />
-                    <span>Checking Team Name Availability...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Next: Leader Details</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </motion.button>
+              <div className="pt-4 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleNextFromStep1}
+                  disabled={checkingTeamName}
+                  className="px-8 py-3.5 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {checkingTeamName ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Checking Availability...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Next: Leader Details</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </motion.div>
           )}
 
           {/* STEP 2: Team Leader Details */}
           {currentStep === 2 && (
-            <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
-              <div className="flex items-center justify-between">
-                <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                  <User className="w-5 h-5 text-sky-400" /> Step 2: Team Leader Details
-                </h4>
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(1)}
-                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" /> Back
-                </button>
-              </div>
+            <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+              <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                <Shield className="w-5 h-5 text-sky-400" /> Step 2: Team Leader Information
+              </h4>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Leader Full Name *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">Full Name *</label>
                   <input
                     type="text"
-                    name="fullName"
                     required
+                    name="fullName"
                     value={leader.fullName}
                     onChange={handleLeaderChange}
-                    placeholder="Alex Mercer"
-                    className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                    placeholder="John Doe"
+                    className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
-
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Leader Email *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">Email Address *</label>
                   <input
                     type="email"
-                    name="email"
                     required
+                    name="email"
                     value={leader.email}
                     onChange={handleLeaderChange}
-                    placeholder="alex@example.com"
-                    className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                    placeholder="john@example.com"
+                    className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Leader Phone *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">Phone Number *</label>
                   <input
                     type="tel"
-                    name="phone"
                     required
+                    name="phone"
                     value={leader.phone}
                     onChange={handleLeaderChange}
                     placeholder="+91 98765 43210"
-                    className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
-
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">College / Organization *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">College / Organization *</label>
                   <input
                     type="text"
-                    name="organization"
                     required
+                    name="organization"
                     value={leader.organization}
                     onChange={handleLeaderChange}
-                    placeholder="University / Company"
-                    className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                    placeholder="IIT Bombay / TechCorp"
+                    className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Gender *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">Gender *</label>
                   <select
                     name="gender"
                     value={leader.gender}
                     onChange={handleLeaderChange}
-                    className="w-full px-4 py-3 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                    className="w-full px-4 py-2.5 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Other / Prefer not to say">Other / Prefer not to say</option>
+                    <option value="Non-binary">Non-binary</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
                   </select>
                 </div>
-
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Year of Study *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">Year of Study / Role *</label>
                   <select
                     name="yearOfStudy"
                     value={leader.yearOfStudy}
                     onChange={handleLeaderChange}
-                    className="w-full px-4 py-3 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                    className="w-full px-4 py-2.5 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   >
-                    <option value="1st Year">1st Year</option>
-                    <option value="2nd Year">2nd Year</option>
-                    <option value="3rd Year">3rd Year</option>
-                    <option value="4th Year">4th Year</option>
-                    <option value="Post Graduate">Post Graduate</option>
+                    <option value="1st Year">1st Year Student</option>
+                    <option value="2nd Year">2nd Year Student</option>
+                    <option value="3rd Year">3rd Year Student</option>
+                    <option value="4th Year">4th Year Student</option>
+                    <option value="Postgraduate">Postgraduate</option>
                     <option value="Working Professional">Working Professional</option>
                   </select>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-mono text-sky-400 mb-1.5 font-bold">
-                  Leader Portfolio / GitHub URL *
-                </label>
-                <input
-                  type="url"
-                  name="githubUrl"
-                  required
-                  value={leader.githubUrl}
-                  onChange={handleLeaderChange}
-                  placeholder="https://github.com/alexmercer"
-                  className="w-full px-4 py-3 bg-white/[0.04] border border-sky-500/40 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
-                />
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="button"
-                onClick={handleNextFromStep2}
-                className="w-full mt-4 py-4 bg-gradient-to-r from-sky-400 to-indigo-500 text-black font-extrabold rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider cursor-pointer"
-              >
-                <span>{teamSize > 1 ? "Next: Member 2 Details" : "Next: Review Team"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-            </motion.div>
-          )}
-
-          {/* STEP 3..N: Additional Member Details */}
-          {currentStep >= 3 && currentStep < 99 && (
-            <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
-              {(() => {
-                const memberIdx = currentStep - 3;
-                const memberNum = memberIdx + 2;
-                const m = members[memberIdx];
-
-                return (
-                  <>
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                        <User className="w-5 h-5 text-indigo-400" /> Step {currentStep}: Member {memberNum} Details
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(currentStep - 1)}
-                        className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-xs font-mono text-slate-300 mb-1.5">Member {memberNum} Full Name *</label>
-                        <input
-                          type="text"
-                          name="fullName"
-                          required
-                          value={m.fullName}
-                          onChange={(e) => handleMemberChange(memberIdx, e)}
-                          placeholder="Full Name"
-                          className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-mono text-slate-300 mb-1.5">Member {memberNum} Email *</label>
-                        <input
-                          type="email"
-                          name="email"
-                          required
-                          value={m.email}
-                          onChange={(e) => handleMemberChange(memberIdx, e)}
-                          placeholder="member@example.com"
-                          className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-xs font-mono text-slate-300 mb-1.5">Phone Number *</label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          required
-                          value={m.phone}
-                          onChange={(e) => handleMemberChange(memberIdx, e)}
-                          placeholder="+91 98765 43210"
-                          className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-mono text-slate-300 mb-1.5">College / Organization *</label>
-                        <input
-                          type="text"
-                          name="organization"
-                          required
-                          value={m.organization}
-                          onChange={(e) => handleMemberChange(memberIdx, e)}
-                          placeholder="University / Company"
-                          className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-xs font-mono text-slate-300 mb-1.5">Gender *</label>
-                        <select
-                          name="gender"
-                          value={m.gender}
-                          onChange={(e) => handleMemberChange(memberIdx, e)}
-                          className="w-full px-4 py-3 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
-                        >
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                          <option value="Other / Prefer not to say">Other / Prefer not to say</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-mono text-slate-300 mb-1.5">Year of Study *</label>
-                        <select
-                          name="yearOfStudy"
-                          value={m.yearOfStudy}
-                          onChange={(e) => handleMemberChange(memberIdx, e)}
-                          className="w-full px-4 py-3 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
-                        >
-                          <option value="1st Year">1st Year</option>
-                          <option value="2nd Year">2nd Year</option>
-                          <option value="3rd Year">3rd Year</option>
-                          <option value="4th Year">4th Year</option>
-                          <option value="Post Graduate">Post Graduate</option>
-                          <option value="Working Professional">Working Professional</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      type="button"
-                      onClick={() => handleNextFromMemberStep(memberIdx)}
-                      className="w-full mt-4 py-4 bg-gradient-to-r from-sky-400 to-indigo-500 text-black font-extrabold rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider cursor-pointer"
-                    >
-                      <span>{memberNum < teamSize ? `Next: Member ${memberNum + 1} Details` : "Next: Review & Submit"}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </motion.button>
-                  </>
-                );
-              })()}
-            </motion.div>
-          )}
-
-          {/* STEP 99: Final Review & Submit Button */}
-          {currentStep === 99 && (
-            <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
-              <div className="flex items-center justify-between">
-                <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-emerald-400" /> Final Step: Review & Confirm
-                </h4>
+              <div className="pt-4 flex justify-between">
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(teamSize > 1 ? teamSize + 1 : 2)}
-                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
+                  onClick={() => setCurrentStep(1)}
+                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <ArrowLeft className="w-3.5 h-3.5" /> Back
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!leader.fullName || !leader.email || !leader.phone || !leader.organization) {
+                      setErrorMessage("Please complete all required Leader fields.");
+                      return;
+                    }
+                    setErrorMessage("");
+                    if (teamSize === 1) {
+                      handleSubmitRegistration();
+                    } else {
+                      setCurrentStep(3);
+                    }
+                  }}
+                  className="px-8 py-3 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-lg flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer"
+                >
+                  <span>{teamSize === 1 ? "Submit Entry" : "Next: Member 2"}</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-
-              <div className="p-5 bg-white/[0.03] border border-white/10 rounded-2xl text-xs font-mono space-y-3">
-                <div className="flex justify-between border-b border-white/10 pb-2">
-                  <span className="text-slate-400">TEAM NAME</span>
-                  <span className="text-white font-bold">{teamName}</span>
-                </div>
-                <div className="flex justify-between border-b border-white/10 pb-2">
-                  <span className="text-slate-400">TRACK</span>
-                  <span className="text-sky-300">{track}</span>
-                </div>
-                <div className="flex justify-between border-b border-white/10 pb-2">
-                  <span className="text-slate-400">TEAM LEADER</span>
-                  <span className="text-white">{leader.fullName} ({leader.email})</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">TOTAL MEMBERS</span>
-                  <span className="text-emerald-400 font-bold">{teamSize} Participants</span>
-                </div>
-              </div>
-
-              <div className="p-3.5 bg-sky-950/40 border border-sky-500/30 rounded-xl text-xs text-sky-300 flex items-center gap-2">
-                <Mail className="w-4 h-4 text-sky-400 shrink-0" />
-                <span>Welcome emails will be automatically sent to all {teamSize} participants upon launch!</span>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.03, boxShadow: "0 0 40px rgba(56,189,248,0.7)" }}
-                whileTap={{ scale: 0.97 }}
-                type="button"
-                disabled={status === "submitting"}
-                onClick={handleSubmitTeam}
-                className="w-full py-5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black text-base rounded-2xl shadow-[0_0_35px_rgba(56,189,248,0.6)] transition-all flex items-center justify-center gap-3 uppercase tracking-wider disabled:opacity-50 cursor-pointer"
-              >
-                {status === "submitting" ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin text-white" />
-                    <span>CONFIRMING TEAM REGISTRATION...</span>
-                  </>
-                ) : (
-                  <span>CONFIRM REGISTRATION 🚀</span>
-                )}
-              </motion.button>
             </motion.div>
           )}
-        </div>
+
+          {/* STEP 3+: Additional Members */}
+          {currentStep >= 3 && currentStep <= teamSize && (
+            <motion.div key={currentStep} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+              <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                <User className="w-5 h-5 text-indigo-400" /> Member {currentStep}: Details
+              </h4>
+
+              {(() => {
+                const memberIndex = currentStep - 2;
+                const memberData = members[memberIndex - 1] || members[0];
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-slate-300 mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        name="fullName"
+                        value={memberData.fullName}
+                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
+                        placeholder="Jane Smith"
+                        className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-mono text-slate-300 mb-1">Email Address *</label>
+                      <input
+                        type="email"
+                        required
+                        name="email"
+                        value={memberData.email}
+                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
+                        placeholder="jane@example.com"
+                        className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-mono text-slate-300 mb-1">Phone Number *</label>
+                      <input
+                        type="tel"
+                        required
+                        name="phone"
+                        value={memberData.phone}
+                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
+                        placeholder="+91 98765 00000"
+                        className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-mono text-slate-300 mb-1">College / Organization *</label>
+                      <input
+                        type="text"
+                        required
+                        name="organization"
+                        value={memberData.organization}
+                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
+                        placeholder="IIT Bombay / College"
+                        className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                      />
+                    </div>
+                  </div>
+                );
+              })()}
+
+              <div className="pt-4 flex justify-between">
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <button
+                  type="button"
+                  disabled={status === "submitting"}
+                  onClick={() => {
+                    const memberIndex = currentStep - 2;
+                    const m = members[memberIndex - 1];
+                    if (!m || !m.fullName || !m.email || !m.phone || !m.organization) {
+                      setErrorMessage(`Please complete all required fields for Member ${currentStep}.`);
+                      return;
+                    }
+                    setErrorMessage("");
+
+                    if (currentStep < teamSize) {
+                      setCurrentStep(currentStep + 1);
+                    } else {
+                      handleSubmitRegistration();
+                    }
+                  }}
+                  className="px-8 py-3 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold text-xs rounded-xl shadow-lg flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {status === "submitting" ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Submitting Registration...</span>
+                    </>
+                  ) : currentStep < teamSize ? (
+                    <>
+                      <span>Next Member</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>Submit Full Team Registration</span>
+                      <CheckCircle2 className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </>
       )}
     </motion.div>
   );
 
   if (onClose) {
-    if (!isOpen) return null;
     return (
       <AnimatePresence>
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl overflow-y-auto">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            className="w-full my-8"
-          >
-            {formContent}
-          </motion.div>
-        </div>
+        {isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full my-auto"
+            >
+              {formContent}
+            </motion.div>
+          </div>
+        )}
       </AnimatePresence>
     );
   }
 
   return (
-    <section id="register" className="py-24 relative overflow-hidden bg-[#04060b]">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section id="register" className="py-16 sm:py-24 relative overflow-hidden bg-[#04060b]">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {formContent}
       </div>
     </section>

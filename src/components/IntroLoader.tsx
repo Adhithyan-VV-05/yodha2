@@ -9,30 +9,53 @@ interface IntroLoaderProps {
 
 export function IntroLoader({ onComplete }: IntroLoaderProps) {
   const [progress, setProgress] = useState(0);
+  const [isEnding, setIsEnding] = useState(false);
 
   useEffect(() => {
-    const duration = 4000; // Exactly 4 seconds real loader animation
-    const startTime = performance.now();
+    let timerId: number | null = null;
+    let animId: number | null = null;
 
-    // Asset preloading (Preload logo image into browser cache)
-    const preloadImage = new Image();
-    preloadImage.src = logo;
+    // Real Asset Preloader: Load Yodha Logo Image
+    const img = new Image();
+    img.src = logo;
 
-    const updateProgress = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const pct = Math.min(100, Math.floor((elapsed / duration) * 100));
+    img.onload = () => {
+      // Hit 50% immediately upon logo image load confirmation
+      setProgress(50);
 
-      setProgress(pct);
+      // Smoothly animate from 50% to 100% over 1.5 seconds
+      const startTime = performance.now();
+      const shrinkDuration = 1500;
 
-      if (elapsed < duration) {
-        requestAnimationFrame(updateProgress);
-      } else {
-        setTimeout(onComplete, 250);
-      }
+      const stepProgress = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const remainingPct = Math.min(50, Math.floor((elapsed / shrinkDuration) * 50));
+        const currentTotal = 50 + remainingPct;
+
+        setProgress(currentTotal);
+
+        if (elapsed < shrinkDuration) {
+          animId = requestAnimationFrame(stepProgress);
+        } else {
+          // Progress reached 100%! Trigger 1-second shrink to size 0 animation
+          setProgress(100);
+          setIsEnding(true);
+          timerId = window.setTimeout(onComplete, 1000); // Exactly 1 sec shrink to 0
+        }
+      };
+
+      animId = requestAnimationFrame(stepProgress);
     };
 
-    const animId = requestAnimationFrame(updateProgress);
-    return () => cancelAnimationFrame(animId);
+    // Fallback if cached or instant load
+    if (img.complete) {
+      img.onload(new Event("load"));
+    }
+
+    return () => {
+      if (animId) cancelAnimationFrame(animId);
+      if (timerId !== null) window.clearTimeout(timerId);
+    };
   }, [onComplete]);
 
   const brandLetters = ["Y", "O", "D", "H", "A", " ", "2", ".", "0"];
@@ -44,7 +67,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
       exit={{
         opacity: 0,
         scale: 1.02,
-        transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
+        transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] },
       }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#020409] text-white overflow-hidden select-none px-8 py-10"
     >
@@ -67,10 +90,10 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         </span>
       </motion.div>
 
-      {/* Center 3D Sphere (REAL 4-SECOND 100x GIANT SHRINK ANIMATION) */}
+      {/* Center 3D Sphere (Shrinks to size 0 within 1 sec when loading is over) */}
       <div className="flex flex-col items-center my-auto z-10 w-full max-w-md">
         <div className="w-full relative flex justify-center mb-2">
-          <ThreeDHeroVisual isLoader={true} progress={progress} />
+          <ThreeDHeroVisual isLoader={true} progress={progress} isEnding={isEnding} />
         </div>
 
         {/* Staggered Letter Entrance with Neon Glow */}
@@ -90,7 +113,9 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
 
         {/* Progress Display */}
         <div className="flex items-center gap-3 text-slate-300 font-mono text-xs tracking-widest">
-          <span className="text-slate-400">LOADING EXPERIENCE</span>
+          <span className="text-slate-400">
+            {isEnding ? "LAUNCHING EXPERIENCE..." : "LOADING ENVIRONMENT"}
+          </span>
           <span className="text-sky-400 font-black text-sm">{String(progress).padStart(3, "0")}%</span>
         </div>
       </div>

@@ -20,7 +20,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
         {/* Section Header */}
         <motion.div
           onViewportEnter={() => setIsInView(true)}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           className="text-center max-w-2xl mx-auto mb-12 sm:mb-16"
         >
           <motion.span
@@ -51,19 +51,18 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
           </motion.p>
         </motion.div>
 
-        {/* Podium Cards Grid - Staggered Scroll Spawn: 1st FIRST, then 2nd & 3rd TOGETHER */}
+        {/* Podium Cards Grid - Staggered Scroll Spawn: 1st FIRST, then 2nd & 3rd TOGETHER (Retains once: true) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mb-12">
           
-          {/* 2nd Place - Silver Trophy (#2) - Spawns TOGETHER with 3rd place (delay = 0.5s) */}
+          {/* 2nd Place - Silver Trophy (#2) */}
           <Card3DTilt intensity={14} className="order-2 md:order-1 flex" glowColor="rgba(226, 232, 240, 0.35)">
             <motion.div
               initial={{ opacity: 0, y: 35, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-slate-400/10 via-slate-950/90 to-slate-950 border border-slate-400/30 flex flex-col justify-between backdrop-blur-xl w-full shadow-2xl"
             >
-              {/* Silver Trophy (#2) - Spawn delay 0.5s */}
               <ThreeDTrophy rank={2} isInView={isInView} spawnDelay={0.5} />
 
               <div>
@@ -95,16 +94,15 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
             </motion.div>
           </Card3DTilt>
 
-          {/* 1st Place - Gold Trophy (#1) - SPAWNS FIRST (delay = 0s) - LARGER SIZE */}
+          {/* 1st Place - Gold Trophy (#1) */}
           <Card3DTilt intensity={18} className="order-1 md:order-2 md:-translate-y-4 flex" glowColor="rgba(245, 158, 11, 0.45)">
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.88 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-amber-500/20 via-slate-950/95 to-slate-950 border border-amber-500/50 flex flex-col justify-between shadow-[0_20px_60px_rgba(245,158,11,0.3)] relative overflow-hidden w-full"
             >
-              {/* Gold Trophy (#1) - SPAWNS FIRST (delay 0s) - Larger size */}
               <ThreeDTrophy rank={1} isInView={isInView} spawnDelay={0} />
 
               <div>
@@ -151,16 +149,15 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
             </motion.div>
           </Card3DTilt>
 
-          {/* 3rd Place - Bronze Trophy (#3) - Spawns TOGETHER with 2nd place (delay = 0.5s) */}
+          {/* 3rd Place - Bronze Trophy (#3) */}
           <Card3DTilt intensity={14} className="order-3 flex" glowColor="rgba(217, 119, 6, 0.35)">
             <motion.div
               initial={{ opacity: 0, y: 35, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-amber-900/15 via-slate-950/90 to-slate-950 border border-amber-700/30 flex flex-col justify-between backdrop-blur-xl w-full shadow-2xl"
             >
-              {/* Bronze Trophy (#3) - Spawn delay 0.5s */}
               <ThreeDTrophy rank={3} isInView={isInView} spawnDelay={0.5} />
 
               <div>

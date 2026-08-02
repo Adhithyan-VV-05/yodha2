@@ -143,7 +143,7 @@ export function TimelineSection() {
           ))}
         </div>
 
-        {/* Timeline Events List with Scroll-Based Entrance Movement */}
+        {/* Timeline Events List with Permanent Entrance Animations (viewport once: true) */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeDay}
@@ -153,7 +153,6 @@ export function TimelineSection() {
             transition={{ duration: 0.3 }}
             className="relative border-l-2 border-gradient-to-b from-sky-400 via-indigo-500 to-purple-500 ml-4 sm:ml-28 space-y-8 pl-6 sm:pl-10"
           >
-            {/* Glowing Laser Vertical Beam overlay */}
             <div className="absolute top-0 bottom-0 -left-[1px] w-[2px] bg-gradient-to-b from-sky-400 via-indigo-500 to-purple-500 shadow-[0_0_12px_rgba(56,189,248,0.8)]" />
 
             {SCHEDULE[activeDay].map((item, idx) => (
@@ -161,15 +160,15 @@ export function TimelineSection() {
                 key={idx}
                 initial={{ opacity: 0, x: -35, scale: 0.92 }}
                 whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
                 className="relative group"
               >
-                {/* Scroll Animated Futuristic Glowing Diamond Node */}
+                {/* Diamond Node */}
                 <motion.div
                   initial={{ scale: 0, rotate: -45 }}
                   whileInView={{ scale: 1, rotate: 45 }}
-                  viewport={{ once: false }}
+                  viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
                   className={`absolute -left-[32px] sm:-left-[48px] top-4 w-5 h-5 rounded-sm border-2 transform rotate-45 transition-all duration-300 ${
                     item.isKey
@@ -183,7 +182,7 @@ export function TimelineSection() {
                   {item.time}
                 </div>
 
-                {/* 3D Scroll Card Container */}
+                {/* 3D Card Container */}
                 <Card3DTilt intensity={8}>
                   <div
                     className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
@@ -193,7 +192,7 @@ export function TimelineSection() {
                     }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                      <span className="sm:hidden text-xs font-mono font-bold text-sky-400 flex items-center gap-1">
+                      <span className="sm:hidden text-xs font-mono text-sky-400 flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5" /> {item.time}
                       </span>
                       <span className="px-3 py-0.5 bg-white/10 border border-white/15 rounded-md text-[10px] font-mono text-sky-300 font-bold uppercase tracking-wider">
