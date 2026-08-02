@@ -15,7 +15,7 @@ export function KineticText({
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % words.length);
-    }, 2200);
+    }, 2400);
     return () => clearInterval(timer);
   }, [words.length]);
 
@@ -24,11 +24,11 @@ export function KineticText({
       <AnimatePresence mode="wait">
         <motion.span
           key={words[index]}
-          initial={{ y: "100%", opacity: 0, rotateX: -60 }}
-          animate={{ y: "0%", opacity: 1, rotateX: 0 }}
-          exit={{ y: "-100%", opacity: 0, rotateX: 60 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-300 to-cyan-300 drop-shadow-[0_0_25px_rgba(56,189,248,0.4)] whitespace-nowrap"
+          initial={{ y: "80%", opacity: 0, filter: "blur(6px)" }}
+          animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+          exit={{ y: "-80%", opacity: 0, filter: "blur(6px)" }}
+          transition={{ duration: 0.5, ease: [0.215, 0.61, 0.355, 1] }}
+          className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-300 to-cyan-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.4)] whitespace-nowrap"
         >
           {words[index]}
         </motion.span>

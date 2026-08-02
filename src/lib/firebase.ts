@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -37,7 +37,7 @@ export interface TeamMember {
   organization: string;
   gender: string;
   yearOfStudy: string;
-  githubUrl?: string; // Leader has required githubUrl
+  githubUrl?: string;
 }
 
 export interface TeamRegistrationData {
@@ -47,6 +47,32 @@ export interface TeamRegistrationData {
   leader: TeamMember;
   members: TeamMember[];
   submittedAt?: string;
+}
+
+/**
+ * Check if a Team Name has already been registered
+ */
+export async function isTeamNameTaken(teamName: string): Promise<boolean> {
+  const normalized = teamName.trim().toLowerCase();
+  if (!normalized) return false;
+
+  const db = getDb();
+
+  if (!db) {
+    // LocalStorage fallback check
+    const existing: TeamRegistrationData[] = JSON.parse(localStorage.getItem("yodha_team_registrations") || "[]");
+    return existing.some((t) => t.teamName.trim().toLowerCase() === normalized);
+  }
+
+  try {
+    const q = query(collection(db, "registrations"), where("teamName", "==", teamName.trim()));
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+  } catch (err) {
+    console.warn("Error checking team name in Firestore, checking fallback:", err);
+    const existing: TeamRegistrationData[] = JSON.parse(localStorage.getItem("yodha_team_registrations") || "[]");
+    return existing.some((t) => t.teamName.trim().toLowerCase() === normalized);
+  }
 }
 
 /**

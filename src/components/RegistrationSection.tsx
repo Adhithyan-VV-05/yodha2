@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, AlertCircle, Loader2, X, User, Users, Shield, ArrowRight, ArrowLeft, Mail } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, X, User, Users, Shield, ArrowRight, ArrowLeft, Mail, Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
-import { saveTeamToFirebase } from "../lib/firebase";
+import { saveTeamToFirebase, isTeamNameTaken } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
 import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
@@ -14,12 +14,12 @@ interface RegistrationSectionProps {
 }
 
 export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "AI Interfaces & Generative UI" }: RegistrationSectionProps) {
-  // Wizard Step State: 1 = Team Info, 2 = Leader, 3+ = Members (2..N), Final = Review & Submit
   const [currentStep, setCurrentStep] = useState(1);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Form State
   const [teamName, setTeamName] = useState("");
-  const [teamSize, setTeamSize] = useState<number>(2); // Default 2 members
+  const [teamSize, setTeamSize] = useState<number>(2);
   const [track, setTrack] = useState(selectedTrack);
 
   // Leader State
@@ -33,7 +33,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
     githubUrl: "",
   });
 
-  // Additional Members State (Max 3 additional members for size 4)
+  // Additional Members State
   const [members, setMembers] = useState<TeamMember[]>([
     { fullName: "", email: "", phone: "", organization: "", gender: "Male", yearOfStudy: "3rd Year" },
     { fullName: "", email: "", phone: "", organization: "", gender: "Male", yearOfStudy: "3rd Year" },
@@ -41,6 +41,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
   ]);
 
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [checkingTeamName, setCheckingTeamName] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailStatus, setEmailStatus] = useState<{ dispatched: boolean; count: number }>({ dispatched: false, count: 0 });
   const [teamPassId, setTeamPassId] = useState("");
@@ -55,14 +56,31 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
     setMembers(updated);
   };
 
-  // Step Navigation Validation
-  const handleNextFromStep1 = () => {
+  // Step 1 Validation & Team Name Availability Check
+  const handleNextFromStep1 = async () => {
     if (!teamName.trim()) {
       setErrorMessage("Please enter your Team Name.");
       return;
     }
+
+    setCheckingTeamName(true);
     setErrorMessage("");
-    setCurrentStep(2);
+
+    try {
+      const taken = await isTeamNameTaken(teamName.trim());
+      setCheckingTeamName(false);
+
+      if (taken) {
+        setErrorMessage("This team name is not available. Please choose another team name.");
+        return;
+      }
+
+      setErrorMessage("");
+      setCurrentStep(2);
+    } catch (err) {
+      setCheckingTeamName(false);
+      setCurrentStep(2);
+    }
   };
 
   const handleNextFromStep2 = () => {
@@ -71,14 +89,14 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
       return;
     }
     if (!leader.githubUrl) {
-      setErrorMessage("Leader GitHub / Portfolio URL is required.");
+      setErrorMessage("Leader Portfolio / GitHub URL is required.");
       return;
     }
     setErrorMessage("");
     if (teamSize > 1) {
-      setCurrentStep(3); // Go to Member 2
+      setCurrentStep(3);
     } else {
-      setCurrentStep(99); // Skip members, go directly to review
+      setCurrentStep(99);
     }
   };
 
@@ -89,18 +107,26 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
       return;
     }
     setErrorMessage("");
-    const nextMemberNum = memberIdx + 2; // Member 2 is index 0
+    const nextMemberNum = memberIdx + 2;
     if (nextMemberNum < teamSize) {
       setCurrentStep(currentStep + 1);
     } else {
-      setCurrentStep(99); // Go to review
+      setCurrentStep(99);
     }
   };
 
-  // Final Team Submission
+  // Final Submission
   const handleSubmitTeam = async () => {
     setStatus("submitting");
     setErrorMessage("");
+
+    const taken = await isTeamNameTaken(teamName.trim());
+    if (taken) {
+      setStatus("idle");
+      setCurrentStep(1);
+      setErrorMessage("This team name is not available. Please choose another team name.");
+      return;
+    }
 
     const activeMembers = members.slice(0, teamSize - 1);
 
@@ -113,13 +139,9 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
     };
 
     try {
-      // 1. Save to Firebase Firestore
       await saveTeamToFirebase(payload);
-
-      // 2. Post to Google Forms Endpoint
       await submitTeamToGoogleForms(payload);
 
-      // 3. Dispatch Welcome Email Notifications to ALL Team Participants
       const allParticipants = [
         { fullName: leader.fullName, email: leader.email, role: "Leader" as const },
         ...activeMembers.map((m) => ({ fullName: m.fullName, email: m.email, role: "Member" as const })),
@@ -135,10 +157,9 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
       setTeamPassId("YODHA-" + Math.floor(100000 + Math.random() * 900000));
       setStatus("success");
 
-      // Celebratory High-Density Confetti
       confetti({
-        particleCount: 130,
-        spread: 80,
+        particleCount: 140,
+        spread: 85,
         origin: { y: 0.6 },
         colors: ["#38bdf8", "#818cf8", "#c084fc", "#34d399", "#fbbf24"],
       });
@@ -148,47 +169,84 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
     }
   };
 
+  const handleDismiss = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      setIsCollapsed(true);
+    }
+  };
+
+  if (isCollapsed && !onClose) {
+    return (
+      <section id="register" className="py-12 bg-[#04060b] text-center">
+        <button
+          onClick={() => setIsCollapsed(false)}
+          className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl uppercase tracking-wider transition-colors cursor-pointer"
+        >
+          Open Registration Form
+        </button>
+      </section>
+    );
+  }
+
   const formContent = (
-    <div className="relative bg-[#090c16] border border-white/15 rounded-3xl p-6 sm:p-10 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.9)] max-w-2xl w-full mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-6">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="relative bg-[#090c16]/95 border border-white/15 rounded-3xl p-6 sm:p-10 backdrop-blur-2xl shadow-[0_0_60px_rgba(0,0,0,0.95)] max-w-2xl w-full mx-auto overflow-hidden"
+    >
+      {/* Moving Ambient Aura Light inside Form */}
+      <motion.div
+        animate={{
+          x: [-20, 20, -20],
+          y: [-15, 15, -15],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -top-20 -right-20 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"
+      />
+
+      {/* Header with Close Button */}
+      <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-6 relative z-10">
         <div>
-          <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-1">
-            TEAM REGISTRATION WIZARD
+          <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-1 font-bold flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5 text-sky-400 animate-spin" />
+            <span>TEAM REGISTRATION PORTAL</span>
           </span>
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Register Your Team for <span className="text-sky-400">YODHA 2.0</span>
+          <h3 className="text-2xl sm:text-3xl font-black text-white">
+            Register Team for <span className="text-sky-400">YODHA 2.0</span>
           </h3>
         </div>
 
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-full bg-white/5 border border-white/10 transition-colors"
-          >
-            <X size={18} />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={handleDismiss}
+          title="Close Registration"
+          className="p-2.5 text-slate-400 hover:text-white rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors shrink-0 ml-4 cursor-pointer"
+        >
+          <X size={20} />
+        </button>
       </div>
 
       {status === "success" ? (
-        /* Success & Team Pass Preview */
+        /* Success State */
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center text-center py-4"
+          className="flex flex-col items-center text-center py-4 relative z-10"
         >
-          <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-400 flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-400 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(52,211,153,0.4)]">
             <CheckCircle2 className="w-10 h-10 text-emerald-400" />
           </div>
 
-          <h4 className="text-2xl sm:text-3xl font-black text-white">TEAM REGISTRATION CONFIRMED!</h4>
+          <h4 className="text-2xl sm:text-3xl font-black text-white">REGISTRATION CONFIRMED!</h4>
           <p className="text-sm text-slate-300 mt-1 max-w-md">
-            Welcome to Yodha 2.0! Your team record has been saved in Firebase, Google Forms, and welcome emails have been dispatched.
+            Welcome to Yodha 2.0! Your team record has been saved and welcome emails have been dispatched.
           </p>
 
-          {/* Email Notification Status Badge */}
-          <div className="mt-4 flex items-center gap-2 px-3.5 py-1.5 bg-emerald-950/60 border border-emerald-500/40 rounded-full text-xs font-mono text-emerald-300">
+          <div className="mt-4 flex items-center gap-2 px-4 py-1.5 bg-emerald-950/60 border border-emerald-500/40 rounded-full text-xs font-mono text-emerald-300">
             <Mail className="w-4 h-4 text-emerald-400" />
             <span>Welcome Email Dispatched to {emailStatus.count} Team Members</span>
           </div>
@@ -236,47 +294,52 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
             onClick={() => {
               setCurrentStep(1);
               setStatus("idle");
+              setTeamName("");
             }}
-            className="mt-6 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-mono uppercase tracking-wider transition-colors"
+            className="mt-6 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer"
           >
             Register Another Team
           </button>
         </motion.div>
       ) : (
         /* Multi-Step Wizard Flow */
-        <div>
+        <div className="relative z-10">
           {/* Progress Indicator Dots */}
           <div className="flex items-center justify-between mb-8 px-2">
             {[1, 2, ...Array.from({ length: teamSize - 1 }, (_, i) => i + 3), 99].map((stepNum, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-all ${
+                <motion.div
+                  animate={{
+                    scale: currentStep === stepNum ? 1.15 : 1,
+                  }}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-all ${
                     currentStep === stepNum
-                      ? "bg-sky-400 text-black shadow-[0_0_15px_#38bdf8]"
+                      ? "bg-sky-400 text-black shadow-[0_0_20px_#38bdf8]"
                       : currentStep > stepNum || (currentStep === 99 && stepNum !== 99)
                       ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                       : "bg-white/5 text-slate-500 border border-white/10"
                   }`}
                 >
                   {stepNum === 99 ? "✓" : stepNum}
-                </div>
+                </motion.div>
                 {idx < teamSize + 1 && <div className="w-6 sm:w-12 h-[2px] bg-white/10 hidden sm:block" />}
               </div>
             ))}
           </div>
 
+          {/* Warning Banner */}
           {errorMessage && (
-            <div className="mb-6 p-3.5 bg-rose-950/40 border border-rose-500/30 rounded-xl text-xs text-rose-300 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 bg-rose-950/70 border border-rose-500/50 rounded-xl text-xs font-medium text-rose-200 flex items-center gap-2.5 shadow-lg">
+              <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
               <span>{errorMessage}</span>
-            </div>
+            </motion.div>
           )}
 
           {/* STEP 1: Team Basics */}
           {currentStep === 1 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                <Users className="w-5 h-5 text-sky-400" /> Step 1: Team Information
+                <Users className="w-5 h-5 text-sky-400" /> Step 1: Team Details
               </h4>
 
               <div>
@@ -285,9 +348,16 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                   type="text"
                   required
                   value={teamName}
-                  onChange={(e) => setTeamName(e.target.value)}
+                  onChange={(e) => {
+                    setTeamName(e.target.value);
+                    if (errorMessage) setErrorMessage("");
+                  }}
                   placeholder="e.g. CyberKnights"
-                  className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                  className={`w-full px-4 py-3 bg-white/[0.04] border rounded-xl text-sm text-white focus:outline-none transition-colors ${
+                    errorMessage.includes("not available")
+                      ? "border-rose-500 focus:border-rose-400"
+                      : "border-white/10 focus:border-sky-400"
+                  }`}
                 />
               </div>
 
@@ -307,7 +377,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Hackathon Track *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Category Track *</label>
                   <select
                     value={track}
                     onChange={(e) => setTrack(e.target.value)}
@@ -315,20 +385,32 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                   >
                     <option value="AI Interfaces & Generative UI">AI Interfaces & Generative UI</option>
                     <option value="Web3 & Decentralized Web">Web3 & Decentralized Web</option>
-                    <option value="3D Graphics & Creative WebGL">3D Graphics & Creative WebGL</option>
+                    <option value="Immersive Digital Creative">Immersive Digital Creative</option>
                     <option value="UI Craftsmanship & Open Innovation">UI Craftsmanship & Open Innovation</option>
                   </select>
                 </div>
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="button"
+                disabled={checkingTeamName}
                 onClick={handleNextFromStep1}
-                className="w-full mt-4 py-4 bg-sky-400 text-black font-bold rounded-xl hover:bg-sky-300 transition-colors flex items-center justify-center gap-2 text-sm uppercase tracking-wider"
+                className="w-full mt-4 py-4 bg-gradient-to-r from-sky-400 to-indigo-500 text-black font-extrabold rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider disabled:opacity-50 cursor-pointer"
               >
-                <span>Next: Leader Details</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                {checkingTeamName ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-black" />
+                    <span>Checking Team Name Availability...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Next: Leader Details</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </motion.button>
             </motion.div>
           )}
 
@@ -342,7 +424,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1"
+                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Back
                 </button>
@@ -385,7 +467,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                     required
                     value={leader.phone}
                     onChange={handleLeaderChange}
-                    placeholder="+1 234 567 8900"
+                    placeholder="+91 98765 43210"
                     className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
                   />
                 </div>
@@ -439,7 +521,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
 
               <div>
                 <label className="block text-xs font-mono text-sky-400 mb-1.5 font-bold">
-                  Leader GitHub / Portfolio URL * (Required for Leader)
+                  Leader Portfolio / GitHub URL *
                 </label>
                 <input
                   type="url"
@@ -452,14 +534,16 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                 />
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="button"
                 onClick={handleNextFromStep2}
-                className="w-full mt-4 py-4 bg-sky-400 text-black font-bold rounded-xl hover:bg-sky-300 transition-colors flex items-center justify-center gap-2 text-sm uppercase tracking-wider"
+                className="w-full mt-4 py-4 bg-gradient-to-r from-sky-400 to-indigo-500 text-black font-extrabold rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider cursor-pointer"
               >
                 <span>{teamSize > 1 ? "Next: Member 2 Details" : "Next: Review Team"}</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </motion.button>
             </motion.div>
           )}
 
@@ -467,7 +551,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
           {currentStep >= 3 && currentStep < 99 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               {(() => {
-                const memberIdx = currentStep - 3; // Index in members array (0 = Member 2)
+                const memberIdx = currentStep - 3;
                 const memberNum = memberIdx + 2;
                 const m = members[memberIdx];
 
@@ -480,7 +564,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                       <button
                         type="button"
                         onClick={() => setCurrentStep(currentStep - 1)}
-                        className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1"
+                        className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
                       >
                         <ArrowLeft className="w-3.5 h-3.5" /> Back
                       </button>
@@ -523,7 +607,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                           required
                           value={m.phone}
                           onChange={(e) => handleMemberChange(memberIdx, e)}
-                          placeholder="+1 234 567 8900"
+                          placeholder="+91 98765 43210"
                           className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
                         />
                       </div>
@@ -575,21 +659,23 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                       </div>
                     </div>
 
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       type="button"
                       onClick={() => handleNextFromMemberStep(memberIdx)}
-                      className="w-full mt-4 py-4 bg-sky-400 text-black font-bold rounded-xl hover:bg-sky-300 transition-colors flex items-center justify-center gap-2 text-sm uppercase tracking-wider"
+                      className="w-full mt-4 py-4 bg-gradient-to-r from-sky-400 to-indigo-500 text-black font-extrabold rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider cursor-pointer"
                     >
                       <span>{memberNum < teamSize ? `Next: Member ${memberNum + 1} Details` : "Next: Review & Submit"}</span>
                       <ArrowRight className="w-4 h-4" />
-                    </button>
+                    </motion.button>
                   </>
                 );
               })()}
             </motion.div>
           )}
 
-          {/* STEP 99: Final Review & Cool Motivating Submit Button */}
+          {/* STEP 99: Final Review & Submit Button */}
           {currentStep === 99 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <div className="flex items-center justify-between">
@@ -599,13 +685,12 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                 <button
                   type="button"
                   onClick={() => setCurrentStep(teamSize > 1 ? teamSize + 1 : 2)}
-                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1"
+                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Back
                 </button>
               </div>
 
-              {/* Summary Card */}
               <div className="p-5 bg-white/[0.03] border border-white/10 rounded-2xl text-xs font-mono space-y-3">
                 <div className="flex justify-between border-b border-white/10 pb-2">
                   <span className="text-slate-400">TEAM NAME</span>
@@ -630,29 +715,28 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                 <span>Welcome emails will be automatically sent to all {teamSize} participants upon launch!</span>
               </div>
 
-              {/* COOL & MOTIVATING SUBMIT BUTTON */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03, boxShadow: "0 0 40px rgba(56,189,248,0.7)" }}
+                whileTap={{ scale: 0.97 }}
                 type="button"
                 disabled={status === "submitting"}
                 onClick={handleSubmitTeam}
-                className="w-full py-5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black text-base rounded-2xl shadow-[0_0_35px_rgba(56,189,248,0.6)] hover:shadow-[0_0_50px_rgba(56,189,248,0.9)] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 uppercase tracking-wider disabled:opacity-50"
+                className="w-full py-5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black text-base rounded-2xl shadow-[0_0_35px_rgba(56,189,248,0.6)] transition-all flex items-center justify-center gap-3 uppercase tracking-wider disabled:opacity-50 cursor-pointer"
               >
                 {status === "submitting" ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin text-white" />
-                    <span>LAUNCHING TEAM REGISTRATION...</span>
+                    <span>CONFIRMING TEAM REGISTRATION...</span>
                   </>
                 ) : (
-                  <>
-                    <span>IGNITE YOUR LEGACY 🚀</span>
-                  </>
+                  <span>CONFIRM REGISTRATION 🚀</span>
                 )}
-              </button>
+              </motion.button>
             </motion.div>
           )}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 
   if (onClose) {
