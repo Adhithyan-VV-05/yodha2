@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import logo from "../assets/logo.png";
 
@@ -65,7 +65,7 @@ const CHAR_SEGMENTS: Record<string, SegmentDef[]> = {
   "0": [SEG.top, SEG.topLeft, SEG.topRight, SEG.bottomLeft, SEG.bottomRight, SEG.bottom],
 };
 
-// Fullscreen post pass shader material for jittery screen effect & sudden vanish
+// Fullscreen post pass shader material for jittery screen effect
 const POST_VERTEX = /* glsl */ `
   varying vec2 vUv;
   void main() {
@@ -90,29 +90,20 @@ const POST_FRAGMENT = /* glsl */ `
   void main() {
     vec2 uv = vUv;
 
-    // Intense screen jitter tearing lines
-    float band = floor(uv.y * 80.0);
-    float bandNoise = rand(vec2(band, floor(uTime * 30.0)));
-    float tear = step(0.85, bandNoise) * (bandNoise - 0.5) * 0.25 * uGlitch;
+    float band = floor(uv.y * 60.0);
+    float bandNoise = rand(vec2(band, floor(uTime * 20.0)));
+    float tear = step(0.88, bandNoise) * (bandNoise - 0.5) * 0.18 * uGlitch;
     uv.x += tear;
 
-    float caAmount = 0.015 * uGlitch;
+    float caAmount = 0.01 * uGlitch;
     float r = texture2D(tDiffuse, uv + vec2(caAmount, 0.0)).r;
     float g = texture2D(tDiffuse, uv).g;
     float b = texture2D(tDiffuse, uv - vec2(caAmount, 0.0)).b;
     float a = texture2D(tDiffuse, uv).a;
     vec3 color = vec3(r, g, b);
 
-    // Dynamic scanline noise
-    float scan = sin(uv.y * uResolution.y * 1.5 + uTime * 20.0) * 0.08 * uGlitch;
+    float scan = sin(uv.y * uResolution.y * 1.2 + uTime * 10.0) * 0.06 * uGlitch;
     color -= scan;
-
-    vec2 blockUv = floor(uv * vec2(30.0, 18.0));
-    float blockNoise = rand(blockUv + floor(uTime * 15.0));
-    float blockGlitch = step(0.96, blockNoise) * uGlitch;
-    color = mix(color, vec3(rand(blockUv), rand(blockUv + 1.0), 1.0), blockGlitch * 0.9);
-
-    color = mix(color, color * vec3(0.75, 0.95, 1.3), uGlitch * 0.5);
 
     gl_FragColor = vec4(color * uFade, a * uFade);
   }
@@ -121,6 +112,7 @@ const POST_FRAGMENT = /* glsl */ `
 export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3DCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [hasContextError, setHasContextError] = useState(false);
 
   const progressRef = useRef(progress);
   const isEndingRef = useRef(isEnding);
@@ -132,9 +124,9 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     const canvasEl = canvasRef.current;
     if (!container || !canvasEl) return;
 
-    let width = container.clientWidth || 1;
-    let height = container.clientHeight || 1;
-    const isMobile = width < 640;
+    let width = container.clientWidth || window.innerWidth || 360;
+    let height = container.clientHeight || window.innerHeight || 640;
+    const isMobile = width < 640 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     const disposables: Array<{ dispose: () => void }> = [];
     const own = <T extends { dispose: () => void }>(item: T): T => {
@@ -142,18 +134,29 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
       return item;
     };
 
+    // FAILSAFE LOGO LOADING GATE FOR MOBILE BROWSERS
     let isLogoLoaded = false;
+    const logoTimeout = setTimeout(() => {
+      isLogoLoaded = true; // Always unlock after 300ms fail-safe timeout on mobile
+    }, 300);
+
+    // WebGL Context Loss Handler
+    const handleContextLost = (e: Event) => {
+      e.preventDefault();
+      setHasContextError(true);
+    };
+    canvasEl.addEventListener("webglcontextlost", handleContextLost);
 
     // ---------------------------------------------------------------------
-    // Scene / Camera / Renderer (Dark Night Sky at Space: Pitch #020308)
+    // Scene / Camera / Renderer (Mobile Optimized)
     // ---------------------------------------------------------------------
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x020308, 0.005);
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 400);
 
-    const baseCamDist = isMobile ? 13.5 : 9.5;
-    const heroCamDist = isMobile ? 10.8 : 7.6;
+    const baseCamDist = isMobile ? 14.5 : 9.5;
+    const heroCamDist = isMobile ? 11.5 : 7.6;
 
     const basePosition = new THREE.Vector3(0, 0, baseCamDist);
     const heroPosition = new THREE.Vector3(0, 0, heroCamDist);
@@ -162,23 +165,31 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     camera.position.copy(basePosition);
     camera.lookAt(baseLookAt);
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasEl,
-      alpha: true,
-      antialias: true,
-      powerPreference: "high-performance",
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvasEl,
+        alpha: true,
+        antialias: !isMobile, // Disable MSAA antialias on mobile GPUs to prevent OOM
+        powerPreference: "high-performance",
+        failIfMajorPerformanceCaveat: false,
+      });
+    } catch {
+      setHasContextError(true);
+      return;
+    }
+
     renderer.setSize(width, height, false);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setClearColor(0x020308, 1); // Dark pitch night sky at space
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0x020308, 1);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.2;
 
     // ---------------------------------------------------------------------
-    // Space Backdrop: Night Sky Starfield + Soft Cosmic Aurora
+    // Space Backdrop: Starfield + Soft Cosmic Aurora
     // ---------------------------------------------------------------------
-    const STAR_COUNT = 2600;
+    const STAR_COUNT = isMobile ? 800 : 2400; // Scaled down for mobile performance
     const starPositions = new Float32Array(STAR_COUNT * 3);
     for (let i = 0; i < STAR_COUNT; i++) {
       const radius = 40 + Math.random() * 160;
@@ -192,24 +203,24 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
 
     const starSpriteCanvas = document.createElement("canvas");
-    starSpriteCanvas.width = 32;
-    starSpriteCanvas.height = 32;
+    starSpriteCanvas.width = 16;
+    starSpriteCanvas.height = 16;
     const spctx2 = starSpriteCanvas.getContext("2d");
     if (spctx2) {
-      const g = spctx2.createRadialGradient(16, 16, 0, 16, 16, 16);
+      const g = spctx2.createRadialGradient(8, 8, 0, 8, 8, 8);
       g.addColorStop(0, "rgba(255,255,255,1)");
       g.addColorStop(0.6, "rgba(56,189,248,0.8)");
       g.addColorStop(1, "rgba(56,189,248,0)");
       spctx2.fillStyle = g;
-      spctx2.fillRect(0, 0, 32, 32);
+      spctx2.fillRect(0, 0, 16, 16);
     }
     const starTexture = own(new THREE.CanvasTexture(starSpriteCanvas));
     const starMat = own(
       new THREE.PointsMaterial({
-        size: 0.95,
+        size: isMobile ? 0.7 : 0.95,
         map: starTexture,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.88,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
         fog: false,
@@ -219,12 +230,12 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     scene.add(starField);
 
     const nebulaCanvas = document.createElement("canvas");
-    nebulaCanvas.width = 512;
-    nebulaCanvas.height = 256;
+    nebulaCanvas.width = isMobile ? 256 : 512;
+    nebulaCanvas.height = isMobile ? 128 : 256;
     const nctx = nebulaCanvas.getContext("2d");
     if (nctx) {
       nctx.fillStyle = "#020308";
-      nctx.fillRect(0, 0, 512, 256);
+      nctx.fillRect(0, 0, nebulaCanvas.width, nebulaCanvas.height);
       const blobs: [number, number, number, string][] = [
         [140, 100, 150, "rgba(56,189,248,0.18)"],
         [370, 150, 170, "rgba(168,85,247,0.16)"],
@@ -235,11 +246,11 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
         g.addColorStop(0, color);
         g.addColorStop(1, "rgba(0,0,0,0)");
         nctx.fillStyle = g;
-        nctx.fillRect(0, 0, 512, 256);
+        nctx.fillRect(0, 0, nebulaCanvas.width, nebulaCanvas.height);
       });
     }
     const nebulaTexture = own(new THREE.CanvasTexture(nebulaCanvas));
-    const nebulaGeo = own(new THREE.SphereGeometry(190, 24, 16));
+    const nebulaGeo = own(new THREE.SphereGeometry(190, 16, 12));
     const nebulaMat = own(
       new THREE.MeshBasicMaterial({
         map: nebulaTexture,
@@ -253,10 +264,9 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
 
     // ---------------------------------------------------------------------
     // SMALL ASTEROIDS SPAWNING OUTSIDE SCREEN & DRIFTING INTO VIEWPORT
-    // (Size is SMALL: radius 0.12 to 0.32, much smaller than 1.35 ball)
     // ---------------------------------------------------------------------
     const smallAsteroids: SmallAsteroid[] = [];
-    const ASTEROID_COUNT = 24;
+    const ASTEROID_COUNT = isMobile ? 10 : 20;
 
     const asteroidMat = own(
       new THREE.MeshStandardMaterial({
@@ -270,18 +280,7 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
 
     for (let i = 0; i < ASTEROID_COUNT; i++) {
       const rad = 0.12 + Math.random() * 0.2;
-      const astGeo = own(new THREE.DodecahedronGeometry(rad, 1));
-
-      const posAttr = astGeo.attributes.position;
-      for (let j = 0; j < posAttr.count; j++) {
-        const x = posAttr.getX(j);
-        const y = posAttr.getY(j);
-        const z = posAttr.getZ(j);
-        const noise = 1 + (Math.random() - 0.5) * 0.3;
-        posAttr.setXYZ(j, x * noise, y * noise, z * noise);
-      }
-      astGeo.computeVertexNormals();
-
+      const astGeo = own(new THREE.DodecahedronGeometry(rad, 0));
       const astMesh = new THREE.Mesh(astGeo, asteroidMat);
 
       const side = Math.random() > 0.5 ? 1 : -1;
@@ -313,11 +312,11 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     // Main 3D Metallic Yodha Logo Sphere (1.35 radius)
     // ---------------------------------------------------------------------
     const ballRadius = 1.35;
-    const sphereGeo = own(new THREE.SphereGeometry(ballRadius, 64, 64));
+    const sphereGeo = own(new THREE.SphereGeometry(ballRadius, isMobile ? 32 : 64, isMobile ? 32 : 64));
 
     const logoCanvas = document.createElement("canvas");
-    logoCanvas.width = 2048;
-    logoCanvas.height = 1024;
+    logoCanvas.width = isMobile ? 1024 : 2048;
+    logoCanvas.height = isMobile ? 512 : 1024;
     const lctx = logoCanvas.getContext("2d");
     const sphereTexture = own(new THREE.CanvasTexture(logoCanvas));
     sphereTexture.wrapS = THREE.RepeatWrapping;
@@ -325,32 +324,34 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
 
     if (lctx) {
       lctx.fillStyle = "#000000";
-      lctx.fillRect(0, 0, 2048, 1024);
+      lctx.fillRect(0, 0, logoCanvas.width, logoCanvas.height);
       const img = new Image();
       const paintLogo = () => {
-        const logoSize = 850;
-        const topY = (1024 - logoSize) / 2;
-        lctx.drawImage(img, 512 - logoSize / 2, topY, logoSize, logoSize);
-        lctx.drawImage(img, 1536 - logoSize / 2, topY, logoSize, logoSize);
+        const logoSize = isMobile ? 420 : 850;
+        const topY = (logoCanvas.height - logoSize) / 2;
+        const halfW = logoCanvas.width / 2;
+        lctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+        lctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
         sphereTexture.needsUpdate = true;
         isLogoLoaded = true;
       };
       img.onload = paintLogo;
+      img.onerror = () => { isLogoLoaded = true; };
       img.src = logo;
       if (img.complete && img.naturalWidth > 0) paintLogo();
     }
 
     const envCanvas = document.createElement("canvas");
-    envCanvas.width = 128;
-    envCanvas.height = 64;
+    envCanvas.width = 64;
+    envCanvas.height = 32;
     const ectx = envCanvas.getContext("2d");
     if (ectx) {
-      const grad = ectx.createLinearGradient(0, 0, 0, 64);
+      const grad = ectx.createLinearGradient(0, 0, 0, 32);
       grad.addColorStop(0, "#38bdf8");
       grad.addColorStop(0.45, "#0b1a2e");
       grad.addColorStop(1, "#020308");
       ectx.fillStyle = grad;
-      ectx.fillRect(0, 0, 128, 64);
+      ectx.fillRect(0, 0, 64, 32);
     }
     const envTexture = own(new THREE.CanvasTexture(envCanvas));
     envTexture.mapping = THREE.EquirectangularReflectionMapping;
@@ -374,16 +375,16 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
 
     // Glowing Ambient Aura Sprite
     const glowCanvas = document.createElement("canvas");
-    glowCanvas.width = 256;
-    glowCanvas.height = 256;
+    glowCanvas.width = 128;
+    glowCanvas.height = 128;
     const glctx = glowCanvas.getContext("2d");
     if (glctx) {
-      const g = glctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      const g = glctx.createRadialGradient(64, 64, 0, 64, 64, 64);
       g.addColorStop(0, "rgba(56, 189, 248, 0.9)");
       g.addColorStop(0.4, "rgba(129, 140, 248, 0.3)");
       g.addColorStop(1, "rgba(0, 0, 0, 0)");
       glctx.fillStyle = g;
-      glctx.fillRect(0, 0, 256, 256);
+      glctx.fillRect(0, 0, 128, 128);
     }
     const glowTexture = own(new THREE.CanvasTexture(glowCanvas));
     const glowMat = own(
@@ -403,9 +404,9 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     // 3D Extruded Digital Text ("YODHA" Silver/White, "2.0" Sky Blue)
     // ---------------------------------------------------------------------
     const LETTERS_Z = 0.8;
-    const LETTER_SCALE = isMobile ? 0.44 : 0.62;
+    const LETTER_SCALE = isMobile ? 0.38 : 0.62; // Fit mobile screens perfectly
     const letterChars = ["Y", "O", "D", "H", "A", " ", "2", ".", "0"];
-    const charSpacing = isMobile ? 0.95 : 1.2;
+    const charSpacing = isMobile ? 0.85 : 1.2;
     const totalWidth = letterChars.length * charSpacing;
     const startX = -totalWidth / 2 + charSpacing / 2;
 
@@ -414,7 +415,7 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
       const key = `${w.toFixed(3)}x${h.toFixed(3)}`;
       let geo = geoCache.get(key);
       if (!geo) {
-        geo = own(new THREE.BoxGeometry(w, h, 0.5));
+        geo = own(new THREE.BoxGeometry(w, h, 0.4));
         geoCache.set(key, geo);
       }
       return geo;
@@ -486,7 +487,7 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     // ---------------------------------------------------------------------
     const smallBaseBalls: SmallBaseBall[] = [];
     const smallBallRadius = 0.28;
-    const smallBallGeo = own(new THREE.SphereGeometry(smallBallRadius, 32, 32));
+    const smallBallGeo = own(new THREE.SphereGeometry(smallBallRadius, 16, 16));
     const smallBallMat = own(
       new THREE.MeshStandardMaterial({
         map: sphereTexture,
@@ -501,12 +502,11 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
       })
     );
 
-    // Construct a continuous supporting base row directly beneath YODHA 2.0
-    const BASE_BALL_COUNT = isMobile ? 12 : 16;
-    const baseRowWidth = (totalWidth * LETTER_SCALE) + 0.8;
+    const BASE_BALL_COUNT = isMobile ? 10 : 16;
+    const baseRowWidth = (totalWidth * LETTER_SCALE) + 0.6;
     const baseStartX = -baseRowWidth / 2;
     const baseStepX = baseRowWidth / (BASE_BALL_COUNT - 1);
-    const basePedestalY = -0.75; // Directly supporting the bottom of 3D letters
+    const basePedestalY = -0.75;
 
     for (let i = 0; i < BASE_BALL_COUNT; i++) {
       const bMesh = new THREE.Mesh(smallBallGeo, smallBallMat);
@@ -538,49 +538,58 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     backLight.position.set(-6, -5, -6);
     scene.add(backLight);
 
-    // Fullscreen glitch / fade post pass
-    let renderTarget = new THREE.WebGLRenderTarget(width, height);
-    own(renderTarget);
-    const postScene = new THREE.Scene();
-    const postCamera = new THREE.Camera();
-    const postGeo = own(new THREE.PlaneGeometry(2, 2));
-    const postUniforms = {
-      tDiffuse: { value: null as THREE.Texture | null },
-      uTime: { value: 0 },
-      uGlitch: { value: 0 },
-      uFade: { value: 1 },
-      uResolution: { value: new THREE.Vector2(width, height) },
-    };
-    const postMat = own(
-      new THREE.ShaderMaterial({
-        uniforms: postUniforms,
-        vertexShader: POST_VERTEX,
-        fragmentShader: POST_FRAGMENT,
-        transparent: true,
-        depthTest: false,
-        depthWrite: false,
-      })
-    );
-    const postMesh = new THREE.Mesh(postGeo, postMat);
-    postScene.add(postMesh);
+    // Optional Post Processing (Disabled on Mobile for GPU stability)
+    let renderTarget: THREE.WebGLRenderTarget | null = null;
+    let postScene: THREE.Scene | null = null;
+    let postCamera: THREE.Camera | null = null;
+    let postUniforms: any = null;
+
+    if (!isMobile) {
+      renderTarget = new THREE.WebGLRenderTarget(width, height);
+      own(renderTarget);
+      postScene = new THREE.Scene();
+      postCamera = new THREE.Camera();
+      const postGeo = own(new THREE.PlaneGeometry(2, 2));
+      postUniforms = {
+        tDiffuse: { value: null as THREE.Texture | null },
+        uTime: { value: 0 },
+        uGlitch: { value: 0 },
+        uFade: { value: 1 },
+        uResolution: { value: new THREE.Vector2(width, height) },
+      };
+      const postMat = own(
+        new THREE.ShaderMaterial({
+          uniforms: postUniforms,
+          vertexShader: POST_VERTEX,
+          fragmentShader: POST_FRAGMENT,
+          transparent: true,
+          depthTest: false,
+          depthWrite: false,
+        })
+      );
+      const postMesh = new THREE.Mesh(postGeo, postMat);
+      postScene.add(postMesh);
+    }
 
     // Resize handling with Mobile View Optimization
     const handleResize = () => {
-      width = container.clientWidth || 1;
-      height = container.clientHeight || 1;
+      width = container.clientWidth || window.innerWidth || 360;
+      height = container.clientHeight || window.innerHeight || 640;
       const isMob = width < 640;
 
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      const newBaseZ = isMob ? 13.5 : 9.5;
-      const newHeroZ = isMob ? 10.8 : 7.6;
+      const newBaseZ = isMob ? 14.5 : 9.5;
+      const newHeroZ = isMob ? 11.5 : 7.6;
       basePosition.set(0, 0, newBaseZ);
       heroPosition.set(0, 0, newHeroZ);
 
       renderer.setSize(width, height, false);
-      renderTarget.setSize(width, height);
-      postUniforms.uResolution.value.set(width, height);
+      if (renderTarget && postUniforms) {
+        renderTarget.setSize(width, height);
+        postUniforms.uResolution.value.set(width, height);
+      }
     };
 
     const resizeObserver =
@@ -590,15 +599,13 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
 
     // Animation loop & Physics Timeline
     const START_Z = -70;
-    const HERO_Z = isMobile ? 10.8 : 7.6;
+    const HERO_Z = isMobile ? 11.5 : 7.6;
     const T_COLLISION = 1.0;
-    const T_SETTLE_HOLD = 2.0; // Settling completes within 3.0s total after hit
-    const T_JITTER = 0.5; // Intense screen jitter pass
-    const T_VANISH = 0.2; // Sudden disappearance cut
+    const T_SETTLE_HOLD = 2.0;
+    const T_JITTER = 0.5;
 
     const T_SETTLE_END = T_COLLISION + T_SETTLE_HOLD;
     const T_JITTER_END = T_SETTLE_END + T_JITTER;
-    const T_VANISH_END = T_JITTER_END + T_VANISH;
 
     let animationFrameId: number;
     const clock = new THREE.Clock();
@@ -645,7 +652,7 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
         }
       });
 
-      // Animate Small Base Balls: Slow continuous Y-axis rotation before hit
+      // Animate Small Base Balls
       smallBaseBalls.forEach((bBall) => {
         if (!bBall.isHit) {
           bBall.mesh.rotation.y += dt * 0.8;
@@ -686,7 +693,6 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
       let fadeFactor = 1;
 
       if (!ending || endingStartTime === null) {
-        // BALL STARTS MOVING FORWARD ONLY ONCE LOGO IS LOADED
         if (isLogoLoaded) {
           const progFactor = THREE.MathUtils.clamp(progress / 100, 0, 1);
           const targetZ = START_Z + progFactor * (LETTERS_Z - START_Z);
@@ -709,7 +715,6 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
         glowSprite.position.copy(ballMesh.position);
         glowSprite.scale.set(4.0, 4.0, 1);
       } else {
-        // ENDING TIMELINE: IMPACT DISPERSION & SIDE-SCREEN BOUNCING PHYSICS (SETTLES IN < 3.0s)
         const t = elapsedTime - endingStartTime;
 
         if (!hasCollided) {
@@ -719,7 +724,6 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
           flashLight.intensity = 26;
           cameraShake = 1.2;
 
-          // Disperse 3D Letter Segments
           letterSegments.forEach((seg) => {
             seg.isHit = true;
             const dx = seg.mesh.position.x;
@@ -736,7 +740,6 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
             );
           });
 
-          // Disperse Small Base Pedestal Balls with Side-Screen Bouncing Physics
           smallBaseBalls.forEach((bBall) => {
             bBall.isHit = true;
             const dx = bBall.mesh.position.x;
@@ -744,8 +747,8 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
             const blastSpeed = 8.0 + Math.random() * 7.0;
 
             bBall.velocity.set(
-              sideDir * blastSpeed, // Bounce outward towards screen sides
-              Math.random() * 4.0,  // Upward pop
+              sideDir * blastSpeed,
+              Math.random() * 4.0,
               (Math.random() - 0.5) * 3.0
             );
             bBall.angularVelocity.set(
@@ -758,7 +761,6 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
 
         flashLight.intensity = Math.max(0, flashLight.intensity * Math.pow(0.05, dt));
 
-        // Physics letter segments falling
         letterSegments.forEach((seg) => {
           if (!seg.isHit || seg.settled) return;
 
@@ -783,8 +785,7 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
           }
         });
 
-        // Small Base Balls: Bouncing off Screen Sides (x = ±12) & Falling to Floor
-        const SIDE_BOUNCE_X = isMobile ? 7.5 : 12.0;
+        const SIDE_BOUNCE_X = isMobile ? 6.5 : 12.0;
 
         smallBaseBalls.forEach((bBall) => {
           if (!bBall.isHit || bBall.settled) return;
@@ -795,14 +796,12 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
           bBall.mesh.rotation.x += bBall.angularVelocity.x * dt;
           bBall.mesh.rotation.y += bBall.angularVelocity.y * dt;
 
-          // Bounce off Screen Side Boundaries!
           if (Math.abs(bBall.mesh.position.x) >= SIDE_BOUNCE_X) {
             const sideSign = bBall.mesh.position.x > 0 ? 1 : -1;
             bBall.mesh.position.x = sideSign * SIDE_BOUNCE_X;
-            bBall.velocity.x = -bBall.velocity.x * 0.65; // Side bounce reflection
+            bBall.velocity.x = -bBall.velocity.x * 0.65;
           }
 
-          // Fall and settle on bottom floor Y = FLOOR_Y within 3.0s
           if (bBall.mesh.position.y <= FLOOR_Y) {
             bBall.mesh.position.y = FLOOR_Y;
             if (Math.abs(bBall.velocity.y) > 1.5) {
@@ -825,26 +824,19 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
           glowSprite.position.copy(ballMesh.position);
           glowSprite.scale.setScalar(3.4);
         } else if (t < T_SETTLE_END) {
-          // Debris settling cleanly on floor within 3.0 seconds total
           ballMesh.position.set(0, 0, HERO_Z);
           ballMesh.rotation.y = elapsedTime * 0.6;
           glowSprite.position.copy(ballMesh.position);
         } else if (t < T_JITTER_END) {
-          // INTENSE SCREEN JITTER PASS BEFORE SUDDEN VANISH
-          glitchIntensity = 1.0; // Max digital tear & scanline glitch
+          glitchIntensity = 1.0;
           ballMesh.position.set(0, 0, HERO_Z);
           glowSprite.position.copy(ballMesh.position);
-        } else if (t < T_VANISH_END) {
-          // SUDDEN DISAPPEARANCE CUT
+        } else {
           fadeFactor = 0;
           ballMesh.visible = false;
           glowSprite.visible = false;
           letterSegments.forEach((seg) => (seg.mesh.visible = false));
           smallBaseBalls.forEach((bBall) => (bBall.mesh.visible = false));
-        } else {
-          fadeFactor = 0;
-          ballMesh.visible = false;
-          glowSprite.visible = false;
           if (!completedFired) {
             completedFired = true;
             onSequenceComplete?.();
@@ -862,20 +854,25 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
       }
       camera.lookAt(ending && endingStartTime !== null && elapsedTime - endingStartTime > T_COLLISION ? heroLookAt : baseLookAt);
 
-      // Render with shader post pass
-      const needsPost = glitchIntensity > 0.001 || fadeFactor < 0.999;
-      if (needsPost) {
-        renderer.setRenderTarget(renderTarget);
-        renderer.clear(true, true, true);
-        renderer.render(scene, camera);
-        renderer.setRenderTarget(null);
-        postUniforms.tDiffuse.value = renderTarget.texture;
-        postUniforms.uTime.value = elapsedTime;
-        postUniforms.uGlitch.value = glitchIntensity;
-        postUniforms.uFade.value = fadeFactor;
-        renderer.clear(true, true, true);
-        renderer.render(postScene, postCamera);
+      // Render with post pass if available, or direct render on mobile GPUs
+      if (renderTarget && postScene && postCamera && postUniforms) {
+        const needsPost = glitchIntensity > 0.001 || fadeFactor < 0.999;
+        if (needsPost) {
+          renderer.setRenderTarget(renderTarget);
+          renderer.clear(true, true, true);
+          renderer.render(scene, camera);
+          renderer.setRenderTarget(null);
+          postUniforms.tDiffuse.value = renderTarget.texture;
+          postUniforms.uTime.value = elapsedTime;
+          postUniforms.uGlitch.value = glitchIntensity;
+          postUniforms.uFade.value = fadeFactor;
+          renderer.clear(true, true, true);
+          renderer.render(postScene, postCamera);
+        } else {
+          renderer.render(scene, camera);
+        }
       } else {
+        // Direct WebGL render on mobile GPUs
         renderer.render(scene, camera);
       }
     };
@@ -883,13 +880,31 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
     animate();
 
     return () => {
+      clearTimeout(logoTimeout);
       cancelAnimationFrame(animationFrameId);
       resizeObserver?.disconnect();
       window.removeEventListener("resize", handleResize);
+      canvasEl.removeEventListener("webglcontextlost", handleContextLost);
       renderer.dispose();
       disposables.forEach((item) => item.dispose());
     };
   }, []);
+
+  // WebGL Fallback container for low-end mobile context loss
+  if (hasContextError) {
+    return (
+      <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#020308]">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 animate-spin flex items-center justify-center shadow-[0_0_30px_rgba(56,189,248,0.5)]">
+            <div className="w-16 h-16 rounded-full bg-[#020308]" />
+          </div>
+          <span className="font-mono text-sm font-bold text-sky-400 tracking-widest uppercase">
+            YODHA 2.0
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className="absolute inset-0 w-full h-full">
