@@ -23,6 +23,32 @@ body {
   min-height: 100vh;
 }
 
+/* Touch & Click Button Optimization for All Devices */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+[role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+/* Custom Cursor Rules on Desktop */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [role="button"] {
+    cursor: none !important;
+  }
+}
+
 /* Hardware-Accelerated Seamless Continuous Infinite Marquee Loop */
 @keyframes marquee {
   0% {

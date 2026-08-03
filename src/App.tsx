@@ -14,6 +14,7 @@ import { PastGallerySection } from "./components/PastGallerySection";
 import { CompactFooter } from "./components/CompactFooter";
 import { MinimalBackgroundVisual } from "./components/MinimalBackgroundVisual";
 import { TrackPage } from "./components/TrackPage";
+import { CustomCursor } from "./components/CustomCursor";
 import { trackUserSession } from "./lib/firebase";
 
 function App() {
@@ -45,6 +46,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#03060d] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-x-hidden">
+      {/* Custom Cyber Pointer Cursor */}
+      <CustomCursor />
+
       {/* Lightweight Minimalistic Background Video Visual */}
       <MinimalBackgroundVisual />
 
@@ -63,10 +67,16 @@ function App() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             onOpenRegisterWithTrack={(tName) => {
-              setActivePage("home");
               handleOpenRegisterWithTrack(tName);
             }}
           />
+          {registerModalOpen && (
+            <RegistrationSection
+              isOpen={true}
+              onClose={() => setRegisterModalOpen(false)}
+              selectedTrack={selectedTrack}
+            />
+          )}
           <CompactFooter />
         </div>
       ) : (
@@ -110,12 +120,14 @@ function App() {
             <RegistrationSection selectedTrack={selectedTrack} />
           </main>
 
-          {/* Registration Modal Popup */}
-          <RegistrationSection
-            isOpen={registerModalOpen}
-            onClose={() => setRegisterModalOpen(false)}
-            selectedTrack={selectedTrack}
-          />
+          {/* Registration Modal Popup - ONLY opens when Register button is clicked */}
+          {registerModalOpen && (
+            <RegistrationSection
+              isOpen={true}
+              onClose={() => setRegisterModalOpen(false)}
+              selectedTrack={selectedTrack}
+            />
+          )}
 
           {/* Ultra-Compact Footer */}
           <CompactFooter />

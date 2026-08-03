@@ -22,7 +22,8 @@ interface RegistrationSectionProps {
   selectedTrack?: string;
 }
 
-export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedTrack = "Healthcare AI" }: RegistrationSectionProps) {
+export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "Healthcare AI" }: RegistrationSectionProps) {
+  if (onClose && !isOpen) return null;
   const [currentStep, setCurrentStep] = useState(1);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -833,7 +834,6 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
                     style={{
                       backgroundColor: stStyle.background,
                       borderColor: isSelected ? stStyle.accent : stStyle.border,
-                      boxShadow: `0 4px 20px ${stStyle.glow}`,
                     }}
                   >
                     <div className="flex items-center gap-3.5 pr-2 truncate">

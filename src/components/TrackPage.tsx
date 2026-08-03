@@ -159,7 +159,6 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                 style={{
                   backgroundColor: stStyle.background,
                   borderColor: stStyle.border,
-                  boxShadow: `0 10px 30px ${stStyle.glow}`,
                 }}
               >
                 <div>
