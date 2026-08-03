@@ -121,13 +121,13 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
                     </div>
                   </div>
 
-                  {/* Footer Action */}
-                  <div className="pt-6 border-t border-white/10 flex items-center justify-end mt-auto">
+                  {/* Horizontally Centered Floating Button (Unaffected by Card Tilt) */}
+                  <div className="pt-6 border-t border-white/10 flex items-center justify-center mt-auto relative z-50 pointer-events-auto">
                     <button
                       onClick={() => {
                         onOpenTrackPage(track.id as "healthcare" | "environmental");
                       }}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs tracking-wider uppercase shadow-lg hover:brightness-110 group/btn transition-all cursor-pointer relative z-30 pointer-events-auto"
+                      className="w-full max-w-xs flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black text-xs sm:text-sm tracking-widest uppercase shadow-[0_0_25px_rgba(56,189,248,0.4)] hover:brightness-115 group/btn transition-all cursor-pointer relative z-50 pointer-events-auto"
                     >
                       <span>Choose Track</span>
                       <ArrowRight className="w-4 h-4 text-sky-200 group-hover/btn:translate-x-1 transition-transform" />
