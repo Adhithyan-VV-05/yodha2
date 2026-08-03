@@ -17,7 +17,7 @@ export function CustomCursor() {
     const onMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
-      // Check if mouse is hovering over interactive clickable elements
+      // Check if mouse cursor is over/near interactive clickable elements or buttons
       const target = e.target as HTMLElement | null;
       if (
         target &&
@@ -71,26 +71,31 @@ export function CustomCursor() {
 
   return (
     <>
-      {/* Main Inner Glowing Dot */}
+      {/* Main Inner Glowing Dot - Turns RED when near/hovering buttons */}
       <div
-        className="fixed top-0 left-0 w-3 h-3 bg-sky-400 rounded-full pointer-events-none z-[9999999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-100 ease-out shadow-[0_0_15px_rgba(56,189,248,1)]"
+        className={`fixed top-0 left-0 w-3.5 h-3.5 rounded-full pointer-events-none z-[9999999] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out ${
+          isHovered
+            ? "bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,1)]"
+            : "bg-sky-400 shadow-[0_0_15px_rgba(56,189,248,1)]"
+        }`}
         style={{
           transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${
             isClicking ? 0.7 : isHovered ? 1.8 : 1
           })`,
-          backgroundColor: isHovered ? "#38bdf8" : "#38bdf8",
         }}
       />
 
-      {/* Smooth Trailing Outer Ring */}
+      {/* Trailing Outer Ring - Turns RED when near/hovering buttons */}
       <div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-sky-400/60 pointer-events-none z-[9999998] -translate-x-1/2 -translate-y-1/2 transition-transform duration-150 ease-out shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+        className={`fixed top-0 left-0 w-9 h-9 rounded-full pointer-events-none z-[9999998] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out border ${
+          isHovered
+            ? "border-rose-500/90 bg-rose-500/15 shadow-[0_0_25px_rgba(244,63,94,0.6)]"
+            : "border-sky-400/50 bg-transparent shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+        }`}
         style={{
           transform: `translate3d(${trailingPos.x}px, ${trailingPos.y}px, 0) scale(${
             isClicking ? 0.8 : isHovered ? 1.6 : 1
           })`,
-          borderColor: isHovered ? "rgba(56,189,248,0.9)" : "rgba(56,189,248,0.45)",
-          backgroundColor: isHovered ? "rgba(56,189,248,0.08)" : "transparent",
         }}
       />
     </>
