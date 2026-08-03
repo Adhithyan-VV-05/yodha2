@@ -15,6 +15,7 @@ import { CompactFooter } from "./components/CompactFooter";
 import { MinimalBackgroundVisual } from "./components/MinimalBackgroundVisual";
 import { TrackPage } from "./components/TrackPage";
 import { CustomCursor } from "./components/CustomCursor";
+import { RiddleTeaserSection } from "./components/RiddleTeaserSection";
 import { trackUserSession } from "./lib/firebase";
 
 function App() {
@@ -88,6 +89,9 @@ function App() {
           <main className="flex-grow">
             {/* 1. Hero Section */}
             <HeroSection onOpenRegister={() => setRegisterModalOpen(true)} />
+
+            {/* Secret Riddle Challenge (Positioned right below Hero Section, 95vw centered) */}
+            <RiddleTeaserSection />
             
             {/* 2, 3, 4, 5. About Yodha, What You'll Build, Vision, Mission */}
             <AboutSection />

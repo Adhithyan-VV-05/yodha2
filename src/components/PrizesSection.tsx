@@ -8,7 +8,7 @@ interface PrizesSectionProps {
   onOpenRegister: () => void;
 }
 
-export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
+export function PrizesSection({ }: PrizesSectionProps) {
   const [isInView, setIsInView] = useState(false);
 
   return (
@@ -181,28 +181,13 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
           </Card3DTilt>
         </div>
 
-        {/* Special INR Bounties Card with Register Now CTA */}
+        {/* Special INR Bounties Card - Single Long Sentence Line Without Breaks */}
         <Card3DTilt intensity={8} className="w-full">
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-sky-950/40 via-indigo-950/40 to-slate-950 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-xl shadow-xl">
-            <div className="text-center md:text-left">
-              <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block font-bold">
-                SPECIAL BOUNTIES & AWARDS
-              </span>
-              <h4 className="text-xl sm:text-2xl font-bold text-white mt-1">
-                ₹10,000 Category & Community Prizes
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-                Awarded for Best AI Integration, Best Design Experience, Accessibility Excellence, and People's Choice Winner.
-              </p>
-            </div>
-
-            <button
-              onClick={onOpenRegister}
-              className="px-8 py-3.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold text-xs sm:text-sm rounded-2xl uppercase tracking-widest shadow-[0_0_25px_rgba(56,189,248,0.4)] hover:brightness-110 transition-all cursor-pointer shrink-0 relative z-30 pointer-events-auto flex items-center gap-2"
-            >
-              <Sparkles className="w-4 h-4 text-sky-200 animate-spin" />
-              <span>Register Now</span>
-            </button>
+          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-sky-950/40 via-indigo-950/40 to-slate-950 border border-white/10 flex items-center justify-center backdrop-blur-xl shadow-xl text-center">
+            <p className="text-xs sm:text-sm md:text-base text-slate-200 font-medium leading-normal">
+              <strong className="text-sky-400 uppercase font-mono font-extrabold tracking-wider mr-2">SPECIAL BOUNTIES & AWARDS:</strong>
+              ₹10,000 Category & Community Prizes — Awarded for Best AI Integration, Best Design Experience, Accessibility Excellence, and People's Choice Winner.
+            </p>
           </div>
         </Card3DTilt>
 

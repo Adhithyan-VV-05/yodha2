@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Trophy, Clock, Sparkles, Users, Cpu, ShieldCheck, Lock } from "lucide-react";
+import { ArrowRight, Trophy, Clock, Sparkles, Users, Cpu, ShieldCheck } from "lucide-react";
 import { KineticText } from "./KineticText";
 import { ThreeDHeroVisual } from "./ThreeDHeroVisual";
 
@@ -257,52 +257,6 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
                 </div>
               ))}
             </motion.div>
-
-            {/* SECRET RIDDLE CHALLENGE PROMOTIONAL CARD */}
-            <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.85 }}
-              className="mt-10 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-purple-950/60 via-slate-950/90 to-amber-950/50 border border-purple-500/40 backdrop-blur-2xl w-[95vw] max-w-[95vw] mx-auto shadow-[0_0_40px_rgba(168,85,247,0.25)] text-left relative overflow-hidden"
-            >
-              {/* Lock Badge Header */}
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span className="text-[10px] font-mono font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow">
-                  <Lock className="w-3 h-3 text-amber-400" />
-                  <span>SECRET RIDDLE CHALLENGE</span>
-                </span>
-                <span className="text-[10px] font-mono font-bold text-purple-300 bg-purple-950/80 border border-purple-500/30 px-3 py-1 rounded-full uppercase tracking-wider">
-                  UNLOCKING SOON • STAY TUNED
-                </span>
-              </div>
-
-              <h4 className="text-base sm:text-lg font-black text-white mb-1">
-                Solve the Riddle & Avail 80% Discount on Selection of Your Team!
-              </h4>
-              <p className="text-xs text-slate-300 leading-relaxed font-normal mb-4">
-                The official Yodha 2.0 AI riddle challenge will be unlocked soon. Solve it correctly to claim an exclusive <strong className="text-amber-300">80% discount</strong> on team selection fees!
-              </p>
-
-              {/* Riddle Input Form Placeholder (Locked State) */}
-              <div className="flex flex-col sm:flex-row items-center gap-2.5">
-                <div className="relative w-full flex-1">
-                  <input
-                    type="text"
-                    disabled
-                    placeholder="Enter riddle answer... (Unlocking Soon, Stay Tuned)"
-                    className="w-full px-4 py-2.5 bg-black/60 border border-purple-500/30 rounded-xl text-xs text-slate-400 placeholder:text-slate-500 focus:outline-none cursor-not-allowed select-none opacity-80 font-mono"
-                  />
-                </div>
-                <button
-                  disabled
-                  className="w-full sm:w-auto px-5 py-2.5 bg-purple-900/40 text-purple-300/70 border border-purple-500/30 rounded-xl text-xs font-mono font-bold uppercase tracking-wider cursor-not-allowed opacity-80 shrink-0 flex items-center justify-center gap-1.5"
-                >
-                  <Lock className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Submit Answer</span>
-                </button>
-              </div>
-            </motion.div>
-
           </div>
         </div>
       </div>
