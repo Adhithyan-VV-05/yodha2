@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ThreeDHeroVisual } from "./ThreeDHeroVisual";
+import { Intro3DCanvas } from "./Intro3DCanvas";
 import logo from "../assets/logo.png";
 
 interface IntroLoaderProps {
@@ -15,50 +15,50 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
     let timerId: number | null = null;
     let animId: number | null = null;
 
-    // Real Asset Preloader: Load Yodha Logo Image
-    const img = new Image();
-    img.src = logo;
+    // Real Resource Preloader: Image Assets & Web Fonts Preload
+    const preloadAssets = async () => {
+      const logoPromise = new Promise((resolve) => {
+        const img = new Image();
+        img.src = logo;
+        if (img.complete) resolve(true);
+        else {
+          img.onload = () => resolve(true);
+          img.onerror = () => resolve(true);
+        }
+      });
 
-    img.onload = () => {
-      // Hit 50% immediately upon logo image load confirmation
-      setProgress(50);
+      const fontsPromise = document.fonts ? document.fonts.ready : Promise.resolve();
 
-      // Smoothly animate from 50% to 100% over 1.5 seconds
+      await Promise.all([logoPromise, fontsPromise]);
+
       const startTime = performance.now();
-      const shrinkDuration = 1500;
+      const progressDuration = 2800;
 
       const stepProgress = (currentTime: number) => {
         const elapsed = currentTime - startTime;
-        const remainingPct = Math.min(50, Math.floor((elapsed / shrinkDuration) * 50));
-        const currentTotal = 50 + remainingPct;
+        const currentPct = Math.min(100, Math.floor((elapsed / progressDuration) * 100));
 
-        setProgress(currentTotal);
+        setProgress(currentPct);
 
-        if (elapsed < shrinkDuration) {
+        if (elapsed < progressDuration) {
           animId = requestAnimationFrame(stepProgress);
         } else {
-          // Progress reached 100%! Trigger 1-second shrink to size 0 animation
           setProgress(100);
           setIsEnding(true);
-          timerId = window.setTimeout(onComplete, 1000); // Exactly 1 sec shrink to 0
+          timerId = window.setTimeout(onComplete, 1200);
         }
       };
 
       animId = requestAnimationFrame(stepProgress);
     };
 
-    // Fallback if cached or instant load
-    if (img.complete) {
-      img.onload(new Event("load"));
-    }
+    preloadAssets();
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
       if (timerId !== null) window.clearTimeout(timerId);
     };
   }, [onComplete]);
-
-  const brandLetters = ["Y", "O", "D", "H", "A", " ", "2", ".", "0"];
 
   return (
     <motion.div
@@ -69,10 +69,13 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         scale: 1.02,
         transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] },
       }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#020409] text-white overflow-hidden select-none px-8 py-10"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#03060d] text-white overflow-hidden select-none px-6 py-8"
     >
-      {/* Dynamic Ambient Glowing Backdrop */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-sky-500/20 via-indigo-500/20 to-purple-500/20 rounded-full blur-[160px] pointer-events-none animate-pulse" />
+      {/* FULL CANVAS 3D YODHA 2.0 SCENE */}
+      <Intro3DCanvas progress={progress} isEnding={isEnding} />
+
+      {/* Ambient Glowing Backdrop matching landing page */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-gradient-to-r from-sky-500/15 via-indigo-500/15 to-purple-500/15 rounded-full blur-[170px] pointer-events-none animate-pulse" />
 
       {/* Top Bar Info */}
       <motion.div
@@ -85,42 +88,22 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
           <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping" />
           <span>YODHA HACKATHON</span>
         </span>
-        <span className="bg-white/10 px-3 py-1 rounded-full text-slate-200 border border-white/10">
+        <span className="bg-white/10 px-3.5 py-1 rounded-full text-slate-200 border border-white/10 backdrop-blur-md">
           11th & 12th
         </span>
       </motion.div>
 
-      {/* Center 3D Sphere (Shrinks to size 0 within 1 sec when loading is over) */}
-      <div className="flex flex-col items-center my-auto z-10 w-full max-w-md">
-        <div className="w-full relative flex justify-center mb-2">
-          <ThreeDHeroVisual isLoader={true} progress={progress} isEnding={isEnding} />
-        </div>
-
-        {/* Staggered Letter Entrance with Neon Glow */}
-        <div className="flex items-center gap-1 sm:gap-3 text-4xl sm:text-6xl md:text-7xl font-black tracking-widest font-mono text-white mb-4 drop-shadow-[0_0_20px_rgba(56,189,248,0.5)]">
-          {brandLetters.map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 25, scale: 0.5 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.1 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className={char === "2" || char === "." || char === "0" ? "text-transparent bg-clip-text bg-gradient-to-b from-sky-300 via-sky-400 to-cyan-500" : "text-white"}
-            >
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-          ))}
-        </div>
-
-        {/* Progress Display */}
-        <div className="flex items-center gap-3 text-slate-300 font-mono text-xs tracking-widest">
-          <span className="text-slate-400">
-            {isEnding ? "LAUNCHING EXPERIENCE..." : "LOADING ENVIRONMENT"}
+      {/* Center Loader Status Overlay: YODHA 2.0 LOADING.. */}
+      <div className="flex flex-col items-center z-10 text-center mt-auto mb-6">
+        <div className="flex items-center gap-3 text-slate-300 font-mono text-xs tracking-widest bg-[#04060b]/80 border border-sky-500/30 px-5 py-2 rounded-full backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.2)]">
+          <span className="text-slate-300 font-medium uppercase tracking-wider">
+            YODHA 2.0 LOADING..
           </span>
           <span className="text-sky-400 font-black text-sm">{String(progress).padStart(3, "0")}%</span>
         </div>
       </div>
 
-      {/* Progress Bar */}
+      {/* Bottom Progress Bar */}
       <div className="w-full max-w-md z-10">
         <div className="w-full h-[3px] bg-white/10 rounded-full overflow-hidden backdrop-blur-md">
           <motion.div

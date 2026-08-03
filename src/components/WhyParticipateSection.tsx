@@ -1,50 +1,56 @@
 import { motion } from "framer-motion";
-import { Lightbulb, Users, Rocket, Trophy, Network, Award } from "lucide-react";
-import { Card3DTilt } from "./Card3DTilt";
+import { Lightbulb, Users, Rocket, Trophy, Network, Award, RotateCw } from "lucide-react";
+import { Card3DFlip } from "./Card3DFlip";
 
 export function WhyParticipateSection() {
   const BENEFITS = [
     {
       title: "Solve Real-World Problems",
-      icon: <Lightbulb className="w-6 h-6 text-amber-400" />,
+      icon: <Lightbulb className="w-8 h-8 text-amber-400" />,
       desc: "Address critical challenges in healthcare disease prevention, medical decision support, and climate sustainability.",
       badge: "Real Impact",
-      accent: "border-amber-500/30 bg-amber-500/5",
+      glow: "rgba(251, 191, 36, 0.4)",
+      flipDir: "horizontal" as const,
     },
     {
       title: "Collaborate with Innovators",
-      icon: <Users className="w-6 h-6 text-sky-400" />,
+      icon: <Users className="w-8 h-8 text-sky-400" />,
       desc: "Form high-performance teams with talented engineers, researchers, and designers across India.",
       badge: "National Network",
-      accent: "border-sky-500/30 bg-sky-500/5",
+      glow: "rgba(56, 189, 248, 0.4)",
+      flipDir: "vertical" as const,
     },
     {
       title: "Build AI Products",
-      icon: <Rocket className="w-6 h-6 text-purple-400" />,
+      icon: <Rocket className="w-8 h-8 text-purple-400" />,
       desc: "Transform abstract ideas into functional, deployable AI prototypes in an intense 24-hour hackathon.",
       badge: "24-Hr Sprint",
-      accent: "border-purple-500/30 bg-purple-500/5",
+      glow: "rgba(192, 132, 252, 0.4)",
+      flipDir: "zoomSlide" as const,
     },
     {
       title: "Win Exciting Prizes",
-      icon: <Trophy className="w-6 h-6 text-amber-300" />,
+      icon: <Trophy className="w-8 h-8 text-amber-300" />,
       desc: "Compete for ₹70,000 INR Cash Prize Pool, official trophies, plaques, and cloud infrastructure credits.",
       badge: "₹70,000 Pool",
-      accent: "border-amber-400/40 bg-amber-400/10",
+      glow: "rgba(245, 158, 11, 0.4)",
+      flipDir: "horizontal" as const,
     },
     {
       title: "Network with Experts",
-      icon: <Network className="w-6 h-6 text-indigo-400" />,
+      icon: <Network className="w-8 h-8 text-indigo-400" />,
       desc: "Get 1-on-1 technical feedback and career guidance from industry software architects and AI researchers.",
       badge: "Mentorship",
-      accent: "border-indigo-500/30 bg-indigo-500/5",
+      glow: "rgba(129, 140, 248, 0.4)",
+      flipDir: "vertical" as const,
     },
     {
       title: "Earn Certificates",
-      icon: <Award className="w-6 h-6 text-emerald-400" />,
+      icon: <Award className="w-8 h-8 text-emerald-400" />,
       desc: "Receive official national participant and winner certificates to boost your career and portfolio.",
       badge: "Recognition",
-      accent: "border-emerald-500/30 bg-emerald-500/5",
+      glow: "rgba(52, 211, 153, 0.4)",
+      flipDir: "zoomSlide" as const,
     },
   ];
 
@@ -79,40 +85,45 @@ export function WhyParticipateSection() {
           </motion.p>
         </div>
 
-        {/* Bento Feature Cards Grid */}
+        {/* Feature 3D Flip Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {BENEFITS.map((item, idx) => (
-            <Card3DTilt key={idx} intensity={10}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.08, ease: "easeOut" }}
-                className={`p-7 rounded-3xl bg-gradient-to-b from-white/[0.05] to-slate-950/90 border ${item.accent} backdrop-blur-xl h-full flex flex-col justify-between group shadow-xl relative overflow-hidden`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <motion.div
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: idx * 0.3 }}
-                      className="p-3 rounded-2xl bg-white/10 border border-white/15"
-                    >
-                      {item.icon}
-                    </motion.div>
-                    <span className="px-3.5 py-1 bg-white/10 border border-white/15 rounded-full text-[10px] font-mono text-sky-300 font-bold uppercase tracking-wider">
+            <Card3DFlip
+              key={idx}
+              flipDirection={item.flipDir}
+              glowColor={item.glow}
+              className="h-64"
+              front={
+                <div className="flex flex-col items-center justify-center text-center my-auto">
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10 mb-3">
+                    {item.icon}
+                  </div>
+                  <span className="px-3.5 py-1 bg-white/10 border border-white/15 rounded-full text-[10px] font-mono text-sky-300 font-bold uppercase tracking-wider mb-2">
+                    {item.badge}
+                  </span>
+                  <h3 className="text-lg font-bold text-white">{item.title}</h3>
+                  <span className="text-[10px] font-mono text-slate-400 mt-2 flex items-center gap-1 opacity-75">
+                    <RotateCw className="w-3 h-3 text-sky-400 animate-spin" /> Tap / Hover to flip
+                  </span>
+                </div>
+              }
+              back={
+                <div className="flex flex-col justify-between h-full text-left">
+                  <div>
+                    <span className="text-[10px] font-mono text-sky-300 bg-sky-950/80 px-2.5 py-1 rounded border border-sky-500/30 uppercase tracking-wider block w-fit mb-2">
                       {item.badge}
                     </span>
+                    <h4 className="text-base font-bold text-white mb-2">{item.title}</h4>
+                    <p className="text-xs text-slate-300 leading-relaxed font-normal">{item.desc}</p>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white group-hover:text-sky-300 transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                    {item.desc}
-                  </p>
+                  <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                    <span>YODHA Advantage</span>
+                    <span className="text-sky-400 font-semibold">Verified Benefit</span>
+                  </div>
                 </div>
-              </motion.div>
-            </Card3DTilt>
+              }
+            />
           ))}
         </div>
       </div>

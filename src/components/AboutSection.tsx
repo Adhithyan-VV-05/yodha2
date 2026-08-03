@@ -1,24 +1,24 @@
 import { motion } from "framer-motion";
-import { Activity, Heart, Brain, Stethoscope, Globe2, Leaf, Target, Shield, Lightbulb, Users2, Rocket, Sparkles, Quote } from "lucide-react";
-import { Card3DTilt } from "./Card3DTilt";
+import { Activity, Heart, Brain, Stethoscope, Globe2, Leaf, Target, Shield, Lightbulb, Users2, Rocket, Sparkles, Quote, RotateCw } from "lucide-react";
+import { Card3DFlip } from "./Card3DFlip";
 
 export function AboutSection() {
   const WHAT_YOULL_BUILD = [
-    { title: "Disease Prevention", category: "HEALTHCARE HUD", icon: <Activity className="w-6 h-6 text-sky-400" />, desc: "Predictive early warning systems & health risk forecasting.", accent: "from-sky-500/20 via-sky-500/5 to-transparent", border: "border-sky-500/30" },
-    { title: "Healthcare Solutions", category: "PATIENT CARE", icon: <Heart className="w-6 h-6 text-rose-400" />, desc: "Patient monitoring, tele-health, and accessible care systems.", accent: "from-rose-500/20 via-rose-500/5 to-transparent", border: "border-rose-500/30" },
-    { title: "Medical Diagnosis", category: "NEURAL AI", icon: <Brain className="w-6 h-6 text-purple-400" />, desc: "AI-assisted clinical imaging analysis and diagnostic intelligence.", accent: "from-purple-500/20 via-purple-500/5 to-transparent", border: "border-purple-500/30" },
-    { title: "AI Decision Support", category: "CLINICAL ENGINE", icon: <Stethoscope className="w-6 h-6 text-indigo-400" />, desc: "Real-time clinical decision engines for doctors and caregivers.", accent: "from-indigo-500/20 via-indigo-500/5 to-transparent", border: "border-indigo-500/30" },
-    { title: "Environmental Monitoring", category: "SATELLITE RADAR", icon: <Globe2 className="w-6 h-6 text-emerald-400" />, desc: "Smart satellite & IoT monitoring for air, water, and ecosystem health.", accent: "from-emerald-500/20 via-emerald-500/5 to-transparent", border: "border-emerald-500/30" },
-    { title: "Sustainable Living", category: "GREEN TECH", icon: <Leaf className="w-6 h-6 text-teal-400" />, desc: "AI tools for renewable energy, waste management, and green cities.", accent: "from-teal-500/20 via-teal-500/5 to-transparent", border: "border-teal-500/30" },
+    { title: "Disease Prevention", category: "HEALTHCARE HUD", icon: <Activity className="w-8 h-8 text-sky-400" />, desc: "Predictive early warning AI systems & population health risk forecasting.", tags: ["Predictive AI", "Risk Models", "Early Warning"], glow: "rgba(56, 189, 248, 0.4)", flipDir: "horizontal" as const },
+    { title: "Healthcare Solutions", category: "PATIENT CARE", icon: <Heart className="w-8 h-8 text-rose-400" />, desc: "Patient monitoring, remote tele-health, and accessible clinical care tools.", tags: ["Telehealth", "Patient Care", "Smart Monitoring"], glow: "rgba(244, 63, 94, 0.4)", flipDir: "vertical" as const },
+    { title: "Medical Diagnosis", category: "NEURAL AI", icon: <Brain className="w-8 h-8 text-purple-400" />, desc: "AI-assisted clinical imaging analysis, MRI/CT scans, and diagnostic intelligence.", tags: ["Medical Vision", "Diagnostics", "Neural Net"], glow: "rgba(192, 132, 252, 0.4)", flipDir: "zoomSlide" as const },
+    { title: "AI Decision Support", category: "CLINICAL ENGINE", icon: <Stethoscope className="w-8 h-8 text-indigo-400" />, desc: "Real-time clinical decision support engines for doctors and triage caregivers.", tags: ["Clinical AI", "Triage", "Doctor Support"], glow: "rgba(129, 140, 248, 0.4)", flipDir: "horizontal" as const },
+    { title: "Environmental Monitoring", category: "SATELLITE RADAR", icon: <Globe2 className="w-8 h-8 text-emerald-400" />, desc: "Smart satellite & IoT sensor monitoring for air, water, and ecosystem health.", tags: ["IoT Sensors", "Satellite Radar", "Ecology"], glow: "rgba(52, 211, 153, 0.4)", flipDir: "vertical" as const },
+    { title: "Sustainable Living", category: "GREEN TECH", icon: <Leaf className="w-8 h-8 text-teal-400" />, desc: "AI tools for renewable energy optimization, waste management, and green cities.", tags: ["Clean Energy", "Green Cities", "Recycling"], glow: "rgba(45, 212, 191, 0.4)", flipDir: "zoomSlide" as const },
   ];
 
   const MISSION_CARDS = [
-    { num: "01", title: "Problem Solving", desc: "Inspire engineering students to solve critical real-world problems using Artificial Intelligence.", icon: <Lightbulb className="w-5 h-5 text-amber-400" /> },
-    { num: "02", title: "Sustainability", desc: "Promote groundbreaking innovation in healthcare accessibility and environmental sustainability.", icon: <Leaf className="w-5 h-5 text-emerald-400" /> },
-    { num: "03", title: "Preventive Care", desc: "Advance AI for disease prevention, diagnosis accuracy, treatment support, and universal health care.", icon: <Heart className="w-5 h-5 text-rose-400" /> },
-    { num: "04", title: "Intelligent Tech", desc: "Develop cutting-edge intelligent technologies addressing climate & environmental challenges.", icon: <Globe2 className="w-5 h-5 text-sky-400" /> },
-    { num: "05", title: "Industry Bridge", desc: "Bridge academia and industry through active cross-pollination, technical mentorship, and guidance.", icon: <Users2 className="w-5 h-5 text-indigo-400" /> },
-    { num: "06", title: "Social Impact", desc: "Foster student entrepreneurship, social impact ventures, and commercialization pathways.", icon: <Rocket className="w-5 h-5 text-purple-400" /> },
+    { num: "01", title: "Problem Solving", desc: "Inspire engineering students to solve critical real-world problems using Artificial Intelligence.", icon: <Lightbulb className="w-6 h-6 text-amber-400" />, flipDir: "vertical" as const },
+    { num: "02", title: "Sustainability", desc: "Promote groundbreaking innovation in healthcare accessibility and environmental sustainability.", icon: <Leaf className="w-6 h-6 text-emerald-400" />, flipDir: "horizontal" as const },
+    { num: "03", title: "Preventive Care", desc: "Advance AI for disease prevention, diagnosis accuracy, treatment support, and universal health care.", icon: <Heart className="w-6 h-6 text-rose-400" />, flipDir: "zoomSlide" as const },
+    { num: "04", title: "Intelligent Tech", desc: "Develop cutting-edge intelligent technologies addressing climate & environmental challenges.", icon: <Globe2 className="w-6 h-6 text-sky-400" />, flipDir: "vertical" as const },
+    { num: "05", title: "Industry Bridge", desc: "Bridge academia and industry through active cross-pollination, technical mentorship, and guidance.", icon: <Users2 className="w-6 h-6 text-indigo-400" />, flipDir: "horizontal" as const },
+    { num: "06", title: "Social Impact", desc: "Foster student entrepreneurship, social impact ventures, and commercialization pathways.", icon: <Rocket className="w-6 h-6 text-purple-400" />, flipDir: "zoomSlide" as const },
   ];
 
   return (
@@ -69,35 +69,56 @@ export function AboutSection() {
           </div>
 
           <div className="lg:col-span-6">
-            <Card3DTilt intensity={12}>
-              <div className="p-8 rounded-3xl bg-gradient-to-b from-sky-500/15 via-indigo-950/40 to-slate-950 border border-sky-400/30 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-6 text-sky-400/20">
-                  <Shield className="w-32 h-32" />
+            <Card3DFlip
+              flipDirection="horizontal"
+              glowColor="rgba(56, 189, 248, 0.5)"
+              className="h-80"
+              front={
+                <div className="flex flex-col items-center justify-center text-center my-auto">
+                  <div className="p-4 rounded-2xl bg-sky-500/20 border border-sky-400/40 mb-4">
+                    <Shield className="w-12 h-12 text-sky-400" />
+                  </div>
+                  <span className="px-3 py-1 bg-sky-400/20 border border-sky-400/30 rounded-full text-[11px] font-mono text-sky-300 font-bold uppercase tracking-widest mb-2">
+                    PAN-INDIA HUB
+                  </span>
+                  <h3 className="text-2xl font-black text-white">24-Hour AI Challenge</h3>
+                  <span className="text-xs font-mono text-slate-400 mt-3 flex items-center gap-1">
+                    <RotateCw className="w-3.5 h-3.5 text-sky-400 animate-spin" /> Tap / Hover to reveal details
+                  </span>
                 </div>
-                <span className="px-3 py-1 bg-sky-400/20 border border-sky-400/30 rounded-full text-[11px] font-mono text-sky-300 font-bold uppercase tracking-widest">
-                  24-Hour AI Challenge
-                </span>
-                <h3 className="text-2xl font-black text-white mt-4">Pan-India Innovation Hub</h3>
-                <ul className="mt-6 space-y-3 text-xs sm:text-sm text-slate-300 font-medium">
-                  <li className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-sky-400 shrink-0" /> Open to all Engineering & Tech Students
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-sky-400 shrink-0" /> ₹70,000 INR Cash Prize Pool + Bounties
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-sky-400 shrink-0" /> Direct Seed Incubation & Cloud Credits
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-sky-400 shrink-0" /> Expert Mentorship & Live Prototype Demos
-                  </li>
-                </ul>
-              </div>
-            </Card3DTilt>
+              }
+              back={
+                <div className="flex flex-col justify-between h-full text-left">
+                  <div>
+                    <span className="px-3 py-1 bg-sky-400/20 border border-sky-400/30 rounded-full text-[10px] font-mono text-sky-300 font-bold uppercase tracking-widest block w-fit mb-3">
+                      HACKATHON OVERVIEW
+                    </span>
+                    <h4 className="text-xl font-black text-white mb-3">National Innovation Platform</h4>
+                    <ul className="space-y-2 text-xs text-slate-300 font-medium">
+                      <li className="flex items-center gap-2">
+                        <Sparkles className="w-3.5 h-3.5 text-sky-400 shrink-0" /> Open to all Engineering & Tech Students
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Sparkles className="w-3.5 h-3.5 text-sky-400 shrink-0" /> ₹70,000 INR Cash Prize Pool + Bounties
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Sparkles className="w-3.5 h-3.5 text-sky-400 shrink-0" /> Direct Seed Incubation & Cloud Credits
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Sparkles className="w-3.5 h-3.5 text-sky-400 shrink-0" /> Expert Mentorship & Live Demos
+                      </li>
+                    </ul>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-400 border-t border-white/10 pt-3">
+                    September 11th & 12th, 2026
+                  </span>
+                </div>
+              }
+            />
           </div>
         </div>
 
-        {/* 2. WHAT YOU'LL BUILD (Unique HUD Cards with Minimalistic Motion) */}
+        {/* 2. WHAT YOU'LL BUILD (Brief Front Cards -> 3D Flip Back Cards) */}
         <div>
           <div className="text-center max-w-2xl mx-auto mb-12">
             <motion.span
@@ -116,70 +137,101 @@ export function AboutSection() {
             >
               AI Solutions That Make a Difference
             </motion.h2>
+            <span className="text-xs font-mono text-slate-400 mt-2 block">
+              Tap / Hover any card to flip and explore domain details
+            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {WHAT_YOULL_BUILD.map((item, idx) => (
-              <Card3DTilt key={idx} intensity={10}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.08, ease: "easeOut" }}
-                  className={`p-6 rounded-3xl bg-gradient-to-br ${item.accent} border ${item.border} backdrop-blur-xl transition-all duration-300 group relative overflow-hidden shadow-xl`}
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">
+              <Card3DFlip
+                key={idx}
+                flipDirection={item.flipDir}
+                glowColor={item.glow}
+                className="h-64"
+                front={
+                  <div className="flex flex-col items-center justify-center text-center my-auto">
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 mb-3">
+                      {item.icon}
+                    </div>
+                    <span className="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-wider mb-1">
                       {item.category}
                     </span>
-                    <motion.div
-                      animate={{ y: [0, -3, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.4 }}
-                      className="p-2.5 rounded-xl bg-white/10 border border-white/15 backdrop-blur-md"
-                    >
-                      {item.icon}
-                    </motion.div>
+                    <h3 className="text-lg font-bold text-white">{item.title}</h3>
+                    <span className="text-[10px] font-mono text-slate-400 mt-3 flex items-center gap-1 opacity-75">
+                      <RotateCw className="w-3 h-3 text-sky-400 animate-spin" /> Tap / Hover to flip
+                    </span>
                   </div>
+                }
+                back={
+                  <div className="flex flex-col justify-between h-full text-left">
+                    <div>
+                      <span className="text-[10px] font-mono text-sky-300 bg-sky-950/80 px-2.5 py-1 rounded border border-sky-500/30 uppercase tracking-wider block w-fit mb-2">
+                        {item.category}
+                      </span>
+                      <h4 className="text-base font-bold text-white mb-2">{item.title}</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed font-normal">{item.desc}</p>
+                    </div>
 
-                  <h3 className="text-lg font-bold text-white group-hover:text-sky-300 transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                    {item.desc}
-                  </p>
-                </motion.div>
-              </Card3DTilt>
+                    <div className="pt-3 border-t border-white/10 flex flex-wrap gap-1.5">
+                      {item.tags.map((tag) => (
+                        <span key={tag} className="text-[9px] font-mono text-slate-300 bg-white/5 px-2 py-0.5 rounded border border-white/10">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                }
+              />
             ))}
           </div>
         </div>
 
         {/* 3. VISION & PHILOSOPHY */}
-        <Card3DTilt intensity={8}>
-          <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-sky-950/60 via-indigo-950/60 to-purple-950/60 border border-sky-400/40 backdrop-blur-2xl shadow-2xl relative overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center gap-8">
-            <div className="p-5 rounded-2xl bg-sky-500/20 border border-sky-400/40 shrink-0">
-              <Quote className="w-10 h-10 text-sky-300" />
-            </div>
-
-            <div>
-              <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block font-bold mb-1">
-                OUR VISION
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-white">
-                To Build India's Premier AI Innovation Platform
-              </h3>
-              <p className="mt-3 text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
-                To build one of India's leading AI innovation platforms where students, researchers, startups, and industry experts collaborate to create intelligent technologies that improve healthcare and protect the environment.
-              </p>
-              
-              <div className="mt-5 p-4 rounded-xl bg-black/40 border border-white/10 text-xs sm:text-sm text-amber-300 font-mono italic flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>"Prevention is Better Than Cure." — Inspired by this philosophy, YODHA encourages innovations that prevent future challenges while solving existing real-world problems through Artificial Intelligence.</span>
+        <Card3DFlip
+          flipDirection="scale"
+          glowColor="rgba(56, 189, 248, 0.5)"
+          className="min-h-[300px] sm:min-h-[260px]"
+          front={
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 w-full p-6 sm:p-8 my-auto text-center md:text-left">
+              <div className="p-5 rounded-2xl bg-sky-500/20 border border-sky-400/40 shrink-0">
+                <Quote className="w-10 h-10 text-sky-300" />
+              </div>
+              <div className="flex-1">
+                <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block font-bold mb-1">
+                  OUR VISION & PHILOSOPHY
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-white">
+                  "Prevention is Better Than Cure."
+                </h3>
+                <span className="text-xs font-mono text-slate-400 mt-2 block flex items-center justify-center md:justify-start gap-1">
+                  <RotateCw className="w-3.5 h-3.5 text-sky-400 animate-spin" /> Tap / Hover to flip & read full vision statement
+                </span>
               </div>
             </div>
-          </div>
-        </Card3DTilt>
+          }
+          back={
+            <div className="flex flex-col justify-between h-full text-left p-4 sm:p-6 space-y-4">
+              <div>
+                <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block font-bold mb-1">
+                  FULL VISION STATEMENT
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-white mb-2">
+                  India's Premier AI Innovation Platform
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                  To build one of India's leading AI innovation platforms where students, researchers, startups, and industry experts collaborate to create intelligent technologies that improve healthcare and protect the environment.
+                </p>
+              </div>
 
-        {/* 4. MISSION (6 Hex-Structured Cards with Minimalistic Floating Badges) */}
+              <div className="p-3.5 rounded-xl bg-black/60 border border-sky-500/30 text-xs text-amber-300 font-mono italic">
+                Inspired by "Prevention is Better Than Cure", YODHA encourages innovations that prevent future challenges while solving existing real-world problems.
+              </div>
+            </div>
+          }
+        />
+
+        {/* 4. MISSION (6 Hex Cards with Smooth 3D Flip Animations) */}
         <div>
           <div className="text-center max-w-2xl mx-auto mb-12">
             <motion.span
@@ -202,28 +254,41 @@ export function AboutSection() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {MISSION_CARDS.map((card, idx) => (
-              <Card3DTilt key={idx} intensity={10}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.08 }}
-                  className="p-6 rounded-3xl bg-gradient-to-b from-white/[0.05] via-slate-950/80 to-slate-950 border border-white/10 hover:border-indigo-400/40 backdrop-blur-xl h-full flex flex-col justify-between relative group"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="p-2.5 rounded-2xl bg-white/5 border border-white/10">
+              <Card3DFlip
+                key={idx}
+                flipDirection={card.flipDir}
+                glowColor="rgba(129, 140, 248, 0.4)"
+                className="h-60"
+                front={
+                  <div className="flex flex-col items-center justify-center text-center my-auto">
+                    <span className="font-mono text-xs font-extrabold text-sky-300 bg-sky-950/80 px-3 py-1 rounded-full border border-sky-400/30 mb-3">
+                      PILLAR {card.num}
+                    </span>
+                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 mb-2">
+                      {card.icon}
+                    </div>
+                    <h4 className="text-lg font-bold text-white">{card.title}</h4>
+                    <span className="text-[10px] font-mono text-slate-400 mt-2 flex items-center gap-1 opacity-75">
+                      <RotateCw className="w-3 h-3 text-sky-400 animate-spin" /> Tap / Hover to flip
+                    </span>
+                  </div>
+                }
+                back={
+                  <div className="flex flex-col justify-between h-full text-left">
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-mono text-xs font-bold text-sky-400">PILLAR {card.num}</span>
                         {card.icon}
                       </div>
-                      <span className="font-mono text-xs font-extrabold text-sky-300 bg-sky-950/80 px-3 py-1 rounded-full border border-sky-400/30 shadow-sm">
-                        PILLAR {card.num}
-                      </span>
+                      <h4 className="text-base font-bold text-white mb-2">{card.title}</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed font-normal">{card.desc}</p>
                     </div>
-                    <h4 className="text-lg font-bold text-white mb-2 group-hover:text-sky-300 transition-colors">{card.title}</h4>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">{card.desc}</p>
+                    <span className="text-[10px] font-mono text-slate-400 border-t border-white/10 pt-2">
+                      YODHA 2.0 Mission Pillar
+                    </span>
                   </div>
-                </motion.div>
-              </Card3DTilt>
+                }
+              />
             ))}
           </div>
         </div>

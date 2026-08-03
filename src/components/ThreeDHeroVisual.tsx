@@ -6,7 +6,7 @@ import logo from "../assets/logo.png";
 interface ThreeDHeroVisualProps {
   isLoader?: boolean;
   progress?: number;
-  isEnding?: boolean; // When loading finishes, shrink ball to size 0 within 1 sec
+  isEnding?: boolean; // When loading finishes, trigger Pulsar Star Explosion burst
   bounceEntrance?: boolean;
 }
 
@@ -24,7 +24,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     // 1. Scene setup
     const scene = new THREE.Scene();
 
-    // 2. Camera setup - Positioned for larger prominent ball
+    // 2. Camera setup - Positioned for prominent ball
     const cameraZ = isLoader ? 5.2 : 5.8;
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.z = cameraZ;
@@ -92,6 +92,36 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     mainGroup.add(sphereMesh);
 
+    // PULSAR STAR EXPLOSION SHOCKWAVE PARTICLES RING
+    const particleCount = 120;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleVelocities: THREE.Vector3[] = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      const angle = (i / particleCount) * Math.PI * 2;
+      const radius = sphereRadius * (0.8 + Math.random() * 0.4);
+      particlePositions[i * 3] = Math.cos(angle) * radius;
+      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 0.5;
+      particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
+
+      const speed = 4 + Math.random() * 8;
+      particleVelocities.push(
+        new THREE.Vector3(Math.cos(angle) * speed, (Math.random() - 0.5) * 2, Math.sin(angle) * speed)
+      );
+    }
+
+    particleGeo.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
+    const particleMat = new THREE.PointsMaterial({
+      color: 0x38bdf8,
+      size: 0.08,
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+    });
+    const particleSystem = new THREE.Points(particleGeo, particleMat);
+    scene.add(particleSystem);
+
     // Studio Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
     scene.add(ambientLight);
@@ -157,23 +187,49 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     let animationFrameId: number;
     let clock = new THREE.Clock();
 
-    // Scale tracking for size 0 shrink transition
-    let currentScale = 1;
     let endingStartTime = 0;
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      sphereMesh.rotation.y = elapsedTime * (isLoader ? 0.85 : 0.45);
+      sphereMesh.rotation.y = elapsedTime * (isLoader ? 1.2 : 0.45);
 
       if (isLoader) {
         if (isEnding) {
-          // SHRINK TO SIZE 0 WITHIN 1 SEC WHEN LOADING IS ABOUT TO BE OVER
+          // SPECTACULAR PULSAR STAR EXPLOSION ANIMATION
           if (endingStartTime === 0) endingStartTime = elapsedTime;
-          const endElapsed = elapsedTime - endingStartTime;
-          currentScale = Math.max(0, 1 - endElapsed / 1.0);
-          mainGroup.scale.set(currentScale, currentScale, currentScale);
+          const t = elapsedTime - endingStartTime; // 0 to 1.0 sec
+
+          if (t < 0.4) {
+            // Phase 1: Energy Accumulation & Supercharge (0 - 0.4s)
+            const chargeFactor = t / 0.4;
+            const currentScale = 1 + chargeFactor * 0.35;
+            mainGroup.scale.set(currentScale, currentScale, currentScale);
+            sphereMat.emissiveIntensity = 0.7 + chargeFactor * 8.0; // Blinding glow
+          } else if (t < 0.75) {
+            // Phase 2: Supernova Pulsar Explosion Burst (0.4s - 0.75s)
+            const burstFactor = (t - 0.4) / 0.35;
+            const currentScale = 1.35 + burstFactor * 2.2; // Expands outward
+            mainGroup.scale.set(currentScale, currentScale, currentScale);
+            sphereMat.emissiveIntensity = 8.7 * (1 - burstFactor);
+            particleMat.opacity = Math.sin(burstFactor * Math.PI); // Particle flare ring
+
+            // Expand shockwave particles
+            const positions = particleGeo.attributes.position.array as Float32Array;
+            for (let i = 0; i < particleCount; i++) {
+              positions[i * 3] += particleVelocities[i].x * 0.03;
+              positions[i * 3 + 1] += particleVelocities[i].y * 0.03;
+              positions[i * 3 + 2] += particleVelocities[i].z * 0.03;
+            }
+            particleGeo.attributes.position.needsUpdate = true;
+          } else {
+            // Phase 3: Cosmic Collapse & Dissolve to Size 0 (0.75s - 1.0s)
+            const collapseFactor = (t - 0.75) / 0.25;
+            const currentScale = Math.max(0, 3.55 * (1 - collapseFactor));
+            mainGroup.scale.set(currentScale, currentScale, currentScale);
+            particleMat.opacity = Math.max(0, 1 - collapseFactor);
+          }
         } else {
           // Dynamic initial shrink from 100x down to 1x as progress goes 0 -> 100%
           const shrinkFactor = Math.max(1, 10 - 9 * (progress / 100));
@@ -200,6 +256,8 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
       renderer.dispose();
       sphereGeo.dispose();
       sphereMat.dispose();
+      particleGeo.dispose();
+      particleMat.dispose();
     };
   }, [isLoader, progress, isEnding]);
 

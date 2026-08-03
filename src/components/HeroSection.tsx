@@ -47,6 +47,14 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
     }
   };
 
+  // Helper for circular progress rings
+  const timerItems = [
+    { label: "DAYS", value: timeLeft.days, max: 365, color: "#38bdf8" },
+    { label: "HOURS", value: timeLeft.hours, max: 24, color: "#818cf8" },
+    { label: "MINS", value: timeLeft.minutes, max: 60, color: "#c084fc" },
+    { label: "SECS", value: timeLeft.seconds, max: 60, color: "#34d399" },
+  ];
+
   return (
     <section id="about" className="relative min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-24 flex items-center justify-center overflow-hidden">
       {/* Dynamic Ambient Background Orbs */}
@@ -120,31 +128,76 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
               A 24-hour national-level AI hackathon where engineering students build intelligent solutions to solve real-world <span className="text-sky-400 font-bold">healthcare</span> and <span className="text-emerald-400 font-bold">environmental challenges</span>.
             </motion.p>
 
-            {/* Countdown Cards targeting 11 September 2026 */}
+            {/* CYBERPUNK HOLOGRAPHIC RADIAL COUNTDOWN TIMER */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.55 }}
-              className="mt-8 grid grid-cols-4 gap-3 bg-gradient-to-r from-white/[0.05] via-white/[0.03] to-white/[0.05] border border-white/10 backdrop-blur-2xl p-4 sm:p-5 rounded-2xl max-w-md w-full shadow-2xl"
+              className="mt-8 p-4 sm:p-6 rounded-3xl bg-gradient-to-r from-slate-950/90 via-sky-950/40 to-slate-950/90 border border-sky-400/30 backdrop-blur-2xl max-w-lg w-full shadow-[0_0_35px_rgba(56,189,248,0.2)]"
             >
-              {[
-                { label: "Days", value: timeLeft.days },
-                { label: "Hours", value: timeLeft.hours },
-                { label: "Minutes", value: timeLeft.minutes },
-                { label: "Seconds", value: timeLeft.seconds },
-              ].map((item, idx) => (
-                <div key={idx} className="flex flex-col items-center">
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-transparent bg-clip-text bg-gradient-to-b from-white via-sky-200 to-sky-400">
-                    {String(item.value).padStart(2, "0")}
-                  </span>
-                  <span className="text-[10px] font-mono text-slate-400 mt-1 uppercase tracking-wider font-semibold">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-mono text-sky-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-sky-400 animate-spin" />
+                  <span>COUNTDOWN TO LAUNCH</span>
+                </span>
+                <span className="text-[10px] font-mono text-slate-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
+                  SEP 11, 2026
+                </span>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2 sm:gap-4">
+                {timerItems.map((item, idx) => {
+                  const strokeDashoffset = 150 - (150 * (item.value % item.max)) / item.max;
+                  return (
+                    <div key={idx} className="flex flex-col items-center relative group">
+                      <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center">
+                        {/* Circular SVG Ring */}
+                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 60 60">
+                          <circle
+                            cx="30"
+                            cy="30"
+                            r="24"
+                            className="text-white/10"
+                            strokeWidth="3.5"
+                            stroke="currentColor"
+                            fill="transparent"
+                          />
+                          <motion.circle
+                            cx="30"
+                            cy="30"
+                            r="24"
+                            stroke={item.color}
+                            strokeWidth="4"
+                            strokeDasharray="150"
+                            animate={{ strokeDashoffset }}
+                            transition={{ duration: 0.8, ease: "easeInOut" }}
+                            strokeLinecap="round"
+                            fill="transparent"
+                          />
+                        </svg>
+
+                        {/* Digits Display */}
+                        <motion.span
+                          key={item.value}
+                          initial={{ scale: 1.2, opacity: 0.5 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                          className="absolute text-lg sm:text-2xl font-black font-mono text-white tracking-tighter"
+                        >
+                          {String(item.value).padStart(2, "0")}
+                        </motion.span>
+                      </div>
+
+                      <span className="text-[10px] font-mono font-bold text-slate-300 mt-1 uppercase tracking-widest">
+                        {item.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </motion.div>
 
-            {/* Action CTAs - Fully Working Buttons */}
+            {/* Action CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

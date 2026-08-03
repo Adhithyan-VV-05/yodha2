@@ -1,62 +1,68 @@
 import { motion } from "framer-motion";
-import { Globe, Heart, Droplets, Building2, Building, ThermometerSun, Trees } from "lucide-react";
-import { Card3DTilt } from "./Card3DTilt";
+import { Globe, Heart, Droplets, Building2, Building, ThermometerSun, Trees, RotateCw } from "lucide-react";
+import { Card3DFlip } from "./Card3DFlip";
 
 export function SDGSection() {
   const SDGS = [
     {
       code: "SDG 3",
       title: "Good Health & Well-being",
-      icon: <Heart className="w-6 h-6 text-white" />,
+      icon: <Heart className="w-8 h-8 text-white" />,
       desc: "Advance AI for disease prevention, diagnosis accuracy, and healthcare accessibility.",
       color: "bg-[#E5243B]",
       borderColor: "border-[#E5243B]/60",
       glowColor: "rgba(229, 36, 59, 0.4)",
+      flipDir: "horizontal" as const,
     },
     {
       code: "SDG 6",
       title: "Clean Water & Sanitation",
-      icon: <Droplets className="w-6 h-6 text-white" />,
+      icon: <Droplets className="w-8 h-8 text-white" />,
       desc: "Develop smart water quality monitoring and resource conservation systems.",
       color: "bg-[#26BDE2]",
       borderColor: "border-[#26BDE2]/60",
       glowColor: "rgba(38, 189, 226, 0.4)",
+      flipDir: "vertical" as const,
     },
     {
       code: "SDG 9",
       title: "Industry, Innovation & Infrastructure",
-      icon: <Building2 className="w-6 h-6 text-white" />,
+      icon: <Building2 className="w-8 h-8 text-white" />,
       desc: "Foster sustainable industrial innovation, AI infrastructure, and research.",
       color: "bg-[#FD6925]",
       borderColor: "border-[#FD6925]/60",
       glowColor: "rgba(253, 105, 37, 0.4)",
+      flipDir: "zoomSlide" as const,
     },
     {
       code: "SDG 11",
       title: "Sustainable Cities & Communities",
-      icon: <Building className="w-6 h-6 text-white" />,
+      icon: <Building className="w-8 h-8 text-white" />,
       desc: "Engineer smart environmental monitoring tools for urban communities.",
       color: "bg-[#FD9D24]",
       borderColor: "border-[#FD9D24]/60",
       glowColor: "rgba(253, 157, 36, 0.4)",
+      flipDir: "horizontal" as const,
     },
     {
       code: "SDG 13",
       title: "Climate Action",
-      icon: <ThermometerSun className="w-6 h-6 text-white" />,
+      icon: <ThermometerSun className="w-8 h-8 text-white" />,
       desc: "Build AI models for climate resilience, forest fire detection, and disaster mitigation.",
       color: "bg-[#3F7E44]",
       borderColor: "border-[#3F7E44]/60",
       glowColor: "rgba(63, 126, 68, 0.4)",
+      flipDir: "vertical" as const,
     },
     {
       code: "SDG 15",
       title: "Life on Land",
-      icon: <Trees className="w-6 h-6 text-white" />,
+      icon: <Trees className="w-8 h-8 text-white" />,
       desc: "Protect terrestrial ecosystems, biodiversity, and forestry using AI tools.",
       color: "bg-[#56C02B]",
       borderColor: "border-[#56C02B]/60",
       glowColor: "rgba(86, 192, 43, 0.4)",
+      flipDir: "zoomSlide" as const,
     },
   ];
 
@@ -92,45 +98,48 @@ export function SDGSection() {
           </motion.p>
         </div>
 
-        {/* SDG Cards Grid with Official SDG Colors & Minimalistic Motion */}
+        {/* SDG Cards Grid with 3D Flip Effects */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SDGS.map((sdg, idx) => (
-            <Card3DTilt key={sdg.code} intensity={12} glowColor={sdg.glowColor}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.08, ease: "easeOut" }}
-                className={`p-6 rounded-3xl bg-gradient-to-b from-white/[0.04] to-slate-950/90 border ${sdg.borderColor} backdrop-blur-xl h-full flex flex-col justify-between shadow-xl relative overflow-hidden group`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <motion.div
-                      animate={{ y: [0, -2, 0] }}
-                      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.3 }}
-                      className={`p-3 rounded-2xl ${sdg.color} shadow-lg`}
-                    >
-                      {sdg.icon}
-                    </motion.div>
-                    <span className="font-mono text-xs font-black text-white bg-white/10 border border-white/20 px-3 py-1 rounded-full uppercase tracking-wider">
-                      {sdg.code}
-                    </span>
+          {SDGS.map((sdg) => (
+            <Card3DFlip
+              key={sdg.code}
+              flipDirection={sdg.flipDir}
+              glowColor={sdg.glowColor}
+              className="h-64"
+              front={
+                <div className="flex flex-col items-center justify-center text-center my-auto">
+                  <div className={`p-4 rounded-2xl ${sdg.color} shadow-lg mb-3`}>
+                    {sdg.icon}
+                  </div>
+                  <span className="font-mono text-xs font-black text-white bg-white/10 border border-white/20 px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                    {sdg.code}
+                  </span>
+                  <h3 className="text-lg font-bold text-white">{sdg.title}</h3>
+                  <span className="text-[10px] font-mono text-slate-400 mt-2 flex items-center gap-1 opacity-75">
+                    <RotateCw className="w-3 h-3 text-sky-400 animate-spin" /> Tap / Hover to flip
+                  </span>
+                </div>
+              }
+              back={
+                <div className="flex flex-col justify-between h-full text-left">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-mono text-xs font-bold text-white bg-white/10 px-2.5 py-0.5 rounded border border-white/20">
+                        {sdg.code}
+                      </span>
+                      <div className={`w-3 h-3 rounded-full ${sdg.color}`} />
+                    </div>
+                    <h4 className="text-base font-bold text-white mb-2">{sdg.title}</h4>
+                    <p className="text-xs text-slate-300 leading-relaxed font-normal">{sdg.desc}</p>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white group-hover:text-sky-300 transition-colors">
-                    {sdg.title}
-                  </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                    {sdg.desc}
-                  </p>
+                  <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                    <span>UN Target Goal</span>
+                    <span className="text-sky-400 font-semibold">Official Alignment</span>
+                  </div>
                 </div>
-
-                <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                  <span>UN Target Goal</span>
-                  <span className="text-sky-400 font-semibold">Official Alignment</span>
-                </div>
-              </motion.div>
-            </Card3DTilt>
+              }
+            />
           ))}
         </div>
       </div>
