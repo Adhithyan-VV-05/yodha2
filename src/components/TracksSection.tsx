@@ -21,7 +21,6 @@ const THEME_TRACKS = [
       "Healthcare Accessibility",
       "Clinical Decision Support",
     ],
-    prizePool: "₹35,000 Track Pool",
     gradient: "from-rose-500/20 via-sky-500/10 to-transparent",
     glowColor: "rgba(244, 63, 94, 0.35)",
   },
@@ -38,13 +37,12 @@ const THEME_TRACKS = [
       "Forest Fire Detection",
       "Biodiversity Protection",
     ],
-    prizePool: "₹35,000 Track Pool",
     gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
     glowColor: "rgba(52, 211, 153, 0.35)",
   },
 ];
 
-export function TracksSection({ onSelectTrack, onOpenTrackPage }: TracksSectionProps) {
+export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
   return (
     <section id="tracks" className="py-20 sm:py-28 relative overflow-hidden bg-[#06080e]/95">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -124,13 +122,9 @@ export function TracksSection({ onSelectTrack, onOpenTrackPage }: TracksSectionP
                   </div>
 
                   {/* Footer Action */}
-                  <div className="pt-6 border-t border-white/10 flex items-center justify-between mt-auto">
-                    <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-3 py-1 rounded-full">
-                      {track.prizePool}
-                    </span>
+                  <div className="pt-6 border-t border-white/10 flex items-center justify-end mt-auto">
                     <button
                       onClick={() => {
-                        onSelectTrack(track.title);
                         onOpenTrackPage(track.id as "healthcare" | "environmental");
                       }}
                       className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs tracking-wider uppercase shadow-lg hover:brightness-110 group/btn transition-all cursor-pointer relative z-30 pointer-events-auto"

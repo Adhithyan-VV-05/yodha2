@@ -71,30 +71,30 @@ export function CustomCursor() {
 
   return (
     <>
-      {/* Main Inner Glowing Dot - Turns RED when near/hovering buttons */}
+      {/* Main Inner Glowing & Blinking Dot - Decreases size when pointed at a button */}
       <div
-        className={`fixed top-0 left-0 w-3.5 h-3.5 rounded-full pointer-events-none z-[9999999] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out ${
+        className={`fixed top-0 left-0 w-3.5 h-3.5 rounded-full pointer-events-none z-[9999999] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out animate-pulse ${
           isHovered
             ? "bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,1)]"
             : "bg-sky-400 shadow-[0_0_15px_rgba(56,189,248,1)]"
         }`}
         style={{
           transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${
-            isClicking ? 0.7 : isHovered ? 1.8 : 1
+            isClicking ? 0.5 : isHovered ? 0.65 : 1
           })`,
         }}
       />
 
-      {/* Trailing Outer Ring - Turns RED when near/hovering buttons */}
+      {/* Trailing Outer Ring - Continuous Blinking & Red on Button Hover */}
       <div
-        className={`fixed top-0 left-0 w-9 h-9 rounded-full pointer-events-none z-[9999998] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out border ${
+        className={`fixed top-0 left-0 w-9 h-9 rounded-full pointer-events-none z-[9999998] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out border animate-pulse ${
           isHovered
-            ? "border-rose-500/90 bg-rose-500/15 shadow-[0_0_25px_rgba(244,63,94,0.6)]"
+            ? "border-rose-500/90 bg-rose-500/20 shadow-[0_0_25px_rgba(244,63,94,0.6)]"
             : "border-sky-400/50 bg-transparent shadow-[0_0_20px_rgba(56,189,248,0.3)]"
         }`}
         style={{
           transform: `translate3d(${trailingPos.x}px, ${trailingPos.y}px, 0) scale(${
-            isClicking ? 0.8 : isHovered ? 1.6 : 1
+            isClicking ? 0.7 : isHovered ? 0.85 : 1
           })`,
         }}
       />

@@ -8,7 +8,7 @@ interface PrizesSectionProps {
   onOpenRegister: () => void;
 }
 
-export function PrizesSection({ }: PrizesSectionProps) {
+export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
   const [isInView, setIsInView] = useState(false);
 
   return (
@@ -182,7 +182,7 @@ export function PrizesSection({ }: PrizesSectionProps) {
         </div>
 
         {/* Special INR Bounties Card */}
-        <Card3DTilt intensity={8} className="w-full">
+        <Card3DTilt intensity={8} className="w-full mb-8">
           <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-sky-950/40 via-indigo-950/40 to-slate-950 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-xl shadow-xl">
             <div className="text-center md:text-left">
               <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block font-bold">
@@ -197,6 +197,16 @@ export function PrizesSection({ }: PrizesSectionProps) {
             </div>
           </div>
         </Card3DTilt>
+
+        {/* Register Today CTA Button */}
+        <div className="text-center">
+          <button
+            onClick={onOpenRegister}
+            className="px-8 py-3.5 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-black font-black text-xs sm:text-sm rounded-2xl uppercase tracking-widest shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:brightness-110 transition-all cursor-pointer relative z-30 pointer-events-auto"
+          >
+            Register Today
+          </button>
+        </div>
 
       </div>
     </section>
