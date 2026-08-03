@@ -29,7 +29,6 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
 
     let width = Math.max(1, container.clientWidth || 36);
     let height = Math.max(1, container.clientHeight || 36);
-    const isMobile = width < 640 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     const aspect = (width > 0 && height > 0) ? width / height : 1;
 
     const scene = new THREE.Scene();
@@ -41,12 +40,13 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: !isMobile,
+        antialias: true,
         powerPreference: "high-performance",
         failIfMajorPerformanceCaveat: false,
       });
       renderer.setSize(width, height, false);
-      renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+      // High Pixel Ratio up to 3 for ultra-crisp display on mobile & PC
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 3));
     } catch {
       setHasContextError(true);
       return;
@@ -55,73 +55,73 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
     const sphereGroup = new THREE.Group();
     scene.add(sphereGroup);
 
-    const sphereGeo = new THREE.SphereGeometry(1.0, isMobile ? 24 : 32, isMobile ? 24 : 32);
+    const sphereGeo = new THREE.SphereGeometry(1.0, 64, 64);
 
-    // PROGRESSIVE TEXTURE QUALITY UPGRADE CANVAS (256 -> 512 -> 1024)
+    // ULTRA HIGH DEFINITION TEXTURE CANVAS (2048 x 1024)
     const canvasTex = document.createElement("canvas");
-    canvasTex.width = 256;
-    canvasTex.height = 128;
+    canvasTex.width = 2048;
+    canvasTex.height = 1024;
     const ctx = canvasTex.getContext("2d");
 
     const sphereTexture = new THREE.CanvasTexture(canvasTex);
     sphereTexture.wrapS = THREE.RepeatWrapping;
     sphereTexture.wrapT = THREE.ClampToEdgeWrapping;
+    // PREVENT DOWN-SAMPLING BLUR
+    sphereTexture.generateMipmaps = false;
+    sphereTexture.minFilter = THREE.LinearFilter;
+    sphereTexture.magFilter = THREE.LinearFilter;
 
     const sphereMat = new THREE.MeshStandardMaterial({
       map: sphereTexture,
       emissiveMap: sphereTexture,
       emissive: 0xffffff,
-      emissiveIntensity: 0.75,
-      roughness: 0.15,
-      metalness: 0.85,
+      emissiveIntensity: 0.85,
+      roughness: 0.1,
+      metalness: 0.9,
       color: 0x000000,
     });
 
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     sphereGroup.add(sphereMesh);
 
-    // Progressive Quality Upgrade Function
+    // Load High-Res Logo Image & Render Crisp Texture
     const img = new Image();
     img.src = logo;
 
-    const updateTextureQuality = (targetW: number, targetH: number) => {
+    const renderCrispTexture = () => {
       if (!ctx) return;
-      canvasTex.width = targetW;
-      canvasTex.height = targetH;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
       ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, targetW, targetH);
+      ctx.fillRect(0, 0, 2048, 1024);
 
-      const logoSize = Math.floor(targetH * 0.78);
-      const topY = (targetH - logoSize) / 2;
-      const halfW = targetW / 2;
+      // Draw two sharp logos on opposite equator poles of the sphere
+      const logoSize = 780;
+      const topY = (1024 - logoSize) / 2;
 
-      ctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
-      ctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, 512 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, 1536 - logoSize / 2, topY, logoSize, logoSize);
 
       sphereTexture.needsUpdate = true;
       setIs3DBallReady(true);
     };
 
     if (img.complete && img.naturalWidth > 0) {
-      updateTextureQuality(256, 128);
-      setTimeout(() => updateTextureQuality(isMobile ? 512 : 1024, isMobile ? 256 : 512), 150);
+      renderCrispTexture();
     } else {
-      img.onload = () => {
-        updateTextureQuality(256, 128);
-        setTimeout(() => updateTextureQuality(isMobile ? 512 : 1024, isMobile ? 256 : 512), 150);
-      };
+      img.onload = () => renderCrispTexture();
     }
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    // Studio Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0x38bdf8, 3.0);
+    const dirLight1 = new THREE.DirectionalLight(0x38bdf8, 3.5);
     dirLight1.position.set(4, 4, 4);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0xc084fc, 2.0);
+    const dirLight2 = new THREE.DirectionalLight(0xc084fc, 2.5);
     dirLight2.position.set(-4, -4, -4);
     scene.add(dirLight2);
 
@@ -181,12 +181,12 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
       onMouseLeave={() => setIsHovered(false)}
       className={`relative inline-flex items-center justify-center cursor-pointer select-none rounded-full overflow-hidden ${sizeClasses} ${className}`}
     >
-      {/* 2D Logo Image Placeholder displayed until 3D ball texture compiles */}
+      {/* 2D Crisp Logo Image Placeholder until 3D ball renders */}
       {(!is3DBallReady || hasContextError) && (
         <img
           src={logo}
           alt="Yodha Logo Placeholder"
-          className="absolute inset-0 w-full h-full object-contain p-1 rounded-full animate-pulse bg-black/60 z-10"
+          className="absolute inset-0 w-full h-full object-contain p-1 rounded-full bg-black/60 z-10"
         />
       )}
       <canvas ref={canvasRef} className={`w-full h-full max-w-full max-h-full touch-none ${is3DBallReady ? "opacity-100" : "opacity-0"}`} />

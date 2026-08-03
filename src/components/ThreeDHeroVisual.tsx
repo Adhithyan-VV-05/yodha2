@@ -39,12 +39,13 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: !isMobile,
+        antialias: true,
         powerPreference: "high-performance",
         failIfMajorPerformanceCaveat: false,
       });
       renderer.setSize(width, height, false);
-      renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+      // High pixel ratio up to 3 for crystal-clear sharp rendering on mobile and PC
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 3));
     } catch {
       setHasContextError(true);
       return;
@@ -54,65 +55,64 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     scene.add(mainGroup);
 
     const sphereRadius = 1.55;
-    const sphereGeo = new THREE.SphereGeometry(sphereRadius, isMobile ? 32 : 64, isMobile ? 32 : 64);
+    const sphereGeo = new THREE.SphereGeometry(sphereRadius, 64, 64);
 
-    // PROGRESSIVE TEXTURE QUALITY UPGRADE CANVAS (256 -> 1024 -> 2048)
+    // ULTRA HD TEXTURE CANVAS (2048 x 1024)
     const canvasTex = document.createElement("canvas");
-    canvasTex.width = 256;
-    canvasTex.height = 128;
+    canvasTex.width = 2048;
+    canvasTex.height = 1024;
     const ctx = canvasTex.getContext("2d");
 
     const sphereTexture = new THREE.CanvasTexture(canvasTex);
     sphereTexture.wrapS = THREE.RepeatWrapping;
     sphereTexture.wrapT = THREE.ClampToEdgeWrapping;
+    // PREVENT DOWN-SAMPLING BLUR
+    sphereTexture.generateMipmaps = false;
+    sphereTexture.minFilter = THREE.LinearFilter;
+    sphereTexture.magFilter = THREE.LinearFilter;
 
     const sphereMat = new THREE.MeshStandardMaterial({
       map: sphereTexture,
       emissiveMap: sphereTexture,
       emissive: 0xffffff,
-      emissiveIntensity: 0.7,
-      roughness: 0.15,
-      metalness: 0.85,
+      emissiveIntensity: 0.85,
+      roughness: 0.1,
+      metalness: 0.9,
       color: 0x000000,
     });
 
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     mainGroup.add(sphereMesh);
 
-    // Texture quality upgrade steps
+    // Load High-Res Logo Image & Render Crisp Texture
     const img = new Image();
     img.src = logo;
 
-    const updateTextureQuality = (targetW: number, targetH: number) => {
+    const renderCrispTexture = () => {
       if (!ctx) return;
-      canvasTex.width = targetW;
-      canvasTex.height = targetH;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
       ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, targetW, targetH);
+      ctx.fillRect(0, 0, 2048, 1024);
 
-      const logoSize = Math.floor(targetH * 0.78);
-      const topY = (targetH - logoSize) / 2;
-      const halfW = targetW / 2;
+      const logoSize = 780;
+      const topY = (1024 - logoSize) / 2;
 
-      ctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
-      ctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, 512 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, 1536 - logoSize / 2, topY, logoSize, logoSize);
 
       sphereTexture.needsUpdate = true;
       setIs3DBallReady(true);
     };
 
     if (img.complete && img.naturalWidth > 0) {
-      updateTextureQuality(256, 128);
-      setTimeout(() => updateTextureQuality(isMobile ? 1024 : 2048, isMobile ? 512 : 1024), 150);
+      renderCrispTexture();
     } else {
-      img.onload = () => {
-        updateTextureQuality(256, 128);
-        setTimeout(() => updateTextureQuality(isMobile ? 1024 : 2048, isMobile ? 512 : 1024), 150);
-      };
+      img.onload = () => renderCrispTexture();
     }
 
-    // Pulsar Explosion Particle Ring
+    // Pulsar Particle Ring
     const particleCount = isMobile ? 60 : 120;
     const particleGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -142,11 +142,11 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     const particleSystem = new THREE.Points(particleGeo, particleMat);
     scene.add(particleSystem);
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
+    // Studio Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x38bdf8, 3.8);
+    const keyLight = new THREE.DirectionalLight(0x38bdf8, 4.0);
     keyLight.position.set(6, 5, 6);
     scene.add(keyLight);
 
@@ -275,12 +275,12 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
         isLoader ? "h-[320px] sm:h-[400px]" : "h-[340px] sm:h-[420px] lg:h-[480px]"
       } flex items-center justify-center select-none overflow-hidden touch-none`}
     >
-      {/* 2D Logo Placeholder image until 3D ball texture compiles */}
+      {/* 2D Crisp Logo Image Placeholder */}
       {(!is3DBallReady || hasContextError) && (
         <img
           src={logo}
           alt="Yodha Sphere Logo Placeholder"
-          className="absolute w-44 h-44 sm:w-60 sm:h-60 object-contain p-2 rounded-full animate-pulse bg-black/50 z-10"
+          className="absolute w-44 h-44 sm:w-60 sm:h-60 object-contain p-2 rounded-full bg-black/50 z-10"
         />
       )}
 

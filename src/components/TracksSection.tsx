@@ -4,14 +4,15 @@ import { Card3DTilt } from "./Card3DTilt";
 
 interface TracksSectionProps {
   onSelectTrack: (trackName: string) => void;
+  onOpenTrackPage: (trackType: "healthcare" | "environmental") => void;
 }
 
 const THEME_TRACKS = [
   {
-    id: "healthcare-ai",
+    id: "healthcare",
     title: "Healthcare AI",
     icon: <Stethoscope className="w-6 sm:w-8 h-6 sm:h-8 text-rose-400" />,
-    badge: "🩺 HEALTHCARE TRACK",
+    badge: "🩺 HEALTHCARE TRACK (IDs 1 - 20)",
     description: "Develop AI solutions that prevent disease, improve diagnostic accuracy, support clinical decision-making, and expand universal healthcare accessibility.",
     subTopics: [
       "Disease Prevention",
@@ -25,10 +26,10 @@ const THEME_TRACKS = [
     glowColor: "rgba(244, 63, 94, 0.35)",
   },
   {
-    id: "environmental-ai",
+    id: "environmental",
     title: "Environmental AI",
     icon: <Trees className="w-6 sm:w-8 h-6 sm:h-8 text-emerald-400" />,
-    badge: "🌿 SUSTAINABILITY TRACK",
+    badge: "🌿 SUSTAINABILITY TRACK (IDs 21 - 40)",
     description: "Build intelligent systems to monitor environmental ecosystems, detect forest fires, analyze water quality, and mitigate climate disaster risks.",
     subTopics: [
       "Water Quality Monitoring",
@@ -43,7 +44,7 @@ const THEME_TRACKS = [
   },
 ];
 
-export function TracksSection({ onSelectTrack }: TracksSectionProps) {
+export function TracksSection({ onSelectTrack, onOpenTrackPage }: TracksSectionProps) {
   return (
     <section id="tracks" className="py-20 sm:py-28 relative overflow-hidden bg-[#06080e]/95">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -73,11 +74,11 @@ export function TracksSection({ onSelectTrack }: TracksSectionProps) {
             transition={{ delay: 0.1 }}
             className="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed"
           >
-            Choose your battleground and build state-of-the-art AI solutions to solve critical human & planetary challenges.
+            Click <strong className="text-sky-300">Choose Track</strong> below to view the 40 dedicated Problem Statements for Healthcare (IDs 1–20) & Environmental AI (IDs 21–40).
           </motion.p>
         </div>
 
-        {/* 2-Card Layout on Mobile */}
+        {/* 2-Card Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {THEME_TRACKS.map((track, idx) => (
             <motion.div
@@ -130,13 +131,12 @@ export function TracksSection({ onSelectTrack }: TracksSectionProps) {
                     <button
                       onClick={() => {
                         onSelectTrack(track.title);
-                        const el = document.getElementById("register");
-                        if (el) el.scrollIntoView({ behavior: "smooth" });
+                        onOpenTrackPage(track.id as "healthcare" | "environmental");
                       }}
-                      className="flex items-center gap-2 text-xs font-bold text-sky-300 hover:text-white group/btn transition-colors cursor-pointer relative z-30 pointer-events-auto"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs tracking-wider uppercase shadow-lg hover:brightness-110 group/btn transition-all cursor-pointer relative z-30 pointer-events-auto"
                     >
                       <span>Choose Track</span>
-                      <ArrowRight className="w-4 h-4 text-sky-400 group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-4 h-4 text-sky-200 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                   </div>
                 </div>
