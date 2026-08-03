@@ -15,7 +15,10 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <Card3DTilt intensity={12}>
-          <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-b from-sky-950/60 via-slate-950 to-black border-2 border-sky-500/40 backdrop-blur-2xl shadow-[0_20px_80px_rgba(56,189,248,0.25)] text-center relative overflow-hidden flex flex-col items-center">
+          <div
+            onClick={onOpenRegister}
+            className="p-8 sm:p-14 rounded-3xl bg-gradient-to-b from-sky-950/60 via-slate-950 to-black border-2 border-sky-500/40 backdrop-blur-2xl shadow-[0_20px_80px_rgba(56,189,248,0.25)] text-center relative overflow-hidden flex flex-col items-center cursor-pointer hover:border-sky-400 transition-all group"
+          >
             
             {/* 3D Interactive Logo Ball */}
             <motion.div
