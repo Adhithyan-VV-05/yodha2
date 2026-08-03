@@ -207,8 +207,12 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
               <motion.button
                 whileHover={{ scale: 1.05, boxShadow: "0 0 35px rgba(56,189,248,0.6)" }}
                 whileTap={{ scale: 0.97 }}
-                onClick={onOpenRegister}
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold rounded-2xl shadow-[0_10px_30px_rgba(56,189,248,0.4)] transition-all flex items-center justify-center gap-3 text-xs sm:text-sm tracking-widest uppercase cursor-pointer"
+                onClick={() => {
+                  onOpenRegister();
+                  const el = document.getElementById("register");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold rounded-2xl shadow-[0_10px_30px_rgba(56,189,248,0.4)] transition-all flex items-center justify-center gap-3 text-xs sm:text-sm tracking-widest uppercase cursor-pointer relative z-30 pointer-events-auto"
               >
                 <Sparkles className="w-4 h-4 text-sky-200 animate-spin" />
                 <span>Register Now</span>
@@ -219,7 +223,7 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={handleExploreThemes}
-                className="w-full sm:w-auto px-8 py-4 bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-slate-100 font-bold rounded-2xl backdrop-blur-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm tracking-widest uppercase cursor-pointer"
+                className="w-full sm:w-auto px-8 py-4 bg-slate-900/90 hover:bg-slate-800 text-slate-200 font-extrabold rounded-2xl border border-white/10 transition-all flex items-center justify-center gap-3 text-xs sm:text-sm tracking-widest uppercase cursor-pointer relative z-30 pointer-events-auto"
               >
                 <Cpu className="w-4 h-4 text-emerald-400" />
                 <span>Explore Themes</span>

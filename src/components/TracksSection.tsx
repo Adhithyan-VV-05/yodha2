@@ -128,8 +128,12 @@ export function TracksSection({ onSelectTrack }: TracksSectionProps) {
                       {track.prizePool}
                     </span>
                     <button
-                      onClick={() => onSelectTrack(track.title)}
-                      className="flex items-center gap-2 text-xs font-bold text-sky-300 hover:text-white group/btn transition-colors cursor-pointer"
+                      onClick={() => {
+                        onSelectTrack(track.title);
+                        const el = document.getElementById("register");
+                        if (el) el.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="flex items-center gap-2 text-xs font-bold text-sky-300 hover:text-white group/btn transition-colors cursor-pointer relative z-30 pointer-events-auto"
                     >
                       <span>Choose Track</span>
                       <ArrowRight className="w-4 h-4 text-sky-400 group-hover/btn:translate-x-1 transition-transform" />

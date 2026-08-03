@@ -91,8 +91,12 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
               <motion.button
                 whileHover={{ scale: 1.06, boxShadow: "0 0 30px rgba(56,189,248,0.6)" }}
                 whileTap={{ scale: 0.97 }}
-                onClick={onOpenRegister}
-                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black text-xs rounded-full shadow-lg transition-all uppercase tracking-widest cursor-pointer border border-white/20"
+                onClick={() => {
+                  onOpenRegister();
+                  const el = document.getElementById("register");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black text-xs rounded-full shadow-lg transition-all uppercase tracking-widest cursor-pointer border border-white/20 relative z-30 pointer-events-auto"
               >
                 <Sparkles className="w-3.5 h-3.5 text-sky-200 animate-spin" />
                 <span>Register Team</span>
@@ -141,8 +145,10 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                   onClick={() => {
                     setMobileMenuOpen(false);
                     onOpenRegister();
+                    const el = document.getElementById("register");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="w-full py-3.5 px-6 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold text-xs rounded-2xl shadow-[0_0_20px_rgba(56,189,248,0.4)] uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-white/20"
+                  className="w-full py-3.5 px-6 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold text-xs rounded-2xl shadow-[0_0_20px_rgba(56,189,248,0.4)] uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-white/20 relative z-30 pointer-events-auto"
                 >
                   <Sparkles className="w-4 h-4 text-sky-200" />
                   <span>Register Team Now</span>

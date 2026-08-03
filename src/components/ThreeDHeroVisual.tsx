@@ -14,6 +14,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [is3DBallReady, setIs3DBallReady] = useState(false);
   const [hasContextError, setHasContextError] = useState(false);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: !isMobile, // Disable MSAA antialiasing on mobile for high GPU FPS
+        antialias: !isMobile,
         powerPreference: "high-performance",
         failIfMajorPerformanceCaveat: false,
       });
@@ -55,29 +56,11 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     const sphereRadius = 1.55;
     const sphereGeo = new THREE.SphereGeometry(sphereRadius, isMobile ? 32 : 64, isMobile ? 32 : 64);
 
-    // Optimized Texture Canvas Dimensions for Mobile GPU Stability
+    // PROGRESSIVE TEXTURE QUALITY UPGRADE CANVAS (256 -> 1024 -> 2048)
     const canvasTex = document.createElement("canvas");
-    canvasTex.width = isMobile ? 1024 : 2048;
-    canvasTex.height = isMobile ? 512 : 1024;
+    canvasTex.width = 256;
+    canvasTex.height = 128;
     const ctx = canvasTex.getContext("2d");
-
-    if (ctx) {
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, canvasTex.width, canvasTex.height);
-
-      const img = new Image();
-      img.src = logo;
-      img.onload = () => {
-        const logoSize = isMobile ? 400 : 800;
-        const topY = (canvasTex.height - logoSize) / 2;
-        const halfW = canvasTex.width / 2;
-
-        ctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
-        ctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
-
-        sphereTexture.needsUpdate = true;
-      };
-    }
 
     const sphereTexture = new THREE.CanvasTexture(canvasTex);
     sphereTexture.wrapS = THREE.RepeatWrapping;
@@ -95,6 +78,39 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
 
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     mainGroup.add(sphereMesh);
+
+    // Texture quality upgrade steps
+    const img = new Image();
+    img.src = logo;
+
+    const updateTextureQuality = (targetW: number, targetH: number) => {
+      if (!ctx) return;
+      canvasTex.width = targetW;
+      canvasTex.height = targetH;
+
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, targetW, targetH);
+
+      const logoSize = Math.floor(targetH * 0.78);
+      const topY = (targetH - logoSize) / 2;
+      const halfW = targetW / 2;
+
+      ctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+
+      sphereTexture.needsUpdate = true;
+      setIs3DBallReady(true);
+    };
+
+    if (img.complete && img.naturalWidth > 0) {
+      updateTextureQuality(256, 128);
+      setTimeout(() => updateTextureQuality(isMobile ? 1024 : 2048, isMobile ? 512 : 1024), 150);
+    } else {
+      img.onload = () => {
+        updateTextureQuality(256, 128);
+        setTimeout(() => updateTextureQuality(isMobile ? 1024 : 2048, isMobile ? 512 : 1024), 150);
+      };
+    }
 
     // Pulsar Explosion Particle Ring
     const particleCount = isMobile ? 60 : 120;
@@ -138,7 +154,6 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     backLight.position.set(-6, -4, -6);
     scene.add(backLight);
 
-    // Pointer & Touch Interaction Scoped Directly to Container (No Window Leaks)
     let targetRotationX = 0;
     let targetRotationY = 0;
 
@@ -162,7 +177,6 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     container.addEventListener("mousemove", onMouseMove);
     container.addEventListener("touchmove", onTouchMove, { passive: true });
 
-    // Resize Handler with Dimension Division-by-Zero Safeguard
     const handleResize = () => {
       if (!containerRef.current || !canvasRef.current) return;
       const w = Math.max(1, containerRef.current.clientWidth || window.innerWidth || 360);
@@ -180,7 +194,6 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     resizeObserver?.observe(container);
     window.addEventListener("resize", handleResize);
 
-    // Animation Loop
     let animationFrameId: number;
     let clock = new THREE.Clock();
     let endingStartTime = 0;
@@ -250,18 +263,6 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     };
   }, [isLoader, progress, isEnding]);
 
-  if (hasContextError) {
-    return (
-      <div className="relative w-full h-[340px] sm:h-[420px] flex items-center justify-center">
-        <div className="w-40 h-40 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-600 animate-pulse flex items-center justify-center shadow-[0_0_40px_rgba(56,189,248,0.5)]">
-          <div className="w-32 h-32 rounded-full bg-[#03060d] flex items-center justify-center">
-            <span className="font-black text-sky-400 text-lg tracking-widest">YODHA 2.0</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <motion.div
       initial={!isLoader ? { y: 40, opacity: 0 } : false}
@@ -274,9 +275,18 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
         isLoader ? "h-[320px] sm:h-[400px]" : "h-[340px] sm:h-[420px] lg:h-[480px]"
       } flex items-center justify-center select-none overflow-hidden touch-none`}
     >
+      {/* 2D Logo Placeholder image until 3D ball texture compiles */}
+      {(!is3DBallReady || hasContextError) && (
+        <img
+          src={logo}
+          alt="Yodha Sphere Logo Placeholder"
+          className="absolute w-44 h-44 sm:w-60 sm:h-60 object-contain p-2 rounded-full animate-pulse bg-black/50 z-10"
+        />
+      )}
+
       <canvas
         ref={canvasRef}
-        className="w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing max-w-full max-h-full touch-none"
+        className={`w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing max-w-full max-h-full touch-none ${is3DBallReady ? "opacity-100" : "opacity-0"}`}
       />
 
       {!isLoader && (

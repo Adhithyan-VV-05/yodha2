@@ -13,6 +13,7 @@ import { RegistrationSection } from "./components/RegistrationSection";
 import { PastGallerySection } from "./components/PastGallerySection";
 import { CompactFooter } from "./components/CompactFooter";
 import { MinimalBackgroundVisual } from "./components/MinimalBackgroundVisual";
+import { trackUserSession } from "./lib/firebase";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,12 +26,17 @@ function App() {
   };
 
   useEffect(() => {
+    // Start Firebase visit increment & session duration tracking telemetry
+    const cleanupSessionTracker = trackUserSession();
+
     if (isLoading) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
+
     return () => {
+      cleanupSessionTracker();
       document.body.style.overflow = "auto";
     };
   }, [isLoading]);

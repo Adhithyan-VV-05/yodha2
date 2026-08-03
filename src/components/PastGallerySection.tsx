@@ -66,13 +66,13 @@ export function PastGallerySection() {
         </motion.h2>
       </div>
 
-      {/* CONTINUOUS INFINITE IMAGE CHAIN CAROUSEL (ZERO GAPS, PRELOADED) */}
-      <div className="relative w-full overflow-hidden select-none py-2">
+      {/* CONTINUOUS INFINITE IMAGE CHAIN CAROUSEL (NO CURSOR INTERACTION, ZERO GAPS) */}
+      <div className="relative w-full overflow-hidden select-none py-2 pointer-events-none">
         {/* Left & Right Fade Mask Borders */}
         <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-[#03050a] to-transparent z-20 pointer-events-none" />
         <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-[#03050a] to-transparent z-20 pointer-events-none" />
 
-        <div className="flex w-max gap-4 sm:gap-6 animate-marquee hover:[animation-play-state:paused]">
+        <div className="flex w-max gap-4 sm:gap-6 animate-marquee">
           {chainImages.map((src, idx) => (
             <div
               key={idx}

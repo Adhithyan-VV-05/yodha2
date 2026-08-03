@@ -2,51 +2,54 @@ import type { TeamRegistrationData } from "./firebase";
 
 const GOOGLE_FORM_URL = import.meta.env.VITE_GOOGLE_FORM_URL || "";
 
-const GOOGLE_FORM_ENTRIES = {
-  teamName: import.meta.env.VITE_GF_ENTRY_TEAMNAME || "entry.1000000001",
-  teamSize: import.meta.env.VITE_GF_ENTRY_TEAMSIZE || "entry.1000000002",
-  track: import.meta.env.VITE_GF_ENTRY_TRACK || "entry.1000000003",
-  leaderName: import.meta.env.VITE_GF_ENTRY_LEADERNAME || "entry.1000000004",
-  leaderEmail: import.meta.env.VITE_GF_ENTRY_LEADEREMAIL || "entry.1000000005",
-  leaderPhone: import.meta.env.VITE_GF_ENTRY_LEADERPHONE || "entry.1000000006",
-  leaderGithub: import.meta.env.VITE_GF_ENTRY_LEADERGITHUB || "entry.1000000007",
-  membersSummary: import.meta.env.VITE_GF_ENTRY_MEMBERSSUMMARY || "entry.1000000008",
-};
-
 export const isGoogleFormConfigured = (): boolean => {
   return Boolean(
     GOOGLE_FORM_URL &&
-      GOOGLE_FORM_URL.includes("docs.google.com/forms") &&
-      !GOOGLE_FORM_URL.includes("YOUR_GOOGLE_FORM_ID")
+      (GOOGLE_FORM_URL.includes("script.google.com") || GOOGLE_FORM_URL.includes("docs.google.com")) &&
+      !GOOGLE_FORM_URL.includes("YOUR_")
   );
 };
 
 /**
- * Submit team registration entry to Google Forms via headless POST
+ * Submit team registration entry to Google Sheet via Google Apps Script Web App (JSON)
+ * or Google Forms (URL Encoded fallback).
  */
 export async function submitTeamToGoogleForms(data: TeamRegistrationData): Promise<{ success: boolean; isMock?: boolean; error?: string }> {
   if (!isGoogleFormConfigured()) {
-    console.info("📋 Google Form URL not configured. Simulating Google Form submission fallback.");
+    console.info("📋 Google Apps Script / Form URL not configured. Simulating Google submission fallback.");
     return { success: true, isMock: true };
   }
 
   try {
-    const formData = new URLSearchParams();
-    
-    formData.append(GOOGLE_FORM_ENTRIES.teamName, data.teamName);
-    formData.append(GOOGLE_FORM_ENTRIES.teamSize, String(data.teamSize));
-    formData.append(GOOGLE_FORM_ENTRIES.track, data.track);
-    formData.append(GOOGLE_FORM_ENTRIES.leaderName, data.leader.fullName);
-    formData.append(GOOGLE_FORM_ENTRIES.leaderEmail, data.leader.email);
-    formData.append(GOOGLE_FORM_ENTRIES.leaderPhone, data.leader.phone);
-    if (data.leader.githubUrl) formData.append(GOOGLE_FORM_ENTRIES.leaderGithub, data.leader.githubUrl);
+    // 1. Google Apps Script Web App JSON Endpoint (Recommended)
+    if (GOOGLE_FORM_URL.includes("script.google.com")) {
+      await fetch(GOOGLE_FORM_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(data),
+      });
 
-    // Format all additional members into summary string for Google Form entry
+      return { success: true, isMock: false };
+    }
+
+    // 2. Google Form standard URL Fallback
+    const formData = new URLSearchParams();
+    formData.append("entry.1000000001", data.teamName);
+    formData.append("entry.1000000002", String(data.teamSize));
+    formData.append("entry.1000000003", data.track);
+    formData.append("entry.1000000004", data.leader.fullName);
+    formData.append("entry.1000000005", data.leader.email);
+    formData.append("entry.1000000006", data.leader.phone);
+    if (data.leader.githubUrl) formData.append("entry.1000000007", data.leader.githubUrl);
+
     const membersText = data.members
       .map((m, i) => `Member ${i + 2}: ${m.fullName} (${m.email}, ${m.phone}, ${m.organization}, ${m.gender}, ${m.yearOfStudy})`)
       .join(" | ");
     
-    formData.append(GOOGLE_FORM_ENTRIES.membersSummary, membersText);
+    formData.append("entry.1000000008", membersText);
 
     const formResponseUrl = GOOGLE_FORM_URL.endsWith("/formResponse")
       ? GOOGLE_FORM_URL

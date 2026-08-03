@@ -20,7 +20,7 @@ body {
   color: #f8fafc;
   font-family: var(--font-sans);
   overflow-x: hidden;
-  min-h-screen: 100vh;
+  min-height: 100vh;
 }
 
 /* Hardware-Accelerated Seamless Continuous Infinite Marquee Loop */
@@ -38,6 +38,13 @@ body {
   width: max-content;
   animation: marquee 35s linear infinite;
   will-change: transform;
+}
+
+/* Mobile View: Slower speed (55s) */
+@media (max-width: 640px) {
+  .animate-marquee {
+    animation: marquee 55s linear infinite;
+  }
 }
 
 /* Custom Cyber Scrollbar */

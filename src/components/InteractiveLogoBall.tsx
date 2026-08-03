@@ -11,11 +11,12 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [is3DBallReady, setIs3DBallReady] = useState(false);
   const [hasContextError, setHasContextError] = useState(false);
 
   const sizeClasses = {
     sm: "w-9 h-9",
-    md: "w-12 h-12",
+    md: "w-11 h-11",
     lg: "w-20 h-20",
     xl: "w-32 h-32",
   }[size];
@@ -56,28 +57,11 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
 
     const sphereGeo = new THREE.SphereGeometry(1.0, isMobile ? 24 : 32, isMobile ? 24 : 32);
 
+    // PROGRESSIVE TEXTURE QUALITY UPGRADE CANVAS (256 -> 512 -> 1024)
     const canvasTex = document.createElement("canvas");
-    canvasTex.width = isMobile ? 512 : 1024;
-    canvasTex.height = isMobile ? 256 : 512;
+    canvasTex.width = 256;
+    canvasTex.height = 128;
     const ctx = canvasTex.getContext("2d");
-
-    if (ctx) {
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, canvasTex.width, canvasTex.height);
-
-      const img = new Image();
-      img.src = logo;
-      img.onload = () => {
-        const logoSize = isMobile ? 200 : 400;
-        const topY = (canvasTex.height - logoSize) / 2;
-        const halfW = canvasTex.width / 2;
-
-        ctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
-        ctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
-
-        sphereTexture.needsUpdate = true;
-      };
-    }
 
     const sphereTexture = new THREE.CanvasTexture(canvasTex);
     sphereTexture.wrapS = THREE.RepeatWrapping;
@@ -87,7 +71,7 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
       map: sphereTexture,
       emissiveMap: sphereTexture,
       emissive: 0xffffff,
-      emissiveIntensity: 0.7,
+      emissiveIntensity: 0.75,
       roughness: 0.15,
       metalness: 0.85,
       color: 0x000000,
@@ -95,6 +79,39 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
 
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     sphereGroup.add(sphereMesh);
+
+    // Progressive Quality Upgrade Function
+    const img = new Image();
+    img.src = logo;
+
+    const updateTextureQuality = (targetW: number, targetH: number) => {
+      if (!ctx) return;
+      canvasTex.width = targetW;
+      canvasTex.height = targetH;
+
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, targetW, targetH);
+
+      const logoSize = Math.floor(targetH * 0.78);
+      const topY = (targetH - logoSize) / 2;
+      const halfW = targetW / 2;
+
+      ctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+
+      sphereTexture.needsUpdate = true;
+      setIs3DBallReady(true);
+    };
+
+    if (img.complete && img.naturalWidth > 0) {
+      updateTextureQuality(256, 128);
+      setTimeout(() => updateTextureQuality(isMobile ? 512 : 1024, isMobile ? 256 : 512), 150);
+    } else {
+      img.onload = () => {
+        updateTextureQuality(256, 128);
+        setTimeout(() => updateTextureQuality(isMobile ? 512 : 1024, isMobile ? 256 : 512), 150);
+      };
+    }
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
@@ -157,14 +174,6 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
     };
   }, [isHovered]);
 
-  if (hasContextError) {
-    return (
-      <div className={`relative inline-flex items-center justify-center rounded-full bg-sky-500/20 ${sizeClasses} ${className}`}>
-        <img src={logo} alt="Yodha Logo" className="w-4/5 h-4/5 object-contain" />
-      </div>
-    );
-  }
-
   return (
     <div
       ref={containerRef}
@@ -172,7 +181,15 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
       onMouseLeave={() => setIsHovered(false)}
       className={`relative inline-flex items-center justify-center cursor-pointer select-none rounded-full overflow-hidden ${sizeClasses} ${className}`}
     >
-      <canvas ref={canvasRef} className="w-full h-full max-w-full max-h-full touch-none" />
+      {/* 2D Logo Image Placeholder displayed until 3D ball texture compiles */}
+      {(!is3DBallReady || hasContextError) && (
+        <img
+          src={logo}
+          alt="Yodha Logo Placeholder"
+          className="absolute inset-0 w-full h-full object-contain p-1 rounded-full animate-pulse bg-black/60 z-10"
+        />
+      )}
+      <canvas ref={canvasRef} className={`w-full h-full max-w-full max-h-full touch-none ${is3DBallReady ? "opacity-100" : "opacity-0"}`} />
     </div>
   );
 }
