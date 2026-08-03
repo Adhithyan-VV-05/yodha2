@@ -59,9 +59,9 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                 : "bg-black/70 backdrop-blur-xl shadow-lg"
             }`}
           >
-            {/* BRAND IDENTITY WITH SNUG-FIT 3D INTERACTIVE BALL */}
-            <a href="#" className="flex items-center gap-2 sm:gap-3 group shrink-0">
-              <InteractiveLogoBall size="sm" />
+            {/* BRAND IDENTITY WITH LARGER SNUG-FIT 3D INTERACTIVE BALL */}
+            <a href="#" className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0">
+              <InteractiveLogoBall size="md" />
               <div className="flex flex-col justify-center">
                 <span className="font-black tracking-tight text-white text-sm sm:text-lg leading-none group-hover:text-sky-300 transition-colors">
                   YODHA <span className="text-sky-400 font-extrabold">2.0</span>

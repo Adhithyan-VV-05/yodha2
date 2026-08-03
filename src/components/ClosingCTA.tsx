@@ -43,8 +43,12 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
             <motion.button
               whileHover={{ scale: 1.06, boxShadow: "0 0 35px rgba(56,189,248,0.6)" }}
               whileTap={{ scale: 0.97 }}
-              onClick={onOpenRegister}
-              className="mt-8 px-10 py-4.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black rounded-2xl shadow-xl flex items-center justify-center gap-3 text-sm tracking-widest uppercase cursor-pointer border border-white/20"
+              onClick={() => {
+                onOpenRegister();
+                const el = document.getElementById("register");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="mt-8 px-10 py-4.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black rounded-2xl shadow-xl flex items-center justify-center gap-3 text-sm tracking-widest uppercase cursor-pointer border border-white/20 relative z-30 pointer-events-auto"
             >
               <Sparkles className="w-4 h-4 text-sky-200 animate-spin" />
               <span>Register Today</span>

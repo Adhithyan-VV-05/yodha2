@@ -8,7 +8,7 @@ interface PrizesSectionProps {
   onOpenRegister: () => void;
 }
 
-export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
+export function PrizesSection({ }: PrizesSectionProps) {
   const [isInView, setIsInView] = useState(false);
 
   return (
@@ -51,7 +51,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
           </motion.p>
         </motion.div>
 
-        {/* Podium Cards Grid - Staggered Scroll Spawn: 1st FIRST, then 2nd & 3rd TOGETHER (Retains once: true) */}
+        {/* Podium Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mb-12">
           
           {/* 2nd Place - Silver Trophy (#2) */}
@@ -137,15 +137,6 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                   </li>
                 </ul>
               </div>
-
-              <motion.button
-                whileHover={{ scale: 1.03, boxShadow: "0 0 25px rgba(245,158,11,0.5)" }}
-                whileTap={{ scale: 0.97 }}
-                onClick={onOpenRegister}
-                className="mt-6 sm:mt-8 w-full py-4 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 text-black font-black rounded-xl shadow-lg hover:brightness-110 transition-all text-xs uppercase tracking-widest cursor-pointer"
-              >
-                Claim Champion Prize
-              </motion.button>
             </motion.div>
           </Card3DTilt>
 
@@ -204,12 +195,6 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                 Awarded for Best AI Integration, Best Design Experience, Accessibility Excellence, and People's Choice Winner.
               </p>
             </div>
-            <button
-              onClick={onOpenRegister}
-              className="w-full md:w-auto px-6 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-xs rounded-xl hover:shadow-[0_0_20px_rgba(56,189,248,0.4)] transition-all uppercase tracking-wider shrink-0 cursor-pointer"
-            >
-              Submit Project Entry
-            </button>
           </div>
         </Card3DTilt>
 

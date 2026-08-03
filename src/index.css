@@ -12,14 +12,32 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
-  background-color: #03060d;
+  background-color: #03060d !important;
 }
 
 body {
-  background-color: #03060d;
+  background-color: #03060d !important;
   color: #f8fafc;
   font-family: var(--font-sans);
   overflow-x: hidden;
+  min-h-screen: 100vh;
+}
+
+/* Hardware-Accelerated Seamless Continuous Infinite Marquee Loop */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-33.3333%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+  will-change: transform;
 }
 
 /* Custom Cyber Scrollbar */

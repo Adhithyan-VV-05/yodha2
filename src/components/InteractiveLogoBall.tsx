@@ -170,7 +170,7 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
       ref={containerRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative inline-flex items-center justify-center cursor-pointer select-none rounded-full overflow-hidden filter drop-shadow-[0_0_12px_rgba(56,189,248,0.6)] ${sizeClasses} ${className}`}
+      className={`relative inline-flex items-center justify-center cursor-pointer select-none rounded-full overflow-hidden ${sizeClasses} ${className}`}
     >
       <canvas ref={canvasRef} className="w-full h-full max-w-full max-h-full touch-none" />
     </div>

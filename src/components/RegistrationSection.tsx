@@ -14,7 +14,7 @@ interface RegistrationSectionProps {
   selectedTrack?: string;
 }
 
-export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "AI Interfaces & Generative UI" }: RegistrationSectionProps) {
+export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "Healthcare AI" }: RegistrationSectionProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -337,10 +337,8 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "A
                     onChange={(e) => setTrack(e.target.value)}
                     className="w-full px-4 py-3 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
                   >
-                    <option value="AI Interfaces & Generative UI">AI Interfaces & Generative UI (₹25,000)</option>
-                    <option value="Web3 & Decentralized Web">Web3 & Decentralized Web (₹20,000)</option>
-                    <option value="Immersive Digital Creative">Immersive Digital Creative (₹15,000)</option>
-                    <option value="UI Craftsmanship & Open Tech">UI Craftsmanship & Open Tech (₹10,000)</option>
+                    <option value="Healthcare AI">Healthcare AI (₹35,000 Track Pool)</option>
+                    <option value="Environmental AI">Environmental AI (₹35,000 Track Pool)</option>
                   </select>
                 </div>
               </div>

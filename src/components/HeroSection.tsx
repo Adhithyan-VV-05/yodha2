@@ -83,7 +83,7 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
 
           {/* LEFT COLUMN: Prominent 3D Black Sphere Visual */}
           <div className="lg:col-span-5 flex justify-center lg:justify-start order-1 lg:order-1">
-            <div className="w-full max-w-md relative flex justify-center items-center overflow-hidden">
+            <div className="w-full max-w-lg relative flex justify-center items-center overflow-hidden">
               <ThreeDHeroVisual bounceEntrance={true} />
             </div>
           </div>
@@ -91,16 +91,16 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
           {/* RIGHT COLUMN: Kinetic Hero Content */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-2">
 
-            {/* Tagline Capsule */}
+            {/* "BE A WARRIOR OF AI" GLOWING CAPSULE BADGE */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 via-sky-500/20 to-indigo-500/20 border border-sky-400/30 backdrop-blur-xl text-xs font-mono text-sky-300 mb-6 shadow-[0_0_25px_rgba(56,189,248,0.3)]"
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500/30 via-indigo-500/30 to-purple-500/30 border border-sky-400/80 backdrop-blur-xl text-xs font-mono text-sky-200 mb-6 shadow-[0_0_30px_rgba(56,189,248,0.8)]"
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="font-bold tracking-widest uppercase text-emerald-300">
-                WARRIORS OF AI • HEALTHCARE & SUSTAINABILITY
+              <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping" />
+              <span className="font-extrabold tracking-widest uppercase text-white drop-shadow-[0_0_10px_rgba(56,189,248,0.9)]">
+                BE A WARRIOR OF AI
               </span>
             </motion.div>
 

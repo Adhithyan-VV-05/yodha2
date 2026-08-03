@@ -7,7 +7,7 @@ export function SDGSection() {
     {
       code: "SDG 3",
       title: "Good Health & Well-being",
-      icon: <Heart className="w-8 h-8 text-white" />,
+      icon: <Heart className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Advance AI for disease prevention, diagnosis accuracy, and healthcare accessibility.",
       color: "bg-[#E5243B]",
       borderColor: "border-[#E5243B]/60",
@@ -17,7 +17,7 @@ export function SDGSection() {
     {
       code: "SDG 6",
       title: "Clean Water & Sanitation",
-      icon: <Droplets className="w-8 h-8 text-white" />,
+      icon: <Droplets className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Develop smart water quality monitoring and resource conservation systems.",
       color: "bg-[#26BDE2]",
       borderColor: "border-[#26BDE2]/60",
@@ -26,8 +26,8 @@ export function SDGSection() {
     },
     {
       code: "SDG 9",
-      title: "Industry, Innovation & Infrastructure",
-      icon: <Building2 className="w-8 h-8 text-white" />,
+      title: "Industry & Innovation",
+      icon: <Building2 className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Foster sustainable industrial innovation, AI infrastructure, and research.",
       color: "bg-[#FD6925]",
       borderColor: "border-[#FD6925]/60",
@@ -36,8 +36,8 @@ export function SDGSection() {
     },
     {
       code: "SDG 11",
-      title: "Sustainable Cities & Communities",
-      icon: <Building className="w-8 h-8 text-white" />,
+      title: "Sustainable Cities",
+      icon: <Building className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Engineer smart environmental monitoring tools for urban communities.",
       color: "bg-[#FD9D24]",
       borderColor: "border-[#FD9D24]/60",
@@ -47,7 +47,7 @@ export function SDGSection() {
     {
       code: "SDG 13",
       title: "Climate Action",
-      icon: <ThermometerSun className="w-8 h-8 text-white" />,
+      icon: <ThermometerSun className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Build AI models for climate resilience, forest fire detection, and disaster mitigation.",
       color: "bg-[#3F7E44]",
       borderColor: "border-[#3F7E44]/60",
@@ -57,7 +57,7 @@ export function SDGSection() {
     {
       code: "SDG 15",
       title: "Life on Land",
-      icon: <Trees className="w-8 h-8 text-white" />,
+      icon: <Trees className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Protect terrestrial ecosystems, biodiversity, and forestry using AI tools.",
       color: "bg-[#56C02B]",
       borderColor: "border-[#56C02B]/60",
@@ -75,16 +75,16 @@ export function SDGSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
+            className="text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
           >
-            <Globe className="w-4 h-4 text-sky-400" />
+            <Globe className="w-4 h-4 text-emerald-400" />
             <span>GLOBAL IMPACT FRAMEWORK</span>
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl sm:text-5xl font-black text-white tracking-tight"
+            className="text-2xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-lime-300 tracking-tight"
           >
             UN Sustainable Development Goals
           </motion.h2>
@@ -92,50 +92,50 @@ export function SDGSection() {
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-3 text-slate-300 text-base max-w-xl mx-auto"
+            className="mt-3 text-slate-300 text-sm sm:text-base max-w-xl mx-auto"
           >
             YODHA Hackathon projects directly align with official United Nations SDGs to drive measurable global social impact.
           </motion.p>
         </div>
 
-        {/* SDG Cards Grid with 3D Flip Effects */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* 2-Card Grid Layout on Mobile */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {SDGS.map((sdg) => (
             <Card3DFlip
               key={sdg.code}
               flipDirection={sdg.flipDir}
               glowColor={sdg.glowColor}
-              className="h-64"
+              className="h-56 sm:h-64"
               front={
-                <div className="flex flex-col items-center justify-center text-center my-auto">
-                  <div className={`p-4 rounded-2xl ${sdg.color} shadow-lg mb-3`}>
+                <div className="flex flex-col items-center justify-center text-center my-auto p-2 sm:p-4">
+                  <div className={`p-2.5 sm:p-4 rounded-2xl ${sdg.color} shadow-lg mb-2 sm:mb-3`}>
                     {sdg.icon}
                   </div>
-                  <span className="font-mono text-xs font-black text-white bg-white/10 border border-white/20 px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                  <span className="font-mono text-[9px] sm:text-xs font-black text-white bg-white/10 border border-white/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
                     {sdg.code}
                   </span>
-                  <h3 className="text-lg font-bold text-white">{sdg.title}</h3>
-                  <span className="text-[10px] font-mono text-slate-400 mt-2 flex items-center gap-1 opacity-75">
-                    <RotateCw className="w-3 h-3 text-sky-400 animate-spin" /> Tap / Hover to flip
+                  <h3 className="text-xs sm:text-lg font-bold text-white leading-snug">{sdg.title}</h3>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1.5 flex items-center gap-1 opacity-75">
+                    <RotateCw className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-sky-400 animate-spin" /> Flip
                   </span>
                 </div>
               }
               back={
-                <div className="flex flex-col justify-between h-full text-left">
+                <div className="flex flex-col justify-between h-full text-left p-2.5 sm:p-4">
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-mono text-xs font-bold text-white bg-white/10 px-2.5 py-0.5 rounded border border-white/20">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-mono text-[9px] sm:text-xs font-bold text-white bg-white/10 px-2 py-0.5 rounded border border-white/20">
                         {sdg.code}
                       </span>
-                      <div className={`w-3 h-3 rounded-full ${sdg.color}`} />
+                      <div className={`w-2.5 h-2.5 rounded-full ${sdg.color}`} />
                     </div>
-                    <h4 className="text-base font-bold text-white mb-2">{sdg.title}</h4>
-                    <p className="text-xs text-slate-300 leading-relaxed font-normal">{sdg.desc}</p>
+                    <h4 className="text-xs sm:text-base font-bold text-white mb-1">{sdg.title}</h4>
+                    <p className="text-[10px] sm:text-xs text-slate-300 leading-normal sm:leading-relaxed font-normal">{sdg.desc}</p>
                   </div>
 
-                  <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-slate-400">
-                    <span>UN Target Goal</span>
-                    <span className="text-sky-400 font-semibold">Official Alignment</span>
+                  <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-slate-400">
+                    <span>UN Target</span>
+                    <span className="text-emerald-400 font-semibold">Official Alignment</span>
                   </div>
                 </div>
               }
