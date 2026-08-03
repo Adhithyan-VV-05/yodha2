@@ -87,7 +87,10 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
               transition={{ delay: idx * 0.15, duration: 0.6 }}
             >
               <Card3DTilt glowColor={track.glowColor} className="h-full">
-                <div className={`p-6 sm:p-8 rounded-3xl bg-gradient-to-br ${track.gradient} bg-slate-950/80 border border-white/10 flex flex-col justify-between h-full relative overflow-hidden backdrop-blur-xl group hover:border-sky-400/40 transition-all duration-300`}>
+                <div
+                  onClick={() => onOpenTrackPage(track.id as "healthcare" | "environmental")}
+                  className={`p-6 sm:p-8 rounded-3xl bg-gradient-to-br ${track.gradient} bg-slate-950/80 border border-white/10 flex flex-col justify-between h-full relative overflow-hidden backdrop-blur-xl group hover:border-sky-400/40 transition-all duration-300 cursor-pointer`}
+                >
                   
                   <div>
                     {/* Header */}

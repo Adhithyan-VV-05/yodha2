@@ -263,7 +263,7 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.85 }}
-              className="mt-10 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-purple-950/60 via-slate-950/90 to-amber-950/50 border border-purple-500/40 backdrop-blur-2xl w-full max-w-xl shadow-[0_0_40px_rgba(168,85,247,0.25)] text-left relative overflow-hidden"
+              className="mt-10 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-purple-950/60 via-slate-950/90 to-amber-950/50 border border-purple-500/40 backdrop-blur-2xl w-[95vw] max-w-[95vw] mx-auto shadow-[0_0_40px_rgba(168,85,247,0.25)] text-left relative overflow-hidden"
             >
               {/* Lock Badge Header */}
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">

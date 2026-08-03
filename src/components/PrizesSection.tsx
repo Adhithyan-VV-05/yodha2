@@ -181,8 +181,8 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
           </Card3DTilt>
         </div>
 
-        {/* Special INR Bounties Card */}
-        <Card3DTilt intensity={8} className="w-full mb-8">
+        {/* Special INR Bounties Card with Register Now CTA */}
+        <Card3DTilt intensity={8} className="w-full">
           <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-sky-950/40 via-indigo-950/40 to-slate-950 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-xl shadow-xl">
             <div className="text-center md:text-left">
               <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block font-bold">
@@ -195,18 +195,16 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                 Awarded for Best AI Integration, Best Design Experience, Accessibility Excellence, and People's Choice Winner.
               </p>
             </div>
+
+            <button
+              onClick={onOpenRegister}
+              className="px-8 py-3.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold text-xs sm:text-sm rounded-2xl uppercase tracking-widest shadow-[0_0_25px_rgba(56,189,248,0.4)] hover:brightness-110 transition-all cursor-pointer shrink-0 relative z-30 pointer-events-auto flex items-center gap-2"
+            >
+              <Sparkles className="w-4 h-4 text-sky-200 animate-spin" />
+              <span>Register Now</span>
+            </button>
           </div>
         </Card3DTilt>
-
-        {/* Register Today CTA Button */}
-        <div className="text-center">
-          <button
-            onClick={onOpenRegister}
-            className="px-8 py-3.5 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-black font-black text-xs sm:text-sm rounded-2xl uppercase tracking-widest shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:brightness-110 transition-all cursor-pointer relative z-30 pointer-events-auto"
-          >
-            Register Today
-          </button>
-        </div>
 
       </div>
     </section>
