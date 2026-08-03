@@ -11,8 +11,8 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [hasContextError, setHasContextError] = useState(false);
 
-  // Size mapping
   const sizeClasses = {
     sm: "w-9 h-9",
     md: "w-12 h-12",
@@ -23,47 +23,57 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) return;
 
-    const width = containerRef.current.clientWidth || 36;
-    const height = containerRef.current.clientHeight || 36;
+    const container = containerRef.current;
+    const canvas = canvasRef.current;
+
+    let width = Math.max(1, container.clientWidth || 36);
+    let height = Math.max(1, container.clientHeight || 36);
+    const isMobile = width < 640 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const aspect = (width > 0 && height > 0) ? width / height : 1;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 100);
     camera.position.z = 3.6;
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      alpha: true,
-      antialias: true,
-      powerPreference: "high-performance",
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: !isMobile,
+        powerPreference: "high-performance",
+        failIfMajorPerformanceCaveat: false,
+      });
+      renderer.setSize(width, height, false);
+      renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2));
+    } catch {
+      setHasContextError(true);
+      return;
+    }
 
     const sphereGroup = new THREE.Group();
     scene.add(sphereGroup);
 
-    const sphereGeo = new THREE.SphereGeometry(1.0, 32, 32);
+    const sphereGeo = new THREE.SphereGeometry(1.0, isMobile ? 24 : 32, isMobile ? 24 : 32);
 
-    // Canvas texture for dual logos
     const canvasTex = document.createElement("canvas");
-    canvasTex.width = 1024;
-    canvasTex.height = 512;
+    canvasTex.width = isMobile ? 512 : 1024;
+    canvasTex.height = isMobile ? 256 : 512;
     const ctx = canvasTex.getContext("2d");
 
     if (ctx) {
       ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, 1024, 512);
+      ctx.fillRect(0, 0, canvasTex.width, canvasTex.height);
 
       const img = new Image();
       img.src = logo;
       img.onload = () => {
-        const logoSize = 400;
-        const topY = (512 - logoSize) / 2;
+        const logoSize = isMobile ? 200 : 400;
+        const topY = (canvasTex.height - logoSize) / 2;
+        const halfW = canvasTex.width / 2;
 
-        // Front Logo (u = 0.25)
-        ctx.drawImage(img, 256 - logoSize / 2, topY, logoSize, logoSize);
-        // Back Logo (u = 0.75)
-        ctx.drawImage(img, 768 - logoSize / 2, topY, logoSize, logoSize);
+        ctx.drawImage(img, halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
+        ctx.drawImage(img, halfW + halfW / 2 - logoSize / 2, topY, logoSize, logoSize);
 
         sphereTexture.needsUpdate = true;
       };
@@ -98,13 +108,12 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
     dirLight2.position.set(-4, -4, -4);
     scene.add(dirLight2);
 
-    // Mouse & Touch Interactive Momentum Tracking
     let targetRotationX = 0;
     let targetRotationY = 0;
 
     const handlePointerMove = (clientX: number, clientY: number) => {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (!rect) return;
+      const rect = container.getBoundingClientRect();
+      if (!rect || rect.width === 0 || rect.height === 0) return;
       const mouseX = ((clientX - rect.left) / rect.width - 0.5) * 2;
       const mouseY = ((clientY - rect.top) / rect.height - 0.5) * 2;
 
@@ -119,20 +128,17 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
       }
     };
 
-    const containerEl = containerRef.current;
-    containerEl.addEventListener("mousemove", onMouseMove);
-    containerEl.addEventListener("touchmove", onTouchMove, { passive: true });
+    container.addEventListener("mousemove", onMouseMove);
+    container.addEventListener("touchmove", onTouchMove, { passive: true });
 
     let animId: number;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      // Continuous 360 degree spin, accelerating on hover
       const spinSpeed = isHovered ? 1.4 : 0.6;
       sphereMesh.rotation.y += spinSpeed * 0.015;
 
-      // Smooth hover rotation tracking
       sphereGroup.rotation.y += (targetRotationY - sphereGroup.rotation.y) * 0.1;
       sphereGroup.rotation.x += (targetRotationX - sphereGroup.rotation.x) * 0.1;
 
@@ -143,13 +149,21 @@ export function InteractiveLogoBall({ size = "sm", className = "" }: Interactive
 
     return () => {
       cancelAnimationFrame(animId);
-      containerEl.removeEventListener("mousemove", onMouseMove);
-      containerEl.removeEventListener("touchmove", onTouchMove);
+      container.removeEventListener("mousemove", onMouseMove);
+      container.removeEventListener("touchmove", onTouchMove);
       renderer.dispose();
       sphereGeo.dispose();
       sphereMat.dispose();
     };
   }, [isHovered]);
+
+  if (hasContextError) {
+    return (
+      <div className={`relative inline-flex items-center justify-center rounded-full bg-sky-500/20 ${sizeClasses} ${className}`}>
+        <img src={logo} alt="Yodha Logo" className="w-4/5 h-4/5 object-contain" />
+      </div>
+    );
+  }
 
   return (
     <div
