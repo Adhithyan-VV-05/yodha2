@@ -1,12 +1,19 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, AlertCircle, Loader2, X, User, Users, Shield, ArrowRight, ArrowLeft, Mail, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { CheckCircle2, AlertCircle, Loader2, X, Users, Shield, ArrowRight, Mail, Sparkles, ChevronRight, Search } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
 import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
 import { InteractiveLogoBall } from "./InteractiveLogoBall";
+import {
+  HEALTHCARE_PROBLEM_STATEMENTS,
+  ENVIRONMENTAL_PROBLEM_STATEMENTS,
+  HEALTHCARE_STYLES,
+  ENVIRONMENTAL_STYLES,
+} from "../data/problemStatements";
+import type { ProblemStatement, ProblemStatementStyle } from "../data/problemStatements";
 
 interface RegistrationSectionProps {
   isOpen?: boolean;
@@ -14,7 +21,7 @@ interface RegistrationSectionProps {
   selectedTrack?: string;
 }
 
-export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "Healthcare AI" }: RegistrationSectionProps) {
+export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedTrack = "Healthcare AI" }: RegistrationSectionProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -22,6 +29,12 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   const [teamName, setTeamName] = useState("");
   const [teamSize, setTeamSize] = useState<number>(2);
   const [track, setTrack] = useState(selectedTrack);
+  const [selectedPS, setSelectedPS] = useState<ProblemStatement | null>(null);
+
+  // PS Picker Modal State (No Animation)
+  const [psModalOpen, setPsModalOpen] = useState(false);
+  const [psSearchQuery, setPsSearchQuery] = useState("");
+  const [psCategoryFilter, setPsCategoryFilter] = useState<"All" | "Healthcare" | "Environmental">("All");
 
   // Leader State
   const [leader, setLeader] = useState<TeamMember>({
@@ -47,6 +60,58 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   const [emailStatus, setEmailStatus] = useState<{ dispatched: boolean; count: number }>({ dispatched: false, count: 0 });
   const [teamPassId, setTeamPassId] = useState("");
 
+  // All 40 Problem Statements & Styles Maps
+  const allProblemStatements: ProblemStatement[] = [
+    ...HEALTHCARE_PROBLEM_STATEMENTS,
+    ...ENVIRONMENTAL_PROBLEM_STATEMENTS,
+  ];
+
+  const healthcareStylesMap: Record<number, ProblemStatementStyle> = HEALTHCARE_STYLES.reduce(
+    (acc, curr) => ({ ...acc, [curr.id]: curr }),
+    {}
+  );
+  const environmentalStylesMap: Record<number, ProblemStatementStyle> = ENVIRONMENTAL_STYLES.reduce(
+    (acc, curr) => ({ ...acc, [curr.id]: curr }),
+    {}
+  );
+
+  const getStyleForPS = (st: ProblemStatement): ProblemStatementStyle => {
+    const map = st.id <= 20 ? healthcareStylesMap : environmentalStylesMap;
+    return (
+      map[st.id] || {
+        id: st.id,
+        theme: "Default",
+        primary: st.id <= 20 ? "#EF4444" : "#10B981",
+        secondary: st.id <= 20 ? "#F87171" : "#34D399",
+        accent: st.id <= 20 ? "#FCA5A5" : "#6EE7B7",
+        background: st.id <= 20 ? "rgba(239,68,68,0.08)" : "rgba(16,185,129,0.08)",
+        border: st.id <= 20 ? "rgba(239,68,68,0.35)" : "rgba(16,185,129,0.35)",
+        heading: "#FFFFFF",
+        content: "#E2E8F0",
+        button: st.id <= 20 ? "#DC2626" : "#059669",
+        buttonHover: st.id <= 20 ? "#B91C1C" : "#047857",
+        glow: st.id <= 20 ? "rgba(239,68,68,0.45)" : "rgba(16,185,129,0.45)",
+      }
+    );
+  };
+
+  const filteredProblemStatements = allProblemStatements.filter((st) => {
+    const matchesCategory =
+      psCategoryFilter === "All" ||
+      (psCategoryFilter === "Healthcare" && st.id <= 20) ||
+      (psCategoryFilter === "Environmental" && st.id > 20);
+
+    const q = psSearchQuery.toLowerCase();
+    const matchesQuery =
+      !q ||
+      st.title.toLowerCase().includes(q) ||
+      st.cardDescription.toLowerCase().includes(q) ||
+      `id #${st.id}`.includes(q) ||
+      st.tags.some((t) => t.toLowerCase().includes(q));
+
+    return matchesCategory && matchesQuery;
+  });
+
   const handleLeaderChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setLeader({ ...leader, [e.target.name]: e.target.value });
   };
@@ -61,6 +126,11 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   const handleNextFromStep1 = async () => {
     if (!teamName.trim()) {
       setErrorMessage("Please enter your Team Name.");
+      return;
+    }
+
+    if (!selectedPS) {
+      setErrorMessage("Please click 'Select the PS' to choose a problem statement before proceeding.");
       return;
     }
 
@@ -90,11 +160,16 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
     setErrorMessage("");
 
     const activeMembers = members.slice(0, teamSize - 1);
+    const fullTrackName = selectedPS
+      ? `${selectedPS.category} AI - [ID #${selectedPS.id}] ${selectedPS.title}`
+      : track;
 
     const payload: TeamRegistrationData = {
       teamName,
       teamSize,
-      track,
+      track: fullTrackName,
+      problemStatementId: selectedPS?.id,
+      problemStatementTitle: selectedPS?.title,
       leader,
       members: activeMembers,
     };
@@ -110,7 +185,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
 
       const emailResult = await sendTeamWelcomeEmails({
         teamName,
-        track,
+        track: fullTrackName,
         participants: allParticipants,
       });
 
@@ -223,8 +298,8 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 <span className="text-white font-bold">{leader.fullName}</span>
               </div>
               <div>
-                <span className="text-slate-500 block mb-0.5">TRACK</span>
-                <span className="text-sky-300 font-semibold">{track}</span>
+                <span className="text-slate-500 block mb-0.5">PROBLEM STATEMENT</span>
+                <span className="text-sky-300 font-semibold">{selectedPS ? `[ID #${selectedPS.id}] ${selectedPS.title}` : track}</span>
               </div>
               <div>
                 <span className="text-slate-500 block mb-0.5">TEAM SIZE</span>
@@ -247,6 +322,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
               setCurrentStep(1);
               setStatus("idle");
               setTeamName("");
+              setSelectedPS(null);
             }}
             className="mt-6 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer"
           >
@@ -289,11 +365,11 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
             </motion.div>
           )}
 
-          {/* STEP 1: Team Basics */}
+          {/* STEP 1: Team Basics & Problem Statement Picker Button */}
           {currentStep === 1 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                <Users className="w-5 h-5 text-sky-400" /> Step 1: Team Details
+                <Users className="w-5 h-5 text-sky-400" /> Step 1: Team & Problem Statement
               </h4>
 
               <div>
@@ -330,18 +406,56 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                   </select>
                 </div>
 
+                {/* Problem Statement Selection Button */}
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Category Track *</label>
-                  <select
-                    value={track}
-                    onChange={(e) => setTrack(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Problem Statement (PS) *</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPsModalOpen(true);
+                      if (errorMessage) setErrorMessage("");
+                    }}
+                    className="w-full px-4 py-3 bg-[#0d111d] border border-sky-400/40 hover:border-sky-400 rounded-xl text-sm font-medium text-white flex items-center justify-between transition-all cursor-pointer shadow-[0_0_15px_rgba(56,189,248,0.15)] group"
                   >
-                    <option value="Healthcare AI">Healthcare AI (₹35,000 Track Pool)</option>
-                    <option value="Environmental AI">Environmental AI (₹35,000 Track Pool)</option>
-                  </select>
+                    {selectedPS ? (
+                      <span className="flex items-center gap-2 truncate text-left">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black bg-sky-500/20 text-sky-300 border border-sky-400/40 shrink-0">
+                          ID #{selectedPS.id}
+                        </span>
+                        <span className="truncate text-xs font-bold text-white">{selectedPS.title}</span>
+                      </span>
+                    ) : (
+                      <span className="text-slate-300 font-bold flex items-center gap-2 text-xs uppercase tracking-wider">
+                        <Sparkles className="w-4 h-4 text-sky-400" />
+                        <span>Select the PS</span>
+                      </span>
+                    )}
+                    <ChevronRight className="w-4 h-4 text-sky-400 shrink-0 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </button>
                 </div>
               </div>
+
+              {/* Show Selected PS Details summary if picked */}
+              {selectedPS && (
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-sky-400/30 text-xs flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-mono text-sky-400 uppercase font-bold block">
+                      SELECTED PROBLEM STATEMENT
+                    </span>
+                    <span className="text-white font-bold text-sm">{selectedPS.title}</span>
+                    <span className="text-slate-400 block text-[11px] mt-0.5 line-clamp-1">
+                      {selectedPS.cardDescription}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPsModalOpen(true)}
+                    className="px-3 py-1 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 rounded-lg text-sky-300 text-[11px] font-mono font-bold shrink-0 ml-3 cursor-pointer"
+                  >
+                    Change PS
+                  </button>
+                </div>
+              )}
 
               <div className="pt-4 flex justify-end">
                 <button
@@ -386,6 +500,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                     className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
+
                 <div>
                   <label className="block text-xs font-mono text-slate-300 mb-1">Email Address *</label>
                   <input
@@ -394,22 +509,24 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                     name="email"
                     value={leader.email}
                     onChange={handleLeaderChange}
-                    placeholder="john@example.com"
+                    placeholder="leader@example.com"
                     className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1">Phone Number *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">Phone / WhatsApp *</label>
                   <input
                     type="tel"
                     required
                     name="phone"
                     value={leader.phone}
                     onChange={handleLeaderChange}
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 9876543210"
                     className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
+
                 <div>
                   <label className="block text-xs font-mono text-slate-300 mb-1">College / Organization *</label>
                   <input
@@ -418,10 +535,11 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                     name="organization"
                     value={leader.organization}
                     onChange={handleLeaderChange}
-                    placeholder="IIT Bombay / TechCorp"
+                    placeholder="Institute / University"
                     className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
+
                 <div>
                   <label className="block text-xs font-mono text-slate-300 mb-1">Gender *</label>
                   <select
@@ -432,24 +550,23 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Non-binary">Non-binary</option>
-                    <option value="Prefer not to say">Prefer not to say</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
+
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1">Year of Study / Role *</label>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">Year of Study *</label>
                   <select
                     name="yearOfStudy"
                     value={leader.yearOfStudy}
                     onChange={handleLeaderChange}
                     className="w-full px-4 py-2.5 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                   >
-                    <option value="1st Year">1st Year Student</option>
-                    <option value="2nd Year">2nd Year Student</option>
-                    <option value="3rd Year">3rd Year Student</option>
-                    <option value="4th Year">4th Year Student</option>
-                    <option value="Postgraduate">Postgraduate</option>
-                    <option value="Working Professional">Working Professional</option>
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                    <option value="Postgraduate">Postgraduate / Other</option>
                   </select>
                 </div>
               </div>
@@ -458,43 +575,45 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-mono uppercase transition-colors cursor-pointer"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Back
+                  Back
                 </button>
+
                 <button
                   type="button"
                   onClick={() => {
                     if (!leader.fullName || !leader.email || !leader.phone || !leader.organization) {
-                      setErrorMessage("Please complete all required Leader fields.");
+                      setErrorMessage("Please fill in all leader details.");
                       return;
                     }
                     setErrorMessage("");
-                    if (teamSize === 1) {
-                      handleSubmitRegistration();
-                    } else {
+                    if (teamSize > 1) {
                       setCurrentStep(3);
+                    } else {
+                      handleSubmitRegistration();
                     }
                   }}
-                  className="px-8 py-3 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-lg flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer"
+                  className="px-8 py-3 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer"
                 >
-                  <span>{teamSize === 1 ? "Submit Entry" : "Next: Member 2"}</span>
-                  <ArrowRight className="w-4 h-4" />
+                  {teamSize > 1 ? "Next: Member 2" : "Submit Registration"}
                 </button>
               </div>
             </motion.div>
           )}
 
-          {/* STEP 3+: Additional Members */}
-          {currentStep >= 3 && currentStep <= teamSize && (
-            <motion.div key={currentStep} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+          {/* STEPS 3 to 5: Additional Members */}
+          {currentStep > 2 && currentStep <= teamSize + 1 && (
+            <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
               <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                <User className="w-5 h-5 text-indigo-400" /> Member {currentStep}: Details
+                <Users className="w-5 h-5 text-sky-400" /> Member #{currentStep - 1} Information
               </h4>
 
               {(() => {
-                const memberIndex = currentStep - 2;
-                const memberData = members[memberIndex - 1] || members[0];
+                const memberIndex = currentStep - 3; // Step 3 = Member index 0
+                const m = members[memberIndex];
+                if (!m) return null;
+
                 return (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -503,47 +622,80 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                         type="text"
                         required
                         name="fullName"
-                        value={memberData.fullName}
-                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
-                        placeholder="Jane Smith"
+                        value={m.fullName}
+                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        placeholder="Jane Doe"
                         className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                       />
                     </div>
+
                     <div>
                       <label className="block text-xs font-mono text-slate-300 mb-1">Email Address *</label>
                       <input
                         type="email"
                         required
                         name="email"
-                        value={memberData.email}
-                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
-                        placeholder="jane@example.com"
+                        value={m.email}
+                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        placeholder="member@example.com"
                         className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                       />
                     </div>
+
                     <div>
-                      <label className="block text-xs font-mono text-slate-300 mb-1">Phone Number *</label>
+                      <label className="block text-xs font-mono text-slate-300 mb-1">Phone / WhatsApp *</label>
                       <input
                         type="tel"
                         required
                         name="phone"
-                        value={memberData.phone}
-                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
-                        placeholder="+91 98765 00000"
+                        value={m.phone}
+                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        placeholder="+91 9876543210"
                         className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                       />
                     </div>
+
                     <div>
                       <label className="block text-xs font-mono text-slate-300 mb-1">College / Organization *</label>
                       <input
                         type="text"
                         required
                         name="organization"
-                        value={memberData.organization}
-                        onChange={(e) => handleMemberChange(memberIndex - 1, e)}
-                        placeholder="IIT Bombay / College"
+                        value={m.organization}
+                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        placeholder="Institute / University"
                         className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
                       />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono text-slate-300 mb-1">Gender *</label>
+                      <select
+                        name="gender"
+                        value={m.gender}
+                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        className="w-full px-4 py-2.5 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                      >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono text-slate-300 mb-1">Year of Study *</label>
+                      <select
+                        name="yearOfStudy"
+                        value={m.yearOfStudy}
+                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        className="w-full px-4 py-2.5 bg-[#0d111d] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                      >
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                        <option value="Postgraduate">Postgraduate / Other</option>
+                      </select>
                     </div>
                   </div>
                 );
@@ -553,46 +705,31 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 <button
                   type="button"
                   onClick={() => setCurrentStep(currentStep - 1)}
-                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-mono uppercase transition-colors cursor-pointer"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Back
+                  Back
                 </button>
+
                 <button
                   type="button"
-                  disabled={status === "submitting"}
                   onClick={() => {
-                    const memberIndex = currentStep - 2;
-                    const m = members[memberIndex - 1];
-                    if (!m || !m.fullName || !m.email || !m.phone || !m.organization) {
-                      setErrorMessage(`Please complete all required fields for Member ${currentStep}.`);
+                    const idx = currentStep - 3;
+                    const m = members[idx];
+                    if (!m.fullName || !m.email || !m.phone || !m.organization) {
+                      setErrorMessage(`Please fill in all details for Member #${currentStep - 1}.`);
                       return;
                     }
                     setErrorMessage("");
 
-                    if (currentStep < teamSize) {
+                    if (currentStep - 1 < teamSize) {
                       setCurrentStep(currentStep + 1);
                     } else {
                       handleSubmitRegistration();
                     }
                   }}
-                  className="px-8 py-3 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold text-xs rounded-xl shadow-lg flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
+                  className="px-8 py-3 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer"
                 >
-                  {status === "submitting" ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Submitting Registration...</span>
-                    </>
-                  ) : currentStep < teamSize ? (
-                    <>
-                      <span>Next Member</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>Submit Full Team Registration</span>
-                      <CheckCircle2 className="w-4 h-4" />
-                    </>
-                  )}
+                  {currentStep - 1 < teamSize ? `Next: Member #${currentStep}` : "Submit Team Registration"}
                 </button>
               </div>
             </motion.div>
@@ -602,30 +739,176 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
     </motion.div>
   );
 
-  if (onClose) {
-    return (
-      <AnimatePresence>
-        {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full my-auto"
-            >
-              {formContent}
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    );
-  }
-
   return (
-    <section id="register" className="py-16 sm:py-24 relative overflow-hidden bg-[#04060b]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {formContent}
-      </div>
-    </section>
+    <>
+      {/* 95vh x 98vw POPUP MODAL FOR PROBLEM STATEMENT SELECTION (ZERO ANIMATION) */}
+      {psModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-2xl">
+          <div className="relative w-[98vw] h-[95vh] max-w-[98vw] max-h-[95vh] rounded-3xl bg-[#070a14] border border-sky-400/40 p-4 sm:p-8 flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.95)] overflow-hidden text-left">
+            {/* Modal Top Header Bar */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/15 pb-4 mb-4 shrink-0">
+              <div>
+                <span className="text-xs font-mono text-sky-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+                  <span>PROBLEM STATEMENT SELECTOR (40 PS)</span>
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-white">
+                  Click Any Problem Statement to Select
+                </h3>
+              </div>
+
+              {/* Search & Category Filter Pills */}
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <div className="relative flex-1 sm:w-72">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={psSearchQuery}
+                    onChange={(e) => setPsSearchQuery(e.target.value)}
+                    placeholder="Search by title, ID #, or tags..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-black/60 border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-sky-400"
+                  />
+                </div>
+
+                <div className="flex items-center gap-1 bg-white/5 border border-white/10 p-1 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setPsCategoryFilter("All")}
+                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer ${
+                      psCategoryFilter === "All"
+                        ? "bg-sky-500 text-black shadow"
+                        : "text-slate-300 hover:bg-white/10"
+                    }`}
+                  >
+                    All (40)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPsCategoryFilter("Healthcare")}
+                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer ${
+                      psCategoryFilter === "Healthcare"
+                        ? "bg-rose-500 text-white shadow"
+                        : "text-slate-300 hover:bg-white/10"
+                    }`}
+                  >
+                    Healthcare (1-20)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPsCategoryFilter("Environmental")}
+                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer ${
+                      psCategoryFilter === "Environmental"
+                        ? "bg-emerald-500 text-black shadow"
+                        : "text-slate-300 hover:bg-white/10"
+                    }`}
+                  >
+                    Environmental (21-40)
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setPsModalOpen(false)}
+                  className="p-2 text-slate-400 hover:text-white rounded-full bg-white/5 hover:bg-white/15 transition-colors cursor-pointer"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable 40 Problem Statements Cards Grid */}
+            <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredProblemStatements.map((st) => {
+                const stStyle = getStyleForPS(st);
+
+                return (
+                  <div
+                    key={st.id}
+                    onClick={() => {
+                      setSelectedPS(st);
+                      setTrack(st.id <= 20 ? "Healthcare AI" : "Environmental AI");
+                      setPsModalOpen(false);
+                    }}
+                    className="rounded-2xl p-5 border flex flex-col justify-between cursor-pointer transition-all hover:scale-[1.01] hover:brightness-115 relative group shadow-lg"
+                    style={{
+                      backgroundColor: stStyle.background,
+                      borderColor: stStyle.border,
+                      boxShadow: `0 4px 20px ${stStyle.glow}`,
+                    }}
+                  >
+                    <div>
+                      {/* Top ID & Badges */}
+                      <div className="flex items-center justify-between mb-3">
+                        <span
+                          className="px-2.5 py-0.5 rounded-full text-xs font-mono font-black border"
+                          style={{
+                            backgroundColor: "rgba(0,0,0,0.7)",
+                            borderColor: stStyle.secondary,
+                            color: stStyle.accent,
+                          }}
+                        >
+                          ID #{st.id}
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono font-extrabold uppercase px-2 py-0.5 rounded bg-black/60 text-slate-300 border border-white/10">
+                            {st.category}
+                          </span>
+                          <span className="text-[10px] font-mono font-extrabold uppercase px-2 py-0.5 rounded bg-black/60 text-slate-300 border border-white/10">
+                            {st.difficulty}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Title */}
+                      <h4 className="text-lg font-extrabold mb-2" style={{ color: stStyle.heading }}>
+                        {st.title}
+                      </h4>
+
+                      {/* Description */}
+                      <p className="text-xs text-slate-300 leading-relaxed line-clamp-3 mb-4 font-normal">
+                        {st.cardDescription}
+                      </p>
+                    </div>
+
+                    {/* Footer Tags & Select Prompt */}
+                    <div>
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {st.tags.slice(0, 3).map((t, i) => (
+                          <span key={i} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-black/50 text-slate-300 border border-white/10">
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div
+                        className="w-full py-2 rounded-xl text-xs font-black uppercase tracking-wider text-center transition-all shadow"
+                        style={{
+                          backgroundColor: stStyle.button,
+                          color: "#FFFFFF",
+                        }}
+                      >
+                        Select Problem Statement #{st.id}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Embedded or Modal Registration Container */}
+      {onClose ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-xl">
+          {formContent}
+        </div>
+      ) : (
+        <section id="register" className="py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden bg-[#04060c]">
+          <div className="max-w-4xl mx-auto relative z-10">{formContent}</div>
+        </section>
+      )}
+    </>
   );
 }

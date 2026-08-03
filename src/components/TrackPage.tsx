@@ -127,7 +127,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
           {/* Difficulty Filter */}
           <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
             <span className="text-xs font-mono text-slate-400 uppercase font-bold shrink-0">Difficulty:</span>
-            {["All", "Easy", "Medium", "Hard", "Advanced"].map((diff) => (
+            {["All", "Easy", "Medium", "Hard"].map((diff) => (
               <button
                 key={diff}
                 onClick={() => setSelectedDifficulty(diff)}

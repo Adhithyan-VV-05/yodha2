@@ -53,6 +53,8 @@ export interface TeamRegistrationData {
   teamName: string;
   teamSize: number;
   track: string;
+  problemStatementId?: number;
+  problemStatementTitle?: string;
   leader: TeamMember;
   members: TeamMember[];
   submittedAt?: string;
