@@ -7,7 +7,6 @@ import { AboutSection } from "./components/AboutSection";
 import { TracksSection } from "./components/TracksSection";
 import { SDGSection } from "./components/SDGSection";
 import { WhyParticipateSection } from "./components/WhyParticipateSection";
-import { TimelineSection } from "./components/TimelineSection";
 import { PrizesSection } from "./components/PrizesSection";
 import { ClosingCTA } from "./components/ClosingCTA";
 import { RegistrationSection } from "./components/RegistrationSection";
@@ -60,9 +59,6 @@ function App() {
 
           {/* 8. Why Participate? */}
           <WhyParticipateSection />
-
-          {/* 9. Event Roadmap & Schedule */}
-          <TimelineSection />
 
           {/* 9. Prize Pool & Rewards */}
           <PrizesSection onOpenRegister={() => setRegisterModalOpen(true)} />

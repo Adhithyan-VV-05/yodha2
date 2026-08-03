@@ -27,7 +27,6 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
   const navLinks = [
     { name: "About", href: "#about" },
     { name: "Tracks", href: "#tracks" },
-    { name: "Schedule", href: "#schedule" },
     { name: "Prizes", href: "#prizes" },
   ];
 
@@ -60,11 +59,9 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                 : "bg-black/70 backdrop-blur-xl shadow-lg"
             }`}
           >
-            {/* BRAND IDENTITY WITH SNUG-FIT 3D INTERACTIVE BALL (NO EXCESS PADDING) */}
+            {/* BRAND IDENTITY WITH SNUG-FIT 3D INTERACTIVE BALL */}
             <a href="#" className="flex items-center gap-2 sm:gap-3 group shrink-0">
-              <div className="relative flex items-center justify-center p-0 rounded-full bg-sky-500/20 border border-sky-400/40 group-hover:border-sky-400/80 transition-all shadow-[0_0_12px_rgba(56,189,248,0.3)]">
-                <InteractiveLogoBall size="sm" />
-              </div>
+              <InteractiveLogoBall size="sm" />
               <div className="flex flex-col justify-center">
                 <span className="font-black tracking-tight text-white text-sm sm:text-lg leading-none group-hover:text-sky-300 transition-colors">
                   YODHA <span className="text-sky-400 font-extrabold">2.0</span>
