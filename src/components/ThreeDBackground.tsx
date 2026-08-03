@@ -8,6 +8,8 @@ export function ThreeDBackground() {
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
+    const isMobile = window.innerWidth < 640 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1200);
@@ -16,14 +18,14 @@ export function ThreeDBackground() {
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
-      antialias: true,
+      antialias: !isMobile, // Disable MSAA on mobile for GPU speed
       powerPreference: "high-performance",
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 1.5));
 
-    // 1. Ambient Stardust Particle Field
-    const starCount = 1000;
+    // 1. Ambient Stardust Particle Field (Adaptive Count)
+    const starCount = isMobile ? 350 : 1000;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
@@ -48,7 +50,7 @@ export function ThreeDBackground() {
     starGeo.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
 
     const starMat = new THREE.PointsMaterial({
-      size: 2,
+      size: isMobile ? 1.5 : 2,
       vertexColors: true,
       transparent: true,
       opacity: 0.7,
@@ -58,8 +60,8 @@ export function ThreeDBackground() {
     const starPoints = new THREE.Points(starGeo, starMat);
     scene.add(starPoints);
 
-    // 2. Ultra-Smooth Realistic Waves at Bottom
-    const waveCount = 1200;
+    // 2. Wave Landscape (Adaptive Count)
+    const waveCount = isMobile ? 350 : 1200;
     const waveGeo = new THREE.BufferGeometry();
     const wavePos = new Float32Array(waveCount * 3);
     const waveCols = new Float32Array(waveCount * 3);
@@ -89,7 +91,7 @@ export function ThreeDBackground() {
     waveGeo.setAttribute("color", new THREE.BufferAttribute(waveCols, 3));
 
     const waveMat = new THREE.PointsMaterial({
-      size: 2.8,
+      size: isMobile ? 2.0 : 2.8,
       vertexColors: true,
       transparent: true,
       opacity: 0.6,
@@ -99,7 +101,7 @@ export function ThreeDBackground() {
     const wavePoints = new THREE.Points(waveGeo, waveMat);
     scene.add(wavePoints);
 
-    // 3. Hyper-Realistic Smooth Drifting Space Asteroids (6 select rocks)
+    // 3. Asteroids (Adaptive Count)
     const asteroidGroup = new THREE.Group();
     scene.add(asteroidGroup);
 
@@ -123,7 +125,7 @@ export function ThreeDBackground() {
     }
 
     const asteroids: Asteroid[] = [];
-    const asteroidCount = 6;
+    const asteroidCount = isMobile ? 2 : 6;
 
     const asteroidMat = new THREE.MeshStandardMaterial({
       color: 0x334155,
@@ -134,22 +136,7 @@ export function ThreeDBackground() {
 
     for (let i = 0; i < asteroidCount; i++) {
       const radius = 16 + Math.random() * 22;
-      const geo = new THREE.IcosahedronGeometry(radius, 3);
-      const pos = geo.attributes.position;
-
-      for (let j = 0; j < pos.count; j++) {
-        const x = pos.getX(j);
-        const y = pos.getY(j);
-        const z = pos.getZ(j);
-
-        const n1 = Math.sin(x * 0.15) * Math.cos(y * 0.15) * Math.sin(z * 0.15) * 4.5;
-        const n2 = Math.cos(x * 0.3 + y * 0.3) * 2.5;
-        const crater = Math.sin(Math.sqrt(x * x + y * y + z * z) * 0.2) * 2.0;
-
-        pos.setXYZ(j, x + n1 + n2, y + n1 + crater, z + n2 + crater);
-      }
-      geo.computeVertexNormals();
-
+      const geo = new THREE.IcosahedronGeometry(radius, isMobile ? 1 : 2);
       const astMesh = new THREE.Mesh(geo, asteroidMat);
       
       astMesh.position.set(
@@ -196,7 +183,6 @@ export function ThreeDBackground() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
     scene.add(ambientLight);
 
-    // Mouse Tracking in 3D Space Coordinates
     let mouseX = 0;
     let mouseY = 0;
     let mouseWorldX = 0;
@@ -225,7 +211,6 @@ export function ThreeDBackground() {
       animId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
-      // Rotate starfield & wave landscape
       starPoints.rotation.y = elapsed * 0.01;
       wavePoints.rotation.y = -elapsed * 0.02;
 
@@ -240,7 +225,6 @@ export function ThreeDBackground() {
       }
       wavePosArr.needsUpdate = true;
 
-      // Smooth Orbital & Interactive Deflection Physics for Asteroids
       asteroids.forEach((ast) => {
         ast.orbitAngle += ast.orbitSpeed;
         const orbitOffset = Math.sin(ast.orbitAngle + elapsed) * 0.3;
@@ -279,7 +263,6 @@ export function ThreeDBackground() {
         if (ast.mesh.position.y < -450) ast.mesh.position.y = 450;
       });
 
-      // Smooth camera tilt
       camera.position.x += (mouseX - camera.position.x) * 0.03;
       camera.position.y += (-mouseY - camera.position.y) * 0.03;
       camera.lookAt(scene.position);
