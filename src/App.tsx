@@ -119,9 +119,6 @@ function App() {
 
             {/* 11. Past Hackathon Movements (Positioned just above footer) */}
             <PastGallerySection />
-
-            {/* Registration Form (Embedded Section) */}
-            <RegistrationSection selectedTrack={selectedTrack} />
           </main>
 
           {/* Registration Modal Popup - ONLY opens when Register button is clicked */}

@@ -95,8 +95,11 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(56,189,248,1)" }}
+              whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500/30 via-indigo-500/30 to-purple-500/30 border border-sky-400/80 backdrop-blur-xl text-xs font-mono text-sky-200 mb-6 shadow-[0_0_30px_rgba(56,189,248,0.8)]"
+              onClick={onOpenRegister}
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500/30 via-indigo-500/30 to-purple-500/30 border border-sky-400/80 backdrop-blur-xl text-xs font-mono text-sky-200 mb-6 shadow-[0_0_30px_rgba(56,189,248,0.8)] cursor-pointer relative z-30 pointer-events-auto"
             >
               <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping" />
               <span className="font-extrabold tracking-widest uppercase text-white drop-shadow-[0_0_10px_rgba(56,189,248,0.9)]">
