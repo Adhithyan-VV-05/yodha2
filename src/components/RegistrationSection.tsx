@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { CheckCircle2, AlertCircle, Loader2, X, Users, Shield, ArrowRight, Mail, Sparkles, ChevronRight, Search } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, X, Users, Shield, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
@@ -31,7 +32,7 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
   const [track, setTrack] = useState(selectedTrack);
   const [selectedPS, setSelectedPS] = useState<ProblemStatement | null>(null);
 
-  // PS Picker Modal State (No Animation)
+  // PS Picker Modal State (No Animation, High Z-Index 999999)
   const [psModalOpen, setPsModalOpen] = useState(false);
   const [psSearchQuery, setPsSearchQuery] = useState("");
   const [psCategoryFilter, setPsCategoryFilter] = useState<"All" | "Healthcare" | "Environmental">("All");
@@ -105,7 +106,6 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
     const matchesQuery =
       !q ||
       st.title.toLowerCase().includes(q) ||
-      st.cardDescription.toLowerCase().includes(q) ||
       `id #${st.id}`.includes(q) ||
       st.tags.some((t) => t.toLowerCase().includes(q));
 
@@ -442,10 +442,7 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
                     <span className="text-[10px] font-mono text-sky-400 uppercase font-bold block">
                       SELECTED PROBLEM STATEMENT
                     </span>
-                    <span className="text-white font-bold text-sm">{selectedPS.title}</span>
-                    <span className="text-slate-400 block text-[11px] mt-0.5 line-clamp-1">
-                      {selectedPS.cardDescription}
-                    </span>
+                    <span className="text-white font-bold text-sm">ID #{selectedPS.id} • {selectedPS.title}</span>
                   </div>
                   <button
                     type="button"
@@ -610,7 +607,7 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
               </h4>
 
               {(() => {
-                const memberIndex = currentStep - 3; // Step 3 = Member index 0
+                const memberIndex = currentStep - 3;
                 const m = members[memberIndex];
                 if (!m) return null;
 
@@ -739,34 +736,34 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
     </motion.div>
   );
 
-  return (
-    <>
-      {/* 95vh x 98vw POPUP MODAL FOR PROBLEM STATEMENT SELECTION (ZERO ANIMATION) */}
-      {psModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-2xl">
-          <div className="relative w-[98vw] h-[95vh] max-w-[98vw] max-h-[95vh] rounded-3xl bg-[#070a14] border border-sky-400/40 p-4 sm:p-8 flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.95)] overflow-hidden text-left">
-            {/* Modal Top Header Bar */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/15 pb-4 mb-4 shrink-0">
+  // High Z-Index Portal Popup (z-[999999]) displaying ID, Title, and styling colors for each statement
+  const psPortalModal = psModalOpen && typeof document !== "undefined"
+    ? createPortal(
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-2 sm:p-4 overflow-hidden">
+          <div className="relative w-[98vw] h-[95vh] max-w-[98vw] max-h-[95vh] rounded-3xl bg-[#060913] border border-sky-400/50 p-4 sm:p-6 flex flex-col shadow-[0_0_120px_rgba(0,0,0,0.98)] overflow-hidden text-left">
+            
+            {/* Top Modal Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/15 pb-4 mb-4 shrink-0">
               <div>
-                <span className="text-xs font-mono text-sky-400 uppercase tracking-widest font-bold flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-                  <span>PROBLEM STATEMENT SELECTOR (40 PS)</span>
+                <span className="text-xs font-mono text-sky-400 uppercase tracking-widest font-black flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-sky-400" />
+                  <span>SELECT PROBLEM STATEMENT (40 PS)</span>
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black text-white">
-                  Click Any Problem Statement to Select
+                <h3 className="text-lg sm:text-2xl font-black text-white mt-0.5">
+                  Click Any Statement to Select for Your Team
                 </h3>
               </div>
 
-              {/* Search & Category Filter Pills */}
-              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                <div className="relative flex-1 sm:w-72">
+              {/* Filters & Search */}
+              <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                <div className="relative flex-1 sm:w-64">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={psSearchQuery}
                     onChange={(e) => setPsSearchQuery(e.target.value)}
-                    placeholder="Search by title, ID #, or tags..."
-                    className="w-full pl-9 pr-3 py-1.5 bg-black/60 border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-sky-400"
+                    placeholder="Search by title or ID #..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-black/70 border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-sky-400"
                   />
                 </div>
 
@@ -774,9 +771,9 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
                   <button
                     type="button"
                     onClick={() => setPsCategoryFilter("All")}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold cursor-pointer transition-colors ${
                       psCategoryFilter === "All"
-                        ? "bg-sky-500 text-black shadow"
+                        ? "bg-sky-500 text-black shadow font-black"
                         : "text-slate-300 hover:bg-white/10"
                     }`}
                   >
@@ -785,9 +782,9 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
                   <button
                     type="button"
                     onClick={() => setPsCategoryFilter("Healthcare")}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold cursor-pointer transition-colors ${
                       psCategoryFilter === "Healthcare"
-                        ? "bg-rose-500 text-white shadow"
+                        ? "bg-rose-500 text-white shadow font-black"
                         : "text-slate-300 hover:bg-white/10"
                     }`}
                   >
@@ -796,9 +793,9 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
                   <button
                     type="button"
                     onClick={() => setPsCategoryFilter("Environmental")}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold cursor-pointer transition-colors ${
                       psCategoryFilter === "Environmental"
-                        ? "bg-emerald-500 text-black shadow"
+                        ? "bg-emerald-500 text-black shadow font-black"
                         : "text-slate-300 hover:bg-white/10"
                     }`}
                   >
@@ -809,17 +806,18 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
                 <button
                   type="button"
                   onClick={() => setPsModalOpen(false)}
-                  className="p-2 text-slate-400 hover:text-white rounded-full bg-white/5 hover:bg-white/15 transition-colors cursor-pointer"
+                  className="p-2 text-slate-300 hover:text-white rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer ml-auto sm:ml-0"
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
             </div>
 
-            {/* Scrollable 40 Problem Statements Cards Grid */}
-            <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Statements List Grid (Crisp: ID + Name/Title + Color Theme) */}
+            <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {filteredProblemStatements.map((st) => {
                 const stStyle = getStyleForPS(st);
+                const isSelected = selectedPS?.id === st.id;
 
                 return (
                   <div
@@ -829,79 +827,68 @@ export function RegistrationSection({ isOpen: _isOpen = true, onClose, selectedT
                       setTrack(st.id <= 20 ? "Healthcare AI" : "Environmental AI");
                       setPsModalOpen(false);
                     }}
-                    className="rounded-2xl p-5 border flex flex-col justify-between cursor-pointer transition-all hover:scale-[1.01] hover:brightness-115 relative group shadow-lg"
+                    className={`rounded-2xl p-4 border flex items-center justify-between cursor-pointer transition-all hover:scale-[1.01] hover:brightness-125 relative group shadow-md ${
+                      isSelected ? "ring-2 ring-white scale-[1.01]" : ""
+                    }`}
                     style={{
                       backgroundColor: stStyle.background,
-                      borderColor: stStyle.border,
+                      borderColor: isSelected ? stStyle.accent : stStyle.border,
                       boxShadow: `0 4px 20px ${stStyle.glow}`,
                     }}
                   >
-                    <div>
-                      {/* Top ID & Badges */}
-                      <div className="flex items-center justify-between mb-3">
-                        <span
-                          className="px-2.5 py-0.5 rounded-full text-xs font-mono font-black border"
-                          style={{
-                            backgroundColor: "rgba(0,0,0,0.7)",
-                            borderColor: stStyle.secondary,
-                            color: stStyle.accent,
-                          }}
-                        >
-                          ID #{st.id}
-                        </span>
-
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono font-extrabold uppercase px-2 py-0.5 rounded bg-black/60 text-slate-300 border border-white/10">
-                            {st.category}
-                          </span>
-                          <span className="text-[10px] font-mono font-extrabold uppercase px-2 py-0.5 rounded bg-black/60 text-slate-300 border border-white/10">
-                            {st.difficulty}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Title */}
-                      <h4 className="text-lg font-extrabold mb-2" style={{ color: stStyle.heading }}>
-                        {st.title}
-                      </h4>
-
-                      {/* Description */}
-                      <p className="text-xs text-slate-300 leading-relaxed line-clamp-3 mb-4 font-normal">
-                        {st.cardDescription}
-                      </p>
-                    </div>
-
-                    {/* Footer Tags & Select Prompt */}
-                    <div>
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {st.tags.slice(0, 3).map((t, i) => (
-                          <span key={i} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-black/50 text-slate-300 border border-white/10">
-                            #{t}
-                          </span>
-                        ))}
-                      </div>
-
-                      <div
-                        className="w-full py-2 rounded-xl text-xs font-black uppercase tracking-wider text-center transition-all shadow"
+                    <div className="flex items-center gap-3.5 pr-2 truncate">
+                      {/* ID Badge */}
+                      <span
+                        className="px-3 py-1 rounded-xl text-xs font-mono font-black border shrink-0 shadow-inner"
                         style={{
-                          backgroundColor: stStyle.button,
-                          color: "#FFFFFF",
+                          backgroundColor: "rgba(0,0,0,0.8)",
+                          borderColor: stStyle.secondary,
+                          color: stStyle.accent,
                         }}
                       >
-                        Select Problem Statement #{st.id}
+                        ID #{st.id}
+                      </span>
+
+                      {/* Statement Name & Category */}
+                      <div className="truncate">
+                        <h4 className="text-sm font-extrabold truncate" style={{ color: stStyle.heading }}>
+                          {st.title}
+                        </h4>
+                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-semibold">
+                          {st.category} AI • {st.difficulty}
+                        </span>
                       </div>
+                    </div>
+
+                    {/* Action Icon / Check */}
+                    <div
+                      className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-all"
+                      style={{
+                        backgroundColor: stStyle.button,
+                        borderColor: stStyle.secondary,
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      {isSelected ? <Check className="w-4 h-4 text-white" /> : <ChevronRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />}
                     </div>
                   </div>
                 );
               })}
             </div>
           </div>
-        </div>
-      )}
+        </div>,
+        document.body
+      )
+    : null;
+
+  return (
+    <>
+      {/* High Z-Index Portal Popup (Rendered directly at document.body) */}
+      {psPortalModal}
 
       {/* Embedded or Modal Registration Container */}
       {onClose ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-xl">
           {formContent}
         </div>
       ) : (
