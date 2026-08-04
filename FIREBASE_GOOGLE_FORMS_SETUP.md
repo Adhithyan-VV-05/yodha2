@@ -19,7 +19,7 @@ This guide provides step-by-step instructions on how to collect your **Firebase 
 4. You will see a `firebaseConfig` code block containing your keys:
    ```javascript
    const firebaseConfig = {
-     apiKey: "AIzaSyD...",
+     apiKey: "YOUR_API_KEY",
      authDomain: "yodha-2.firebaseapp.com",
      projectId: "yodha-2",
      storageBucket: "yodha-2.firebasestorage.app",
@@ -101,7 +101,7 @@ Create a `.env` file in your project root directory (`d:\YODHA 2\.env`) and fill
 # -------------------------------------------------------------
 # FIREBASE FIRESTORE API KEYS
 # -------------------------------------------------------------
-VITE_FIREBASE_API_KEY=AIzaSyYourActualApiKeyHere
+VITE_FIREBASE_API_KEY=YourActualApiKeyHere
 VITE_FIREBASE_AUTH_DOMAIN=yodha-2.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=yodha-2
 VITE_FIREBASE_STORAGE_BUCKET=yodha-2.firebasestorage.app

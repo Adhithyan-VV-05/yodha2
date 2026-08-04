@@ -15,13 +15,13 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCb1foYyZbBV_SC7f4U_NTNFjPqBLQ9stA",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "yodha-2.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "yodha-2",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "yodha-2.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "56808818692",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:56808818692:web:203e9ad64f08a5106e0d51",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-D0Q9RB7WVE",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "",
 };
 
 // Initialize Firebase App & Analytics
@@ -37,7 +37,9 @@ if (typeof window !== "undefined") {
 
 export const db = getFirestore(app);
 
-export const isFirebaseConfigured = (): boolean => true;
+export const isFirebaseConfigured = (): boolean => {
+  return Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
+};
 
 export interface TeamMember {
   fullName: string;

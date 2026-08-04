@@ -162,13 +162,13 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, collection, onSnapshot, query, orderBy, limit } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCb1foYyZbBV_SC7f4U_NTNFjPqBLQ9stA",
+  apiKey: "YOUR_FIREBASE_API_KEY",
   authDomain: "yodha-2.firebaseapp.com",
   projectId: "yodha-2",
   storageBucket: "yodha-2.firebasestorage.app",
   messagingSenderId: "56808818692",
-  appId: "1:56808818692:web:203e9ad64f08a5106e0d51",
-  measurementId: "G-D0Q9RB7WVE"
+  appId: "YOUR_FIREBASE_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID"
 };
 
 const app = initializeApp(firebaseConfig);
