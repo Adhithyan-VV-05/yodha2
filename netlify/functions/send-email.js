@@ -4,8 +4,17 @@
 const BANNER_URL = "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.png";
 
 function generateEmailHtml(data) {
-  const websiteUrl = data.websiteUrl || "https://yodha-2-hackathon.netlify.app/";
-  const contactEmail = data.contactEmail || "yodha.hackathon@gmail.com";
+  const websiteUrl =
+    data.websiteUrl ||
+    process.env.WEBSITE_URL ||
+    process.env.VITE_WEBSITE_URL ||
+    "https://yodha-hackathon.netlify.app/";
+
+  const contactEmail =
+    data.contactEmail ||
+    process.env.CONTACT_EMAIL ||
+    process.env.VITE_CONTACT_EMAIL ||
+    "your-contact-email@example.com";
 
   const membersHtml = (data.members || []).map((m, idx) => `
     <div style="background-color: #0d1222; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
@@ -183,7 +192,7 @@ exports.handler = async function (event) {
     }
 
     const brevoApiKey = process.env.BREVO_API_KEY;
-    const senderEmail = process.env.SENDER_EMAIL || "yodha.hackathon@gmail.com";
+    const senderEmail = process.env.SENDER_EMAIL || process.env.VITE_CONTACT_EMAIL || "your-sender-email@example.com";
 
     // Generate futuristic HTML email body
     const htmlContent = generateEmailHtml({
@@ -197,7 +206,6 @@ exports.handler = async function (event) {
       referralCode: referralCode || "WARRIOR-2026",
       registrationDate: registrationDate || new Date().toLocaleDateString("en-US", { dateStyle: "medium" }),
       members: members || [],
-      websiteUrl: "https://yodha-2-hackathon.netlify.app/",
     });
 
     if (!brevoApiKey) {

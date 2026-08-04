@@ -25,9 +25,19 @@ export interface RegistrationEmailPayload {
  * Generate a modern, futuristic HTML email template matching YODHA branding
  */
 export function generateEmailTemplate(data: RegistrationEmailPayload): string {
-  const websiteUrl = data.websiteUrl || "https://yodha-2-hackathon.netlify.app/";
-  const contactEmail = data.contactEmail || "yodha.hackathon@gmail.com";
-  const bannerUrl = "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.png";
+  const websiteUrl =
+    data.websiteUrl ||
+    (typeof import.meta !== "undefined" && import.meta.env?.VITE_WEBSITE_URL) ||
+    "https://yodha-hackathon.netlify.app/";
+
+  const contactEmail =
+    data.contactEmail ||
+    (typeof import.meta !== "undefined" && import.meta.env?.VITE_CONTACT_EMAIL) ||
+    "your-contact-email@example.com";
+
+  const bannerUrl =
+    (typeof import.meta !== "undefined" && import.meta.env?.VITE_BANNER_URL) ||
+    "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.png";
 
   const membersHtml = (data.members || []).map((m, idx) => `
     <div style="background-color: #0d1222; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
