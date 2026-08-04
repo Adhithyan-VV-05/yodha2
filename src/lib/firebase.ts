@@ -60,14 +60,38 @@ export interface TeamRegistrationData {
   submittedAt?: string;
 }
 
+export interface UserSessionData {
+  sessionId: string;
+  date: string;
+  dayOfWeek: string;
+  startTime: string;
+  startTimeReadable: string;
+  endTime: string;
+  endTimeReadable: string;
+  activeDurationSeconds: number;
+  totalDurationSeconds: number;
+  inactiveDurationSeconds: number;
+  isOnline: boolean;
+  isTabActive: boolean;
+  deviceType: string;
+  screenResolution: string;
+  userAgent: string;
+  createdAt: any;
+  lastActive: any;
+}
+
 /**
- * 1. AUTOMATIC SITE VISIT TRACKER (+1 visit count on load & session duration telemetry)
+ * 1. AUTOMATIC REALTIME SITE VISIT & ACTIVE TIME TRACKER
+ * - Tracks exact ACTIVE focus time spent on website.
+ * - Tab switches, window blur, or hidden tabs PAUSE active time accumulation automatically.
+ * - Syncs realtime state to Firestore for live external dashboard monitoring.
  */
 export function trackUserSession(): () => void {
   if (typeof window === "undefined") return () => {};
 
   const sessionId = "sess_" + Date.now() + "_" + Math.random().toString(36).substring(2, 7);
-  const now = new Date();
+  const sessionStartTime = Date.now();
+  const now = new Date(sessionStartTime);
   const startTimeISO = now.toISOString();
   const dateStr = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
   const dayName = now.toLocaleDateString("en-US", { weekday: "long" });
@@ -77,21 +101,39 @@ export function trackUserSession(): () => void {
   const deviceType = isMobile ? "Mobile" : "Desktop";
   const screenResolution = `${window.innerWidth}x${window.innerHeight}`;
 
-  // 1. Atomically increment total site visits in `stats/site_analytics`
+  let accumulatedActiveMs = 0;
+  let activePeriodStart: number | null = document.visibilityState === "visible" && document.hasFocus() ? Date.now() : null;
+
+  const getActiveSeconds = (): number => {
+    let totalMs = accumulatedActiveMs;
+    if (activePeriodStart !== null) {
+      totalMs += Date.now() - activePeriodStart;
+    }
+    return Math.max(0, Math.floor(totalMs / 1000));
+  };
+
+  const getTotalSeconds = (): number => {
+    return Math.max(0, Math.floor((Date.now() - sessionStartTime) / 1000));
+  };
+
+  // 1. Atomically increment total site visits & live online user count in `stats/site_analytics`
   const statsRef = doc(db, "stats", "site_analytics");
   setDoc(
     statsRef,
     {
       totalVisits: increment(1),
+      activeLiveUsers: increment(1),
       lastVisitTime: serverTimestamp(),
       lastVisitDate: dateStr,
     },
     { merge: true }
   ).catch((err) => console.warn("Firestore visit increment notice:", err));
 
-  // 2. Create session document in `user_sessions`
+  // 2. Initialize session document in `user_sessions`
   const sessionRef = doc(db, "user_sessions", sessionId);
-  const initialData = {
+  const isCurrentlyActive = document.visibilityState === "visible" && document.hasFocus();
+
+  const initialData: Record<string, any> = {
     sessionId,
     date: dateStr,
     dayOfWeek: dayName,
@@ -99,47 +141,118 @@ export function trackUserSession(): () => void {
     startTimeReadable,
     endTime: startTimeISO,
     endTimeReadable: startTimeReadable,
-    durationSeconds: 0,
+    activeDurationSeconds: 0,
+    totalDurationSeconds: 0,
+    inactiveDurationSeconds: 0,
+    isOnline: true,
+    isTabActive: isCurrentlyActive,
     deviceType,
     screenResolution,
     userAgent: navigator.userAgent,
     createdAt: serverTimestamp(),
+    lastActive: serverTimestamp(),
   };
 
   setDoc(sessionRef, initialData).catch((err) => console.warn("Firestore session init notice:", err));
 
-  // 3. Heartbeat timer to update session end time & total time spent
-  const heartbeatInterval = setInterval(() => {
+  let lastActiveSecsSaved = 0;
+
+  // Sync session state to Firestore
+  const syncSessionToFirestore = (isEnding = false, isTabActiveState?: boolean) => {
+    const activeSecs = getActiveSeconds();
+    const totalSecs = getTotalSeconds();
+    const inactiveSecs = Math.max(0, totalSecs - activeSecs);
     const currentTime = new Date();
-    const duration = Math.floor((currentTime.getTime() - now.getTime()) / 1000);
     const endTimeReadable = currentTime.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+    const activeDelta = activeSecs - lastActiveSecsSaved;
+    if (activeDelta > 0) {
+      lastActiveSecsSaved = activeSecs;
+      // Increment cumulative active seconds counter across all users
+      setDoc(
+        statsRef,
+        { totalActiveSecondsAllUsers: increment(activeDelta) },
+        { merge: true }
+      ).catch(() => {});
+    }
+
+    const currentTabActive = isTabActiveState !== undefined
+      ? isTabActiveState
+      : (document.visibilityState === "visible" && document.hasFocus());
 
     updateDoc(sessionRef, {
       endTime: currentTime.toISOString(),
       endTimeReadable,
-      durationSeconds: duration,
-      lastActive: serverTimestamp(),
-    }).catch(() => {});
-  }, 10000); // Heartbeat every 10s
-
-  const handleUnload = () => {
-    const currentTime = new Date();
-    const duration = Math.floor((currentTime.getTime() - now.getTime()) / 1000);
-    const endTimeReadable = currentTime.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-
-    updateDoc(sessionRef, {
-      endTime: currentTime.toISOString(),
-      endTimeReadable,
-      durationSeconds: duration,
+      activeDurationSeconds: activeSecs,
+      totalDurationSeconds: totalSecs,
+      inactiveDurationSeconds: inactiveSecs,
+      isOnline: !isEnding,
+      isTabActive: isEnding ? false : currentTabActive,
       lastActive: serverTimestamp(),
     }).catch(() => {});
   };
 
+  // Event handlers for visibility change and focus/blur
+  const handleVisibilityOrFocusChange = () => {
+    const isVisibleAndFocused = document.visibilityState === "visible" && document.hasFocus();
+
+    if (isVisibleAndFocused) {
+      // User switched BACK to tab - resume active clock
+      if (activePeriodStart === null) {
+        activePeriodStart = Date.now();
+      }
+    } else {
+      // User switched AWAY from tab - pause active clock & record accumulated time
+      if (activePeriodStart !== null) {
+        accumulatedActiveMs += Date.now() - activePeriodStart;
+        activePeriodStart = null;
+      }
+    }
+
+    syncSessionToFirestore(false, isVisibleAndFocused);
+  };
+
+  window.addEventListener("visibilitychange", handleVisibilityOrFocusChange);
+  window.addEventListener("focus", handleVisibilityOrFocusChange);
+  window.addEventListener("blur", handleVisibilityOrFocusChange);
+
+  // Heartbeat interval every 5s to push live updates
+  const heartbeatInterval = setInterval(() => {
+    syncSessionToFirestore(false);
+  }, 5000);
+
+  // Handle tab unload / close
+  let hasUnloaded = false;
+  const handleUnload = () => {
+    if (hasUnloaded) return;
+    hasUnloaded = true;
+
+    if (activePeriodStart !== null) {
+      accumulatedActiveMs += Date.now() - activePeriodStart;
+      activePeriodStart = null;
+    }
+
+    syncSessionToFirestore(true, false);
+
+    // Decrement active live users counter
+    setDoc(
+      statsRef,
+      { activeLiveUsers: increment(-1) },
+      { merge: true }
+    ).catch(() => {});
+  };
+
   window.addEventListener("beforeunload", handleUnload);
+  window.addEventListener("pagehide", handleUnload);
 
   return () => {
     clearInterval(heartbeatInterval);
+    window.removeEventListener("visibilitychange", handleVisibilityOrFocusChange);
+    window.removeEventListener("focus", handleVisibilityOrFocusChange);
+    window.removeEventListener("blur", handleVisibilityOrFocusChange);
     window.removeEventListener("beforeunload", handleUnload);
+    window.removeEventListener("pagehide", handleUnload);
+    handleUnload();
   };
 }
 
