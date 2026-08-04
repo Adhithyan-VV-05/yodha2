@@ -1,14 +1,27 @@
 /**
  * ==============================================================================
- * YODHA 2.0 - GOOGLE APPS SCRIPT FOR AUTOMATED TEAM REGISTRATIONS
+ * 🚀 YODHA 2.0 - GOOGLE APPS SCRIPT FOR AUTOMATED TEAM REGISTRATIONS
  * ==============================================================================
- * Copy & Paste this entire file into Google Apps Script (script.google.com).
- * It automatically handles team registrations, dynamic team member sizes (1 to 4),
- * creates column headers, and saves entries directly to your Google Sheet!
+ * 
+ * 📋 HOW TO SETUP & DEPLOY THIS SCRIPT:
+ * 1. Open your Google Sheet (or Google Form linked spreadsheet).
+ * 2. Click "Extensions" -> "Apps Script" in the top menu bar.
+ * 3. Delete any default code in Code.gs and PASTE THIS ENTIRE FILE.
+ * 4. Click the "Save" icon (Ctrl + S).
+ * 5. Click "Deploy" (top right blue button) -> "New deployment".
+ * 6. Click the gear icon (Select type) -> Choose "Web app".
+ * 7. Configure settings:
+ *    - Description: "Yodha 2.0 Registration API"
+ *    - Execute as: "Me (your email)"
+ *    - Who has access: "Anyone"  <-- CRITICAL! MUST BE "Anyone"
+ * 8. Click "Deploy", grant permissions, and COPY the Web App URL.
+ * 9. Paste the Web App URL into your `.env` file as:
+ *    VITE_GOOGLE_FORM_URL=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
+ * 
  * ==============================================================================
  */
 
-// 1. Handle HTTP POST Requests from Web App / Website
+// 1. Handle HTTP POST Requests from Web Application
 function doPost(e) {
   var lock = LockService.getScriptLock();
   // Wait up to 10 seconds to prevent concurrent row write collisions
@@ -34,6 +47,7 @@ function doPost(e) {
     var teamName = data.teamName || "N/A";
     var teamSize = Number(data.teamSize) || 1;
     var track = data.track || "N/A";
+    var problemStatement = data.problemStatementTitle || (data.problemStatementId ? "ID: " + data.problemStatementId) : "N/A";
 
     // Leader Details
     var leader = data.leader || {};
@@ -43,6 +57,7 @@ function doPost(e) {
     var leaderOrg = leader.organization || "N/A";
     var leaderGender = leader.gender || "N/A";
     var leaderYear = leader.yearOfStudy || "N/A";
+    var leaderGithub = leader.githubUrl || "N/A";
 
     // Build Row Array starting with Leader
     var row = [
@@ -50,12 +65,14 @@ function doPost(e) {
       teamName,
       teamSize,
       track,
+      problemStatement,
       leaderName,
       leaderEmail,
       leaderPhone,
       leaderOrg,
       leaderGender,
-      leaderYear
+      leaderYear,
+      leaderGithub
     ];
 
     // Dynamically Append Members 2, 3, 4 based on teamSize
@@ -69,9 +86,10 @@ function doPost(e) {
         row.push(m.organization || "N/A");
         row.push(m.gender || "N/A");
         row.push(m.yearOfStudy || "N/A");
+        row.push(m.githubUrl || "N/A");
       } else {
-        // Empty cells for missing members
-        row.push("-", "-", "-", "-", "-", "-");
+        // Empty placeholder cells for non-existent members
+        row.push("-", "-", "-", "-", "-", "-", "-");
       }
     }
 
@@ -106,33 +124,41 @@ function setupHeadersIfEmpty(sheet) {
       "Team Name",
       "Team Size",
       "Category Track",
+      "Problem Statement",
       "Leader Full Name",
       "Leader Email",
       "Leader Phone",
       "Leader College / Org",
       "Leader Gender",
       "Leader Year of Study",
+      "Leader GitHub URL",
       "Member 2 Full Name",
       "Member 2 Email",
       "Member 2 Phone",
       "Member 2 College / Org",
       "Member 2 Gender",
       "Member 2 Year of Study",
+      "Member 2 GitHub URL",
       "Member 3 Full Name",
       "Member 3 Email",
       "Member 3 Phone",
       "Member 3 College / Org",
       "Member 3 Gender",
       "Member 3 Year of Study",
+      "Member 3 GitHub URL",
       "Member 4 Full Name",
       "Member 4 Email",
       "Member 4 Phone",
       "Member 4 College / Org",
       "Member 4 Gender",
-      "Member 4 Year of Study"
+      "Member 4 Year of Study",
+      "Member 4 GitHub URL"
     ];
 
     sheet.appendRow(headers);
-    sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold").setBackground("#0284c7").setFontColor("#ffffff");
+    sheet.getRange(1, 1, 1, headers.length)
+      .setFontWeight("bold")
+      .setBackground("#0284c7")
+      .setFontColor("#ffffff");
   }
 }
