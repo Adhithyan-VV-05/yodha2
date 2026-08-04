@@ -27,7 +27,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     let height = Math.max(1, container.clientHeight || window.innerHeight || 360);
     const isMobile = width < 640 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    const cameraZ = isLoader ? (isMobile ? 6.2 : 5.2) : (isMobile ? 6.8 : 5.8);
+    const cameraZ = isLoader ? (isMobile ? 6.2 : 5.2) : (isMobile ? 5.2 : 4.2);
     const aspect = (width > 0 && height > 0) ? width / height : 1;
 
     const scene = new THREE.Scene();
@@ -187,7 +187,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
 
-      camera.position.z = isLoader ? (isMob ? 6.2 : 5.2) : (isMob ? 6.8 : 5.8);
+      camera.position.z = isLoader ? (isMob ? 6.2 : 5.2) : (isMob ? 5.2 : 4.2);
     };
 
     const resizeObserver = typeof ResizeObserver !== "undefined" ? new ResizeObserver(handleResize) : null;
@@ -272,7 +272,7 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`relative w-full ${
-        isLoader ? "h-[320px] sm:h-[400px]" : "h-[340px] sm:h-[420px] lg:h-[480px]"
+        isLoader ? "h-[320px] sm:h-[400px]" : "h-[380px] sm:h-[480px] lg:h-[560px]"
       } flex items-center justify-center select-none overflow-hidden touch-none`}
     >
       {/* 2D Crisp Logo Image Placeholder */}

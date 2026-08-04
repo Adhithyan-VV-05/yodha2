@@ -56,7 +56,7 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
   ];
 
   return (
-    <section id="about" className="relative min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-24 flex items-center justify-center overflow-hidden">
+    <section id="about" className="relative min-h-screen pt-20 sm:pt-24 pb-12 sm:pb-16 flex items-center justify-center overflow-hidden">
       {/* Dynamic Ambient Background Orbs */}
       <motion.div
         animate={{
@@ -79,11 +79,11 @@ export function HeroSection({ onOpenRegister }: HeroSectionProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Split Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center min-h-[calc(100vh-140px)]">
 
           {/* LEFT COLUMN: Prominent 3D Black Sphere Visual */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-start order-1 lg:order-1">
-            <div className="w-full max-w-lg relative flex justify-center items-center overflow-hidden">
+          <div className="lg:col-span-5 flex flex-col justify-center items-center order-1 lg:order-1 self-center w-full my-auto">
+            <div className="w-full max-w-xl relative flex justify-center items-center overflow-visible">
               <ThreeDHeroVisual bounceEntrance={true} />
             </div>
           </div>
