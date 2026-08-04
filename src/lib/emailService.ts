@@ -8,6 +8,7 @@ export interface TeamEmailPayload {
   teamName: string;
   track: string;
   participants: EmailParticipant[];
+  warriorReferralCode?: string;
 }
 
 /**
@@ -32,8 +33,9 @@ Here are your registration details:
 • Team Name: ${payload.teamName}
 • Selected Track: ${payload.track}
 • Total Participants: ${payload.participants.length}
+${payload.warriorReferralCode ? `• Your Warrior Referral Code: ${payload.warriorReferralCode} (Share with other teams to earn referral perks!)` : ""}
 
-Get ready to build the future of frontend creativity. Stay tuned on Discord & Email for problem statements and track briefings!
+Get ready to build the future of AI innovation. Stay tuned on Discord & Email for briefings!
 
 Best regards,
 The YODHA 2.0 Organizing Team

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { CheckCircle2, AlertCircle, Loader2, X, Users, Shield, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, X, Users, Shield, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift } from "lucide-react";
 import confetti from "canvas-confetti";
-import { saveTeamToFirebase, isTeamNameTaken } from "../lib/firebase";
+import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
 import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
@@ -61,6 +61,131 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   const [errorMessage, setErrorMessage] = useState("");
   const [emailStatus, setEmailStatus] = useState<{ dispatched: boolean; count: number }>({ dispatched: false, count: 0 });
   const [teamPassId, setTeamPassId] = useState("");
+
+  // Warrior Referral System State
+  const [usedReferralCode, setUsedReferralCode] = useState("");
+  const [referralCheckState, setReferralCheckState] = useState<{
+    status: "idle" | "checking" | "valid" | "invalid";
+    message?: string;
+    ownerName?: string;
+  }>({ status: "idle" });
+
+  // Field Duplicate Errors & Loading State
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [checkingFields, setCheckingFields] = useState<Record<string, boolean>>({});
+
+  // Generated Referral Code on Success
+  const [generatedReferralCode, setGeneratedReferralCode] = useState("");
+  const [copiedReferralCode, setCopiedReferralCode] = useState(false);
+
+  // Validate Entered Referral Code
+  const handleVerifyReferralCode = async (codeVal: string) => {
+    const trimmed = codeVal.trim().toUpperCase();
+    if (!trimmed) {
+      setReferralCheckState({ status: "idle" });
+      return;
+    }
+
+    setReferralCheckState({ status: "checking" });
+    const res = await validateReferralCode(trimmed);
+    if (res.valid && res.roomData) {
+      setReferralCheckState({
+        status: "valid",
+        ownerName: res.roomData.teamName,
+        message: `Valid Referral Code (Referred by Team "${res.roomData.teamName}")`,
+      });
+    } else {
+      setReferralCheckState({
+        status: "invalid",
+        message: res.error || "Invalid Referral Code. Please check the code and try again.",
+      });
+    }
+  };
+
+  // Real-time Field Duplicate Validation (In-form + Database)
+  const validateFieldInFormAndDB = async (
+    fieldKey: string,
+    value: string,
+    fieldType: "email" | "phone",
+    _targetRole?: string
+  ) => {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      setFieldErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[fieldKey];
+        return copy;
+      });
+      return;
+    }
+
+    // 1. In-Form Duplicate Check across all active team members
+    const activeMembers = members.slice(0, teamSize - 1);
+    const allFormFields: { key: string; val: string; type: "email" | "phone"; label: string }[] = [
+      { key: "leader_email", val: leader.email.trim().toLowerCase(), type: "email", label: "Leader Email" },
+      { key: "leader_phone", val: leader.phone.trim(), type: "phone", label: "Leader Mobile" },
+      ...activeMembers.map((m, i) => ({
+        key: `member_${i}_email`,
+        val: m.email.trim().toLowerCase(),
+        type: "email" as const,
+        label: `Member #${i + 2} Email`,
+      })),
+      ...activeMembers.map((m, i) => ({
+        key: `member_${i}_phone`,
+        val: m.phone.trim(),
+        type: "phone" as const,
+        label: `Member #${i + 2} Mobile`,
+      })),
+    ];
+
+    const currentVal = fieldType === "email" ? trimmed.toLowerCase() : trimmed;
+    const inFormMatch = allFormFields.find(
+      (f) => f.key !== fieldKey && f.type === fieldType && f.val && f.val === currentVal
+    );
+
+    if (inFormMatch) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        [fieldKey]: `This ${fieldType === "email" ? "email" : "mobile number"} is used by another member in your team (${inFormMatch.label}).`,
+      }));
+      return;
+    }
+
+    // Clear in-form error if no duplicate inside the current form
+    setFieldErrors((prev) => {
+      const copy = { ...prev };
+      if (copy[fieldKey] && copy[fieldKey].includes("used by another member")) {
+        delete copy[fieldKey];
+      }
+      return copy;
+    });
+
+    // 2. Database Duplicate Check in Firestore
+    setCheckingFields((prev) => ({ ...prev, [fieldKey]: true }));
+
+    try {
+      const dupCheck = await checkParticipantDuplicate(
+        fieldType === "email" ? trimmed : undefined,
+        fieldType === "phone" ? trimmed : undefined
+      );
+
+      if (fieldType === "email" && dupCheck.isEmailTaken) {
+        setFieldErrors((prev) => ({ ...prev, [fieldKey]: "This email address is already registered." }));
+      } else if (fieldType === "phone" && dupCheck.isPhoneTaken) {
+        setFieldErrors((prev) => ({ ...prev, [fieldKey]: "This mobile number is already registered." }));
+      } else {
+        setFieldErrors((prev) => {
+          const copy = { ...prev };
+          delete copy[fieldKey];
+          return copy;
+        });
+      }
+    } catch (err) {
+      console.warn("Error running field duplicate check:", err);
+    } finally {
+      setCheckingFields((prev) => ({ ...prev, [fieldKey]: false }));
+    }
+  };
 
   // All 40 Problem Statements & Styles Maps
   const allProblemStatements: ProblemStatement[] = [
@@ -135,6 +260,17 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
       return;
     }
 
+    if (usedReferralCode.trim()) {
+      if (referralCheckState.status === "checking") {
+        setErrorMessage("Validating Warrior Referral Code, please wait...");
+        return;
+      }
+      if (referralCheckState.status === "invalid") {
+        setErrorMessage("Invalid Referral Code. Please clear or correct the code to proceed.");
+        return;
+      }
+    }
+
     setCheckingTeamName(true);
     setErrorMessage("");
 
@@ -157,6 +293,18 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
 
   // Final Form Submission
   const handleSubmitRegistration = async () => {
+    // Check if any field errors exist
+    if (Object.keys(fieldErrors).length > 0) {
+      setErrorMessage("Please resolve all duplicate email and phone errors before submitting.");
+      return;
+    }
+
+    // Check if referral code is invalid
+    if (usedReferralCode.trim() && referralCheckState.status === "invalid") {
+      setErrorMessage("Invalid Warrior Referral Code. Please verify the code before submitting.");
+      return;
+    }
+
     setStatus("submitting");
     setErrorMessage("");
 
@@ -173,10 +321,17 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
       problemStatementTitle: selectedPS?.title,
       leader,
       members: activeMembers,
+      usedReferralCode: usedReferralCode.trim().toUpperCase() || undefined,
     };
 
     try {
-      await saveTeamToFirebase(payload);
+      const saveRes = await saveTeamToFirebase(payload);
+      if (!saveRes.success) {
+        setStatus("error");
+        setErrorMessage(saveRes.error || "Failed to submit team registration.");
+        return;
+      }
+
       await submitTeamToGoogleForms(payload);
 
       const allParticipants = [
@@ -188,10 +343,14 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
         teamName,
         track: fullTrackName,
         participants: allParticipants,
+        warriorReferralCode: saveRes.warriorReferralCode,
       });
 
       setEmailStatus({ dispatched: emailResult.success, count: emailResult.dispatchedTo.length });
       setTeamPassId("YODHA-" + Math.floor(100000 + Math.random() * 900000));
+      if (saveRes.warriorReferralCode) {
+        setGeneratedReferralCode(saveRes.warriorReferralCode);
+      }
       setStatus("success");
 
       confetti({
@@ -318,12 +477,61 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
             </div>
           </div>
 
+          {/* Warrior Referral Code Card on Success */}
+          {generatedReferralCode && (
+            <div className="mt-6 w-full p-4.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-sky-500/10 to-purple-500/10 border border-amber-400/50 text-left relative overflow-hidden shadow-xl">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Gift className="w-4 h-4 text-amber-400 animate-bounce" />
+                  <span>YOUR WARRIOR REFERRAL CODE</span>
+                </span>
+                <span className="text-[10px] font-mono bg-amber-400/20 px-2 py-0.5 rounded border border-amber-400/40 text-amber-300 font-bold">
+                  REFERRAL ROOM ACTIVE
+                </span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-black/70 p-3 rounded-xl border border-amber-400/30">
+                <span className="font-mono text-xl sm:text-2xl font-black text-amber-300 tracking-wider">
+                  {generatedReferralCode}
+                </span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(generatedReferralCode);
+                    setCopiedReferralCode(true);
+                    setTimeout(() => setCopiedReferralCode(false), 2500);
+                  }}
+                  className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-black font-black text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(251,191,36,0.4)] shrink-0"
+                >
+                  {copiedReferralCode ? (
+                    <>
+                      <Check className="w-4 h-4 text-black" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4 text-black" />
+                      <span>Copy Code</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <p className="text-xs text-slate-300 mt-2 font-sans leading-relaxed">
+                Share this code with other teams! Every team that registers using your referral code will enter your Warrior Referral Room and climb your referral rank.
+              </p>
+            </div>
+          )}
+
           <button
             onClick={() => {
               setCurrentStep(1);
               setStatus("idle");
               setTeamName("");
               setSelectedPS(null);
+              setUsedReferralCode("");
+              setReferralCheckState({ status: "idle" });
+              setGeneratedReferralCode("");
+              setFieldErrors({});
             }}
             className="mt-6 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer"
           >
@@ -366,7 +574,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
             </motion.div>
           )}
 
-          {/* STEP 1: Team Basics & Problem Statement Picker Button */}
+          {/* STEP 1: Team Basics, Problem Statement Picker & Warrior Referral Code */}
           {currentStep === 1 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <h4 className="text-lg font-bold text-white flex items-center gap-2">
@@ -455,11 +663,62 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 </div>
               )}
 
+              {/* Warrior Referral Code Input Field (Optional) */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
+                    <Gift className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Warrior Referral Code (Optional)</span>
+                  </label>
+                  {referralCheckState.status === "checking" && (
+                    <span className="text-[10px] font-mono text-sky-400 flex items-center gap-1">
+                      <Loader2 className="w-3 h-3 animate-spin text-sky-400" /> Validating Code...
+                    </span>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  value={usedReferralCode}
+                  onChange={(e) => {
+                    const val = e.target.value.toUpperCase();
+                    setUsedReferralCode(val);
+                    if (!val.trim()) {
+                      setReferralCheckState({ status: "idle" });
+                    }
+                  }}
+                  onBlur={() => {
+                    if (usedReferralCode.trim()) {
+                      handleVerifyReferralCode(usedReferralCode);
+                    }
+                  }}
+                  placeholder="e.g. WARR-X8K9"
+                  className={`w-full px-4 py-3 bg-white/[0.04] border rounded-xl text-sm font-mono text-white uppercase focus:outline-none transition-colors ${
+                    referralCheckState.status === "valid"
+                      ? "border-emerald-500/80 focus:border-emerald-400 bg-emerald-950/20"
+                      : referralCheckState.status === "invalid"
+                      ? "border-rose-500/80 focus:border-rose-400 bg-rose-950/20"
+                      : "border-white/10 focus:border-sky-400"
+                  }`}
+                />
+                {referralCheckState.status === "valid" && (
+                  <p className="text-xs text-emerald-400 font-mono mt-1.5 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>{referralCheckState.message}</span>
+                  </p>
+                )}
+                {referralCheckState.status === "invalid" && (
+                  <p className="text-xs text-rose-400 font-mono mt-1.5 flex items-center gap-1.5">
+                    <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                    <span>{referralCheckState.message}</span>
+                  </p>
+                )}
+              </div>
+
               <div className="pt-4 flex justify-end">
                 <button
                   type="button"
                   onClick={handleNextFromStep1}
-                  disabled={checkingTeamName}
+                  disabled={checkingTeamName || referralCheckState.status === "checking"}
                   className="px-8 py-3.5 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
                 >
                   {checkingTeamName ? (
@@ -478,7 +737,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
             </motion.div>
           )}
 
-          {/* STEP 2: Team Leader Details */}
+          {/* STEP 2: Team Leader Details with Real-time Duplicate Check */}
           {currentStep === 2 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
               <h4 className="text-lg font-bold text-white flex items-center gap-2">
@@ -500,29 +759,71 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1">Email Address *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-mono text-slate-300">Email Address *</label>
+                    {checkingFields["leader_email"] && (
+                      <span className="text-[10px] font-mono text-sky-400 flex items-center gap-1">
+                        <Loader2 className="w-3 h-3 animate-spin text-sky-400" /> Verifying...
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="email"
                     required
                     name="email"
                     value={leader.email}
-                    onChange={handleLeaderChange}
+                    onChange={(e) => {
+                      handleLeaderChange(e);
+                      validateFieldInFormAndDB("leader_email", e.target.value, "email", "Leader");
+                    }}
+                    onBlur={(e) => validateFieldInFormAndDB("leader_email", e.target.value, "email", "Leader")}
                     placeholder="leader@example.com"
-                    className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                    className={`w-full px-4 py-2.5 bg-white/[0.04] border rounded-xl text-sm text-white focus:outline-none transition-colors ${
+                      fieldErrors["leader_email"]
+                        ? "border-rose-500/80 focus:border-rose-400 bg-rose-950/20"
+                        : "border-white/10 focus:border-sky-400"
+                    }`}
                   />
+                  {fieldErrors["leader_email"] && (
+                    <p className="text-xs text-rose-400 font-medium mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                      <span>{fieldErrors["leader_email"]}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1">Phone / WhatsApp *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-mono text-slate-300">Phone / WhatsApp *</label>
+                    {checkingFields["leader_phone"] && (
+                      <span className="text-[10px] font-mono text-sky-400 flex items-center gap-1">
+                        <Loader2 className="w-3 h-3 animate-spin text-sky-400" /> Verifying...
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="tel"
                     required
                     name="phone"
                     value={leader.phone}
-                    onChange={handleLeaderChange}
+                    onChange={(e) => {
+                      handleLeaderChange(e);
+                      validateFieldInFormAndDB("leader_phone", e.target.value, "phone", "Leader");
+                    }}
+                    onBlur={(e) => validateFieldInFormAndDB("leader_phone", e.target.value, "phone", "Leader")}
                     placeholder="+91 9876543210"
-                    className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                    className={`w-full px-4 py-2.5 bg-white/[0.04] border rounded-xl text-sm text-white focus:outline-none transition-colors ${
+                      fieldErrors["leader_phone"]
+                        ? "border-rose-500/80 focus:border-rose-400 bg-rose-950/20"
+                        : "border-white/10 focus:border-sky-400"
+                    }`}
                   />
+                  {fieldErrors["leader_phone"] && (
+                    <p className="text-xs text-rose-400 font-medium mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                      <span>{fieldErrors["leader_phone"]}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -585,6 +886,10 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                       setErrorMessage("Please fill in all leader details.");
                       return;
                     }
+                    if (fieldErrors["leader_email"] || fieldErrors["leader_phone"]) {
+                      setErrorMessage("Please resolve email and mobile number errors before proceeding.");
+                      return;
+                    }
                     setErrorMessage("");
                     if (teamSize > 1) {
                       setCurrentStep(3);
@@ -600,7 +905,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
             </motion.div>
           )}
 
-          {/* STEPS 3 to 5: Additional Members */}
+          {/* STEPS 3 to 5: Additional Members with Real-time Duplicate Check */}
           {currentStep > 2 && currentStep <= teamSize + 1 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
               <h4 className="text-lg font-bold text-white flex items-center gap-2">
@@ -611,6 +916,8 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 const memberIndex = currentStep - 3;
                 const m = members[memberIndex];
                 if (!m) return null;
+                const emailKey = `member_${memberIndex}_email`;
+                const phoneKey = `member_${memberIndex}_phone`;
 
                 return (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -628,29 +935,71 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono text-slate-300 mb-1">Email Address *</label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-xs font-mono text-slate-300">Email Address *</label>
+                        {checkingFields[emailKey] && (
+                          <span className="text-[10px] font-mono text-sky-400 flex items-center gap-1">
+                            <Loader2 className="w-3 h-3 animate-spin text-sky-400" /> Verifying...
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="email"
                         required
                         name="email"
                         value={m.email}
-                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        onChange={(e) => {
+                          handleMemberChange(memberIndex, e);
+                          validateFieldInFormAndDB(emailKey, e.target.value, "email", `Member #${memberIndex + 2}`);
+                        }}
+                        onBlur={(e) => validateFieldInFormAndDB(emailKey, e.target.value, "email", `Member #${memberIndex + 2}`)}
                         placeholder="member@example.com"
-                        className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                        className={`w-full px-4 py-2.5 bg-white/[0.04] border rounded-xl text-sm text-white focus:outline-none transition-colors ${
+                          fieldErrors[emailKey]
+                            ? "border-rose-500/80 focus:border-rose-400 bg-rose-950/20"
+                            : "border-white/10 focus:border-sky-400"
+                        }`}
                       />
+                      {fieldErrors[emailKey] && (
+                        <p className="text-xs text-rose-400 font-medium mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                          <span>{fieldErrors[emailKey]}</span>
+                        </p>
+                      )}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono text-slate-300 mb-1">Phone / WhatsApp *</label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-xs font-mono text-slate-300">Phone / WhatsApp *</label>
+                        {checkingFields[phoneKey] && (
+                          <span className="text-[10px] font-mono text-sky-400 flex items-center gap-1">
+                            <Loader2 className="w-3 h-3 animate-spin text-sky-400" /> Verifying...
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="tel"
                         required
                         name="phone"
                         value={m.phone}
-                        onChange={(e) => handleMemberChange(memberIndex, e)}
+                        onChange={(e) => {
+                          handleMemberChange(memberIndex, e);
+                          validateFieldInFormAndDB(phoneKey, e.target.value, "phone", `Member #${memberIndex + 2}`);
+                        }}
+                        onBlur={(e) => validateFieldInFormAndDB(phoneKey, e.target.value, "phone", `Member #${memberIndex + 2}`)}
                         placeholder="+91 9876543210"
-                        className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400"
+                        className={`w-full px-4 py-2.5 bg-white/[0.04] border rounded-xl text-sm text-white focus:outline-none transition-colors ${
+                          fieldErrors[phoneKey]
+                            ? "border-rose-500/80 focus:border-rose-400 bg-rose-950/20"
+                            : "border-white/10 focus:border-sky-400"
+                        }`}
                       />
+                      {fieldErrors[phoneKey] && (
+                        <p className="text-xs text-rose-400 font-medium mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                          <span>{fieldErrors[phoneKey]}</span>
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -715,6 +1064,10 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                     const m = members[idx];
                     if (!m.fullName || !m.email || !m.phone || !m.organization) {
                       setErrorMessage(`Please fill in all details for Member #${currentStep - 1}.`);
+                      return;
+                    }
+                    if (fieldErrors[`member_${idx}_email`] || fieldErrors[`member_${idx}_phone`]) {
+                      setErrorMessage(`Please resolve email and mobile number errors for Member #${currentStep - 1} before proceeding.`);
                       return;
                     }
                     setErrorMessage("");
