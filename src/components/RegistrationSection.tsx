@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { CheckCircle2, AlertCircle, Loader2, X, Users, Shield, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, X, Users, Shield, ShieldCheck, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
@@ -78,26 +78,37 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   const [generatedReferralCode, setGeneratedReferralCode] = useState("");
   const [copiedReferralCode, setCopiedReferralCode] = useState(false);
 
-  // Validate Entered Referral Code
+  // Validate Entered Warrior Referral Code on Click of Verify Logo/Button
   const handleVerifyReferralCode = async (codeVal: string) => {
     const trimmed = codeVal.trim().toUpperCase();
     if (!trimmed) {
-      setReferralCheckState({ status: "idle" });
+      setReferralCheckState({
+        status: "invalid",
+        message: "Please enter a Warrior Referral Code before clicking Verify.",
+      });
       return;
     }
 
-    setReferralCheckState({ status: "checking" });
-    const res = await validateReferralCode(trimmed);
+    setReferralCheckState({ status: "checking", message: "Scanning database..." });
+
+    // Smooth scanning feedback delay (~650ms)
+    const [res] = await Promise.all([
+      validateReferralCode(trimmed),
+      new Promise((r) => setTimeout(r, 650)),
+    ]);
+
     if (res.valid && res.roomData) {
       setReferralCheckState({
         status: "valid",
         ownerName: res.roomData.teamName,
-        message: `Valid Referral Code (Referred by Team "${res.roomData.teamName}")`,
+        message: `✓ Valid Warrior Code! (Referred by Team "${res.roomData.teamName}")`,
       });
     } else {
+      // Clear input field if invalid as requested by user!
+      setUsedReferralCode("");
       setReferralCheckState({
         status: "invalid",
-        message: res.error || "Invalid Referral Code. Please check the code and try again.",
+        message: "❌ Invalid Warrior Code! Code not found in database. Field cleared.",
       });
     }
   };
@@ -663,52 +674,78 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 </div>
               )}
 
-              {/* Warrior Referral Code Input Field (Optional) */}
+              {/* Warrior Referral Code Input Field (Optional) with VERIFY Logo Button */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
                     <Gift className="w-3.5 h-3.5 text-amber-400" />
                     <span>Warrior Referral Code (Optional)</span>
                   </label>
-                  {referralCheckState.status === "checking" && (
-                    <span className="text-[10px] font-mono text-sky-400 flex items-center gap-1">
-                      <Loader2 className="w-3 h-3 animate-spin text-sky-400" /> Validating Code...
-                    </span>
-                  )}
                 </div>
-                <input
-                  type="text"
-                  value={usedReferralCode}
-                  onChange={(e) => {
-                    const val = e.target.value.toUpperCase();
-                    setUsedReferralCode(val);
-                    if (!val.trim()) {
-                      setReferralCheckState({ status: "idle" });
-                    }
-                  }}
-                  onBlur={() => {
-                    if (usedReferralCode.trim()) {
-                      handleVerifyReferralCode(usedReferralCode);
-                    }
-                  }}
-                  placeholder="e.g. WARR-X8K9"
-                  className={`w-full px-4 py-3 bg-white/[0.04] border rounded-xl text-sm font-mono text-white uppercase focus:outline-none transition-colors ${
-                    referralCheckState.status === "valid"
-                      ? "border-emerald-500/80 focus:border-emerald-400 bg-emerald-950/20"
-                      : referralCheckState.status === "invalid"
-                      ? "border-rose-500/80 focus:border-rose-400 bg-rose-950/20"
-                      : "border-white/10 focus:border-sky-400"
-                  }`}
-                />
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={usedReferralCode}
+                    onChange={(e) => {
+                      const val = e.target.value.toUpperCase();
+                      setUsedReferralCode(val);
+                      if (!val.trim()) {
+                        setReferralCheckState({ status: "idle" });
+                      }
+                    }}
+                    placeholder="e.g. WARR-X8K9"
+                    className={`flex-1 px-4 py-3 bg-white/[0.04] border rounded-xl text-sm font-mono text-white uppercase focus:outline-none transition-all ${
+                      referralCheckState.status === "valid"
+                        ? "border-emerald-500/80 focus:border-emerald-400 bg-emerald-950/20"
+                        : referralCheckState.status === "invalid"
+                        ? "border-rose-500/80 focus:border-rose-400 bg-rose-950/20"
+                        : "border-white/10 focus:border-amber-400"
+                    }`}
+                  />
+
+                  {/* VERIFY Logo / Button */}
+                  <button
+                    type="button"
+                    onClick={() => handleVerifyReferralCode(usedReferralCode)}
+                    disabled={referralCheckState.status === "checking"}
+                    className={`px-4 py-3 rounded-xl font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer shrink-0 shadow-lg ${
+                      referralCheckState.status === "checking"
+                        ? "bg-amber-500/20 border border-amber-400/40 text-amber-300 cursor-wait"
+                        : referralCheckState.status === "valid"
+                        ? "bg-emerald-500/20 border border-emerald-400/60 text-emerald-300"
+                        : "bg-amber-400 hover:bg-amber-300 text-black shadow-[0_0_15px_rgba(251,191,36,0.3)]"
+                    }`}
+                  >
+                    {referralCheckState.status === "checking" ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-amber-300" />
+                        <span>Scanning...</span>
+                      </>
+                    ) : referralCheckState.status === "valid" ? (
+                      <>
+                        <Check className="w-4 h-4 text-emerald-400" />
+                        <span>VERIFIED</span>
+                      </>
+                    ) : (
+                      <>
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>VERIFY</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
                 {referralCheckState.status === "valid" && (
-                  <p className="text-xs text-emerald-400 font-mono mt-1.5 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <p className="text-xs text-emerald-400 font-mono mt-2 flex items-center gap-1.5 bg-emerald-950/40 p-2.5 rounded-lg border border-emerald-500/30">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                     <span>{referralCheckState.message}</span>
                   </p>
                 )}
+
                 {referralCheckState.status === "invalid" && (
-                  <p className="text-xs text-rose-400 font-mono mt-1.5 flex items-center gap-1.5">
-                    <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                  <p className="text-xs text-rose-400 font-mono mt-2 flex items-center gap-1.5 bg-rose-950/50 p-2.5 rounded-lg border border-rose-500/40">
+                    <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                     <span>{referralCheckState.message}</span>
                   </p>
                 )}
