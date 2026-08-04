@@ -82,7 +82,7 @@ export async function sendTeamWelcomeEmails(
     referralCode: payload.warriorReferralCode || "WARRIOR-2026",
     registrationDate: nowStr,
     websiteUrl: "https://yodha2.netlify.app/",
-    contactEmail: "adhithyanvv05@gmail.com",
+    contactEmail: "yodha.hackathon@gmail.com",
   };
 
   const result = await sendRegistrationEmail(registrationData);

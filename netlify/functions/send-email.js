@@ -161,7 +161,7 @@ exports.handler = async function (event) {
     }
 
     const brevoApiKey = process.env.BREVO_API_KEY;
-    const senderEmail = process.env.SENDER_EMAIL || "adhithyanvv05@gmail.com";
+    const senderEmail = process.env.SENDER_EMAIL || "yodha.hackathon@gmail.com";
 
     // Generate futuristic HTML email body
     const htmlContent = generateEmailHtml({
