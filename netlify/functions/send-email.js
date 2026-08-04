@@ -4,8 +4,22 @@
 const BANNER_URL = "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.png";
 
 function generateEmailHtml(data) {
-  const websiteUrl = data.websiteUrl || "https://yodha2.netlify.app/";
-  const contactEmail = data.contactEmail || "adhithyanvv05@gmail.com";
+  const websiteUrl = data.websiteUrl || "https://yodha-2-hackathon.netlify.app/";
+  const contactEmail = data.contactEmail || "yodha.hackathon@gmail.com";
+
+  const membersHtml = (data.members || []).map((m, idx) => `
+    <div style="background-color: #0d1222; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
+      <div style="font-size: 11px; font-family: monospace; color: #38bdf8; font-weight: bold; text-transform: uppercase;">
+        ${m.role || `Member ${idx + 1}`}
+      </div>
+      <div style="font-size: 14px; font-weight: 700; color: #ffffff; margin-top: 2px;">
+        ${m.fullName}
+      </div>
+      <div style="font-size: 12px; color: #94a3b8; font-family: monospace; margin-top: 4px;">
+        ✉️ ${m.email} ${m.phone ? `• 📞 ${m.phone}` : ""} ${m.organization ? `• 🏛️ ${m.organization}` : ""}
+      </div>
+    </div>
+  `).join("");
 
   return `
 <!DOCTYPE html>
@@ -62,11 +76,12 @@ function generateEmailHtml(data) {
           </p>
 
           <div class="card-box">
-            <div class="card-title">📋 Registration Details</div>
+            <div class="card-title">📋 Registration Summary</div>
             
             <div class="detail-row">
               <div class="detail-label">👤 Team Leader</div>
               <div class="detail-value">${data.leaderName}</div>
+              ${data.leaderEmail ? `<div style="font-size: 12px; color: #94a3b8; font-family: monospace;">✉️ ${data.leaderEmail} ${data.leaderPhone ? `• 📞 ${data.leaderPhone}` : ""}</div>` : ""}
             </div>
 
             <div class="detail-row">
@@ -75,13 +90,13 @@ function generateEmailHtml(data) {
             </div>
 
             <div class="detail-row">
-              <div class="detail-label">🏆 Track</div>
+              <div class="detail-label">🏆 Track / Problem Statement</div>
               <div class="detail-value" style="color: #38bdf8;">${data.track}</div>
             </div>
 
             <div class="detail-row">
-              <div class="detail-label">👨‍💻 Team Size</div>
-              <div class="detail-value">${data.teamSize} Participants</div>
+              <div class="detail-label">👨‍💻 Total Team Size</div>
+              <div class="detail-value">${data.teamSize} Member(s)</div>
             </div>
 
             <div class="detail-row">
@@ -99,6 +114,13 @@ function generateEmailHtml(data) {
               <div class="badge-status">Registration Confirmed</div>
             </div>
           </div>
+
+          ${data.members && data.members.length > 0 ? `
+          <div class="card-box">
+            <div class="card-title">👥 Team Roster & Submitted Details</div>
+            ${membersHtml}
+          </div>
+          ` : ""}
 
           <div class="card-box">
             <div class="card-title">🚀 What Happens Next?</div>
@@ -151,7 +173,7 @@ exports.handler = async function (event) {
 
   try {
     const data = JSON.parse(event.body || "{}");
-    const { leaderName, leaderEmail, teamName, track, teamSize, referralCode, registrationDate } = data;
+    const { leaderName, leaderEmail, leaderPhone, organization, teamName, track, teamSize, referralCode, registrationDate, members } = data;
 
     if (!leaderEmail || !leaderName) {
       return {
@@ -167,11 +189,15 @@ exports.handler = async function (event) {
     const htmlContent = generateEmailHtml({
       leaderName,
       leaderEmail,
+      leaderPhone,
+      organization,
       teamName: teamName || "YODHA Team",
       track: track || "AI Innovation",
-      teamSize: teamSize || 1,
+      teamSize: teamSize || (members ? members.length : 1),
       referralCode: referralCode || "WARRIOR-2026",
       registrationDate: registrationDate || new Date().toLocaleDateString("en-US", { dateStyle: "medium" }),
+      members: members || [],
+      websiteUrl: "https://yodha-2-hackathon.netlify.app/",
     });
 
     if (!brevoApiKey) {

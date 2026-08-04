@@ -1,13 +1,15 @@
 import { generateEmailTemplate } from "./emailTemplate";
-import type { RegistrationEmailPayload } from "./emailTemplate";
+import type { RegistrationEmailPayload, TeamMemberDetails } from "./emailTemplate";
 
-export type { RegistrationEmailPayload };
+export type { RegistrationEmailPayload, TeamMemberDetails };
 export { generateEmailTemplate };
 
 export interface EmailParticipant {
   fullName: string;
   email: string;
   role: "Leader" | "Member";
+  phone?: string;
+  organization?: string;
 }
 
 export interface TeamEmailPayload {
@@ -53,7 +55,7 @@ export async function sendRegistrationEmail(
 
 /**
  * High-level wrapper for registration workflow:
- * Extracts Team Leader details and sends Brevo confirmation email
+ * Extracts Team Leader details & full member roster, then sends Brevo confirmation email
  */
 export async function sendTeamWelcomeEmails(
   payload: TeamEmailPayload
@@ -73,15 +75,26 @@ export async function sendTeamWelcomeEmails(
     day: "numeric",
   });
 
+  const memberRoster: TeamMemberDetails[] = payload.participants.map((p, i) => ({
+    role: p.role === "Leader" ? "Team Leader (Captain)" : `Team Member ${i + 1}`,
+    fullName: p.fullName,
+    email: p.email,
+    phone: p.phone,
+    organization: p.organization,
+  }));
+
   const registrationData: RegistrationEmailPayload = {
     leaderName,
     leaderEmail,
+    leaderPhone: leader?.phone,
+    organization: leader?.organization,
     teamName: payload.teamName,
     track: payload.track,
     teamSize: payload.participants.length,
     referralCode: payload.warriorReferralCode || "WARRIOR-2026",
     registrationDate: nowStr,
-    websiteUrl: "https://yodha2.netlify.app/",
+    members: memberRoster,
+    websiteUrl: "https://yodha-2-hackathon.netlify.app/",
     contactEmail: "yodha.hackathon@gmail.com",
   };
 

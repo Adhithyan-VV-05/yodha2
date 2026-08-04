@@ -59,7 +59,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [checkingTeamName, setCheckingTeamName] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [emailStatus, setEmailStatus] = useState<{ dispatched: boolean; count: number }>({ dispatched: false, count: 0 });
+  const [_emailStatus, setEmailStatus] = useState<{ dispatched: boolean; count: number }>({ dispatched: false, count: 0 });
   const [teamPassId, setTeamPassId] = useState("");
 
   // Warrior Referral System State
@@ -346,8 +346,8 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
       await submitTeamToGoogleForms(payload);
 
       const allParticipants = [
-        { fullName: leader.fullName, email: leader.email, role: "Leader" as const },
-        ...activeMembers.map((m) => ({ fullName: m.fullName, email: m.email, role: "Member" as const })),
+        { fullName: leader.fullName, email: leader.email, role: "Leader" as const, phone: leader.phone, organization: leader.organization },
+        ...activeMembers.map((m) => ({ fullName: m.fullName, email: m.email, role: "Member" as const, phone: m.phone, organization: m.organization })),
       ];
 
       const emailResult = await sendTeamWelcomeEmails({
@@ -444,9 +444,14 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
             Welcome to Yodha 2.0! Your team record has been saved and welcome emails have been dispatched.
           </p>
 
-          <div className="mt-4 flex items-center gap-2 px-4 py-1.5 bg-emerald-950/60 border border-emerald-500/40 rounded-full text-xs font-mono text-emerald-300">
-            <Mail className="w-4 h-4 text-emerald-400" />
-            <span>Welcome Email Dispatched to {emailStatus.count} Team Members</span>
+          <div className="mt-4 flex items-start gap-3 px-4.5 py-3 bg-emerald-950/80 border border-emerald-400/60 rounded-xl text-xs font-mono text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] text-left max-w-lg">
+            <Mail className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5 animate-bounce" />
+            <div>
+              <span className="font-bold text-white block text-xs uppercase tracking-wider">CONFIRMATION EMAIL SENT TO LEADER</span>
+              <span className="text-emerald-300/90 text-[11px] font-sans leading-relaxed block mt-0.5">
+                A detailed confirmation pass & full submission summary have been sent to Team Leader: <strong className="text-white">{leader.fullName}</strong> ({leader.email}).
+              </span>
+            </div>
           </div>
 
           {/* Digital Team Pass */}
