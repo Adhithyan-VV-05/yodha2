@@ -1,3 +1,9 @@
+import { generateEmailTemplate } from "./emailTemplate";
+import type { RegistrationEmailPayload } from "./emailTemplate";
+
+export type { RegistrationEmailPayload };
+export { generateEmailTemplate };
+
 export interface EmailParticipant {
   fullName: string;
   email: string;
@@ -12,60 +18,78 @@ export interface TeamEmailPayload {
 }
 
 /**
- * Dispatch welcome email notifications to all team participants
+ * Send Brevo confirmation email to the Team Leader via Netlify Serverless Function
+ * - Sends email ONLY to the Team Leader
+ * - Fails silently without stopping or breaking the registration workflow
  */
-export async function sendTeamWelcomeEmails(payload: TeamEmailPayload): Promise<{ success: boolean; dispatchedTo: string[]; isMock: boolean }> {
-  const emails = payload.participants.map((p) => p.email).filter(Boolean);
-  
-  console.info(`📧 [YODHA 2.0 EMAIL SERVICE] Dispatching welcome emails to ${emails.length} participants for Team '${payload.teamName}':`, emails);
-
-  // Email message template preview for logging/verification
-  const emailMessageTemplate = `
--------------------------------------------------------------
-SUBJECT: Welcome to YODHA 2.0 - Registration Confirmed! 🚀
-TO: ${emails.join(", ")}
-
-Hey Hackers! 👋
-
-Congratulations! Your team '${payload.teamName}' has been successfully registered for YODHA 2.0 under the track: ${payload.track}.
-
-Here are your registration details:
-• Team Name: ${payload.teamName}
-• Selected Track: ${payload.track}
-• Total Participants: ${payload.participants.length}
-${payload.warriorReferralCode ? `• Your Warrior Referral Code: ${payload.warriorReferralCode} (Share with other teams to earn referral perks!)` : ""}
-
-Get ready to build the future of AI innovation. Stay tuned on Discord & Email for briefings!
-
-Best regards,
-The YODHA 2.0 Organizing Team
--------------------------------------------------------------
-  `;
-
-  console.info(emailMessageTemplate);
-
+export async function sendRegistrationEmail(
+  payload: RegistrationEmailPayload
+): Promise<{ success: boolean; dispatchedTo?: string; isMock?: boolean; error?: string }> {
   try {
-    // Check if custom EmailJS or Webhook Service URL is configured in environment
-    const serviceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL;
+    console.info(`📧 [BREVO EMAIL SERVICE] Requesting Netlify Function send-email for Team Leader '${payload.leaderName}' (${payload.leaderEmail})...`);
 
-    if (serviceUrl) {
-      await fetch(serviceUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          teamName: payload.teamName,
-          track: payload.track,
-          recipients: emails,
-          message: emailMessageTemplate,
-        }),
-      });
-      return { success: true, dispatchedTo: emails, isMock: false };
+    // Call Netlify Function /.netlify/functions/send-email
+    const response = await fetch("/.netlify/functions/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      const resData = await response.json();
+      console.info("✅ [BREVO EMAIL SERVICE] Success response:", resData);
+      return { success: true, dispatchedTo: payload.leaderEmail, isMock: resData.isMock || false };
+    } else {
+      const errText = await response.text();
+      console.warn("⚠️ [BREVO EMAIL SERVICE] Netlify function returned non-200 status:", response.status, errText);
+      return { success: true, dispatchedTo: payload.leaderEmail, isMock: true, error: errText };
     }
-
-    // Default simulation fallback (logs nicely and confirms dispatch)
-    return { success: true, dispatchedTo: emails, isMock: true };
-  } catch (error) {
-    console.warn("Email service dispatch notice:", error);
-    return { success: true, dispatchedTo: emails, isMock: true };
+  } catch (err: any) {
+    // Non-blocking fallback: Log error but ensure registration flow completes 100% successfully
+    console.warn("⚠️ [BREVO EMAIL SERVICE] Non-blocking email dispatch error (Registration preserved):", err);
+    return { success: true, dispatchedTo: payload.leaderEmail, isMock: true, error: err.message };
   }
+}
+
+/**
+ * High-level wrapper for registration workflow:
+ * Extracts Team Leader details and sends Brevo confirmation email
+ */
+export async function sendTeamWelcomeEmails(
+  payload: TeamEmailPayload
+): Promise<{ success: boolean; dispatchedTo: string[]; isMock: boolean }> {
+  const leader = payload.participants.find((p) => p.role === "Leader") || payload.participants[0];
+  const leaderEmail = leader?.email;
+  const leaderName = leader?.fullName || "Team Leader";
+
+  if (!leaderEmail) {
+    console.warn("⚠️ No Team Leader email provided for email dispatch.");
+    return { success: true, dispatchedTo: [], isMock: true };
+  }
+
+  const nowStr = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const registrationData: RegistrationEmailPayload = {
+    leaderName,
+    leaderEmail,
+    teamName: payload.teamName,
+    track: payload.track,
+    teamSize: payload.participants.length,
+    referralCode: payload.warriorReferralCode || "WARRIOR-2026",
+    registrationDate: nowStr,
+    websiteUrl: "https://yodha2.netlify.app/",
+    contactEmail: "adhithyanvv05@gmail.com",
+  };
+
+  const result = await sendRegistrationEmail(registrationData);
+
+  return {
+    success: true,
+    dispatchedTo: [leaderEmail],
+    isMock: result.isMock || false,
+  };
 }
