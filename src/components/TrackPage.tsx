@@ -99,7 +99,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
             }}
           >
             {isHealthcare ? <HeartPulse className="w-4 h-4 text-rose-400" /> : <Leaf className="w-4 h-4 text-emerald-400" />}
-            <span>{isHealthcare ? "HEALTHCARE AI TRACK (IDs 1 - 20)" : "ENVIRONMENTAL AI TRACK (IDs 21 - 40)"}</span>
+            <span>{isHealthcare ? "HEALTHCARE AI TRACK (IDs 1 - 10)" : "ENVIRONMENTAL AI TRACK (IDs 11 - 20)"}</span>
           </span>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-sky-400 tracking-tight">

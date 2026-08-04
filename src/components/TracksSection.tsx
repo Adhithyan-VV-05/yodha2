@@ -11,7 +11,7 @@ const THEME_TRACKS = [
     id: "healthcare",
     title: "Healthcare AI",
     icon: <Stethoscope className="w-6 sm:w-8 h-6 sm:h-8 text-rose-400" />,
-    badge: "🩺 HEALTHCARE TRACK (IDs 1 - 20)",
+    badge: "🩺 HEALTHCARE TRACK (IDs 1 - 10)",
     description: "Develop AI solutions that prevent disease, improve diagnostic accuracy, support clinical decision-making, and expand universal healthcare accessibility.",
     subTopics: [
       "Disease Prevention",
@@ -26,7 +26,7 @@ const THEME_TRACKS = [
     id: "environmental",
     title: "Environmental AI",
     icon: <Trees className="w-6 sm:w-8 h-6 sm:h-8 text-emerald-400" />,
-    badge: "🌿 SUSTAINABILITY TRACK (IDs 21 - 40)",
+    badge: "🌿 SUSTAINABILITY TRACK (IDs 11 - 20)",
     description: "Build intelligent systems to monitor environmental ecosystems, detect forest fires, analyze water quality, and mitigate climate disaster risks.",
     subTopics: [
       "Water Quality Monitoring",
@@ -69,7 +69,7 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
             transition={{ delay: 0.1 }}
             className="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed"
           >
-            Click <strong className="text-sky-300">Choose Track</strong> below to view the 40 dedicated Problem Statements for Healthcare (IDs 1–20) & Environmental AI (IDs 21–40).
+            Click <strong className="text-sky-300">Choose Track</strong> below to view the 20 dedicated Problem Statements for Healthcare (IDs 1–10) & Environmental AI (IDs 11–20).
           </motion.p>
         </div>
 
