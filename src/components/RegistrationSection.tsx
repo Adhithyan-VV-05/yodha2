@@ -13,6 +13,7 @@ import {
   ENVIRONMENTAL_PROBLEM_STATEMENTS,
   HEALTHCARE_STYLES,
   ENVIRONMENTAL_STYLES,
+  getPSImage,
 } from "../data/problemStatements";
 import type { ProblemStatement, ProblemStatementStyle } from "../data/problemStatements";
 
@@ -198,7 +199,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
     }
   };
 
-  // All 40 Problem Statements & Styles Maps
+  // All 20 Problem Statements & Styles Maps
   const allProblemStatements: ProblemStatement[] = [
     ...HEALTHCARE_PROBLEM_STATEMENTS,
     ...ENVIRONMENTAL_PROBLEM_STATEMENTS,
@@ -214,21 +215,21 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   );
 
   const getStyleForPS = (st: ProblemStatement): ProblemStatementStyle => {
-    const map = st.id <= 20 ? healthcareStylesMap : environmentalStylesMap;
+    const map = st.id <= 10 ? healthcareStylesMap : environmentalStylesMap;
     return (
       map[st.id] || {
         id: st.id,
         theme: "Default",
-        primary: st.id <= 20 ? "#EF4444" : "#10B981",
-        secondary: st.id <= 20 ? "#F87171" : "#34D399",
-        accent: st.id <= 20 ? "#FCA5A5" : "#6EE7B7",
-        background: st.id <= 20 ? "rgba(239,68,68,0.08)" : "rgba(16,185,129,0.08)",
-        border: st.id <= 20 ? "rgba(239,68,68,0.35)" : "rgba(16,185,129,0.35)",
+        primary: st.id <= 10 ? "#EF4444" : "#10B981",
+        secondary: st.id <= 10 ? "#F87171" : "#34D399",
+        accent: st.id <= 10 ? "#FCA5A5" : "#6EE7B7",
+        background: st.id <= 10 ? "rgba(239,68,68,0.08)" : "rgba(16,185,129,0.08)",
+        border: st.id <= 10 ? "rgba(239,68,68,0.35)" : "rgba(16,185,129,0.35)",
         heading: "#FFFFFF",
         content: "#E2E8F0",
-        button: st.id <= 20 ? "#DC2626" : "#059669",
-        buttonHover: st.id <= 20 ? "#B91C1C" : "#047857",
-        glow: st.id <= 20 ? "rgba(239,68,68,0.45)" : "rgba(16,185,129,0.45)",
+        button: st.id <= 10 ? "#DC2626" : "#059669",
+        buttonHover: st.id <= 10 ? "#B91C1C" : "#047857",
+        glow: st.id <= 10 ? "rgba(239,68,68,0.45)" : "rgba(16,185,129,0.45)",
       }
     );
   };
@@ -236,8 +237,8 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
   const filteredProblemStatements = allProblemStatements.filter((st) => {
     const matchesCategory =
       psCategoryFilter === "All" ||
-      (psCategoryFilter === "Healthcare" && st.id <= 20) ||
-      (psCategoryFilter === "Environmental" && st.id > 20);
+      (psCategoryFilter === "Healthcare" && st.id <= 10) ||
+      (psCategoryFilter === "Environmental" && st.id > 10);
 
     const q = psSearchQuery.toLowerCase();
     const matchesQuery =
@@ -660,19 +661,29 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                 </div>
               </div>
 
-              {/* Show Selected PS Details summary if picked */}
+              {/* Show Selected PS Details summary with Image Thumbnail Card if picked */}
               {selectedPS && (
-                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-sky-400/30 text-xs flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-mono text-sky-400 uppercase font-bold block">
-                      SELECTED PROBLEM STATEMENT
-                    </span>
-                    <span className="text-white font-bold text-sm">ID #{selectedPS.id} • {selectedPS.title}</span>
+                <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-sky-400/40 text-xs flex items-center justify-between shadow-lg">
+                  <div className="flex items-center gap-3 truncate">
+                    {/* Image Thumbnail Card */}
+                    <div className="w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border border-sky-400/40 shrink-0 relative shadow-md bg-black/60">
+                      <img src={getPSImage(selectedPS)} alt={selectedPS.title} className="w-full h-full object-cover" />
+                      <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-black/80 text-sky-300 border border-sky-400/40">
+                        #{selectedPS.id}
+                      </div>
+                    </div>
+                    <div className="truncate">
+                      <span className="text-[10px] font-mono text-sky-400 uppercase font-bold block">
+                        SELECTED PROBLEM STATEMENT
+                      </span>
+                      <span className="text-white font-bold text-xs sm:text-sm truncate block">{selectedPS.title}</span>
+                      <span className="text-[10px] font-mono text-slate-300 block">{selectedPS.category} AI Track</span>
+                    </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => setPsModalOpen(true)}
-                    className="px-3 py-1 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 rounded-lg text-sky-300 text-[11px] font-mono font-bold shrink-0 ml-3 cursor-pointer"
+                    className="px-3 py-1.5 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 rounded-xl text-sky-300 text-[11px] font-mono font-bold shrink-0 ml-3 cursor-pointer transition-colors shadow"
                   >
                     Change PS
                   </button>
@@ -1143,10 +1154,10 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
               <div>
                 <span className="text-xs font-mono text-sky-400 uppercase tracking-widest font-black flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-sky-400" />
-                  <span>SELECT PROBLEM STATEMENT (40 PS)</span>
+                  <span>SELECT PROBLEM STATEMENT (20 PS)</span>
                 </span>
                 <h3 className="text-lg sm:text-2xl font-black text-white mt-0.5">
-                  Click Any Statement to Select for Your Team
+                  Click Any Problem Statement Card to Select for Your Team
                 </h3>
               </div>
 
@@ -1173,7 +1184,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                         : "text-slate-300 hover:bg-white/10"
                     }`}
                   >
-                    All (40)
+                    All (20)
                   </button>
                   <button
                     type="button"
@@ -1184,7 +1195,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                         : "text-slate-300 hover:bg-white/10"
                     }`}
                   >
-                    Healthcare (1-20)
+                    Healthcare (1-10)
                   </button>
                   <button
                     type="button"
@@ -1195,7 +1206,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                         : "text-slate-300 hover:bg-white/10"
                     }`}
                   >
-                    Environmental (21-40)
+                    Environmental (11-20)
                   </button>
                 </div>
 
@@ -1209,21 +1220,22 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
               </div>
             </div>
 
-            {/* Statements List Grid (Crisp: ID + Name/Title + Color Theme) */}
-            <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {/* Statements List Grid with Image Cards */}
+            <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
               {filteredProblemStatements.map((st) => {
                 const stStyle = getStyleForPS(st);
                 const isSelected = selectedPS?.id === st.id;
+                const psImg = getPSImage(st);
 
                 return (
                   <div
                     key={st.id}
                     onClick={() => {
                       setSelectedPS(st);
-                      setTrack(st.id <= 20 ? "Healthcare AI" : "Environmental AI");
+                      setTrack(st.id <= 10 ? "Healthcare AI" : "Environmental AI");
                       setPsModalOpen(false);
                     }}
-                    className={`rounded-2xl p-4 border flex items-center justify-between cursor-pointer transition-all hover:scale-[1.01] hover:brightness-125 relative group shadow-md ${
+                    className={`rounded-2xl p-3 sm:p-3.5 border flex items-center justify-between cursor-pointer transition-all hover:scale-[1.01] hover:brightness-125 relative group shadow-lg ${
                       isSelected ? "ring-2 ring-white scale-[1.01]" : ""
                     }`}
                     style={{
@@ -1231,25 +1243,26 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                       borderColor: isSelected ? stStyle.accent : stStyle.border,
                     }}
                   >
-                    <div className="flex items-center gap-3.5 pr-2 truncate">
-                      {/* ID Badge */}
-                      <span
-                        className="px-3 py-1 rounded-xl text-xs font-mono font-black border shrink-0 shadow-inner"
-                        style={{
-                          backgroundColor: "rgba(0,0,0,0.8)",
-                          borderColor: stStyle.secondary,
-                          color: stStyle.accent,
-                        }}
-                      >
-                        ID #{st.id}
-                      </span>
+                    <div className="flex items-center gap-3 pr-2 truncate min-w-0">
+                      {/* Image Thumbnail Card */}
+                      <div className="w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden shrink-0 border border-white/20 relative shadow-md bg-black/60">
+                        <img
+                          src={psImg}
+                          alt={st.title}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                        <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-black/80 text-white border border-white/20 shadow">
+                          #{st.id}
+                        </div>
+                      </div>
 
                       {/* Statement Name & Category */}
                       <div className="truncate">
-                        <h4 className="text-sm font-extrabold truncate" style={{ color: stStyle.heading }}>
+                        <h4 className="text-xs sm:text-sm font-extrabold truncate" style={{ color: stStyle.heading }}>
                           {st.title}
                         </h4>
-                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-semibold">
+                        <span className="text-[10px] font-mono text-slate-300 uppercase tracking-wider block font-semibold mt-0.5">
                           {st.category} AI • {st.difficulty}
                         </span>
                       </div>
@@ -1257,7 +1270,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
 
                     {/* Action Icon / Check */}
                     <div
-                      className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-all"
+                      className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-all ml-2"
                       style={{
                         backgroundColor: stStyle.button,
                         borderColor: stStyle.secondary,

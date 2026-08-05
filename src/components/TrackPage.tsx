@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Sparkles, X, HeartPulse, Leaf, Search, Tag, CheckCircle2, ChevronRight } from "lucide-react";
+import { ArrowLeft, Sparkles, X, HeartPulse, Leaf, Search, Tag, CheckCircle2, ChevronRight, Maximize2 } from "lucide-react";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
   ENVIRONMENTAL_PROBLEM_STATEMENTS,
   HEALTHCARE_STYLES,
   ENVIRONMENTAL_STYLES,
+  getPSImage,
 } from "../data/problemStatements";
 import type { ProblemStatement, ProblemStatementStyle } from "../data/problemStatements";
 
@@ -147,6 +148,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {filteredStatements.map((st) => {
             const stStyle = getStyleForId(st.id);
+            const psImage = getPSImage(st);
 
             return (
               <motion.div
@@ -155,38 +157,65 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between border backdrop-blur-xl shadow-xl relative overflow-hidden transition-all group"
+                className="rounded-3xl p-5 sm:p-6 flex flex-col justify-between border backdrop-blur-xl shadow-2xl relative overflow-hidden transition-all group"
                 style={{
                   backgroundColor: stStyle.background,
                   borderColor: stStyle.border,
                 }}
               >
                 <div>
-                  {/* Top Bar: ID Pill & Difficulty */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span
-                      className="px-3 py-1 rounded-full text-xs font-mono font-black border"
-                      style={{
-                        backgroundColor: "rgba(0,0,0,0.6)",
-                        borderColor: stStyle.secondary,
-                        color: stStyle.accent,
-                      }}
-                    >
-                      ID #{st.id}
-                    </span>
+                  {/* Image Card Container */}
+                  <div
+                    onClick={() => setSelectedStatement(st)}
+                    className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-4 group/img border border-white/15 shadow-lg cursor-pointer bg-black/60"
+                  >
+                    <img
+                      src={psImage}
+                      alt={st.title}
+                      className="w-full h-full object-cover group-hover/img:scale-108 transition-transform duration-500 ease-out"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#080c17] via-black/30 to-transparent opacity-85 group-hover/img:opacity-50 transition-opacity" />
 
-                    <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-extrabold uppercase bg-black/50 text-slate-300 border border-white/10">
-                      {st.difficulty}
-                    </span>
+                    {/* Top Left ID Badge */}
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 z-10">
+                      <span
+                        className="px-2.5 py-0.5 rounded-lg text-xs font-mono font-black border backdrop-blur-md shadow-md"
+                        style={{
+                          backgroundColor: "rgba(3, 6, 13, 0.8)",
+                          borderColor: stStyle.secondary,
+                          color: stStyle.accent,
+                        }}
+                      >
+                        ID #{st.id}
+                      </span>
+                    </div>
+
+                    {/* Top Right Difficulty */}
+                    <div className="absolute top-2.5 right-2.5 z-10">
+                      <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-extrabold uppercase bg-black/80 backdrop-blur-md text-slate-200 border border-white/15 shadow-md">
+                        {st.difficulty}
+                      </span>
+                    </div>
+
+                    {/* Bottom Overlay Info */}
+                    <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between z-10">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-300 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded border border-sky-400/30">
+                        {st.category} AI
+                      </span>
+                      <span className="text-[10px] font-mono text-white bg-sky-500/80 backdrop-blur-md px-2 py-0.5 rounded border border-sky-300/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center gap-1 shadow-lg font-bold">
+                        <Maximize2 className="w-3 h-3 text-white" /> View Image
+                      </span>
+                    </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-extrabold mb-3 leading-snug" style={{ color: stStyle.heading }}>
+                  <h3 className="text-xl font-extrabold mb-2.5 leading-snug" style={{ color: stStyle.heading }}>
                     {st.title}
                   </h3>
 
                   {/* Card Description */}
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5 line-clamp-3">
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-4 line-clamp-3">
                     {st.cardDescription}
                   </p>
 
@@ -243,7 +272,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
               className="relative w-full max-w-3xl rounded-3xl bg-[#090d19] border border-white/20 p-6 sm:p-10 shadow-[0_0_80px_rgba(0,0,0,0.95)] max-h-[90vh] overflow-y-auto z-10 text-left"
             >
               {/* Top Close Button */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                 <div className="flex items-center gap-3">
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-black bg-sky-500/20 text-sky-300 border border-sky-400/40">
                     ID #{selectedStatement.id}
@@ -259,6 +288,30 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                 >
                   <X className="w-5 h-5" />
                 </button>
+              </div>
+
+              {/* Problem Statement Hero Image Card in Modal */}
+              <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden mb-6 border border-white/20 shadow-2xl group bg-black/80">
+                <img
+                  src={getPSImage(selectedStatement)}
+                  alt={selectedStatement.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#090d19] via-black/20 to-transparent" />
+                
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-black/80 backdrop-blur-md text-sky-300 border border-sky-400/40 shadow-md">
+                    Problem Statement Card #{selectedStatement.id}
+                  </span>
+                  <a
+                    href={getPSImage(selectedStatement)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-sky-500/80 hover:bg-sky-400 text-white backdrop-blur-md border border-sky-300/40 flex items-center gap-1.5 transition-all shadow-lg"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5" /> Full Image
+                  </a>
+                </div>
               </div>
 
               {/* Title */}

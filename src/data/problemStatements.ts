@@ -1,3 +1,5 @@
+import { getProblemStatementImage } from "../lib/psImages";
+
 export interface ReadMoreDetails {
   background: string;
   challenge: string;
@@ -17,7 +19,12 @@ export interface ProblemStatement {
   sdgs: string[];
   tags: string[];
   cardDescription: string;
+  image?: string;
   readMore: ReadMoreDetails;
+}
+
+export function getPSImage(st: ProblemStatement | { id: number; image?: string }): string {
+  return st.image || getProblemStatementImage(st.id);
 }
 
 export interface ProblemStatementStyle {
