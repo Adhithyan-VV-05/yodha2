@@ -254,25 +254,33 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
 
     // Main 3D Logo Sphere
     const ballRadius = 1.35;
-    const sphereGeo = own(new THREE.SphereGeometry(ballRadius, 32, 32));
+    const sphereGeo = own(new THREE.SphereGeometry(ballRadius, 128, 128));
 
     const logoCanvas = document.createElement("canvas");
-    logoCanvas.width = 1024;
-    logoCanvas.height = 512;
+    logoCanvas.width = 4096;
+    logoCanvas.height = 2048;
     const lctx = logoCanvas.getContext("2d");
     const sphereTexture = own(new THREE.CanvasTexture(logoCanvas));
     sphereTexture.wrapS = THREE.RepeatWrapping;
     sphereTexture.wrapT = THREE.ClampToEdgeWrapping;
+    sphereTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const maxAniso = renderer.capabilities.getMaxAnisotropy();
+    sphereTexture.anisotropy = Math.max(1, maxAniso);
+    sphereTexture.generateMipmaps = true;
+    sphereTexture.minFilter = THREE.LinearMipmapLinearFilter;
 
     if (lctx) {
+      lctx.imageSmoothingEnabled = true;
+      lctx.imageSmoothingQuality = "high";
       lctx.fillStyle = "#000000";
-      lctx.fillRect(0, 0, 1024, 512);
+      lctx.fillRect(0, 0, 4096, 2048);
       const img = new Image();
       const paintLogo = () => {
-        const logoSize = 420;
-        const topY = (512 - logoSize) / 2;
-        lctx.drawImage(img, 256 - logoSize / 2, topY, logoSize, logoSize);
-        lctx.drawImage(img, 768 - logoSize / 2, topY, logoSize, logoSize);
+        const logoSize = 1560;
+        const topY = (2048 - logoSize) / 2;
+        lctx.drawImage(img, 1024 - logoSize / 2, topY, logoSize, logoSize);
+        lctx.drawImage(img, 3072 - logoSize / 2, topY, logoSize, logoSize);
         sphereTexture.needsUpdate = true;
       };
       img.onload = paintLogo;
@@ -286,8 +294,8 @@ export function Intro3DCanvas({ progress, isEnding, onSequenceComplete }: Intro3
         emissiveMap: sphereTexture,
         emissive: 0xffffff,
         emissiveIntensity: 0.9,
-        roughness: 0.15,
-        metalness: 0.88,
+        roughness: 0.08,
+        metalness: 0.92,
         color: 0x020308,
       })
     );

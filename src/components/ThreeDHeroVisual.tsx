@@ -46,6 +46,9 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
       renderer.setSize(width, height, false);
       // High pixel ratio up to 3 for crystal-clear sharp rendering on mobile and PC
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 3));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
     } catch {
       setHasContextError(true);
       return;
@@ -55,36 +58,41 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     scene.add(mainGroup);
 
     const sphereRadius = 1.55;
-    const sphereGeo = new THREE.SphereGeometry(sphereRadius, 64, 64);
+    // 128x128 ultra-smooth sphere geometry
+    const sphereGeo = new THREE.SphereGeometry(sphereRadius, 128, 128);
 
-    // ULTRA HD TEXTURE CANVAS (2048 x 1024)
+    // ULTRA HD 4K TEXTURE CANVAS (4096 x 2048)
     const canvasTex = document.createElement("canvas");
-    canvasTex.width = 2048;
-    canvasTex.height = 1024;
+    canvasTex.width = 4096;
+    canvasTex.height = 2048;
     const ctx = canvasTex.getContext("2d");
 
     const sphereTexture = new THREE.CanvasTexture(canvasTex);
     sphereTexture.wrapS = THREE.RepeatWrapping;
     sphereTexture.wrapT = THREE.ClampToEdgeWrapping;
-    // PREVENT DOWN-SAMPLING BLUR
-    sphereTexture.generateMipmaps = false;
-    sphereTexture.minFilter = THREE.LinearFilter;
+    sphereTexture.colorSpace = THREE.SRGBColorSpace;
+
+    // MAX ANISOTROPIC FILTERING (Prevents blur when sphere rotates)
+    const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
+    sphereTexture.anisotropy = Math.max(1, maxAnisotropy);
+    sphereTexture.generateMipmaps = true;
+    sphereTexture.minFilter = THREE.LinearMipmapLinearFilter;
     sphereTexture.magFilter = THREE.LinearFilter;
 
     const sphereMat = new THREE.MeshStandardMaterial({
       map: sphereTexture,
       emissiveMap: sphereTexture,
       emissive: 0xffffff,
-      emissiveIntensity: 0.85,
-      roughness: 0.1,
-      metalness: 0.9,
+      emissiveIntensity: 0.88,
+      roughness: 0.08,
+      metalness: 0.92,
       color: 0x000000,
     });
 
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     mainGroup.add(sphereMesh);
 
-    // Load High-Res Logo Image & Render Crisp Texture
+    // Load High-Res Logo Image & Render Crisp 4K Texture
     const img = new Image();
     img.src = logo;
 
@@ -94,13 +102,13 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
       ctx.imageSmoothingQuality = "high";
 
       ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, 2048, 1024);
+      ctx.fillRect(0, 0, 4096, 2048);
 
-      const logoSize = 780;
-      const topY = (1024 - logoSize) / 2;
+      const logoSize = 1560;
+      const topY = (2048 - logoSize) / 2;
 
-      ctx.drawImage(img, 512 - logoSize / 2, topY, logoSize, logoSize);
-      ctx.drawImage(img, 1536 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, 1024 - logoSize / 2, topY, logoSize, logoSize);
+      ctx.drawImage(img, 3072 - logoSize / 2, topY, logoSize, logoSize);
 
       sphereTexture.needsUpdate = true;
       setIs3DBallReady(true);
@@ -143,19 +151,21 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
     scene.add(particleSystem);
 
     // Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x38bdf8, 4.0);
+    const keyLight = new THREE.DirectionalLight(0x38bdf8, 4.2);
     keyLight.position.set(6, 5, 6);
     scene.add(keyLight);
 
-    const backLight = new THREE.DirectionalLight(0xa855f7, 3.2);
+    const backLight = new THREE.DirectionalLight(0xa855f7, 3.4);
     backLight.position.set(-6, -4, -6);
     scene.add(backLight);
 
     let targetRotationX = 0;
     let targetRotationY = 0;
+    let isInteracting = false;
+    let disturbanceTimer: ReturnType<typeof setTimeout> | null = null;
 
     const handleMove = (clientX: number, clientY: number) => {
       const rect = container.getBoundingClientRect();
@@ -165,6 +175,17 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
 
       targetRotationY = mouseX * 0.85;
       targetRotationX = mouseY * 0.85;
+      isInteracting = true;
+
+      if (disturbanceTimer) clearTimeout(disturbanceTimer);
+      disturbanceTimer = setTimeout(() => {
+        isInteracting = false;
+      }, 1000);
+    };
+
+    const handlePointerEnd = () => {
+      isInteracting = false;
+      if (disturbanceTimer) clearTimeout(disturbanceTimer);
     };
 
     const onMouseMove = (e: MouseEvent) => handleMove(e.clientX, e.clientY);
@@ -176,6 +197,9 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
 
     container.addEventListener("mousemove", onMouseMove);
     container.addEventListener("touchmove", onTouchMove, { passive: true });
+    container.addEventListener("mouseleave", handlePointerEnd);
+    container.addEventListener("touchend", handlePointerEnd);
+    container.addEventListener("touchcancel", handlePointerEnd);
 
     const handleResize = () => {
       if (!containerRef.current || !canvasRef.current) return;
@@ -241,8 +265,14 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
         sphereMesh.position.y = Math.sin(elapsedTime * 3) * 0.1;
       }
 
-      mainGroup.rotation.y += (targetRotationY - mainGroup.rotation.y) * 0.08;
-      mainGroup.rotation.x += (targetRotationX - mainGroup.rotation.x) * 0.08;
+      // Smooth return to upright default orientation when undisturbed or unhovered
+      if (!isInteracting && !isHovered) {
+        targetRotationX += (0 - targetRotationX) * 0.04;
+        targetRotationY += (0 - targetRotationY) * 0.04;
+      }
+
+      mainGroup.rotation.y += (targetRotationY - mainGroup.rotation.y) * 0.06;
+      mainGroup.rotation.x += (targetRotationX - mainGroup.rotation.x) * 0.06;
 
       renderer.render(scene, camera);
     };
@@ -251,8 +281,12 @@ export function ThreeDHeroVisual({ isLoader = false, progress = 0, isEnding = fa
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      if (disturbanceTimer) clearTimeout(disturbanceTimer);
       container.removeEventListener("mousemove", onMouseMove);
       container.removeEventListener("touchmove", onTouchMove);
+      container.removeEventListener("mouseleave", handlePointerEnd);
+      container.removeEventListener("touchend", handlePointerEnd);
+      container.removeEventListener("touchcancel", handlePointerEnd);
       resizeObserver?.disconnect();
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
