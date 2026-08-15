@@ -15,10 +15,10 @@ export function YodhaTitleBanner({ size = "md", className = "", align = "center"
   }[size];
 
   const warriorSizes = {
-    sm: "h-6 sm:h-8 w-full max-w-[260px] sm:max-w-[340px]",
-    md: "h-8 sm:h-12 md:h-14 lg:h-16 w-full max-w-[320px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[660px]",
-    lg: "h-10 sm:h-14 md:h-16 lg:h-20 w-full max-w-[400px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[780px]",
-    xl: "h-14 sm:h-20 md:h-24 lg:h-28 w-full max-w-[500px] sm:max-w-[700px] md:max-w-[850px] lg:max-w-[950px]",
+    sm: "w-full max-w-[280px] sm:max-w-[340px] h-auto max-h-12",
+    md: "w-full max-w-[340px] sm:max-w-[500px] md:max-w-[620px] lg:max-w-[740px] h-auto max-h-16 sm:max-h-24 md:max-h-28",
+    lg: "w-full max-w-[380px] sm:max-w-[580px] md:max-w-[720px] lg:max-w-[850px] h-auto max-h-20 sm:max-h-28 md:max-h-32",
+    xl: "w-full max-w-[480px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1100px] h-auto max-h-24 sm:max-h-36 md:max-h-40",
   }[size];
 
   const alignmentClass = align === "left" ? "items-center lg:items-start" : "items-center";
