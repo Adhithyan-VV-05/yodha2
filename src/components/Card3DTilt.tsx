@@ -5,14 +5,14 @@ interface Card3DTiltProps {
   children: React.ReactNode;
   className?: string;
   intensity?: number;
-  glowColor?: string;
+  bgImage?: string;
 }
 
 export function Card3DTilt({
   children,
   className = "",
   intensity = 15,
-  glowColor = "rgba(56, 189, 248, 0.4)",
+  bgImage,
 }: Card3DTiltProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
@@ -57,7 +57,7 @@ export function Card3DTilt({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative perspective-1000 ${className}`}
+      className={`relative perspective-1000 shine-sweep ${className}`}
       style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
     >
       <motion.div
@@ -72,20 +72,33 @@ export function Card3DTilt({
           damping: 25,
           mass: 0.5,
         }}
-        className="w-full h-full relative"
+        className="w-full h-full relative overflow-hidden rounded-3xl"
         style={{ transformStyle: "preserve-3d" }}
       >
-        {/* Dynamic Holographic Cursor Spotlight Sheen */}
+        {bgImage && (
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <img
+              src={bgImage}
+              alt=""
+              className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-25 filter brightness-90 contrast-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#02040a] via-[#02040a]/85 to-[#02040a]/60 z-10" />
+          </div>
+        )}
+
+        {/* Dynamic Holographic Dark Glass Sheen */}
         {isHovered && (
           <div
-            className="absolute inset-0 rounded-[inherit] pointer-events-none z-30 transition-opacity duration-300 opacity-100"
+            className="absolute inset-0 rounded-[inherit] pointer-events-none z-20 transition-opacity duration-300 opacity-100"
             style={{
-              background: `radial-gradient(600px circle at ${glowPos.x}% ${glowPos.y}%, ${glowColor}, transparent 40%)`,
+              background: `radial-gradient(500px circle at ${glowPos.x}% ${glowPos.y}%, rgba(255, 255, 255, 0.08), transparent 45%)`,
               mixBlendMode: "screen",
             }}
           />
         )}
-        {children}
+        <div className="relative z-10 w-full h-full flex flex-col justify-between">
+          {children}
+        </div>
       </motion.div>
     </div>
   );

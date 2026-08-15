@@ -40,67 +40,67 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        {/* Floating Glass Pill Container with Dynamic Full Perimeter Scroll Border */}
+        {/* Floating Glass Pill Container with Dynamic Silver-Blue Scroll Border */}
         <div className="relative p-[1.5px] rounded-full overflow-hidden transition-all duration-500">
           
-          {/* Dynamic Perimeter Border Fill starting from bottom */}
+          {/* Dynamic Silver-Blue Perimeter Border Fill starting from bottom */}
           <div
             className="absolute inset-0 rounded-full pointer-events-none transition-all"
             style={{
-              background: `conic-gradient(from 180deg at 50% 50%, #38bdf8 0%, #818cf8 ${scrollProgress}%, rgba(255,255,255,0.12) ${scrollProgress}%, rgba(255,255,255,0.12) 100%)`,
+              background: `conic-gradient(from 180deg at 50% 50%, #2563eb 0%, #cbd5e1 ${scrollProgress}%, rgba(148,163,184,0.2) ${scrollProgress}%, rgba(255,255,255,0.1) 100%)`,
             }}
           />
 
-          {/* Inner Content Body */}
+          {/* Inner Content Body (Ultra Luxury Metallic Chrome Theme) */}
           <div
-            className={`relative flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-500 ${
+            className={`relative flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-500 border border-slate-400/30 ${
               scrolled
-                ? "bg-[#04060b]/95 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.85)]"
-                : "bg-black/70 backdrop-blur-xl shadow-lg"
+                ? "bg-gradient-to-r from-slate-950/98 via-slate-900/98 to-slate-950/98 backdrop-blur-2xl shadow-[0_4px_30px_rgba(203,213,225,0.2)]"
+                : "bg-gradient-to-r from-slate-950/90 via-slate-900/90 to-slate-950/90 backdrop-blur-xl shadow-xl"
             }`}
           >
-            {/* BRAND IDENTITY WITH LARGER SNUG-FIT 3D INTERACTIVE BALL */}
+            {/* BRAND IDENTITY */}
             <a href="#" className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0">
               <InteractiveLogoBall size="md" />
               <div className="flex flex-col justify-center">
-                <span className="font-black tracking-tight text-white text-sm sm:text-lg leading-none group-hover:text-sky-300 transition-colors">
-                  YODHA <span className="text-sky-400 font-extrabold">2.0</span>
+                <span className="font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 text-sm sm:text-lg leading-none group-hover:brightness-125 transition-all">
+                  YODHA <span className="text-slate-100 font-black">2.0</span>
                 </span>
-                <span className="text-[8px] sm:text-[9px] font-mono text-emerald-400 font-extrabold uppercase tracking-widest mt-0.5 flex items-center gap-1">
-                  <Shield className="w-2.5 h-2.5 text-emerald-400 hidden sm:inline" />
-                  <span>AI HACKATHON</span>
+                <span className="text-[8px] sm:text-[9px] font-mono text-slate-300 font-extrabold uppercase tracking-widest mt-0.5 flex items-center gap-1">
+                  <Shield className="w-2.5 h-2.5 text-blue-400 hidden sm:inline" />
+                  <span>WARRIORS OF AI</span>
                 </span>
               </div>
             </a>
 
-            {/* DESKTOP NAV LINKS */}
-            <nav className="hidden md:flex items-center gap-1 bg-white/[0.05] border border-white/10 backdrop-blur-xl rounded-full px-3 py-1 shadow-inner">
+            {/* DESKTOP NAV LINKS (METALLIC CHROME PILL DOCK) */}
+            <nav className="hidden md:flex items-center gap-1 bg-slate-900/90 border border-slate-400/40 backdrop-blur-xl rounded-full px-3 py-1 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="px-4 py-1.5 text-xs font-bold text-slate-300 hover:text-white hover:bg-gradient-to-r hover:from-sky-500/20 hover:to-indigo-500/20 rounded-full transition-all duration-300 border border-transparent hover:border-sky-400/30"
+                  className="px-4 py-1.5 text-xs font-black text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 border border-transparent hover:border-slate-300/50 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] uppercase tracking-wider"
                 >
                   {link.name}
                 </a>
               ))}
             </nav>
 
-            {/* DESKTOP REGISTER CTA BUTTON */}
+            {/* DESKTOP REGISTER CTA BUTTON (METALLIC SILVER) */}
             <div className="hidden md:flex items-center gap-4">
               <motion.button
-                whileHover={{ scale: 1.06, boxShadow: "0 0 30px rgba(56,189,248,0.6)" }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => {
                   onOpenRegister();
                   const el = document.getElementById("register");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black text-xs rounded-full shadow-lg transition-all uppercase tracking-widest cursor-pointer border border-white/20 relative z-30 pointer-events-auto"
+                className="btn-metallic-silver flex items-center gap-2 px-6 py-2.5 text-xs rounded-full uppercase tracking-widest cursor-pointer relative z-30 pointer-events-auto"
               >
-                <Sparkles className="w-3.5 h-3.5 text-sky-200 animate-spin" />
+                <Sparkles className="w-3.5 h-3.5 text-slate-950 animate-spin" />
                 <span>Register Team</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-slate-950" />
               </motion.button>
             </div>
 
@@ -108,7 +108,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             <div className="flex md:hidden items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 text-slate-200 hover:text-white rounded-full bg-white/10 border border-white/15 backdrop-blur-md cursor-pointer"
+                className="p-2 text-slate-200 hover:text-white rounded-full bg-slate-900/90 border border-slate-400/60 backdrop-blur-md cursor-pointer"
               >
                 {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
@@ -117,7 +117,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
         </div>
       </div>
 
-      {/* MOBILE MENU DROPDOWN DRAWER */}
+      {/* MOBILE MENU DROPDOWN DRAWER (METALLIC CHROME) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -127,20 +127,20 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="md:hidden max-w-7xl mx-auto px-4 mt-2"
           >
-            <div className="bg-[#04060b]/98 border border-sky-500/30 backdrop-blur-2xl px-6 py-6 rounded-3xl shadow-2xl flex flex-col gap-4">
+            <div className="bg-slate-950/98 border border-slate-400/50 backdrop-blur-2xl px-6 py-6 rounded-3xl shadow-[0_10px_35px_rgba(0,0,0,0.8)] flex flex-col gap-4">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-base font-bold text-slate-200 hover:text-sky-400 py-1 transition-colors flex items-center justify-between"
+                  className="text-base font-black text-slate-200 hover:text-white py-1 transition-colors flex items-center justify-between uppercase tracking-wider"
                 >
                   <span>{link.name}</span>
-                  <ArrowUpRight className="w-4 h-4 text-slate-500" />
+                  <ArrowUpRight className="w-4 h-4 text-slate-400" />
                 </a>
               ))}
 
-              <div className="pt-4 border-t border-white/10 mt-1">
+              <div className="pt-4 border-t border-white/15 mt-1">
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
@@ -148,11 +148,11 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                     const el = document.getElementById("register");
                     if (el) el.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="w-full py-3.5 px-6 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-extrabold text-xs rounded-2xl shadow-[0_0_20px_rgba(56,189,248,0.4)] uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-white/20 relative z-30 pointer-events-auto"
+                  className="btn-metallic-silver w-full py-3.5 px-6 text-xs rounded-2xl uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer relative z-30 pointer-events-auto"
                 >
-                  <Sparkles className="w-4 h-4 text-sky-200" />
+                  <Sparkles className="w-4 h-4 text-slate-950" />
                   <span>Register Team Now</span>
-                  <ArrowUpRight className="w-4 h-4" />
+                  <ArrowUpRight className="w-4 h-4 text-slate-950" />
                 </button>
               </div>
             </div>

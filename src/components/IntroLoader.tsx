@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import logo from "../assets/logo.png";
+import { YodhaTitleBanner } from "./YodhaTitleBanner";
 
 interface IntroLoaderProps {
   onComplete: () => void;
@@ -26,7 +26,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
       // 1. Preload Logo Image
       const logoPromise = new Promise((resolve) => {
         const img = new Image();
-        img.src = logo;
+        img.src = "/logo.png";
         if (img.complete) {
           updateProgress();
           resolve(true);
@@ -69,7 +69,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
           animId = requestAnimationFrame(stepFill);
         } else {
           setProgress(100);
-          timerId = window.setTimeout(onComplete, 2000); // Hold outer ring 2s post load
+          timerId = window.setTimeout(onComplete, 300);
         }
       };
 
@@ -92,36 +92,39 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         opacity: 0,
         transition: { duration: 0.4, ease: "easeInOut" },
       }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#020308] text-white overflow-hidden select-none px-4"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#020617] text-white overflow-hidden select-none px-4"
     >
-      {/* Center Minimalist Spinner & 2D Logo */}
-      <div className="flex flex-col items-center justify-center text-center">
+      {/* Ambient Background Glow */}
+      <div className="absolute w-[450px] h-[450px] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none" />
+
+      {/* Center Spinner & Background-Removed Spartan Emblem Logo */}
+      <div className="flex flex-col items-center justify-center text-center relative z-10">
         <div className="relative flex items-center justify-center mb-6">
-          {/* Glowing Concentric Orbit Ring */}
-          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-2 border-sky-500/20 border-t-sky-400 animate-spin shadow-[0_0_25px_rgba(56,189,248,0.4)]" />
-          <div className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-indigo-500/20 border-b-purple-400 animate-spin-slow" />
+          {/* Glowing Concentric Armor Ring */}
+          <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-2 border-blue-500/30 border-t-blue-400 animate-spin shadow-lg" />
+          <div className="absolute w-20 h-20 sm:w-28 sm:h-28 rounded-full border border-slate-500/30 border-b-slate-300 animate-spin-slow" />
           
-          {/* Center 2D Logo */}
-          <div className="absolute">
-            <img src={logo} alt="Yodha Logo" className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
+          {/* Center Background-Removed Spartan Emblem Logo */}
+          <div className="absolute drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]">
+            <img src="/logo.png" alt="Yodha Spartan Emblem" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
           </div>
         </div>
 
-        {/* Clean Title */}
-        <h2 className="text-xl sm:text-2xl font-black tracking-widest text-white mb-6 uppercase">
-          YODHA 2.0
-        </h2>
+        {/* Dynamic Animated Y-O-D-H-A Title Letters */}
+        <div className="max-w-xs sm:max-w-sm mb-4 px-2">
+          <YodhaTitleBanner size="sm" align="center" />
+        </div>
       </div>
 
-      {/* Minimal Bottom Progress Bar */}
-      <div className="w-full max-w-xs relative">
-        <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-1.5">
-          <span>LOADING</span>
-          <span className="text-sky-400 font-bold">{progress}%</span>
+      {/* Cyber Neon Bottom Progress Bar */}
+      <div className="w-full max-w-xs relative z-10 mt-2">
+        <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+          <span className="tracking-widest uppercase text-[10px] text-blue-300">INITIALIZING AI CORE</span>
+          <span className="text-white font-extrabold">{progress}%</span>
         </div>
-        <div className="w-full h-[3px] bg-white/10 rounded-full overflow-hidden relative">
+        <div className="w-full h-[4px] bg-slate-900 border border-blue-500/20 rounded-full overflow-hidden relative shadow-inner">
           <motion.div
-            className="h-full bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-500 rounded-full shadow-[0_0_12px_rgba(56,189,248,0.8)] transition-all duration-150"
+            className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 rounded-full shadow-lg transition-all duration-150"
             style={{ width: `${progress}%` }}
           />
         </div>

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Globe, Heart, Droplets, Building2, Building, ThermometerSun, Trees, RotateCw } from "lucide-react";
 import { Card3DFlip } from "./Card3DFlip";
+import { CARD_BACKGROUNDS } from "../data/cardBackgrounds";
 
 export function SDGSection() {
   const SDGS = [
@@ -9,65 +10,59 @@ export function SDGSection() {
       title: "Good Health & Well-being",
       icon: <Heart className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Advance AI for disease prevention, diagnosis accuracy, and healthcare accessibility.",
-      color: "bg-[#E5243B]",
-      borderColor: "border-[#E5243B]/60",
-      glowColor: "rgba(229, 36, 59, 0.4)",
+      color: "bg-blue-600",
       flipDir: "horizontal" as const,
+      bgImage: CARD_BACKGROUNDS.sdgs.sdg3,
     },
     {
       code: "SDG 6",
       title: "Clean Water & Sanitation",
       icon: <Droplets className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Develop smart water quality monitoring and resource conservation systems.",
-      color: "bg-[#26BDE2]",
-      borderColor: "border-[#26BDE2]/60",
-      glowColor: "rgba(38, 189, 226, 0.4)",
+      color: "bg-slate-700",
       flipDir: "vertical" as const,
+      bgImage: CARD_BACKGROUNDS.sdgs.sdg6,
     },
     {
       code: "SDG 9",
       title: "Industry & Innovation",
       icon: <Building2 className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Foster sustainable industrial innovation, AI infrastructure, and research.",
-      color: "bg-[#FD6925]",
-      borderColor: "border-[#FD6925]/60",
-      glowColor: "rgba(253, 105, 37, 0.4)",
+      color: "bg-blue-700",
       flipDir: "zoomSlide" as const,
+      bgImage: CARD_BACKGROUNDS.sdgs.sdg9,
     },
     {
       code: "SDG 11",
       title: "Sustainable Cities",
       icon: <Building className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Engineer smart environmental monitoring tools for urban communities.",
-      color: "bg-[#FD9D24]",
-      borderColor: "border-[#FD9D24]/60",
-      glowColor: "rgba(253, 157, 36, 0.4)",
+      color: "bg-slate-800",
       flipDir: "horizontal" as const,
+      bgImage: CARD_BACKGROUNDS.sdgs.sdg11,
     },
     {
       code: "SDG 13",
       title: "Climate Action",
       icon: <ThermometerSun className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Build AI models for climate resilience, forest fire detection, and disaster mitigation.",
-      color: "bg-[#3F7E44]",
-      borderColor: "border-[#3F7E44]/60",
-      glowColor: "rgba(63, 126, 68, 0.4)",
+      color: "bg-blue-800",
       flipDir: "vertical" as const,
+      bgImage: CARD_BACKGROUNDS.sdgs.sdg13,
     },
     {
       code: "SDG 15",
       title: "Life on Land",
       icon: <Trees className="w-6 sm:w-8 h-6 sm:h-8 text-white" />,
       desc: "Protect terrestrial ecosystems, biodiversity, and forestry using AI tools.",
-      color: "bg-[#56C02B]",
-      borderColor: "border-[#56C02B]/60",
-      glowColor: "rgba(86, 192, 43, 0.4)",
+      color: "bg-slate-600",
       flipDir: "zoomSlide" as const,
+      bgImage: CARD_BACKGROUNDS.sdgs.sdg15,
     },
   ];
 
   return (
-    <section className="py-20 sm:py-28 relative overflow-hidden bg-[#04060b]">
+    <section className="py-20 sm:py-28 relative overflow-hidden bg-gradient-to-b from-[#020617] via-[#040c21] to-[#020617] text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -75,16 +70,16 @@ export function SDGSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
+            className="text-xs font-mono text-slate-300 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
           >
-            <Globe className="w-4 h-4 text-emerald-400" />
+            <Globe className="w-4 h-4 text-blue-400" />
             <span>GLOBAL IMPACT FRAMEWORK</span>
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-lime-300 tracking-tight"
+            className="text-2xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-blue-400 tracking-tight"
           >
             UN Sustainable Development Goals
           </motion.h2>
@@ -104,7 +99,7 @@ export function SDGSection() {
             <Card3DFlip
               key={sdg.code}
               flipDirection={sdg.flipDir}
-              glowColor={sdg.glowColor}
+              bgImage={sdg.bgImage}
               className="h-56 sm:h-64"
               front={
                 <div className="flex flex-col items-center justify-center text-center my-auto p-2 sm:p-4">
@@ -116,7 +111,7 @@ export function SDGSection() {
                   </span>
                   <h3 className="text-xs sm:text-lg font-bold text-white leading-snug">{sdg.title}</h3>
                   <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1.5 flex items-center gap-1 opacity-75">
-                    <RotateCw className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-sky-400 animate-spin" /> Flip
+                    <RotateCw className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-blue-400 animate-spin" /> Flip
                   </span>
                 </div>
               }
@@ -135,7 +130,7 @@ export function SDGSection() {
 
                   <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-slate-400">
                     <span>UN Target</span>
-                    <span className="text-emerald-400 font-semibold">Official Alignment</span>
+                    <span className="text-blue-300 font-semibold">Official Alignment</span>
                   </div>
                 </div>
               }

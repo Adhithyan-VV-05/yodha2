@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Sparkles, X, HeartPulse, Leaf, Search, Tag, CheckCircle2, ChevronRight, Maximize2 } from "lucide-react";
+import { YodhaImage } from "./YodhaImage";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
   ENVIRONMENTAL_PROBLEM_STATEMENTS,
@@ -78,9 +79,9 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
         <div className="flex items-center justify-between mb-8 sm:mb-12 border-b border-white/10 pb-6">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-slate-200 hover:text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-lg"
+            className="btn-metallic-silver flex items-center gap-2 px-5 py-2.5 rounded-full text-xs uppercase tracking-wider cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4 text-sky-400" />
+            <ArrowLeft className="w-4 h-4 text-slate-950" />
             <span>Back to Main Page</span>
           </button>
 
@@ -169,7 +170,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                     onClick={() => setSelectedStatement(st)}
                     className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-4 group/img border border-white/15 shadow-lg cursor-pointer bg-black/60"
                   >
-                    <img
+                    <YodhaImage
                       src={psImage}
                       alt={st.title}
                       className="w-full h-full object-cover group-hover/img:scale-108 transition-transform duration-500 ease-out"
@@ -236,14 +237,10 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                 {/* Card Action Button */}
                 <button
                   onClick={() => setSelectedStatement(st)}
-                  className="w-full py-3 px-4 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer border border-white/10 hover:brightness-110"
-                  style={{
-                    backgroundColor: stStyle.button,
-                    color: "#FFFFFF",
-                  }}
+                  className="btn-metallic-silver w-full py-3 px-4 rounded-xl text-xs uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Read Details & Solve</span>
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-4 h-4 text-slate-950" />
                 </button>
               </motion.div>
             );
@@ -292,7 +289,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
 
               {/* Problem Statement Hero Image Card in Modal */}
               <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden mb-6 border border-white/20 shadow-2xl group bg-black/80">
-                <img
+                <YodhaImage
                   src={getPSImage(selectedStatement)}
                   alt={selectedStatement.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
@@ -377,9 +374,9 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                     isHealthcare ? "Healthcare AI" : "Environmental AI"
                   );
                 }}
-                className="w-full py-4 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 text-white font-black rounded-2xl shadow-xl uppercase tracking-widest text-xs sm:text-sm flex items-center justify-center gap-2 hover:brightness-110 cursor-pointer"
+                className="btn-metallic-silver w-full py-4 rounded-2xl uppercase tracking-widest text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Sparkles className="w-4 h-4 text-sky-200 animate-spin" />
+                <Sparkles className="w-4 h-4 text-slate-950 animate-spin" />
                 <span>Register Team for {selectedStatement.category} AI Track</span>
               </button>
             </motion.div>

@@ -14,7 +14,6 @@ import { PastGallerySection } from "./components/PastGallerySection";
 import { CompactFooter } from "./components/CompactFooter";
 import { MinimalBackgroundVisual } from "./components/MinimalBackgroundVisual";
 import { TrackPage } from "./components/TrackPage";
-import { CustomCursor } from "./components/CustomCursor";
 import { RiddleTeaserSection } from "./components/RiddleTeaserSection";
 import { trackUserSession } from "./lib/firebase";
 
@@ -46,11 +45,8 @@ function App() {
   }, [isLoading]);
 
   return (
-    <div className="min-h-screen bg-[#03060d] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-x-hidden">
-      {/* Custom Cyber Pointer Cursor */}
-      <CustomCursor />
-
-      {/* Lightweight Minimalistic Background Video Visual */}
+    <div className="min-h-screen bg-[#020510] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-x-hidden">
+      {/* Fixed Minimalistic Background Canvas Visual */}
       <MinimalBackgroundVisual />
 
       {/* Intro Loader Curtain */}
@@ -58,18 +54,17 @@ function App() {
         {isLoading && <IntroLoader onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* Dynamic View: Track Pages vs Main Landing Page */}
-      {activePage === "healthcare" || activePage === "environmental" ? (
-        <div className={`flex flex-col min-h-screen relative z-10 transition-opacity duration-700 ${isLoading ? "opacity-0 pointer-events-none hidden" : "opacity-100 block"}`}>
+      {/* Main App Experience */}
+      {activePage !== "home" ? (
+        <div className="min-h-screen relative z-20">
+          <Navbar onOpenRegister={() => setRegisterModalOpen(true)} />
           <TrackPage
             trackType={activePage}
             onBack={() => {
               setActivePage("home");
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            onOpenRegisterWithTrack={(tName) => {
-              handleOpenRegisterWithTrack(tName);
-            }}
+            onOpenRegisterWithTrack={handleOpenRegisterWithTrack}
           />
           {registerModalOpen && (
             <RegistrationSection
@@ -85,18 +80,18 @@ function App() {
           {/* Navbar */}
           <Navbar onOpenRegister={() => setRegisterModalOpen(true)} />
 
-          {/* Main Content Sections (All 10 Official Content Sections) */}
+          {/* Main Content Sections (Immediate Loading for Ultra-Fast Instant Scroll) */}
           <main className="flex-grow">
-            {/* 1. Hero Section */}
+            {/* 1. Hero Section (Screen 1: Logo Emblem; Screen 2: Interactive 3D Robot & Details) */}
             <HeroSection onOpenRegister={() => setRegisterModalOpen(true)} />
 
-            {/* Secret Riddle Challenge (Positioned right below Hero Section, 95vw centered) */}
+            {/* Secret Riddle Challenge */}
             <RiddleTeaserSection />
             
-            {/* 2, 3, 4, 5. About Yodha, What You'll Build, Vision, Mission */}
+            {/* 2, 3, 4, 5. About Yodha, Vision, Mission */}
             <AboutSection />
             
-            {/* 6. Hackathon Themes (Innovation Tracks) */}
+            {/* 6. Innovation Tracks */}
             <TracksSection
               onSelectTrack={handleOpenRegisterWithTrack}
               onOpenTrackPage={(tType) => {
@@ -111,13 +106,13 @@ function App() {
             {/* 8. Why Participate? */}
             <WhyParticipateSection />
 
-            {/* 9. Prize Pool & Rewards */}
+            {/* 9. Standalone Prize Rewards & Trophies Section */}
             <PrizesSection onOpenRegister={() => setRegisterModalOpen(true)} />
 
             {/* 10. Closing CTA Section */}
             <ClosingCTA onOpenRegister={() => setRegisterModalOpen(true)} />
 
-            {/* 11. Past Hackathon Movements (Positioned just above footer) */}
+            {/* 11. Past Hackathon Movements */}
             <PastGallerySection />
           </main>
 
@@ -139,3 +134,4 @@ function App() {
 }
 
 export default App;
+

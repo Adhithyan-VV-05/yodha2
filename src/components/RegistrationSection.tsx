@@ -8,6 +8,7 @@ import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
 import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
 import { InteractiveLogoBall } from "./InteractiveLogoBall";
+import { YodhaImage } from "./YodhaImage";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
   ENVIRONMENTAL_PROBLEM_STATEMENTS,
@@ -667,7 +668,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                   <div className="flex items-center gap-3 truncate">
                     {/* Image Thumbnail Card */}
                     <div className="w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border border-sky-400/40 shrink-0 relative shadow-md bg-black/60">
-                      <img src={getPSImage(selectedPS)} alt={selectedPS.title} className="w-full h-full object-cover" />
+                      <YodhaImage src={getPSImage(selectedPS)} alt={selectedPS.title} className="w-full h-full object-cover" />
                       <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-black/80 text-sky-300 border border-sky-400/40">
                         #{selectedPS.id}
                       </div>
@@ -772,17 +773,17 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                   type="button"
                   onClick={handleNextFromStep1}
                   disabled={checkingTeamName || referralCheckState.status === "checking"}
-                  className="px-8 py-3.5 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer disabled:opacity-50"
+                  className="btn-metallic-silver px-8 py-3.5 text-xs rounded-xl flex items-center gap-2 uppercase tracking-widest cursor-pointer disabled:opacity-50"
                 >
                   {checkingTeamName ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
                       <span>Checking Availability...</span>
                     </>
                   ) : (
                     <>
                       <span>Next: Leader Details</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 text-slate-950" />
                     </>
                   )}
                 </button>
@@ -950,7 +951,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                       handleSubmitRegistration();
                     }
                   }}
-                  className="px-8 py-3 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer"
+                  className="btn-metallic-silver px-8 py-3 text-xs rounded-xl flex items-center gap-2 uppercase tracking-widest cursor-pointer"
                 >
                   {teamSize > 1 ? "Next: Member 2" : "Submit Registration"}
                 </button>
@@ -1131,7 +1132,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
                       handleSubmitRegistration();
                     }
                   }}
-                  className="px-8 py-3 bg-gradient-to-r from-sky-400 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center gap-2 uppercase tracking-widest transition-all cursor-pointer"
+                  className="btn-metallic-silver px-8 py-3 text-xs rounded-xl flex items-center gap-2 uppercase tracking-widest cursor-pointer"
                 >
                   {currentStep - 1 < teamSize ? `Next: Member #${currentStep}` : "Submit Team Registration"}
                 </button>
