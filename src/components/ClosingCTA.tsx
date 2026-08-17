@@ -11,7 +11,7 @@ interface ClosingCTAProps {
 
 export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
   return (
-    <section className="py-20 sm:py-28 relative overflow-hidden bg-[#020617]">
+    <section className="py-20 sm:py-28 relative overflow-hidden bg-transparent">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <Card3DTilt intensity={12} bgImage={CARD_BACKGROUNDS.cta.launchpad}>
           <div

@@ -34,7 +34,7 @@ export function PastGallerySection() {
   const chainImages = [...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES];
 
   return (
-    <section className="py-16 sm:py-24 relative overflow-hidden bg-[#02040a] border-t border-b border-sky-500/20 z-20">
+    <section className="py-16 sm:py-24 relative overflow-hidden bg-transparent border-t border-b border-sky-500/20 z-20">
       {/* Ambient Lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-sky-500/15 via-cyan-500/15 to-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
@@ -61,8 +61,8 @@ export function PastGallerySection() {
       {/* CONTINUOUS INFINITE IMAGE CHAIN CAROUSEL (NO CURSOR INTERACTION, ZERO GAPS) */}
       <div className="relative w-full overflow-hidden select-none py-2 pointer-events-none">
         {/* Left & Right Fade Mask Borders */}
-        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-[#02040a] to-transparent z-20 pointer-events-none" />
-        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-[#02040a] to-transparent z-20 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-[#020510]/90 to-transparent z-20 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-[#020510]/90 to-transparent z-20 pointer-events-none" />
 
         <div className="flex w-max gap-4 sm:gap-6 animate-marquee">
           {chainImages.map((src, idx) => (

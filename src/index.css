@@ -188,50 +188,21 @@ input[type="submit"],
   font-weight: 50 250;
 }
 
-/* Card Levitating Floating Keyframes & Motion Classes */
-@keyframes float-card {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes float-card-delayed {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
-}
-
+/* Card Levitating Floating Disabled for Static Premium Clean Look */
 .animate-float-card {
-  animation: float-card 6s ease-in-out infinite;
+  transform: none;
 }
 
 .animate-float-delayed {
-  animation: float-card-delayed 7s ease-in-out infinite 1.5s;
+  transform: none;
 }
 
-/* Card Hover Specular Shine Sweep */
+/* Card Specular Shine Sweep Disabled */
 .shine-sweep {
   position: relative;
-  overflow: hidden;
 }
 .shine-sweep::after {
-  content: "";
-  position: absolute;
-  top: -20%;
-  left: -120%;
-  width: 70%;
-  height: 140%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    transparent 100%
-  );
-  transform: skewX(-25deg);
-  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  z-index: 15;
-}
-.shine-sweep:hover::after {
-  transform: translateX(350%) skewX(-25deg);
+  display: none !important;
 }
 
 /* REALISTIC PREMIUM METALLIC CHROME & PLATINUM SILVER STYLING */

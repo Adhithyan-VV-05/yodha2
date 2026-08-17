@@ -23,7 +23,7 @@ export function AboutSection() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 relative overflow-hidden bg-gradient-to-b from-[#020617] via-[#040c21] to-[#020617] text-white">
+    <section className="py-20 sm:py-28 relative overflow-hidden bg-transparent text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-24">
         
         {/* 1. ABOUT YODHA */}

@@ -62,7 +62,7 @@ export function SDGSection() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 relative overflow-hidden bg-gradient-to-b from-[#020617] via-[#040c21] to-[#020617] text-white">
+    <section className="py-20 sm:py-28 relative overflow-hidden bg-transparent text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">

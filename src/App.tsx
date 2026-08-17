@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
-import { IntroLoader } from "./components/IntroLoader";
-import { Navbar } from "./components/Navbar";
 import { HeroSection } from "./components/HeroSection";
 import { AboutSection } from "./components/AboutSection";
 import { TracksSection } from "./components/TracksSection";
@@ -18,7 +15,6 @@ import { RiddleTeaserSection } from "./components/RiddleTeaserSection";
 import { trackUserSession } from "./lib/firebase";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
   const [activePage, setActivePage] = useState<"home" | "healthcare" | "environmental">("home");
@@ -31,33 +27,23 @@ function App() {
   useEffect(() => {
     // Start Firebase visit increment & session duration tracking telemetry
     const cleanupSessionTracker = trackUserSession();
-
-    if (isLoading) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = "auto";
 
     return () => {
       cleanupSessionTracker();
       document.body.style.overflow = "auto";
     };
-  }, [isLoading]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#020510] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-x-hidden">
       {/* Fixed Minimalistic Background Canvas Visual */}
       <MinimalBackgroundVisual />
 
-      {/* Intro Loader Curtain */}
-      <AnimatePresence mode="wait">
-        {isLoading && <IntroLoader onComplete={() => setIsLoading(false)} />}
-      </AnimatePresence>
-
       {/* Main App Experience */}
       {activePage !== "home" ? (
         <div className="min-h-screen relative z-20">
-          <Navbar onOpenRegister={() => setRegisterModalOpen(true)} />
+          {/* Navbar temporarily removed */}
           <TrackPage
             trackType={activePage}
             onBack={() => {
@@ -76,9 +62,8 @@ function App() {
           <CompactFooter />
         </div>
       ) : (
-        <div className={`flex flex-col min-h-screen relative z-10 transition-opacity duration-700 ${isLoading ? "opacity-0 pointer-events-none hidden" : "opacity-100 block"}`}>
-          {/* Navbar */}
-          <Navbar onOpenRegister={() => setRegisterModalOpen(true)} />
+        <div className="flex flex-col min-h-screen relative z-10 opacity-100 block">
+          {/* Navbar temporarily removed */}
 
           {/* Main Content Sections (Immediate Loading for Ultra-Fast Instant Scroll) */}
           <main className="flex-grow">

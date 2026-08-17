@@ -63,7 +63,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
   };
 
   return (
-    <div className="min-h-screen bg-[#03060d] text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-x-hidden">
+    <div className="min-h-screen bg-transparent text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-x-hidden">
       {/* Dynamic Radial Aura Glow */}
       <div
         className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full blur-[200px] pointer-events-none z-0"

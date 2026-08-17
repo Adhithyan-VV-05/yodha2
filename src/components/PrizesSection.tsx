@@ -48,9 +48,8 @@ function ViewportCenterTrophyCard({
         </div>
 
         <div className="relative z-20">
-          {/* Full-Visibility 3D Trophy Image: Floating UPWARD & OUTSIDE top of card on center scroll */}
+          {/* Full-Visibility 3D Trophy Image */}
           <div className="relative w-full h-44 sm:h-56 mb-4 flex items-center justify-center overflow-visible">
-            <div className={`absolute inset-0 ${glowColorClass} rounded-full blur-3xl group-hover:opacity-100 transition-opacity`} />
             <motion.img
               style={{ y: trophyY, scale: trophyScale }}
               src={trophyImgSrc}
@@ -61,12 +60,6 @@ function ViewportCenterTrophyCard({
 
           {children}
         </div>
-
-        {/* Dynamic Center Specular Light Reflection Sweep across card */}
-        <motion.div
-          style={{ opacity: sheenOpacity, x: sheenX }}
-          className="absolute inset-0 pointer-events-none z-30 bg-gradient-to-r from-transparent via-white/40 to-transparent transform -skew-x-12 rounded-3xl overflow-hidden"
-        />
       </div>
     </div>
   );
@@ -74,7 +67,7 @@ function ViewportCenterTrophyCard({
 
 export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
   return (
-    <section id="prizes" className="py-20 sm:py-28 relative overflow-hidden bg-gradient-to-b from-[#020617] via-[#040d24] to-[#020617] text-white z-20">
+    <section id="prizes" className="py-20 sm:py-28 relative overflow-hidden bg-transparent text-white z-20">
       
       {/* Background Ambient Glow Orbs */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-blue-600/10 rounded-full blur-[160px] pointer-events-none z-0" />
@@ -111,7 +104,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
             trophyAlt="Gold Yodha Champion Trophy"
             glowColorClass="bg-amber-500/20"
             baseTilt={0}
-            className="order-1 md:order-2 p-7 sm:p-8 rounded-3xl bg-slate-950/98 border-2 border-amber-400/70 backdrop-blur-2xl shadow-[0_0_40px_rgba(245,158,11,0.25)] flex flex-col justify-between group cursor-pointer border-t-amber-300"
+            className="order-1 md:order-2 p-7 sm:p-8 rounded-3xl bg-slate-950/98 border-2 border-amber-400/70 backdrop-blur-2xl shadow-2xl flex flex-col justify-between group cursor-pointer border-t-amber-300"
           >
             <div className="flex items-center justify-between mb-3 border-t border-amber-500/20 pt-4">
               <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center">

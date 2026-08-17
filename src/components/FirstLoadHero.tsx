@@ -83,7 +83,7 @@ export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
                 </div>
 
                 {/* Bottom Edge Gradient Fade Mask */}
-                <div className="absolute bottom-0 inset-x-0 h-12 sm:h-16 bg-gradient-to-t from-[#020510] via-[#020510]/75 to-transparent pointer-events-none z-10" />
+                <div className="absolute bottom-0 inset-x-0 h-12 sm:h-16 bg-gradient-to-t from-transparent via-[#020510]/30 to-transparent pointer-events-none z-10" />
               </div>
             </div>
 
