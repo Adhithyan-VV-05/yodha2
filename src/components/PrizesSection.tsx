@@ -10,7 +10,6 @@ function ViewportCenterTrophyCard({
   children,
   trophyImgSrc,
   trophyAlt,
-  glowColorClass = "bg-slate-400/10",
   baseTilt = 0,
   className = "",
 }: {
@@ -30,10 +29,6 @@ function ViewportCenterTrophyCard({
   // 3D Trophy Breakout Float: Float upward (-32px) and scale (1.25x) outside card border at center
   const trophyY = useTransform(scrollYProgress, [0.15, 0.5, 0.85], [0, -32, 0]);
   const trophyScale = useTransform(scrollYProgress, [0.15, 0.5, 0.85], [1, 1.25, 1]);
-  
-  // Light Reflection Opacity & Movement near center
-  const sheenOpacity = useTransform(scrollYProgress, [0.35, 0.5, 0.65], [0, 0.95, 0]);
-  const sheenX = useTransform(scrollYProgress, [0.3, 0.7], ["-120%", "220%"]);
 
   return (
     <div ref={cardRef} className="w-full relative py-6 sm:py-0">

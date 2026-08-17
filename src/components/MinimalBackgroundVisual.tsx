@@ -231,22 +231,41 @@ export function MinimalBackgroundVisual() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#020510]">
-      {/* Desktop View Background Image (bg.png) - z-0 */}
-      <img
-        src="/bg.png"
-        alt=""
-        className="hidden md:block absolute inset-0 w-full h-full object-fill object-center pointer-events-none z-0"
-      />
-      {/* Mobile View Background Image (bg2.png) - z-0 */}
-      <img
-        src="/bg2.png"
-        alt=""
-        className="block md:hidden absolute inset-0 w-full h-full object-fill object-center pointer-events-none z-0"
-      />
-      {/* Canvas for Natural Twinkling Galaxy Stars - z-10 (above background image, below page content) */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block pointer-events-none z-10 opacity-95" />
-    </div>
+    <>
+      {/* Fixed Deep Space Galaxy Background Layer (z-0) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#020510]">
+        {/* PC View Background Image (pc bg.jpeg) */}
+        <img
+          src="/pc bg.jpeg"
+          alt=""
+          className="hidden md:block absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-0"
+        />
+        {/* Mobile View Background Image (mob bg.jpeg) */}
+        <img
+          src="/mob bg.jpeg"
+          alt=""
+          className="block md:hidden absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-0"
+        />
+        {/* Canvas for Live Twinkling Stars - z-10 (above background image, below page content) */}
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block pointer-events-none z-10 opacity-95" />
+      </div>
+
+      {/* Topmost Screen HUD Frame Layer (Topmost Z-Index: z-[9999]) */}
+      <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
+        {/* PC Screen Frame Overlay (frame_pc.png) */}
+        <img
+          src="/frame_pc.png"
+          alt=""
+          className="hidden md:block fixed inset-0 w-full h-full object-fill pointer-events-none z-[9999]"
+        />
+        {/* Mobile Screen Frame Overlay (frame_mob.png) */}
+        <img
+          src="/frame_mob.png"
+          alt=""
+          className="block md:hidden fixed inset-0 w-full h-full object-fill pointer-events-none z-[9999]"
+        />
+      </div>
+    </>
   );
 }
 
