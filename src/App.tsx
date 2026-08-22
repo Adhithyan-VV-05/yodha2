@@ -9,7 +9,7 @@ import { ClosingCTA } from "./components/ClosingCTA";
 import { RegistrationSection } from "./components/RegistrationSection";
 import { PastGallerySection } from "./components/PastGallerySection";
 import { CompactFooter } from "./components/CompactFooter";
-import { MinimalBackgroundVisual } from "./components/MinimalBackgroundVisual";
+import KineticGrid from "./components/ui/kinetic-grid";
 import { TrackPage } from "./components/TrackPage";
 import { RiddleTeaserSection } from "./components/RiddleTeaserSection";
 import { trackUserSession } from "./lib/firebase";
@@ -24,32 +24,80 @@ function App() {
     setRegisterModalOpen(true);
   };
 
+  const handleSelectPage = (page: "home" | "healthcare" | "environmental") => {
+    setActivePage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (page !== "home") {
+      window.history.pushState({ activePage: page }, "");
+    }
+  };
+
   useEffect(() => {
+    const handlePopState = () => {
+      setActivePage("home");
+    };
+    window.addEventListener("popstate", handlePopState);
+
     // Start Firebase visit increment & session duration tracking telemetry
     const cleanupSessionTracker = trackUserSession();
     document.body.style.overflow = "auto";
 
+    // Dynamic Typewriter Document Title Animation
+    const titles = [
+      "YODHA 2.0",
+      "WARRIORS OF AI",
+      "YODHA — WARRIORS OF AI",
+      "JYOTHI ENGINEERING COLLEGE",
+    ];
+    let titleIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const typeTitle = () => {
+      const currentFullTitle = titles[titleIndex];
+
+      if (isDeleting) {
+        charIndex--;
+      } else {
+        charIndex++;
+      }
+
+      document.title = currentFullTitle.substring(0, charIndex) + (charIndex < currentFullTitle.length ? " ▌" : "");
+
+      let typeSpeed = isDeleting ? 40 : 85;
+
+      if (!isDeleting && charIndex === currentFullTitle.length) {
+        typeSpeed = 2200; // Pause on full title
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        titleIndex = (titleIndex + 1) % titles.length;
+        typeSpeed = 400; // Pause before next title
+      }
+
+      timer = setTimeout(typeTitle, typeSpeed);
+    };
+
+    typeTitle();
+
     return () => {
+      window.removeEventListener("popstate", handlePopState);
       cleanupSessionTracker();
       document.body.style.overflow = "auto";
+      clearTimeout(timer);
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020510] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-x-hidden">
-      {/* Fixed Minimalistic Background Canvas Visual */}
-      <MinimalBackgroundVisual />
-
+    <KineticGrid className="min-h-screen bg-[#020510] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-x-hidden">
       {/* Main App Experience */}
       {activePage !== "home" ? (
         <div className="min-h-screen relative z-20">
           {/* Navbar temporarily removed */}
           <TrackPage
             trackType={activePage}
-            onBack={() => {
-              setActivePage("home");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
+            onBack={() => handleSelectPage("home")}
             onOpenRegisterWithTrack={handleOpenRegisterWithTrack}
           />
           {registerModalOpen && (
@@ -67,22 +115,19 @@ function App() {
 
           {/* Main Content Sections (Immediate Loading for Ultra-Fast Instant Scroll) */}
           <main className="flex-grow">
-            {/* 1. Hero Section (Screen 1: Logo Emblem; Screen 2: Interactive 3D Robot & Details) */}
-            <HeroSection onOpenRegister={() => setRegisterModalOpen(true)} />
+            {/* 1. Hero Section & Interactive Command Center */}
+            <HeroSection onOpenRegister={handleOpenRegisterWithTrack} />
 
             {/* Secret Riddle Challenge */}
             <RiddleTeaserSection />
             
-            {/* 2, 3, 4, 5. About Yodha, Vision, Mission */}
+            {/* 2. About Yodha & Jyothi Engineering College */}
             <AboutSection />
-            
-            {/* 6. Innovation Tracks */}
+
+            {/* 3. Innovation Tracks */}
             <TracksSection
               onSelectTrack={handleOpenRegisterWithTrack}
-              onOpenTrackPage={(tType) => {
-                setActivePage(tType);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
+              onOpenTrackPage={(tType) => handleSelectPage(tType)}
             />
 
             {/* 7. UN Sustainable Development Goals */}
@@ -114,7 +159,7 @@ function App() {
           <CompactFooter />
         </div>
       )}
-    </div>
+    </KineticGrid>
   );
 }
 

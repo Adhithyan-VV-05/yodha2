@@ -40,7 +40,7 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
             </span>
 
             <p className="mt-2 text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed relative z-20">
-              Join the next generation of innovators and create AI-powered solutions that improve lives, protect our planet, and shape the future.
+              Together, let's build AI solutions that save lives & protect our planet. Innovate. Impact. Be a Warrior of AI.
             </p>
 
             <motion.button
@@ -59,7 +59,7 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
             </motion.button>
 
             <span className="text-xs font-mono text-slate-400 mt-5 relative z-20">
-              Event Dates: <strong className="text-white">September 11th & 12th, 2026</strong> • National Level Entry
+              Jyothi Engineering College (Autonomous), Cheruthuruthy, Thrissur • <strong className="text-white">yodha.aidajecc.in</strong>
             </span>
 
           </div>

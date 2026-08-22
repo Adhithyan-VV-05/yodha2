@@ -224,38 +224,6 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
           </button>
         </motion.div>
 
- 
-
-        {/* Special Track Bounties & Community Awards Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="p-6 sm:p-8 rounded-3xl bg-slate-950/95 border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-2xl shadow-xl relative overflow-hidden"
-        >
-          <div className="flex items-center gap-4 text-left">
-            <div className="p-3.5 rounded-2xl bg-blue-950/80 border border-blue-500/40 shrink-0">
-              <ShieldCheck className="w-8 h-8 text-blue-300" />
-            </div>
-            <div>
-              <span className="text-[10px] font-mono text-blue-300 uppercase tracking-widest font-extrabold block mb-1">
-                SPECIAL TRACK BOUNTIES • ₹10,000 INR
-              </span>
-              <h4 className="text-lg sm:text-xl font-bold text-white">
-                Best AI Integration, Best Design & Community Choice Awards
-              </h4>
-            </div>
-          </div>
-
-          <button
-            onClick={onOpenRegister}
-            className="btn-metallic-silver px-8 py-3.5 text-xs rounded-2xl uppercase tracking-widest shrink-0 cursor-pointer"
-          >
-            Register Team to Win
-          </button>
-        </motion.div>
-
       </div>
     </section>
   );

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Trophy, Clock, Sparkles, Cpu, Shield } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 import { TextScramble } from "./TextScramble";
-import { SplineScene } from "@/components/ui/splite";
+import { HeroCommandCenter } from "./HeroCommandCenter";
 import { YodhaTitleBanner } from "./YodhaTitleBanner";
 
 interface FirstLoadHeroProps {
-  onOpenRegister: () => void;
+  onOpenRegister: (trackName?: string) => void;
 }
 
 export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
@@ -49,199 +49,188 @@ export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
   };
 
   const timerItems = [
-    { label: "DAYS", value: timeLeft.days },
-    { label: "HOURS", value: timeLeft.hours },
-    { label: "MINS", value: timeLeft.minutes },
-    { label: "SECS", value: timeLeft.seconds },
+    { label: "D", value: timeLeft.days },
+    { label: "H", value: timeLeft.hours },
+    { label: "M", value: timeLeft.minutes },
+    { label: "S", value: timeLeft.seconds },
   ];
 
   return (
-    <section id="about" className="relative w-full overflow-hidden min-h-screen pt-20 sm:pt-28 pb-16 flex items-center justify-center">
-      {/* Interactive 3D Robot Core & Landing Hero Content */}
+    <section id="about" className="relative w-full overflow-hidden pt-12 sm:pt-20 pb-8 flex items-center justify-center">
+      {/* Interactive Command Hub & Landing Hero Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        {/* Split Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center min-h-[calc(100vh-140px)]">
+        
+        {/* Tight & Properly Spaced Split Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
 
-            {/* LEFT COLUMN: Interactive 3D Robot with Sleek Bottom Tech Frame */}
-            <div className="lg:col-span-5 flex flex-col justify-start items-center order-1 lg:order-1 w-full -mt-2 sm:-mt-6 lg:-mt-10 self-start">
-              <div className="w-full max-w-xl h-[300px] sm:h-[450px] lg:h-[560px] relative flex justify-center items-center overflow-visible select-none pointer-events-auto scale-90 sm:scale-95 lg:scale-100 origin-top">
-                <SplineScene
-                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                  className="w-full h-full"
-                  showChestLogo={true}
-                />
+            {/* LEFT COLUMN: Interactive Hackathon Command Hub */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-5 flex flex-col justify-center items-center order-1 lg:order-1 w-full relative z-20 pointer-events-auto"
+            >
+              <HeroCommandCenter onOpenRegister={onOpenRegister} />
+            </motion.div>
 
-                {/* Sleek Tech Dock Bottom Base Frame for the Robot */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 pointer-events-none z-20 flex flex-col items-center">
-                  <div className="px-5 py-1 rounded-full bg-slate-950/90 border border-slate-700 backdrop-blur-xl shadow-xl text-center flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
-                    <span className="text-[10px] font-mono font-extrabold text-slate-200 tracking-widest uppercase">
-                      YODHA AI ROBOTIC CORE
-                    </span>
-                  </div>
-                  <div className="w-36 h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent mt-1" />
-                </div>
-
-                {/* Bottom Edge Gradient Fade Mask */}
-                <div className="absolute bottom-0 inset-x-0 h-12 sm:h-16 bg-gradient-to-t from-transparent via-[#020510]/30 to-transparent pointer-events-none z-10" />
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN: Kinetic Hero Content */}
+            {/* RIGHT COLUMN: Kinetic Hero Banner & Metadata */}
             <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-2">
 
-              {/* Dynamic Animated Y-O-D-H-A Title Letters (Reveals on Screen 2) */}
-              <div className="mb-4">
+              {/* Dynamic Animated Y-O-D-H-A Title Banner */}
+              <div className="mb-2 w-full flex justify-center lg:justify-start">
                 <YodhaTitleBanner size="lg" align="left" />
               </div>
 
-              {/* "BE A WARRIOR OF AI" METALLIC SILVER & SAPPHIRE BLUE CAPSULE BADGE */}
+              {/* Tagline Capsule Badge */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ duration: 0.7 }}
-                onClick={onOpenRegister}
-                className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-slate-900/90 border border-slate-600 backdrop-blur-xl text-xs font-mono text-slate-200 mb-6 shadow-lg cursor-pointer relative z-30 pointer-events-auto group"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.5 }}
+                onClick={() => onOpenRegister()}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-600 backdrop-blur-xl text-xs font-mono text-slate-200 mb-4 shadow-md cursor-pointer relative z-30 pointer-events-auto group"
               >
-                <Shield className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
-                <span className="font-extrabold tracking-widest uppercase text-white">
-                  <TextScramble text="BE A WARRIOR OF AI" revealDuration={1000} />
+                <Shield className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                <span className="font-extrabold tracking-widest uppercase text-white text-[11px] sm:text-xs">
+                  <TextScramble text="INNOVATE • IMPACT — BE A WARRIOR OF AI" revealDuration={1000} />
                 </span>
               </motion.div>
 
-              {/* HACKATHON TITLE TAGS */}
+              {/* Institution Metadata Tags */}
               <div className="w-full max-w-xl mb-3">
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                  <span className="text-xs font-mono font-extrabold text-slate-100 uppercase tracking-widest bg-slate-900/90 border border-blue-500/40 px-3.5 py-1.5 rounded-full shadow-md">
-                    NATIONAL AI HACKATHON 2.0
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
+                  <span className="text-[11px] sm:text-xs font-mono font-extrabold text-white uppercase tracking-wider bg-slate-900/90 border border-sky-400/40 px-3 py-1 rounded-full shadow-sm">
+                    JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)
                   </span>
-                  <span className="text-xs font-mono text-slate-300 border border-white/20 px-3.5 py-1.5 rounded-full">
-                    SEP 11-12, 2026
+                  <span className="text-[11px] sm:text-xs font-mono text-slate-300 border border-white/20 px-3 py-1 rounded-full bg-black/40">
+                    DEPT OF AI & DATA SCIENCE
                   </span>
                 </div>
               </div>
 
-              {/* SUBTITLE */}
+              {/* Subtitle */}
               <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="mt-1 text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed"
+              >
+                A 48-hour national-level innovation challenge bringing together engineering students to build AI solutions that <strong className="text-white font-bold">save lives</strong> and <strong className="text-cyan-300 font-bold">protect our planet</strong>.
+              </motion.p>
+
+              {/* Sci-Fi Circular Countdown Section */}
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="mt-3 text-base sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed"
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="mt-5 w-full max-w-xl mx-auto lg:mx-0 relative select-none"
               >
-                A 24-hour national-level AI hackathon where engineering students build intelligent solutions to solve real-world <strong className="text-white font-bold">healthcare</strong> and <strong className="text-blue-300 font-bold">environmental challenges</strong>.
-              </motion.p>
+                {/* Sci-Fi Header Bar */}
+                <div className="relative flex items-center justify-center mb-3 w-full px-1">
+                  <div className="flex-1 flex items-center gap-1">
+                    <div className="w-2 h-2 border-l-2 border-t-2 border-cyan-400 -rotate-45" />
+                    <div className="h-[2px] w-full bg-gradient-to-r from-sky-500/90 via-cyan-400 to-transparent" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-300" />
+                  </div>
 
-              {/* HIGH-IMPACT COUNTDOWN WIDGET */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="mt-8 w-full max-w-xl p-4 sm:p-5 rounded-3xl bg-slate-950/90 border border-blue-500/30 backdrop-blur-xl shadow-2xl relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-3 px-1">
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-blue-400" />
-                    <span className="text-[11px] font-mono text-slate-200 uppercase tracking-widest font-extrabold">
-                      <TextScramble text="COUNTDOWN TO LAUNCH" revealDuration={800} />
+                  <div className="px-3 text-center shrink-0">
+                    <span className="text-xs sm:text-sm font-mono font-black tracking-widest text-cyan-300 uppercase">
+                      HACKATHON STARTS IN
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-300 border border-white/20 px-2 py-0.5 rounded-full">
-                    SEP 11, 2026
-                  </span>
+
+                  <div className="flex-1 flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-300" />
+                    <div className="h-[2px] w-full bg-gradient-to-l from-sky-500/90 via-cyan-400 to-transparent" />
+                    <div className="w-2 h-2 border-r-2 border-t-2 border-cyan-400 rotate-45" />
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-2 sm:gap-3">
-                  {timerItems.map((item) => (
-                    <div
-                      key={item.label}
-                      className="flex flex-col items-center justify-center p-2.5 sm:p-3.5 rounded-2xl bg-white/[0.04] border border-white/15 relative overflow-hidden group hover:border-blue-400 transition-colors"
-                    >
-                      <span className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">
-                        {String(item.value).padStart(2, "0")}
-                      </span>
-                      <span className="text-[9px] sm:text-[10px] font-mono text-slate-300 tracking-wider font-bold mt-1">
-                        {item.label}
-                      </span>
-                    </div>
-                  ))}
+                {/* 4 Circular Pods Grid */}
+                <div className="relative w-full flex items-center justify-center">
+                  <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent z-0 pointer-events-none" />
+
+                  <div className="grid grid-cols-4 gap-2 sm:gap-3 w-full relative z-10">
+                    {timerItems.map((item) => (
+                      <div
+                        key={item.label}
+                        className="relative aspect-square flex flex-col items-center justify-center group"
+                      >
+                        {/* Inner Disc */}
+                        <div className="absolute inset-[12%] rounded-full bg-[#030919]/90 backdrop-blur-md border border-cyan-400/30 pointer-events-none z-0 overflow-hidden" />
+
+                        {/* Metallic Frame Image */}
+                        <div className="absolute inset-0 w-full h-full pointer-events-none z-10 animate-spin-slow">
+                          <img
+                            src="/countdown circle.webp"
+                            alt={item.label}
+                            className="w-full h-full object-contain pointer-events-none"
+                            style={{
+                              WebkitBackfaceVisibility: "hidden",
+                              backfaceVisibility: "hidden",
+                              transform: "translateZ(0)",
+                            }}
+                          />
+                        </div>
+
+                        {/* Centered Numbers */}
+                        <div className="absolute inset-0 z-20 flex items-center justify-center text-center pointer-events-none">
+                          <div className="relative font-digital flex items-center justify-center leading-none">
+                            <span className="font-digital text-2xl sm:text-4xl font-normal text-cyan-950/40 select-none pointer-events-none tracking-wider leading-none">
+                              88
+                            </span>
+                            <span className="absolute inset-0 flex items-center justify-center font-digital text-2xl sm:text-4xl font-normal text-cyan-300 tracking-wider leading-none">
+                              {String(item.value).padStart(2, "0")}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Unit Label */}
+                        <div className="absolute bottom-[16%] left-0 right-0 z-20 flex items-center justify-center text-center pointer-events-none">
+                          <span className="text-[10px] sm:text-xs font-mono font-bold text-sky-400/90 tracking-widest uppercase">
+                            {item.label}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
 
-              {/* ACTION CTA BUTTONS (REALISTIC METALLIC SILVER) */}
+              {/* Action Buttons */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto relative z-30 pointer-events-auto"
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 w-full"
               >
-                <motion.button
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={onOpenRegister}
-                  className="btn-metallic-silver w-full sm:w-auto px-8 py-4 text-xs sm:text-sm rounded-2xl flex items-center justify-center gap-3 uppercase tracking-widest cursor-pointer relative z-30 pointer-events-auto group"
+                <button
+                  onClick={() => onOpenRegister()}
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-sky-400 to-blue-600 text-black font-black text-xs sm:text-sm tracking-widest uppercase hover:brightness-110 transition-all shadow-[0_0_20px_rgba(56,189,248,0.5)] flex items-center gap-2 cursor-pointer pointer-events-auto"
                 >
-                  <Sparkles className="w-4 h-4 text-slate-950 group-hover:rotate-45 transition-transform" />
-                  <span>REGISTER NOW</span>
-                  <ArrowRight className="w-4 h-4 text-slate-950 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
+                  <span>REGISTER TEAM NOW</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
 
                 <button
                   onClick={handleExploreThemes}
-                  className="btn-metallic-outline w-full sm:w-auto px-8 py-4 text-xs sm:text-sm rounded-2xl transition-all uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer backdrop-blur-xl relative z-30 pointer-events-auto"
+                  className="px-5 py-3 rounded-full bg-slate-900/90 border border-slate-700 text-slate-200 font-bold text-xs sm:text-sm tracking-wider uppercase hover:border-cyan-400 hover:text-white transition-all cursor-pointer pointer-events-auto"
                 >
-                  <Cpu className="w-4 h-4 text-slate-300" />
-                  <span>EXPLORE THEMES</span>
+                  EXPLORE TRACKS
                 </button>
               </motion.div>
 
-              {/* VALUE PROPOSITION BADGES */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="mt-10 grid grid-cols-3 gap-3 sm:gap-6 w-full max-w-xl border-t border-white/10 pt-6"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-xl bg-slate-900 border border-blue-500/30 text-blue-400">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div className="text-left">
-                    <span className="text-xs font-bold text-white block leading-tight">24 Hours</span>
-                    <span className="text-[10px] text-slate-400 font-mono">Non-stop building</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-xl bg-slate-900 border border-slate-600 text-slate-200">
-                    <Cpu className="w-4 h-4" />
-                  </div>
-                  <div className="text-left">
-                    <span className="text-xs font-bold text-white block leading-tight">AI-Focused</span>
-                    <span className="text-[10px] text-slate-400 font-mono">Healthcare & Nature</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-xl bg-slate-900 border border-blue-500/30 text-blue-400">
-                    <Trophy className="w-4 h-4" />
-                  </div>
-                  <div className="text-left">
-                    <span className="text-xs font-bold text-white block leading-tight">₹70,000 Pool</span>
-                    <span className="text-[10px] text-slate-400 font-mono">INR Cash Bounties</span>
-                  </div>
-                </div>
-              </motion.div>
-
             </div>
-          </div>
+
         </div>
+
+      </div>
     </section>
   );
 }

@@ -19,7 +19,7 @@ export function CompactFooter() {
               <span className="text-sky-400 font-extrabold">2.0</span>
             </h4>
             <p className="text-[10px] text-sky-400/90 font-mono uppercase tracking-wider font-semibold">
-              WARRIORS OF AI • SEP 11th & 12th
+              JYOTHI ENGINEERING COLLEGE • yodha.aidajecc.in
             </p>
           </div>
         </div>

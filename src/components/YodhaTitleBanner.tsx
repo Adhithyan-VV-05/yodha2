@@ -1,9 +1,25 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 interface YodhaTitleBannerProps {
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
   align?: "left" | "center";
+}
+
+const LETTERS = [
+  { id: "Y", src: "/Y.png", delay: 0.05 },
+  { id: "O", src: "/O.png", delay: 0.1 },
+  { id: "D", src: "/D.png", delay: 0.15 },
+  { id: "H", src: "/H.png", delay: 0.2 },
+  { id: "A", src: "/A.png", delay: 0.25 },
+];
+
+interface PhysicsState {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
 }
 
 export function YodhaTitleBanner({ size = "md", className = "", align = "center" }: YodhaTitleBannerProps) {
@@ -15,152 +31,154 @@ export function YodhaTitleBanner({ size = "md", className = "", align = "center"
   }[size];
 
   const warriorSizes = {
-    sm: "w-full max-w-[280px] sm:max-w-[340px] h-auto max-h-12",
-    md: "w-full max-w-[340px] sm:max-w-[500px] md:max-w-[620px] lg:max-w-[740px] h-auto max-h-16 sm:max-h-24 md:max-h-28",
-    lg: "w-full max-w-[380px] sm:max-w-[580px] md:max-w-[720px] lg:max-w-[850px] h-auto max-h-20 sm:max-h-28 md:max-h-32",
-    xl: "w-full max-w-[480px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1100px] h-auto max-h-24 sm:max-h-36 md:max-h-40",
+    sm: "w-full max-w-[320px] sm:max-w-[400px] h-auto max-h-14",
+    md: "w-full max-w-[420px] sm:max-w-[620px] md:max-w-[780px] lg:max-w-[940px] h-auto max-h-20 sm:max-h-28 md:max-h-36",
+    lg: "w-full max-w-[480px] sm:max-w-[720px] md:max-w-[900px] lg:max-w-[1080px] h-auto max-h-24 sm:max-h-34 md:max-h-40",
+    xl: "w-full max-w-[580px] sm:max-w-[880px] md:max-w-[1100px] lg:max-w-[1300px] h-auto max-h-28 sm:max-h-44 md:max-h-52",
   }[size];
 
   const alignmentClass = align === "left" ? "items-center lg:items-start" : "items-center";
 
+  // Physics state for each letter (fleeing repulsion physics)
+  const letterRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const physicsRef = useRef<PhysicsState[]>([
+    { x: 0, y: 0, vx: 0, vy: 0 },
+    { x: 0, y: 0, vx: 0, vy: 0 },
+    { x: 0, y: 0, vx: 0, vy: 0 },
+    { x: 0, y: 0, vx: 0, vy: 0 },
+    { x: 0, y: 0, vx: 0, vy: 0 },
+  ]);
+
+  const mousePosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+    let animId: number;
+
+    const updatePhysics = () => {
+      animId = requestAnimationFrame(updatePhysics);
+
+      const mouse = mousePosRef.current;
+
+      for (let i = 0; i < LETTERS.length; i++) {
+        const el = letterRefs.current[i];
+        const p = physicsRef.current[i];
+        if (!el) continue;
+
+        const rect = el.getBoundingClientRect();
+        // Calculate original un-displaced base center of letter
+        const baseCenterX = rect.left - p.x + rect.width / 2;
+        const baseCenterY = rect.top - p.y + rect.height / 2;
+
+        const currentX = baseCenterX + p.x;
+        const currentY = baseCenterY + p.y;
+
+        const dx = currentX - mouse.x;
+        const dy = currentY - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // Repulsion radius (cursor cannot touch letters)
+        const radius = 130;
+
+        let fx = 0;
+        let fy = 0;
+
+        if (dist < radius && dist > 0) {
+          const pushFactor = 1 - dist / radius;
+          const force = pushFactor * pushFactor * 16;
+          const angle = Math.atan2(dy, dx);
+          fx = Math.cos(angle) * force;
+          fy = Math.sin(angle) * force;
+        }
+
+        // Damped spring return force back to origin (0, 0)
+        const springK = 0.09;
+        const damping = 0.84;
+
+        const springFx = -p.x * springK;
+        const springFy = -p.y * springK;
+
+        p.vx = (p.vx + fx + springFx) * damping;
+        p.vy = (p.vy + fy + springFy) * damping;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Max displacement threshold
+        const maxOffset = 140;
+        p.x = Math.max(-maxOffset, Math.min(maxOffset, p.x));
+        p.y = Math.max(-maxOffset, Math.min(maxOffset, p.y));
+
+        // Smoothly apply hardware-accelerated transform directly to DOM element (0 React re-renders)
+        el.style.transform = `translate3d(${p.x.toFixed(2)}px, ${p.y.toFixed(2)}px, 0)`;
+      }
+    };
+
+    updatePhysics();
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
   return (
     <div className={`flex flex-col select-none ${alignmentClass} ${className}`}>
-      {/* 3D Kinetic Staggered Letter Row: Y-O-D-H-A with unique entrance animations */}
-      <div className="flex items-center gap-0.5 sm:gap-1 md:gap-1.5 py-1">
-
-        {/* LETTER Y: Diagonal 3D Drop & Tilt Entrance */}
-        <motion.div
-          initial={{ opacity: 0, x: -70, y: -70, rotateZ: -45, scale: 0.3 }}
-          animate={{ opacity: 1, x: 0, y: [0, -8, 0], rotateZ: 0, scale: 1 }}
-          transition={{
-            opacity: { duration: 0.6, delay: 0.05 },
-            scale: { duration: 0.6, delay: 0.05, type: "spring", stiffness: 260 },
-            x: { duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] },
-            y: { repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.7 },
-          }}
-          whileHover={{ scale: 1.15, y: -10, rotate: -5 }}
-          className="relative group cursor-pointer"
-        >
-          <img
-            src="/Y.png"
-            alt="Y"
-            className={`${letterSizes} w-auto object-contain filter drop-shadow-[0_8px_25px_rgba(0,0,0,0.85)] group-hover:brightness-125 transition-all duration-300`}
-            loading="eager"
-          />
-        </motion.div>
-
-        {/* LETTER O: 3D Y-AXIS 360° CONTINUOUS ROTATION LOOP */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.2, rotateY: -180 }}
-          animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
-          transition={{
-            opacity: { duration: 0.6, delay: 0.15 },
-            scale: { duration: 0.6, delay: 0.15, type: "spring", stiffness: 280 },
-            y: { repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.8 },
-          }}
-          whileHover={{ scale: 1.15, y: -10 }}
-          className="relative group cursor-pointer"
-          style={{ perspective: 1000, transformStyle: "preserve-3d" }}
-        >
+      {/* Tight-knit Y-O-D-H-A Title Letter Row (Single Unified Word) */}
+      <div className="flex items-center -space-x-1 sm:-space-x-2 md:-space-x-3 py-1 relative z-20">
+        {LETTERS.map((letter, idx) => (
           <motion.div
-            animate={{ rotateY: 360 }}
-            transition={{
-              repeat: Infinity,
-              duration: 6,
-              ease: "linear",
+            key={letter.id}
+            ref={(el) => {
+              letterRefs.current[idx] = el;
             }}
-            className="inline-block transform-gpu origin-center"
-            style={{ transformStyle: "preserve-3d" }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: letter.delay }}
+            className="relative group cursor-pointer"
           >
             <img
-              src="/O.png"
-              alt="O"
-              className={`${letterSizes} w-auto object-contain filter drop-shadow-[0_8px_25px_rgba(0,0,0,0.85)] group-hover:brightness-125 transition-all duration-300`}
+              src={letter.src}
+              alt={letter.id}
+              className={`${letterSizes} w-auto object-contain filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] group-hover:brightness-125`}
               loading="eager"
             />
           </motion.div>
-        </motion.div>
-
-        {/* LETTER D: Energetic Spring Pop & Bottom-Right Bounce */}
-        <motion.div
-          initial={{ opacity: 0, y: 80, rotateZ: 35, scale: 0.2 }}
-          animate={{ opacity: 1, y: [0, -8, 0], rotateZ: 0, scale: 1 }}
-          transition={{
-            opacity: { duration: 0.6, delay: 0.25 },
-            scale: { duration: 0.6, delay: 0.25, type: "spring", stiffness: 300 },
-            y: { repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.9 },
-          }}
-          whileHover={{ scale: 1.15, y: -10, rotate: 5 }}
-          className="relative group cursor-pointer"
-        >
-          <img
-            src="/D.png"
-            alt="D"
-            className={`${letterSizes} w-auto object-contain filter drop-shadow-[0_8px_25px_rgba(0,0,0,0.85)] group-hover:brightness-125 transition-all duration-300`}
-            loading="eager"
-          />
-        </motion.div>
-
-        {/* LETTER H: Cyber Zoom Slam & Blur Focal Reveal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 2.2, filter: "blur(10px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: [0, -8, 0] }}
-          transition={{
-            opacity: { duration: 0.5, delay: 0.35 },
-            scale: { duration: 0.5, delay: 0.35, ease: "easeOut" },
-            filter: { duration: 0.5, delay: 0.35 },
-            y: { repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 1.0 },
-          }}
-          whileHover={{ scale: 1.15, y: -10 }}
-          className="relative group cursor-pointer"
-        >
-          <img
-            src="/H.png"
-            alt="H"
-            className={`${letterSizes} w-auto object-contain filter drop-shadow-[0_8px_25px_rgba(0,0,0,0.85)] group-hover:brightness-125 transition-all duration-300`}
-            loading="eager"
-          />
-        </motion.div>
-
-        {/* LETTER A: Top-Right Diagonal Sweep & Flare */}
-        <motion.div
-          initial={{ opacity: 0, x: 70, y: -70, rotateZ: 45, scale: 0.2 }}
-          animate={{ opacity: 1, x: 0, y: [0, -8, 0], rotateZ: 0, scale: 1 }}
-          transition={{
-            opacity: { duration: 0.6, delay: 0.45 },
-            scale: { duration: 0.6, delay: 0.45, type: "spring", stiffness: 260 },
-            x: { duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] },
-            y: { repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 1.1 },
-          }}
-          whileHover={{ scale: 1.15, y: -10, rotate: 5 }}
-          className="relative group cursor-pointer"
-        >
-          <img
-            src="/A.png"
-            alt="A"
-            className={`${letterSizes} w-auto object-contain filter drop-shadow-[0_8px_25px_rgba(0,0,0,0.85)] group-hover:brightness-125 transition-all duration-300`}
-            loading="eager"
-          />
-        </motion.div>
-
+        ))}
       </div>
 
-      {/* Background-Removed WARRIORS OF AI Graphic Banner (Sleek Metallic Underline Graphic matching YODHA width, no box background) */}
+      {/* WARRIORS OF AI Graphic Banner (Larger, Centered, Closer, Smooth Horizontal Elaborating/Shrinking Pulse) */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.55 }}
-        className="mt-0.5 sm:mt-1 flex items-center justify-center w-full px-2"
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="mt-[-6px] sm:mt-[-12px] md:mt-[-16px] flex items-center justify-center w-full px-2 relative z-10"
       >
-        <img
+        <motion.img
           src="/warrior of ai.png"
           alt="WARRIORS OF AI"
-          className={`${warriorSizes} object-contain filter brightness-125 drop-shadow-[0_4px_18px_rgba(56,189,248,0.35)]`}
+          animate={{
+            scaleX: [1, 1.05, 0.96, 1.04, 1],
+            scaleY: [1, 0.98, 1.02, 0.99, 1],
+          }}
+          transition={{
+            duration: 5.5,
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "easeInOut",
+          }}
+          className={`${warriorSizes} object-contain filter brightness-110 drop-shadow-[0_4px_16px_rgba(56,189,248,0.4)]`}
           loading="eager"
         />
       </motion.div>
     </div>
   );
 }
+
 
 

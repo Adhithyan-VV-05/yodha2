@@ -48,10 +48,8 @@ interface SplineSceneProps {
 export function SplineScene({ scene, className, showChestLogo = true }: SplineSceneProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Smooth lively loading progress counter (0% -> 92%)
     let progressTimer: ReturnType<typeof setInterval>;
 
     if (isLoading) {
@@ -67,25 +65,14 @@ export function SplineScene({ scene, className, showChestLogo = true }: SplineSc
       }, 140);
     }
 
-    // Safety fallback timer: finalize loading after 3.8s max
     const safetyTimer = setTimeout(() => {
       setLoadProgress(100);
       setTimeout(() => setIsLoading(false), 200);
     }, 3800);
 
-    // Track mouse movement across the complete hero section & screen
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-      setMousePos({ x: mouseX, y: mouseY });
-    };
-
-    window.addEventListener("mousemove", handleGlobalMouseMove);
-
     return () => {
       if (progressTimer) clearInterval(progressTimer);
       clearTimeout(safetyTimer);
-      window.removeEventListener("mousemove", handleGlobalMouseMove);
     };
   }, [isLoading]);
 
@@ -96,29 +83,15 @@ export function SplineScene({ scene, className, showChestLogo = true }: SplineSc
 
   return (
     <SplineErrorBoundary>
-      <div 
-        className={`relative w-full h-full min-h-[280px] sm:min-h-[380px] ${className || ''}`}
-        style={{
-          transform: `perspective(1000px) rotateY(${mousePos.x * 10}deg) rotateX(${-mousePos.y * 10}deg)`,
-          transition: 'transform 0.12s ease-out',
-        }}
-      >
-        {/* Small, Proper, Lively Mini Progress Bar Widget while Robot is Loading */}
+      <div className={`relative w-full h-full min-h-[280px] sm:min-h-[380px] ${className || ''}`}>
+        {/* Loading Progress Bar */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30 transition-opacity duration-300">
-            <div className="px-4 py-2.5 rounded-2xl bg-slate-950/90 border border-sky-400/40 shadow-[0_0_25px_rgba(56,189,248,0.3)] backdrop-blur-xl flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full border-2 border-sky-400 border-t-transparent animate-spin shrink-0" />
-              <div className="flex flex-col">
-                <div className="flex items-center justify-between gap-3 text-[10px] font-mono text-slate-300 font-bold uppercase tracking-wider">
-                  <span>Loading 3D Robot</span>
-                  <span className="text-sky-400 font-black">{loadProgress}%</span>
-                </div>
-                <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden mt-1 relative">
-                  <div 
-                    className="h-full bg-gradient-to-r from-sky-400 to-indigo-500 rounded-full transition-all duration-150 shadow-[0_0_8px_rgba(56,189,248,0.8)]"
-                    style={{ width: `${loadProgress}%` }}
-                  />
-                </div>
+            <div className="px-4 py-2 rounded-xl bg-slate-950/90 border border-slate-700 backdrop-blur-xl flex items-center gap-3 shadow-lg">
+              <div className="w-4 h-4 rounded-full border-2 border-sky-400 border-t-transparent animate-spin shrink-0" />
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-300 font-bold uppercase tracking-wider">
+                <span>Loading 3D Robot...</span>
+                <span className="text-sky-400 font-bold">{loadProgress}%</span>
               </div>
             </div>
           </div>
@@ -129,28 +102,24 @@ export function SplineScene({ scene, className, showChestLogo = true }: SplineSc
           scene={scene}
           onLoad={handleSplineLoad}
           style={{ width: '100%', height: '100%' }}
-          className="w-full h-full pointer-events-auto"
+          className="w-full h-full pointer-events-none"
         />
 
-        {/* Minimal Clean YODHA Logo Emblem on Robot's Chest */}
+        {/* YODHA Chest Emblem */}
         {showChestLogo && !isLoading && (
           <div
-            className="absolute pointer-events-none z-20 flex items-center justify-center transition-all duration-150 ease-out"
+            className="absolute pointer-events-none z-20 flex items-center justify-center -translate-x-1/2 -translate-y-1/2"
             style={{
               top: '49%',
               left: '50%',
-              transform: `translate(calc(-50% + ${mousePos.x * 10}px), calc(-50% + ${mousePos.y * 10}px))`,
             }}
           >
             <div className="relative flex items-center justify-center">
-              {/* Minimal Steady Chest Reactor Core Ring */}
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-sky-400/40 bg-sky-500/10 shadow-[0_0_12px_rgba(56,189,248,0.4)]" />
-              
-              {/* Clean YODHA 2D Logo Emblem */}
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-sky-400/30 bg-sky-500/10 shadow-md" />
               <img
                 src={logo}
                 alt="YODHA Chest Emblem"
-                className="absolute w-6 h-6 sm:w-8 sm:h-8 object-contain filter brightness-110 drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]"
+                className="absolute w-6 h-6 sm:w-8 sm:h-8 object-contain filter brightness-110"
               />
             </div>
           </div>
@@ -159,3 +128,4 @@ export function SplineScene({ scene, className, showChestLogo = true }: SplineSc
     </SplineErrorBoundary>
   );
 }
+

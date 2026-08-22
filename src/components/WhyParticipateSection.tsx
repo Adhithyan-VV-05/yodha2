@@ -1,132 +1,219 @@
 import { motion } from "framer-motion";
-import { Lightbulb, Users, Rocket, Trophy, Network, Award, RotateCw } from "lucide-react";
-import { Card3DFlip } from "./Card3DFlip";
-import { CARD_BACKGROUNDS } from "../data/cardBackgrounds";
+import { Lightbulb, Users, Rocket, Trophy, Network, Award, Sparkles, CheckCircle2 } from "lucide-react";
 
 export function WhyParticipateSection() {
   const BENEFITS = [
     {
-      title: "Solve Real Problems",
-      icon: <Lightbulb className="w-6 sm:w-8 h-6 sm:h-8 text-blue-400" />,
-      desc: "Address critical challenges in healthcare disease prevention, medical decision support, and climate sustainability.",
-      badge: "Real Impact",
-      flipDir: "horizontal" as const,
-      bgImage: CARD_BACKGROUNDS.whyParticipate.real_problems,
+      id: "prizes",
+      title: "₹70,000 Cash Prize Pool",
+      subtitle: "Compete for top cash rewards, official trophies, plaques, & cloud infrastructure credits.",
+      icon: <Trophy className="w-8 h-8 text-amber-400" />,
+      badge: "CASH POOL & TROPHIES",
+      featured: true,
+      stats: "₹70,000 Pool",
+      points: [
+        "1st Prize: ₹35,000 Cash + National Winner Trophy",
+        "2nd Prize: ₹20,000 Cash + Runner-Up Trophy",
+        "3rd Prize: ₹10,000 Cash + Excellence Plaque",
+        "Special Innovation Track Award: ₹5,000",
+      ],
     },
     {
-      title: "Collaborate Innovators",
-      icon: <Users className="w-6 sm:w-8 h-6 sm:h-8 text-slate-200" />,
-      desc: "Form high-performance teams with talented engineers, researchers, and designers across India.",
-      badge: "National Network",
-      flipDir: "vertical" as const,
-      bgImage: CARD_BACKGROUNDS.whyParticipate.innovators,
+      id: "impact",
+      title: "Solve Real-World Problems",
+      subtitle: "Address critical challenges in Healthcare disease prediction & Environmental monitoring.",
+      icon: <Lightbulb className="w-7 h-7 text-cyan-400" />,
+      badge: "REAL IMPACT",
+      featured: false,
+      stats: "Healthcare & Eco AI",
+      points: [
+        "Build AI tools that save lives",
+        "Protect ecosystems & clean water",
+      ],
     },
     {
-      title: "Build AI Products",
-      icon: <Rocket className="w-6 sm:w-8 h-6 sm:h-8 text-blue-400" />,
-      desc: "Transform abstract ideas into functional, deployable AI prototypes in an intense 24-hour hackathon.",
-      badge: "24-Hr Sprint",
-      flipDir: "zoomSlide" as const,
-      bgImage: CARD_BACKGROUNDS.whyParticipate.build_ai,
+      id: "marathon",
+      title: "48-Hour Coding Marathon",
+      subtitle: "Transform abstract ideas into functional, deployable AI prototypes in an intense 48-hour sprint.",
+      icon: <Rocket className="w-7 h-7 text-cyan-400" />,
+      badge: "48H SPRINT",
+      featured: false,
+      stats: "Offline Marathon",
+      points: [
+        "48-hour non-stop building sprint",
+        "Live judging & prototype demo",
+      ],
     },
     {
-      title: "Win Cash Prizes",
-      icon: <Trophy className="w-6 sm:w-8 h-6 sm:h-8 text-slate-200" />,
-      desc: "Compete for ₹70,000 INR Cash Prize Pool, official trophies, plaques, and cloud infrastructure credits.",
-      badge: "₹70,000 Pool",
-      flipDir: "horizontal" as const,
-      bgImage: CARD_BACKGROUNDS.whyParticipate.cash_prizes,
+      id: "network",
+      title: "National Innovator Network",
+      subtitle: "Form high-performance teams with talented engineers, researchers, and designers across India.",
+      icon: <Users className="w-7 h-7 text-cyan-400" />,
+      badge: "COLLABORATION",
+      featured: false,
+      stats: "Top Talent",
+      points: [
+        "Cross-institutional teamwork",
+        "Lifetime innovator community",
+      ],
     },
     {
-      title: "Network with Experts",
-      icon: <Network className="w-6 sm:w-8 h-6 sm:h-8 text-blue-400" />,
-      desc: "Get 1-on-1 technical feedback and career guidance from industry software architects and AI researchers.",
-      badge: "Mentorship",
-      flipDir: "vertical" as const,
-      bgImage: CARD_BACKGROUNDS.whyParticipate.network_experts,
+      id: "mentorship",
+      title: "1-on-1 Expert Mentorship",
+      subtitle: "Get technical feedback and architectural guidance from industry software architects & AI researchers.",
+      icon: <Network className="w-7 h-7 text-cyan-400" />,
+      badge: "EXPERT GUIDANCE",
+      featured: false,
+      stats: "Industry Mentors",
+      points: [
+        "Code & model architecture review",
+        "Career & startup incubator guidance",
+      ],
     },
     {
-      title: "Earn Certificates",
-      icon: <Award className="w-6 sm:w-8 h-6 sm:h-8 text-slate-200" />,
-      desc: "Receive official national participant and winner certificates to boost your career and portfolio.",
-      badge: "Recognition",
-      flipDir: "zoomSlide" as const,
-      bgImage: CARD_BACKGROUNDS.whyParticipate.certificates,
+      id: "certification",
+      title: "National Certification",
+      subtitle: "Receive official participant and winner certificates from Jyothi Engineering College to boost your resume.",
+      icon: <Award className="w-7 h-7 text-cyan-400" />,
+      badge: "RECOGNITION",
+      featured: false,
+      stats: "Official Certificate",
+      points: [
+        "Verified KTU academic points eligible",
+        "Portfolio & LinkedIn badge",
+      ],
     },
   ];
 
   return (
-    <section className="py-20 sm:py-28 relative overflow-hidden bg-transparent text-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="why-participate" className="py-20 sm:py-28 relative overflow-hidden bg-transparent text-white select-none">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <motion.span
+        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+          <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xs font-mono text-slate-300 uppercase tracking-widest block mb-2 font-bold"
+            className="flex items-center justify-center gap-3 text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest mb-3"
           >
-            PARTICIPANT ADVANTAGES
-          </motion.span>
+            <span className="w-10 sm:w-16 h-[1px] bg-gradient-to-r from-transparent to-cyan-400" />
+            <span>PARTICIPANT ADVANTAGES</span>
+            <span className="w-10 sm:w-16 h-[1px] bg-gradient-to-l from-transparent to-cyan-400" />
+          </motion.div>
+
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-blue-400 tracking-tight"
+            className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase font-sans leading-none"
           >
-            Why Participate in YODHA?
+            WHY PARTICIPATE IN{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400 drop-shadow-[0_0_25px_rgba(56,189,248,0.6)]">
+              YODHA 2.0?
+            </span>
           </motion.h2>
+
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-3 text-slate-300 text-sm sm:text-base max-w-xl mx-auto"
+            className="mt-4 text-slate-300 text-sm sm:text-base max-w-2xl mx-auto font-normal leading-relaxed"
           >
-            Empower your engineering journey with mentorship, cash rewards, and real-world AI building experience.
+            Supercharge your engineering career with national mentorship, cash rewards, incubation access, and real-world AI building experience.
           </motion.p>
         </div>
 
-        {/* 2-Card Grid Layout on Mobile */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+        {/* FUTURISTIC BENTO ADVANTAGE GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {BENEFITS.map((item, idx) => (
-            <Card3DFlip
-              key={idx}
-              flipDirection={item.flipDir}
-              bgImage={item.bgImage}
-              className="h-56 sm:h-64"
-              front={
-                <div className="flex flex-col items-center justify-center text-center my-auto p-2 sm:p-4">
-                  <div className="p-2.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 mb-2 sm:mb-3 shadow-md">
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              className={`relative rounded-3xl p-6 sm:p-8 flex flex-col justify-between group transition-all duration-300 bg-[#040a1b]/85 border backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.8)] overflow-hidden ${
+                item.featured
+                  ? "md:col-span-2 lg:col-span-2 border-amber-500/50 hover:border-amber-400 shadow-[0_0_30px_rgba(245,158,11,0.2)]"
+                  : "border-slate-800 hover:border-cyan-400/80 hover:shadow-[0_0_25px_rgba(56,189,248,0.25)]"
+              }`}
+            >
+              {/* Metallic Card Frame Image Texture */}
+              <img
+                src="/metallic_card_frame.png"
+                alt=""
+                className="absolute inset-0 w-full h-full object-fill pointer-events-none opacity-25 mix-blend-screen group-hover:opacity-40 transition-opacity"
+              />
+
+              {/* Corner LED Glow Dots */}
+              <div className="absolute top-3 left-3 w-2 h-2 rounded-full bg-cyan-400/70 group-hover:bg-cyan-400 shadow-[0_0_8px_#38bdf8]" />
+              <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-cyan-400/70 group-hover:bg-cyan-400 shadow-[0_0_8px_#38bdf8]" />
+
+              <div>
+                {/* Header Row */}
+                <div className="flex items-center justify-between mb-4 relative z-10">
+                  <div className={`p-3.5 rounded-2xl border transition-transform duration-300 group-hover:scale-110 ${
+                    item.featured
+                      ? "bg-amber-950/40 border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+                      : "bg-[#08132e] border-cyan-400/30 shadow-[0_0_15px_rgba(56,189,248,0.2)]"
+                  }`}>
                     {item.icon}
                   </div>
-                  <span className="px-2.5 py-0.5 sm:py-1 bg-slate-900 border border-slate-700 rounded-full text-[9px] sm:text-[10px] font-mono text-slate-200 font-bold uppercase tracking-wider mb-1.5">
-                    {item.badge}
-                  </span>
-                  <h3 className="text-xs sm:text-lg font-bold text-white leading-snug">{item.title}</h3>
-                  <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1.5 flex items-center gap-1 opacity-75">
-                    <RotateCw className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-blue-400 animate-spin" /> Flip
-                  </span>
-                </div>
-              }
-              back={
-                <div className="flex flex-col justify-between h-full text-left p-2.5 sm:p-4">
-                  <div>
-                    <span className="text-[9px] sm:text-[10px] font-mono text-slate-200 bg-slate-900 px-2 py-0.5 rounded border border-slate-700 uppercase tracking-wider block w-fit mb-1.5">
-                      {item.badge}
-                    </span>
-                    <h4 className="text-xs sm:text-base font-bold text-white mb-1">{item.title}</h4>
-                    <p className="text-[10px] sm:text-xs text-slate-300 leading-normal sm:leading-relaxed font-normal">{item.desc}</p>
-                  </div>
 
-                  <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-slate-400">
-                    <span>YODHA Advantage</span>
-                    <span className="text-blue-300 font-semibold">Verified</span>
-                  </div>
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border ${
+                    item.featured
+                      ? "bg-amber-950/80 border-amber-400/50 text-amber-300"
+                      : "bg-cyan-950/80 border-cyan-400/40 text-cyan-300"
+                  }`}>
+                    {item.stats}
+                  </span>
                 </div>
-              }
-            />
+
+                {/* Badge Category Tag */}
+                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1 relative z-10">
+                  {item.badge}
+                </span>
+
+                {/* Title */}
+                <h3 className={`font-black text-white font-sans tracking-tight mb-2 relative z-10 ${
+                  item.featured ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
+                }`}>
+                  {item.title}
+                </h3>
+
+                {/* Subtitle */}
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4 font-normal relative z-10">
+                  {item.subtitle}
+                </p>
+
+                {/* Bullet Points */}
+                <div className="space-y-2 mb-4 relative z-10">
+                  {item.points.map((point, pIdx) => (
+                    <div key={pIdx} className="flex items-start gap-2 text-xs text-slate-200">
+                      <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${
+                        item.featured ? "text-amber-400" : "text-cyan-400"
+                      }`} />
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom Card Footer */}
+              <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-mono relative z-10">
+                <span className="text-slate-400">YODHA Advantage</span>
+                <span className={`font-bold flex items-center gap-1 ${
+                  item.featured ? "text-amber-300" : "text-cyan-300"
+                }`}>
+                  <span>Verified</span>
+                  <Sparkles className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </motion.div>
           ))}
         </div>
+
       </div>
     </section>
   );

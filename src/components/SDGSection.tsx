@@ -111,7 +111,7 @@ export function SDGSection() {
                   </span>
                   <h3 className="text-xs sm:text-lg font-bold text-white leading-snug">{sdg.title}</h3>
                   <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1.5 flex items-center gap-1 opacity-75">
-                    <RotateCw className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-blue-400 animate-spin" /> Flip
+                    <RotateCw className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-blue-400" /> Flip
                   </span>
                 </div>
               }

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Sparkles, X, HeartPulse, Leaf, Search, Tag, CheckCircle2, ChevronRight, Maximize2 } from "lucide-react";
+import { ArrowLeft, Sparkles, X, HeartPulse, Leaf, Search, Tag, CheckCircle2, ChevronRight, Maximize2, Filter, ChevronDown } from "lucide-react";
 import { YodhaImage } from "./YodhaImage";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
@@ -23,6 +23,33 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("All");
 
   const isHealthcare = trackType === "healthcare";
+
+  // Native Browser Backtrack Support (Listens for Browser Back Button / ESC)
+  useEffect(() => {
+    const handlePopState = () => {
+      if (selectedStatement) {
+        setSelectedStatement(null);
+      } else {
+        onBack();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (selectedStatement) setSelectedStatement(null);
+        else onBack();
+      }
+    };
+
+    window.history.pushState({ track: trackType, modal: !!selectedStatement }, "");
+    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedStatement, trackType, onBack]);
 
   const statements: ProblemStatement[] = isHealthcare
     ? HEALTHCARE_PROBLEM_STATEMENTS
@@ -79,13 +106,13 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
         <div className="flex items-center justify-between mb-8 sm:mb-12 border-b border-white/10 pb-6">
           <button
             onClick={onBack}
-            className="btn-metallic-silver flex items-center gap-2 px-5 py-2.5 rounded-full text-xs uppercase tracking-wider cursor-pointer"
+            className="btn-metallic-silver flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-mono font-extrabold uppercase tracking-wider cursor-pointer hover:scale-105 transition-transform"
           >
             <ArrowLeft className="w-4 h-4 text-slate-950" />
             <span>Back to Main Page</span>
           </button>
 
-          <span className="text-xs font-mono font-bold text-slate-400 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full hidden sm:inline-block">
+          <span className="text-xs font-mono font-bold text-slate-300 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full hidden sm:inline-block">
             YODHA 2.0 • {isHealthcare ? "Healthcare Track" : "Environmental Track"}
           </span>
         </div>
@@ -93,7 +120,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
         {/* Track Title Banner */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <span
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-widest mb-4 border"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-widest mb-4 border shadow-md"
             style={{
               borderColor: isHealthcare ? "rgba(239,68,68,0.5)" : "rgba(16,185,129,0.5)",
               backgroundColor: isHealthcare ? "rgba(239,68,68,0.1)" : "rgba(16,185,129,0.1)",
@@ -112,36 +139,39 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
           </p>
         </div>
 
-        {/* Search & Filter Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 bg-white/[0.03] border border-white/10 p-4 rounded-2xl backdrop-blur-xl">
+        {/* Search & Theme Difficulty Dropdown Bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 bg-[#040816]/90 border border-sky-500/30 p-4 rounded-2xl backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
           {/* Search Box */}
           <div className="relative w-full sm:w-96">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-cyan-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search problem statements or tags..."
-              className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-sky-400 transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 bg-black/60 border border-cyan-400/30 rounded-xl text-xs sm:text-sm font-mono text-white placeholder-slate-400 focus:outline-none focus:border-cyan-300 focus:ring-2 focus:ring-cyan-400/30 transition-all"
             />
           </div>
 
-          {/* Difficulty Filter */}
-          <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
-            <span className="text-xs font-mono text-slate-400 uppercase font-bold shrink-0">Difficulty:</span>
-            {["All", "Easy", "Medium", "Hard"].map((diff) => (
-              <button
-                key={diff}
-                onClick={() => setSelectedDifficulty(diff)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                  selectedDifficulty === diff
-                    ? "bg-sky-500 text-black shadow-[0_0_15px_rgba(56,189,248,0.5)]"
-                    : "bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10"
-                }`}
+          {/* THEMED CYBERPUNK DIFFICULTY DROPDOWN MENU */}
+          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+            <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest shrink-0 flex items-center gap-1.5">
+              <Filter className="w-3.5 h-3.5 text-cyan-400" />
+              <span>DIFFICULTY LEVEL:</span>
+            </span>
+            <div className="relative w-full sm:w-56">
+              <select
+                value={selectedDifficulty}
+                onChange={(e) => setSelectedDifficulty(e.target.value)}
+                className="w-full appearance-none bg-[#070e22] border border-cyan-400/50 hover:border-cyan-300 rounded-xl px-4 py-2.5 pr-10 text-xs font-mono font-bold text-cyan-300 shadow-[0_0_20px_rgba(56,189,248,0.2)] focus:outline-none focus:ring-2 focus:ring-cyan-400/40 cursor-pointer transition-all uppercase tracking-wider"
               >
-                {diff}
-              </button>
-            ))}
+                <option value="All" className="bg-[#070e22] text-cyan-300 font-bold">⚡ All Difficulties</option>
+                <option value="Easy" className="bg-[#070e22] text-emerald-300 font-bold">🟢 Easy</option>
+                <option value="Medium" className="bg-[#070e22] text-amber-300 font-bold">🟡 Medium</option>
+                <option value="Hard" className="bg-[#070e22] text-rose-300 font-bold">🔴 Hard</option>
+              </select>
+              <ChevronDown className="w-4 h-4 text-cyan-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
         </div>
 
@@ -167,7 +197,10 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                 <div>
                   {/* Image Card Container */}
                   <div
-                    onClick={() => setSelectedStatement(st)}
+                    onClick={() => {
+                      setSelectedStatement(st);
+                      window.history.pushState({ modal: st.id }, "");
+                    }}
                     className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-4 group/img border border-white/15 shadow-lg cursor-pointer bg-black/60"
                   >
                     <YodhaImage
@@ -192,9 +225,15 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                       </span>
                     </div>
 
-                    {/* Top Right Difficulty */}
+                    {/* Top Right Difficulty Badge */}
                     <div className="absolute top-2.5 right-2.5 z-10">
-                      <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-extrabold uppercase bg-black/80 backdrop-blur-md text-slate-200 border border-white/15 shadow-md">
+                      <span className={`px-2.5 py-0.5 rounded-md text-[10px] font-mono font-extrabold uppercase border shadow-md backdrop-blur-md ${
+                        st.difficulty === "Easy"
+                          ? "bg-emerald-950/80 text-emerald-300 border-emerald-500/40"
+                          : st.difficulty === "Medium"
+                          ? "bg-amber-950/80 text-amber-300 border-amber-500/40"
+                          : "bg-rose-950/80 text-rose-300 border-rose-500/40"
+                      }`}>
                         {st.difficulty}
                       </span>
                     </div>
@@ -236,8 +275,11 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
 
                 {/* Card Action Button */}
                 <button
-                  onClick={() => setSelectedStatement(st)}
-                  className="btn-metallic-silver w-full py-3 px-4 rounded-xl text-xs uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer"
+                  onClick={() => {
+                    setSelectedStatement(st);
+                    window.history.pushState({ modal: st.id }, "");
+                  }}
+                  className="btn-metallic-silver w-full py-3 px-4 rounded-xl text-xs font-mono font-extrabold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:scale-102 transition-transform"
                 >
                   <span>Read Details & Solve</span>
                   <ChevronRight className="w-4 h-4 text-slate-950" />
@@ -248,7 +290,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
         </div>
       </div>
 
-      {/* FULL PROBLEM STATEMENT READ-MORE MODAL */}
+      {/* FULL PROBLEM STATEMENT READ-MORE MODAL WITH BACKTRACK SUPPORT */}
       <AnimatePresence>
         {selectedStatement && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -266,7 +308,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-3xl rounded-3xl bg-[#090d19] border border-white/20 p-6 sm:p-10 shadow-[0_0_80px_rgba(0,0,0,0.95)] max-h-[90vh] overflow-y-auto z-10 text-left"
+              className="relative w-full max-w-3xl rounded-3xl bg-[#090d19] border border-cyan-400/40 p-6 sm:p-10 shadow-[0_0_80px_rgba(56,189,248,0.3)] max-h-[90vh] overflow-y-auto z-10 text-left"
             >
               {/* Top Close Button */}
               <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
@@ -274,7 +316,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-black bg-sky-500/20 text-sky-300 border border-sky-400/40">
                     ID #{selectedStatement.id}
                   </span>
-                  <span className="text-xs font-mono text-slate-400 uppercase tracking-widest font-bold">
+                  <span className="text-xs font-mono text-slate-300 uppercase tracking-widest font-bold">
                     {selectedStatement.category} AI TRACK
                   </span>
                 </div>
@@ -374,7 +416,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                     isHealthcare ? "Healthcare AI" : "Environmental AI"
                   );
                 }}
-                className="btn-metallic-silver w-full py-4 rounded-2xl uppercase tracking-widest text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-metallic-silver w-full py-4 rounded-2xl uppercase tracking-widest text-xs sm:text-sm font-mono font-extrabold flex items-center justify-center gap-2 cursor-pointer hover:scale-102 transition-transform"
               >
                 <Sparkles className="w-4 h-4 text-slate-950 animate-spin" />
                 <span>Register Team for {selectedStatement.category} AI Track</span>
