@@ -8,11 +8,11 @@ interface YodhaTitleBannerProps {
 }
 
 const LETTERS = [
-  { id: "Y", src: "/Y.png", delay: 0.05 },
-  { id: "O", src: "/O.png", delay: 0.1 },
-  { id: "D", src: "/D.png", delay: 0.15 },
-  { id: "H", src: "/H.png", delay: 0.2 },
-  { id: "A", src: "/A.png", delay: 0.25 },
+  { id: "Y", src: "/Y.webp", delay: 0.05 },
+  { id: "O", src: "/O.webp", delay: 0.1 },
+  { id: "D", src: "/D.webp", delay: 0.15 },
+  { id: "H", src: "/H.webp", delay: 0.2 },
+  { id: "A", src: "/A.webp", delay: 0.25 },
 ];
 
 interface PhysicsState {
@@ -160,7 +160,7 @@ export function YodhaTitleBanner({ size = "md", className = "", align = "center"
         className="mt-[-6px] sm:mt-[-12px] md:mt-[-16px] flex items-center justify-center w-full px-2 relative z-10"
       >
         <motion.img
-          src="/warrior of ai.png"
+          src="/warrior of ai.webp"
           alt="WARRIORS OF AI"
           animate={{
             scaleX: [1, 1.05, 0.96, 1.04, 1],

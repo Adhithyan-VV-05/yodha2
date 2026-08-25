@@ -26,7 +26,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
       // 1. Preload Logo Image
       const logoPromise = new Promise((resolve) => {
         const img = new Image();
-        img.src = "/logo.png";
+        img.src = "/logo.webp";
         if (img.complete) {
           updateProgress();
           resolve(true);
@@ -106,7 +106,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
           
           {/* Center Background-Removed Spartan Emblem Logo */}
           <div className="absolute drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]">
-            <img src="/logo.png" alt="Yodha Spartan Emblem" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
+            <img src="/logo.webp" alt="Yodha Spartan Emblem" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
           </div>
         </div>
 

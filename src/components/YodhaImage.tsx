@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, type ImgHTMLAttributes } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.webp";
 
 interface YodhaImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   containerClassName?: string;

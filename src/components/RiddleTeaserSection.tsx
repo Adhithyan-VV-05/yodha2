@@ -14,7 +14,7 @@ export function RiddleTeaserSection() {
       >
         {/* Generated Metallic Silver Cyber Border Overlay */}
         <div className="absolute inset-0 pointer-events-none z-15 border-2 border-slate-300/40 rounded-3xl overflow-hidden">
-          <img src="/riddle_border.png" alt="" className="w-full h-full object-cover opacity-30 mix-blend-overlay" />
+          <img src="/riddle_border.webp" alt="" className="w-full h-full object-cover opacity-30 mix-blend-overlay" />
         </div>
 
         {/* Background Cipher Image with Dark Contrast Overlay */}

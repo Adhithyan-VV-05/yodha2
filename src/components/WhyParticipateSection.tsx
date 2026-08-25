@@ -141,7 +141,7 @@ export function WhyParticipateSection() {
             >
               {/* Metallic Card Frame Image Texture */}
               <img
-                src="/metallic_card_frame.png"
+                src="/metallic_card_frame.webp"
                 alt=""
                 className="absolute inset-0 w-full h-full object-fill pointer-events-none opacity-25 mix-blend-screen group-hover:opacity-40 transition-opacity"
               />

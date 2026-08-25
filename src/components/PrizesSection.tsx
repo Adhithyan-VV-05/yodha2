@@ -39,7 +39,7 @@ function ViewportCenterTrophyCard({
       >
         {/* Metallic Border Overlay */}
         <div className="absolute inset-0 pointer-events-none z-15 border-2 border-slate-400/30 rounded-3xl overflow-hidden">
-          <img src="/about_border.png" alt="" className="w-full h-full object-cover opacity-30 mix-blend-overlay" />
+          <img src="/about_border.webp" alt="" className="w-full h-full object-cover opacity-30 mix-blend-overlay" />
         </div>
 
         <div className="relative z-20">
@@ -95,7 +95,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
           
           {/* 1ST PLACE - GOLD CHAMPION TROPHY CARD (Mobile Order 1, Desktop Center) */}
           <ViewportCenterTrophyCard
-            trophyImgSrc="/gold.png"
+            trophyImgSrc="/gold.webp"
             trophyAlt="Gold Yodha Champion Trophy"
             glowColorClass="bg-amber-500/20"
             baseTilt={0}
@@ -132,7 +132,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
 
           {/* 2ND PLACE - SILVER TROPHY CARD (Mobile Order 2, Desktop Left, Tilted -4deg) */}
           <ViewportCenterTrophyCard
-            trophyImgSrc="/silver.png"
+            trophyImgSrc="/silver.webp"
             trophyAlt="Silver Yodha Trophy"
             glowColorClass="bg-slate-400/10"
             baseTilt={-4}
@@ -163,7 +163,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
 
           {/* 3RD PLACE - BRONZE TROPHY CARD (Mobile Order 3, Desktop Right, Tilted +4deg) */}
           <ViewportCenterTrophyCard
-            trophyImgSrc="/bronze.png"
+            trophyImgSrc="/bronze.webp"
             trophyAlt="Bronze Yodha Trophy"
             glowColorClass="bg-amber-700/10"
             baseTilt={4}

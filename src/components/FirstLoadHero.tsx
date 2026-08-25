@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield } from "lucide-react";
 import { TextScramble } from "./TextScramble";
-import { HeroCommandCenter } from "./HeroCommandCenter";
+import { HeroRoboVisual } from "./HeroRoboVisual";
 import { YodhaTitleBanner } from "./YodhaTitleBanner";
 
 interface FirstLoadHeroProps {
@@ -57,13 +57,13 @@ export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
 
   return (
     <section id="about" className="relative w-full overflow-hidden pt-12 sm:pt-20 pb-8 flex items-center justify-center">
-      {/* Interactive Command Hub & Landing Hero Content */}
+      {/* Landing Hero Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         
         {/* Tight & Properly Spaced Split Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
 
-            {/* LEFT COLUMN: Interactive Hackathon Command Hub */}
+            {/* LEFT COLUMN: Futuristic AI Robo Visual */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -71,7 +71,7 @@ export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
               transition={{ duration: 0.7 }}
               className="lg:col-span-5 flex flex-col justify-center items-center order-1 lg:order-1 w-full relative z-20 pointer-events-auto"
             >
-              <HeroCommandCenter onOpenRegister={onOpenRegister} />
+              <HeroRoboVisual onOpenRegister={onOpenRegister} />
             </motion.div>
 
             {/* RIGHT COLUMN: Kinetic Hero Banner & Metadata */}
@@ -179,20 +179,20 @@ export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
                         </div>
 
                         {/* Centered Numbers */}
-                        <div className="absolute inset-0 z-20 flex items-center justify-center text-center pointer-events-none">
+                        <div className="absolute inset-0 z-20 flex items-center justify-center text-center pointer-events-none -translate-y-1.5 sm:-translate-y-2">
                           <div className="relative font-digital flex items-center justify-center leading-none">
-                            <span className="font-digital text-2xl sm:text-4xl font-normal text-cyan-950/40 select-none pointer-events-none tracking-wider leading-none">
+                            <span className="font-digital text-3xl sm:text-5xl font-normal text-cyan-950/40 select-none pointer-events-none tracking-wider leading-none">
                               88
                             </span>
-                            <span className="absolute inset-0 flex items-center justify-center font-digital text-2xl sm:text-4xl font-normal text-cyan-300 tracking-wider leading-none">
+                            <span className="absolute inset-0 flex items-center justify-center font-digital text-3xl sm:text-5xl font-normal text-cyan-300 tracking-wider leading-none filter drop-shadow-[0_0_12px_rgba(56,189,248,0.6)]">
                               {String(item.value).padStart(2, "0")}
                             </span>
                           </div>
                         </div>
 
-                        {/* Unit Label */}
-                        <div className="absolute bottom-[16%] left-0 right-0 z-20 flex items-center justify-center text-center pointer-events-none">
-                          <span className="text-[10px] sm:text-xs font-mono font-bold text-sky-400/90 tracking-widest uppercase">
+                        {/* Unit Label (D, H, M, S) */}
+                        <div className="absolute bottom-[20%] left-0 right-0 z-20 flex items-center justify-center text-center pointer-events-none">
+                          <span className="text-[10px] sm:text-xs font-mono font-extrabold text-cyan-300 tracking-widest uppercase">
                             {item.label}
                           </span>
                         </div>

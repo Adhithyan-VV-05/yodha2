@@ -17,7 +17,7 @@ export function Card3DFlip({
   flipDirection = "horizontal",
   className = "",
   bgImage,
-  borderOverlayImage = "/about_border.png",
+  borderOverlayImage = "/about_border.webp",
 }: Card3DFlipProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
