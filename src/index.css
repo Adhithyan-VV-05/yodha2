@@ -23,14 +23,22 @@ html {
   scroll-behavior: smooth;
   color-scheme: dark;
   background-color: #03060d !important;
+  overflow: hidden !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  width: 100vw !important;
 }
 
 body {
   background-color: #03060d !important;
   color: #f8fafc;
   font-family: var(--font-sans);
-  overflow-x: hidden;
-  min-height: 100vh;
+  overflow: hidden !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  width: 100vw !important;
+  position: fixed;
+  inset: 0;
 }
 
 /* Touch & Click Button Optimization for All Devices */
@@ -106,6 +114,33 @@ input[type="submit"],
 
 ::-webkit-scrollbar-thumb:hover {
   background: #38bdf8;
+}
+
+/* Hide scrollbar for clean horizontal experience */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* 100vh Viewport Layout Constraint Utilities */
+.section-100vh-fit {
+  max-height: 100vh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+@media (max-height: 750px) {
+  .section-100vh-fit {
+    scale: 0.92;
+    transform-origin: center center;
+  }
 }
 
 /* Smooth Ambient Background Floating Keyframes */

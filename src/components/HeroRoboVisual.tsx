@@ -16,7 +16,7 @@ export function HeroRoboVisual({ onOpenRegister }: HeroRoboVisualProps) {
         <img
           src="/robo.webp"
           alt="YODHA AI Robo"
-          className="w-full h-auto max-h-[440px] sm:max-h-[500px] object-contain filter drop-shadow-[0_15px_30px_rgba(56,189,248,0.35)] hover:drop-shadow-[0_20px_45px_rgba(56,189,248,0.55)] hover:scale-105 transition-all duration-300"
+          className="w-full h-auto max-h-[22vh] sm:max-h-[28vh] lg:max-h-[420px] object-contain filter drop-shadow-[0_15px_30px_rgba(56,189,248,0.35)] hover:drop-shadow-[0_20px_45px_rgba(56,189,248,0.55)] hover:scale-105 transition-all duration-300"
         />
       </motion.div>
     </div>

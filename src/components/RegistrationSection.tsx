@@ -7,7 +7,6 @@ import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkPartici
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
 import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
-import { InteractiveLogoBall } from "./InteractiveLogoBall";
 import { YodhaImage } from "./YodhaImage";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
@@ -409,17 +408,19 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
         className="absolute -top-20 -right-20 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"
       />
 
-      {/* Header with 3D Interactive Logo Ball & Close Button */}
+      {/* Header with YODHA Helmet Logo & Close Button */}
       <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-6 relative z-10">
-        <div className="flex items-center gap-4">
-          <InteractiveLogoBall size="md" />
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-cyan-400/50 bg-[#020510] p-1.5 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(56,189,248,0.35)]">
+            <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-contain" />
+          </div>
           <div>
-            <span className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-0.5 font-bold flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-sky-400 animate-spin" />
+            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-0.5 font-bold flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
               <span>TEAM REGISTRATION PORTAL</span>
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white">
-              Register Team for <span className="text-sky-400">YODHA 2.0</span>
+              Register Team for <span className="text-cyan-400">YODHA 2.0</span>
             </h3>
           </div>
         </div>

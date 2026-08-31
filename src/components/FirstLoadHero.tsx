@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { ArrowRight, Shield } from "lucide-react";
-import { TextScramble } from "./TextScramble";
 import { HeroRoboVisual } from "./HeroRoboVisual";
 import { YodhaTitleBanner } from "./YodhaTitleBanner";
 
@@ -12,10 +10,10 @@ interface FirstLoadHeroProps {
 export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
   // Countdown Timer targeting 11 September 2026
   const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
+    days: 10,
+    hours: 11,
+    minutes: 30,
+    seconds: 39,
   });
 
   useEffect(() => {
@@ -41,196 +39,172 @@ export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
     return () => clearInterval(timer);
   }, []);
 
-  const handleExploreThemes = () => {
-    const el = document.getElementById("tracks");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   const timerItems = [
-    { label: "D", value: timeLeft.days },
-    { label: "H", value: timeLeft.hours },
-    { label: "M", value: timeLeft.minutes },
-    { label: "S", value: timeLeft.seconds },
+    { label: "DAYS", value: timeLeft.days },
+    { label: "HOURS", value: timeLeft.hours },
+    { label: "MINS", value: timeLeft.minutes },
+    { label: "SECS", value: timeLeft.seconds },
   ];
 
   return (
-    <section id="about" className="relative w-full overflow-hidden pt-12 sm:pt-20 pb-8 flex items-center justify-center">
-      {/* Landing Hero Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+    <section id="hero-page" className="relative w-full h-full flex flex-col justify-between py-2 sm:py-3 px-3 sm:px-8 max-w-7xl mx-auto overflow-hidden select-none">
+      
+      {/* ========================================================================= */}
+      {/* 1. PC / DESKTOP VIEW (EXACT SIZING MATCH TO LEFT SIDE OF MOCKUP)          */}
+      {/* ========================================================================= */}
+      <div className="hidden lg:flex flex-col justify-between h-full w-full py-1">
         
-        {/* Tight & Properly Spaced Split Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+        {/* TOP ROW: 2-COLUMN SPLIT (Left Details • Right AI Robot Mascot) */}
+        <div className="grid grid-cols-12 gap-6 items-center w-full my-auto">
+          
+          {/* Left Column: YODHA Title, Subtext, Pill Badge, College Text, Blue CTA Button */}
+          <div className="col-span-7 flex flex-col items-start text-left space-y-4">
+            {/* YODHA Title Banner + WARRIORS OF AI subtext with cyan lines */}
+            <YodhaTitleBanner size="lg" align="left" />
 
-            {/* LEFT COLUMN: Futuristic AI Robo Visual */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="lg:col-span-5 flex flex-col justify-center items-center order-1 lg:order-1 w-full relative z-20 pointer-events-auto"
-            >
-              <HeroRoboVisual onOpenRegister={onOpenRegister} />
-            </motion.div>
-
-            {/* RIGHT COLUMN: Kinetic Hero Banner & Metadata */}
-            <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-2">
-
-              {/* Dynamic Animated Y-O-D-H-A Title Banner */}
-              <div className="mb-2 w-full flex justify-center lg:justify-start">
-                <YodhaTitleBanner size="lg" align="left" />
-              </div>
-
-              {/* Tagline Capsule Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.5 }}
-                onClick={() => onOpenRegister()}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-600 backdrop-blur-xl text-xs font-mono text-slate-200 mb-4 shadow-md cursor-pointer relative z-30 pointer-events-auto group"
-              >
-                <Shield className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                <span className="font-extrabold tracking-widest uppercase text-white text-[11px] sm:text-xs">
-                  <TextScramble text="INNOVATE • IMPACT — BE A WARRIOR OF AI" revealDuration={1000} />
-                </span>
-              </motion.div>
-
-              {/* Institution Metadata Tags */}
-              <div className="w-full max-w-xl mb-3">
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
-                  <span className="text-[11px] sm:text-xs font-mono font-extrabold text-white uppercase tracking-wider bg-slate-900/90 border border-sky-400/40 px-3 py-1 rounded-full shadow-sm">
-                    JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)
-                  </span>
-                  <span className="text-[11px] sm:text-xs font-mono text-slate-300 border border-white/20 px-3 py-1 rounded-full bg-black/40">
-                    DEPT OF AI & DATA SCIENCE
-                  </span>
-                </div>
-              </div>
-
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="mt-1 text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed"
-              >
-                A 48-hour national-level innovation challenge bringing together engineering students to build AI solutions that <strong className="text-white font-bold">save lives</strong> and <strong className="text-cyan-300 font-bold">protect our planet</strong>.
-              </motion.p>
-
-              {/* Sci-Fi Circular Countdown Section */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="mt-5 w-full max-w-xl mx-auto lg:mx-0 relative select-none"
-              >
-                {/* Sci-Fi Header Bar */}
-                <div className="relative flex items-center justify-center mb-3 w-full px-1">
-                  <div className="flex-1 flex items-center gap-1">
-                    <div className="w-2 h-2 border-l-2 border-t-2 border-cyan-400 -rotate-45" />
-                    <div className="h-[2px] w-full bg-gradient-to-r from-sky-500/90 via-cyan-400 to-transparent" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-300" />
-                  </div>
-
-                  <div className="px-3 text-center shrink-0">
-                    <span className="text-xs sm:text-sm font-mono font-black tracking-widest text-cyan-300 uppercase">
-                      HACKATHON STARTS IN
-                    </span>
-                  </div>
-
-                  <div className="flex-1 flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-300" />
-                    <div className="h-[2px] w-full bg-gradient-to-l from-sky-500/90 via-cyan-400 to-transparent" />
-                    <div className="w-2 h-2 border-r-2 border-t-2 border-cyan-400 rotate-45" />
-                  </div>
-                </div>
-
-                {/* 4 Circular Pods Grid */}
-                <div className="relative w-full flex items-center justify-center">
-                  <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent z-0 pointer-events-none" />
-
-                  <div className="grid grid-cols-4 gap-2 sm:gap-3 w-full relative z-10">
-                    {timerItems.map((item) => (
-                      <div
-                        key={item.label}
-                        className="relative aspect-square flex flex-col items-center justify-center group"
-                      >
-                        {/* Inner Disc */}
-                        <div className="absolute inset-[12%] rounded-full bg-[#030919]/90 backdrop-blur-md border border-cyan-400/30 pointer-events-none z-0 overflow-hidden" />
-
-                        {/* Metallic Frame Image */}
-                        <div className="absolute inset-0 w-full h-full pointer-events-none z-10 animate-spin-slow">
-                          <img
-                            src="/countdown circle.webp"
-                            alt={item.label}
-                            className="w-full h-full object-contain pointer-events-none"
-                            style={{
-                              WebkitBackfaceVisibility: "hidden",
-                              backfaceVisibility: "hidden",
-                              transform: "translateZ(0)",
-                            }}
-                          />
-                        </div>
-
-                        {/* Centered Numbers */}
-                        <div className="absolute inset-0 z-20 flex items-center justify-center text-center pointer-events-none -translate-y-1.5 sm:-translate-y-2">
-                          <div className="relative font-digital flex items-center justify-center leading-none">
-                            <span className="font-digital text-3xl sm:text-5xl font-normal text-cyan-950/40 select-none pointer-events-none tracking-wider leading-none">
-                              88
-                            </span>
-                            <span className="absolute inset-0 flex items-center justify-center font-digital text-3xl sm:text-5xl font-normal text-cyan-300 tracking-wider leading-none filter drop-shadow-[0_0_12px_rgba(56,189,248,0.6)]">
-                              {String(item.value).padStart(2, "0")}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Unit Label (D, H, M, S) */}
-                        <div className="absolute bottom-[20%] left-0 right-0 z-20 flex items-center justify-center text-center pointer-events-none">
-                          <span className="text-[10px] sm:text-xs font-mono font-extrabold text-cyan-300 tracking-widest uppercase">
-                            {item.label}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Action Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 w-full"
-              >
-                <button
-                  onClick={() => onOpenRegister()}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-sky-400 to-blue-600 text-black font-black text-xs sm:text-sm tracking-widest uppercase hover:brightness-110 transition-all shadow-[0_0_20px_rgba(56,189,248,0.5)] flex items-center gap-2 cursor-pointer pointer-events-auto"
-                >
-                  <span>REGISTER TEAM NOW</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={handleExploreThemes}
-                  className="px-5 py-3 rounded-full bg-slate-900/90 border border-slate-700 text-slate-200 font-bold text-xs sm:text-sm tracking-wider uppercase hover:border-cyan-400 hover:text-white transition-all cursor-pointer pointer-events-auto"
-                >
-                  EXPLORE TRACKS
-                </button>
-              </motion.div>
-
+            {/* Pill Badge: 🛡️ 48-HOUR HEALTHCARE AI HACKATHON */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-400/50 text-cyan-300 font-mono text-xs font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+              <Shield className="w-3.5 h-3.5 text-cyan-400" />
+              <span>48-HOUR HEALTHCARE AI HACKATHON</span>
             </div>
+
+            {/* Subtitle: JYOTHI ENGINEERING COLLEGE (AUTONOMOUS) • DEPT OF AI & DATA SCIENCE */}
+            <div className="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed font-medium">
+              <p>JYOTHI ENGINEERING COLLEGE (AUTONOMOUS) •</p>
+              <p>DEPT OF AI & DATA SCIENCE</p>
+            </div>
+
+            {/* Blue Glowing Pill Button: REGISTER TEAM NOW ➔ */}
+            <button
+              onClick={() => onOpenRegister()}
+              className="px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 via-sky-400 to-cyan-400 text-slate-950 font-black text-xs tracking-widest uppercase hover:brightness-115 transition-all shadow-[0_0_30px_rgba(56,189,248,0.65)] flex items-center gap-2 cursor-pointer pointer-events-auto active:scale-95 hover:scale-105"
+            >
+              <span>REGISTER TEAM NOW</span>
+              <ArrowRight className="w-4 h-4 text-slate-950" />
+            </button>
+          </div>
+
+          {/* Right Column: Large AI Robot Mascot with subtle glowing aura */}
+          <div className="col-span-5 flex justify-center items-center relative">
+            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+            <HeroRoboVisual onOpenRegister={onOpenRegister} />
+          </div>
 
         </div>
 
+        {/* BOTTOM ROW: CENTERED HACKATHON STARTS IN HEADER LINE + 4 CIRCULAR TIMERS */}
+        <div className="w-full flex flex-col items-center justify-center space-y-2 pt-1 pb-1">
+          {/* Header Line */}
+          <div className="flex items-center justify-center gap-4 w-full max-w-xl">
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-cyan-400/60 to-cyan-400" />
+            <span className="text-xs font-mono font-black tracking-widest text-cyan-300 uppercase shrink-0">
+              HACKATHON STARTS IN
+            </span>
+            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-cyan-400/60 to-cyan-400" />
+          </div>
+
+          {/* 4 Horizontal Circular Timer Pods */}
+          <div className="flex items-center justify-center gap-5 xl:gap-7">
+            {timerItems.map((item) => (
+              <div key={item.label} className="relative w-18 h-18 sm:w-20 sm:h-20 xl:w-22 xl:h-22 flex flex-col items-center justify-center">
+                <div className="absolute inset-[8%] rounded-full bg-[#030919]/90 border border-cyan-400/40 pointer-events-none shadow-[0_0_15px_rgba(56,189,248,0.25)]" />
+                <div className="absolute inset-0 w-full h-full pointer-events-none animate-spin-slow">
+                  <img src="/countdown circle.webp" alt={item.label} className="w-full h-full object-contain" />
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center text-center -translate-y-1 z-10">
+                  <div className="relative font-digital flex items-center justify-center">
+                    <span className="font-digital text-xl sm:text-2xl font-normal text-cyan-950/40 select-none">88</span>
+                    <span className="absolute inset-0 flex items-center justify-center font-digital text-xl sm:text-2xl font-normal text-cyan-300 filter drop-shadow-[0_0_10px_rgba(56,189,248,0.7)]">
+                      {String(item.value).padStart(2, "0")}
+                    </span>
+                  </div>
+                </div>
+                <div className="absolute bottom-[14%] left-0 right-0 text-center z-10">
+                  <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-cyan-300 tracking-wider uppercase">
+                    {item.label}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
+
+      {/* ========================================================================= */}
+      {/* 2. MOBILE VIEW (EXACT SIZING MATCH TO RIGHT SIDE OF MOCKUP)               */}
+      {/* ========================================================================= */}
+      <div className="flex lg:hidden flex-col justify-between h-full w-full py-1 text-center items-center space-y-1.5">
+        
+        {/* 1. YODHA Title Banner + WARRIORS OF AI */}
+        <div className="w-full flex justify-center scale-85 sm:scale-100">
+          <YodhaTitleBanner size="lg" align="center" />
+        </div>
+
+        {/* 2. Centered Hovering AI Robot Mascot */}
+        <div className="w-full flex justify-center my-auto max-h-[180px] sm:max-h-[220px]">
+          <HeroRoboVisual onOpenRegister={onOpenRegister} />
+        </div>
+
+        {/* 3. Pill Badge: 🛡️ 48-HOUR HEALTHCARE AI HACKATHON */}
+        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-950/70 border border-cyan-400/50 text-cyan-300 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
+          <Shield className="w-3 h-3 text-cyan-400" />
+          <span>48-HOUR HEALTHCARE AI HACKATHON</span>
+        </div>
+
+        {/* 4. Subtitle Text */}
+        <div className="text-[10px] sm:text-[11px] font-mono text-slate-300 leading-tight space-y-0.5 max-w-xs">
+          <p>JYOTHI ENGINEERING COLLEGE (AUTONOMOUS) •</p>
+          <p>DEPT OF AI & DATA SCIENCE</p>
+        </div>
+
+        {/* 5. Full-Width Glowing Blue Pill Button */}
+        <button
+          onClick={() => onOpenRegister()}
+          className="w-full max-w-xs py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-sky-400 to-cyan-400 text-slate-950 font-black text-xs tracking-widest uppercase hover:brightness-115 transition-all shadow-[0_0_20px_rgba(56,189,248,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+        >
+          <span>REGISTER TEAM NOW</span>
+          <ArrowRight className="w-3.5 h-3.5 text-slate-950" />
+        </button>
+
+        {/* 6. Bottom Section: HACKATHON STARTS IN + 4 Circular Timers */}
+        <div className="w-full flex flex-col items-center space-y-1 pt-0.5">
+          <div className="flex items-center justify-center gap-2 w-full max-w-xs">
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-cyan-400/70" />
+            <span className="text-[9px] font-mono font-black tracking-widest text-cyan-300 uppercase">
+              HACKATHON STARTS IN
+            </span>
+            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-cyan-400/70" />
+          </div>
+
+          <div className="grid grid-cols-4 gap-1.5 w-full max-w-[240px]">
+            {timerItems.map((item) => (
+              <div key={item.label} className="relative aspect-square flex flex-col items-center justify-center">
+                <div className="absolute inset-[10%] rounded-full bg-[#030919]/90 border border-cyan-400/40 pointer-events-none" />
+                <div className="absolute inset-0 w-full h-full pointer-events-none animate-spin-slow">
+                  <img src="/countdown circle.webp" alt={item.label} className="w-full h-full object-contain" />
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center text-center -translate-y-0.5 z-10">
+                  <div className="relative font-digital flex items-center justify-center">
+                    <span className="font-digital text-base sm:text-lg font-normal text-cyan-300 filter drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]">
+                      {String(item.value).padStart(2, "0")}
+                    </span>
+                  </div>
+                </div>
+                <div className="absolute bottom-[10%] left-0 right-0 text-center z-10">
+                  <span className="text-[7px] font-mono font-extrabold text-cyan-300 uppercase tracking-tight">
+                    {item.label}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
     </section>
   );
 }
+
+export default FirstLoadHero;

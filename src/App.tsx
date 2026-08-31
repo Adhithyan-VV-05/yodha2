@@ -9,22 +9,36 @@ import { ClosingCTA } from "./components/ClosingCTA";
 import { RegistrationSection } from "./components/RegistrationSection";
 import { PastGallerySection } from "./components/PastGallerySection";
 import { CompactFooter } from "./components/CompactFooter";
+import { VerticalYodhaCarousel } from "./components/VerticalYodhaCarousel";
 import KineticGrid from "./components/ui/kinetic-grid";
 import { TrackPage } from "./components/TrackPage";
-import { RiddleTeaserSection } from "./components/RiddleTeaserSection";
 import { trackUserSession } from "./lib/firebase";
+import { PureHorizontalEngine, type SectionInfo } from "./components/PureHorizontalEngine";
+import { AwwwardsCard } from "./components/AwwwardsCard";
+
+const SECTIONS: SectionInfo[] = [
+  { id: "hero", name: "Page 1 • Command Center", widthVw: 100 },
+  { id: "about", name: "Section 02 • About YODHA 2.0", widthVw: 200 },
+  { id: "tracks", name: "Section 03 • Healthcare AI Track", widthVw: 100 },
+  { id: "sdg", name: "Section 04 • UN SDG Goals", widthVw: 100 },
+  { id: "why", name: "Section 05 • Why Participate", widthVw: 100 },
+  { id: "prizes", name: "Section 06 • Prizes & Rewards", widthVw: 100 },
+  { id: "cta", name: "Section 07 • Join Movement", widthVw: 100 },
+  { id: "gallery", name: "Section 08 • Past Movements", widthVw: 100 },
+  { id: "carousel", name: "Section 09 • Vertical Past YODHA Carousel", widthVw: 100 },
+];
 
 function App() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
-  const [activePage, setActivePage] = useState<"home" | "healthcare" | "environmental">("home");
+  const [activePage, setActivePage] = useState<"home" | "healthcare">("home");
 
   const handleOpenRegisterWithTrack = (trackName?: string) => {
     if (trackName) setSelectedTrack(trackName);
     setRegisterModalOpen(true);
   };
 
-  const handleSelectPage = (page: "home" | "healthcare" | "environmental") => {
+  const handleSelectPage = (page: "home" | "healthcare") => {
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (page !== "home") {
@@ -38,9 +52,11 @@ function App() {
     };
     window.addEventListener("popstate", handlePopState);
 
+    // Completely lock document body vertical scroll
+    document.body.style.overflow = "hidden";
+
     // Start Firebase visit increment & session duration tracking telemetry
     const cleanupSessionTracker = trackUserSession();
-    document.body.style.overflow = "auto";
 
     // Dynamic Typewriter Document Title Animation
     const titles = [
@@ -84,17 +100,19 @@ function App() {
     return () => {
       window.removeEventListener("popstate", handlePopState);
       cleanupSessionTracker();
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "hidden";
       clearTimeout(timer);
     };
   }, []);
 
   return (
-    <KineticGrid className="min-h-screen bg-[#020510] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-x-hidden">
+    <KineticGrid
+      planeBackground={true}
+      className="h-screen w-screen bg-[#020510] text-white selection:bg-sky-400 selection:text-black font-sans relative overflow-hidden"
+    >
       {/* Main App Experience */}
       {activePage !== "home" ? (
-        <div className="min-h-screen relative z-20">
-          {/* Navbar temporarily removed */}
+        <div className="h-screen w-screen overflow-y-auto relative z-20">
           <TrackPage
             trackType={activePage}
             onBack={() => handleSelectPage("home")}
@@ -110,43 +128,77 @@ function App() {
           <CompactFooter />
         </div>
       ) : (
-        <div className="flex flex-col min-h-screen relative z-10 opacity-100 block">
-          {/* Navbar temporarily removed */}
+        <div className="relative z-10 w-screen h-screen overflow-hidden">
+          {/* 100% Vertically Fixed Pure Horizontal Engine */}
+          <PureHorizontalEngine sections={SECTIONS}>
+            {/* 1. Page 1: Hero Section (YODHA Title + Robot + Timer + CTA) */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="top">
+                <HeroSection onOpenRegister={handleOpenRegisterWithTrack} />
+              </AwwwardsCard>
+            </div>
 
-          {/* Main Content Sections (Immediate Loading for Ultra-Fast Instant Scroll) */}
-          <main className="flex-grow">
-            {/* 1. Hero Section & Interactive Command Center */}
-            <HeroSection onOpenRegister={handleOpenRegisterWithTrack} />
+            {/* 2. Section 02: About YODHA 2.0 (200vw Horizontal Span) */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="bottom">
+                <AboutSection />
+              </AwwwardsCard>
+            </div>
 
-            {/* Secret Riddle Challenge */}
-            <RiddleTeaserSection />
-            
-            {/* 2. About Yodha & Jyothi Engineering College */}
-            <AboutSection />
+            {/* 3. Section 03: Innovation Tracks (200vw Horizontal Span) */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="top">
+                <TracksSection
+                  onSelectTrack={handleOpenRegisterWithTrack}
+                  onOpenTrackPage={(tType) => handleSelectPage(tType)}
+                />
+              </AwwwardsCard>
+            </div>
 
-            {/* 3. Innovation Tracks */}
-            <TracksSection
-              onSelectTrack={handleOpenRegisterWithTrack}
-              onOpenTrackPage={(tType) => handleSelectPage(tType)}
-            />
+            {/* 4. Section 04: UN Sustainable Development Goals */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="bottom">
+                <SDGSection />
+              </AwwwardsCard>
+            </div>
 
-            {/* 7. UN Sustainable Development Goals */}
-            <SDGSection />
+            {/* 5. Section 05: Why Participate? */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="top">
+                <WhyParticipateSection />
+              </AwwwardsCard>
+            </div>
 
-            {/* 8. Why Participate? */}
-            <WhyParticipateSection />
+            {/* 6. Section 06: Standalone Prize Rewards & Trophies (200vw Horizontal Span) */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="bottom">
+                <PrizesSection onOpenRegister={() => setRegisterModalOpen(true)} />
+              </AwwwardsCard>
+            </div>
 
-            {/* 9. Standalone Prize Rewards & Trophies Section */}
-            <PrizesSection onOpenRegister={() => setRegisterModalOpen(true)} />
+            {/* 7. Section 07: Closing CTA Section */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="top">
+                <ClosingCTA onOpenRegister={() => setRegisterModalOpen(true)} />
+              </AwwwardsCard>
+            </div>
 
-            {/* 10. Closing CTA Section */}
-            <ClosingCTA onOpenRegister={() => setRegisterModalOpen(true)} />
+            {/* 8. Section 08: Past Hackathon Movements */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="bottom">
+                <PastGallerySection />
+              </AwwwardsCard>
+            </div>
 
-            {/* 11. Past Hackathon Movements */}
-            <PastGallerySection />
-          </main>
+            {/* 9. Section 09: Vertical Past YODHA Carousel */}
+            <div className="w-full h-full flex flex-col justify-center items-center section-100vh-fit">
+              <AwwwardsCard direction="top">
+                <VerticalYodhaCarousel />
+              </AwwwardsCard>
+            </div>
+          </PureHorizontalEngine>
 
-          {/* Registration Modal Popup - ONLY opens when Register button is clicked */}
+          {/* Registration Modal Popup */}
           {registerModalOpen && (
             <RegistrationSection
               isOpen={true}
@@ -154,9 +206,6 @@ function App() {
               selectedTrack={selectedTrack}
             />
           )}
-
-          {/* Ultra-Compact Footer */}
-          <CompactFooter />
         </div>
       )}
     </KineticGrid>
@@ -164,4 +213,3 @@ function App() {
 }
 
 export default App;
-

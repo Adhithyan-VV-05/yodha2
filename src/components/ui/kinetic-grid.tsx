@@ -56,10 +56,12 @@ export default function KineticGrid({
   children,
   className,
   globalColor = "default",
+  planeBackground = true,
 }: {
   children?: ReactNode;
   className?: string;
   globalColor?: "default" | "monochrome";
+  planeBackground?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -461,10 +463,16 @@ export default function KineticGrid({
         className,
       )}
     >
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 w-full h-full z-0 pointer-events-none"
-      />
+      {/* Plane Gradient Background */}
+      <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-br from-[#020510] via-[#081026] to-[#030712]" />
+      <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(circle_at_20%_25%,rgba(56,189,248,0.08)_0%,transparent_55%),radial-gradient(circle_at_80%_75%,rgba(139,92,246,0.08)_0%,transparent_55%)]" />
+
+      {!planeBackground && (
+        <canvas
+          ref={canvasRef}
+          className="fixed inset-0 w-full h-full z-0 pointer-events-none"
+        />
+      )}
 
       <div className="relative z-10 w-full h-full">{children}</div>
     </div>

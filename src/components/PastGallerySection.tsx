@@ -34,19 +34,19 @@ export function PastGallerySection() {
   const chainImages = [...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES];
 
   return (
-    <section className="py-16 sm:py-24 relative overflow-hidden bg-transparent border-t border-b border-sky-500/20 z-20">
+    <section className="py-2 sm:py-4 relative overflow-hidden bg-transparent border-t border-b border-sky-500/20 z-20 w-full h-full flex flex-col justify-center items-center">
       {/* Ambient Lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-sky-500/15 via-cyan-500/15 to-blue-600/15 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-8 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-4 text-center my-auto">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
+          className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-1 font-bold flex items-center justify-center gap-2"
         >
           <Camera className="w-4 h-4 text-sky-400" />
-          <span>PAST HACKATHON MOMENTS</span>
+          <span>SECTION 08 • PAST HACKATHON MOMENTS</span>
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: 15 }}

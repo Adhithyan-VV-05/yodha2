@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Shield } from "lucide-react";
 import { Card3DTilt } from "./Card3DTilt";
-import { InteractiveLogoBall } from "./InteractiveLogoBall";
 import { CARD_BACKGROUNDS } from "../data/cardBackgrounds";
 import { YodhaTitleBanner } from "./YodhaTitleBanner";
 
@@ -11,32 +10,34 @@ interface ClosingCTAProps {
 
 export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
   return (
-    <section className="py-20 sm:py-28 relative overflow-hidden bg-transparent">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="py-2 sm:py-4 relative overflow-hidden bg-transparent w-full h-full flex flex-col justify-center items-center">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 my-auto">
         <Card3DTilt intensity={12} bgImage={CARD_BACKGROUNDS.cta.launchpad}>
           <div
             onClick={onOpenRegister}
-            className="p-8 sm:p-14 rounded-3xl bg-slate-950/95 border-2 border-slate-700 backdrop-blur-2xl shadow-2xl text-center relative overflow-hidden flex flex-col items-center cursor-pointer hover:border-blue-500 transition-all group"
+            className="p-6 sm:p-10 rounded-3xl bg-slate-950/95 border-2 border-slate-700 backdrop-blur-2xl shadow-2xl text-center relative overflow-hidden flex flex-col items-center cursor-pointer hover:border-blue-500 transition-all group"
           >
             
-            {/* 3D Interactive Logo Ball */}
+            {/* YODHA Helmet Logo Container */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              className="mb-4 relative z-20"
+              className="mb-3 relative z-20"
             >
-              <InteractiveLogoBall size="xl" />
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-cyan-400/50 bg-[#020510] p-2 flex items-center justify-center shrink-0 shadow-[0_0_25px_rgba(56,189,248,0.45)]">
+                <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-contain" />
+              </div>
             </motion.div>
 
             {/* Official Animated Y-O-D-H-A Title Banner */}
-            <div className="my-3 relative z-20">
+            <div className="my-2 relative z-20">
               <YodhaTitleBanner align="center" size="sm" />
             </div>
 
-            <span className="px-4 py-1.5 bg-slate-900 border border-slate-700 rounded-full text-xs font-mono text-slate-200 font-bold uppercase tracking-widest mb-3 inline-flex items-center gap-2 shadow-sm relative z-20">
+            <span className="px-3.5 py-1 bg-slate-900 border border-slate-700 rounded-full text-xs font-mono text-cyan-300 font-bold uppercase tracking-widest mb-2 inline-flex items-center gap-2 shadow-sm relative z-20">
               <Shield className="w-3.5 h-3.5 text-blue-400" />
-              <span>JOIN THE MOVEMENT</span>
+              <span>SECTION 07 • JOIN THE MOVEMENT</span>
             </span>
 
             <p className="mt-2 text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed relative z-20">

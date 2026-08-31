@@ -12,7 +12,7 @@ import {
 import type { ProblemStatement, ProblemStatementStyle } from "../data/problemStatements";
 
 interface TrackPageProps {
-  trackType: "healthcare" | "environmental";
+  trackType: "healthcare";
   onBack: () => void;
   onOpenRegisterWithTrack: (trackName: string) => void;
 }
