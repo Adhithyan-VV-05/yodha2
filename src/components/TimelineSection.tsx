@@ -60,7 +60,8 @@ const HACKATHON_PHASES: ScheduleItem[] = [
 
 export function TimelineSection() {
   return (
-    <section id="schedule" className="py-24 relative overflow-hidden bg-transparent">
+    <section id="timeline" className="py-24 relative overflow-hidden bg-transparent">
+
       <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">

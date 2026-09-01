@@ -395,7 +395,7 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative bg-[#090c16]/95 border border-white/15 rounded-3xl p-6 sm:p-10 backdrop-blur-2xl shadow-[0_0_60px_rgba(0,0,0,0.95)] max-w-2xl w-full mx-auto overflow-hidden"
+      className="relative bg-slate-950/90 border border-purple-500/30 rounded-3xl p-6 sm:p-10 backdrop-blur-2xl shadow-[0_0_60px_rgba(168,85,247,0.2)] max-w-3xl w-full mx-auto overflow-hidden"
     >
       {/* Moving Ambient Aura Light inside Form */}
       <motion.div
@@ -405,22 +405,22 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
           opacity: [0.3, 0.6, 0.3],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-20 -right-20 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"
+        className="absolute -top-20 -right-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"
       />
 
       {/* Header with YODHA Helmet Logo & Close Button */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-6 relative z-10">
+      <div className="flex items-center justify-between border-b border-purple-500/20 pb-6 mb-6 relative z-10">
         <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-cyan-400/50 bg-[#020510] p-1.5 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(56,189,248,0.35)]">
-            <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-contain" />
+          <div className="w-12 h-12 rounded-full overflow-hidden border border-purple-500/60 shadow-[0_0_20px_rgba(168,85,247,0.4)] shrink-0">
+            <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-cover scale-110" />
           </div>
           <div>
-            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-0.5 font-bold flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+            <span className="text-xs font-mono text-purple-400 uppercase tracking-widest block mb-0.5 font-bold flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-spin" />
               <span>TEAM REGISTRATION PORTAL</span>
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white">
-              Register Team for <span className="text-cyan-400">YODHA 2.0</span>
+              Register Team for <span className="text-purple-400 font-sans">YODHA 2.0</span>
             </h3>
           </div>
         </div>

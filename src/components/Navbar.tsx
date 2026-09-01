@@ -1,164 +1,184 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight, Sparkles, Shield } from "lucide-react";
-import { InteractiveLogoBall } from "./InteractiveLogoBall";
+import { Menu, X, ArrowRight } from "lucide-react";
+import logo from "../assets/logo.webp";
 
 interface NavbarProps {
-  onOpenRegister: () => void;
+  onOpenRegister: (trackName?: string) => void;
 }
 
 export function Navbar({ onOpenRegister }: NavbarProps) {
-  const [scrolled, setScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolledPastHero, setScrolledPastHero] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = totalHeight > 0 ? Math.min(100, Math.max(0, (window.scrollY / totalHeight) * 100)) : 0;
-      setScrollProgress(progress);
-      setScrolled(window.scrollY > 20);
+      const heroThreshold = window.innerHeight * 0.8;
+      setScrolledPastHero(window.scrollY > heroThreshold);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
-    { name: "About", href: "#about" },
-    { name: "Tracks", href: "#tracks" },
-    { name: "Prizes", href: "#prizes" },
+    { name: "ABOUT", href: "#about" },
+    { name: "PROBLEM STATEMENTS", href: "#tracks" },
+    { name: "JOURNEY", href: "#timeline" },
+    { name: "PRIZES", href: "#prizes" },
+    { name: "REGISTER", href: "#register", isAction: true },
   ];
 
   return (
-    <motion.header
-      initial={{ y: -40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled ? "py-2 sm:py-3" : "py-3 sm:py-5"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        {/* Floating Glass Pill Container with Dynamic Silver-Blue Scroll Border */}
-        <div className="relative p-[1.5px] rounded-full overflow-hidden transition-all duration-500">
+    <>
+      {/* 1. FULL NAVBAR (VISIBLE ONLY IN HERO SECTION) */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+          scrolledPastHero
+            ? "-translate-y-full opacity-0 pointer-events-none"
+            : "translate-y-0 opacity-100 py-4 sm:py-6 bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
-          {/* Dynamic Silver-Blue Perimeter Border Fill starting from bottom */}
-          <div
-            className="absolute inset-0 rounded-full pointer-events-none transition-all"
-            style={{
-              background: `conic-gradient(from 180deg at 50% 50%, #2563eb 0%, #cbd5e1 ${scrollProgress}%, rgba(148,163,184,0.2) ${scrollProgress}%, rgba(255,255,255,0.1) 100%)`,
-            }}
-          />
+          {/* BRAND LOGO WITH DOWNWARDS ALIGNED 2.0 */}
+          <a href="#" className="flex items-center gap-2 group shrink-0">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.4)] shrink-0">
+              <img src={logo} alt="Yodha Logo" className="w-full h-full object-cover scale-110" />
+            </div>
+            <div className="flex items-baseline">
+              <span className="font-black text-2xl sm:text-3xl text-slate-950 tracking-tight font-sans">
+                YODHA
+              </span>
+              <span className="text-purple-600 font-extrabold text-xs sm:text-sm font-mono relative top-[3px] ml-1.5">
+                2.0
+              </span>
+            </div>
+          </a>
 
-          {/* Inner Content Body (Ultra Luxury Metallic Chrome Theme) */}
-          <div
-            className={`relative flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-500 border border-slate-400/30 ${
-              scrolled
-                ? "bg-gradient-to-r from-slate-950/98 via-slate-900/98 to-slate-950/98 backdrop-blur-2xl shadow-[0_4px_30px_rgba(203,213,225,0.2)]"
-                : "bg-gradient-to-r from-slate-950/90 via-slate-900/90 to-slate-950/90 backdrop-blur-xl shadow-xl"
-            }`}
-          >
-            {/* BRAND IDENTITY */}
-            <a href="#" className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0">
-              <InteractiveLogoBall size="md" />
-              <div className="flex flex-col justify-center">
-                <span className="font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 text-sm sm:text-lg leading-none group-hover:brightness-125 transition-all">
-                  YODHA <span className="text-slate-100 font-black">2.0</span>
-                </span>
-                <span className="text-[8px] sm:text-[9px] font-mono text-slate-300 font-extrabold uppercase tracking-widest mt-0.5 flex items-center gap-1">
-                  <Shield className="w-2.5 h-2.5 text-blue-400 hidden sm:inline" />
-                  <span>WARRIORS OF AI</span>
-                </span>
-              </div>
-            </a>
-
-            {/* DESKTOP NAV LINKS (METALLIC CHROME PILL DOCK) */}
-            <nav className="hidden md:flex items-center gap-1 bg-slate-900/90 border border-slate-400/40 backdrop-blur-xl rounded-full px-3 py-1 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="px-4 py-1.5 text-xs font-black text-slate-200 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 border border-transparent hover:border-slate-300/50 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] uppercase tracking-wider"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </nav>
-
-            {/* DESKTOP REGISTER CTA BUTTON (METALLIC SILVER) */}
-            <div className="hidden md:flex items-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => {
-                  onOpenRegister();
-                  const el = document.getElementById("register");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
+          {/* DESKTOP NAV LINKS (DARK CHARCOAL TEXT FOR HERO CANVAS) */}
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  if (link.isAction) {
+                    e.preventDefault();
+                    onOpenRegister();
+                  }
                 }}
-                className="btn-metallic-silver flex items-center gap-2 px-6 py-2.5 text-xs rounded-full uppercase tracking-widest cursor-pointer relative z-30 pointer-events-auto"
+                className="text-xs font-mono font-bold text-slate-900 hover:text-purple-600 transition-colors tracking-widest uppercase cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5 text-slate-950 animate-spin" />
-                <span>Register Team</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-slate-950" />
-              </motion.button>
-            </div>
+                {link.name}
+              </a>
+            ))}
+          </nav>
 
-            {/* MOBILE HAMBURGER TOGGLE */}
-            <div className="flex md:hidden items-center">
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 text-slate-200 hover:text-white rounded-full bg-slate-900/90 border border-slate-400/60 backdrop-blur-md cursor-pointer"
-              >
-                {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-              </button>
-            </div>
+          {/* DESKTOP REGISTER CTA BUTTON */}
+          <div className="hidden lg:flex items-center gap-4">
+            <button
+              onClick={() => onOpenRegister()}
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white text-xs font-mono font-bold tracking-widest uppercase flex items-center gap-2 shadow-[0_0_25px_rgba(139,92,246,0.5)] hover:brightness-115 hover:scale-105 transition-all cursor-pointer active:scale-95"
+            >
+              <span>REGISTER NOW</span>
+              <ArrowRight className="w-4 h-4 text-white" />
+            </button>
           </div>
+
+          {/* MOBILE THREE LINES HAMBURGER TOGGLE WHEN IN HERO */}
+          <div className="flex lg:hidden items-center">
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="p-2.5 text-slate-900 hover:text-purple-600 rounded-xl bg-white/80 border border-purple-500/40 backdrop-blur-md cursor-pointer"
+            >
+              <Menu size={22} />
+            </button>
+          </div>
+
         </div>
+      </header>
+
+      {/* 2. MINIMAL THREE LINES HAMBURGER BUTTON (VISIBLE WHEN SCROLLED PAST HERO) */}
+      <div
+        className={`fixed top-4 right-4 sm:top-6 sm:right-8 z-50 transition-all duration-500 ${
+          scrolledPastHero
+            ? "translate-y-0 opacity-100 pointer-events-auto"
+            : "-translate-y-12 opacity-0 pointer-events-none"
+        }`}
+      >
+        <button
+          onClick={() => setMenuOpen(true)}
+          className="p-3.5 rounded-full bg-slate-950/90 border-2 border-purple-500/60 backdrop-blur-2xl text-white shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:scale-110 active:scale-95 transition-all cursor-pointer flex items-center justify-center group"
+          aria-label="Open menu"
+        >
+          <Menu className="w-6 h-6 text-purple-400 group-hover:rotate-90 transition-transform duration-300" />
+        </button>
       </div>
 
-      {/* MOBILE MENU DROPDOWN DRAWER (METALLIC CHROME) */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden max-w-7xl mx-auto px-4 mt-2"
-          >
-            <div className="bg-slate-950/98 border border-slate-400/50 backdrop-blur-2xl px-6 py-6 rounded-3xl shadow-[0_10px_35px_rgba(0,0,0,0.8)] flex flex-col gap-4">
+      {/* 3. MENU DRAWER / MODAL FOR SECTION LINKS */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl animate-fade-in">
+          <div className="relative w-full max-w-md bg-slate-950 border-2 border-purple-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+              <div className="flex items-baseline">
+                <span className="font-black text-2xl text-white tracking-tight font-sans">
+                  YODHA
+                </span>
+                <span className="text-purple-400 font-bold text-xs font-mono relative top-[2px] ml-1.5">
+                  2.0
+                </span>
+              </div>
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="p-2 rounded-full bg-slate-900 text-slate-300 hover:text-white hover:bg-purple-900/50 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Links */}
+            <div className="flex flex-col gap-3">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-base font-black text-slate-200 hover:text-white py-1 transition-colors flex items-center justify-between uppercase tracking-wider"
+                  onClick={(e) => {
+                    setMenuOpen(false);
+                    if (link.isAction) {
+                      e.preventDefault();
+                      onOpenRegister();
+                    }
+                  }}
+                  className="px-4 py-3 rounded-2xl bg-slate-900/80 border border-slate-800 text-sm font-mono font-bold text-slate-200 hover:text-white hover:border-purple-500/50 transition-all flex items-center justify-between uppercase tracking-wider"
                 >
                   <span>{link.name}</span>
-                  <ArrowUpRight className="w-4 h-4 text-slate-400" />
+                  <ArrowRight className="w-4 h-4 text-purple-400" />
                 </a>
               ))}
-
-              <div className="pt-4 border-t border-white/15 mt-1">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenRegister();
-                    const el = document.getElementById("register");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="btn-metallic-silver w-full py-3.5 px-6 text-xs rounded-2xl uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer relative z-30 pointer-events-auto"
-                >
-                  <Sparkles className="w-4 h-4 text-slate-950" />
-                  <span>Register Team Now</span>
-                  <ArrowUpRight className="w-4 h-4 text-slate-950" />
-                </button>
-              </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+
+            {/* Register CTA */}
+            <div className="pt-2 border-t border-slate-800">
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  onOpenRegister();
+                }}
+                className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white text-xs font-mono font-bold tracking-widest uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(139,92,246,0.5)] cursor-pointer"
+              >
+                <span>REGISTER NOW</span>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+    </>
   );
 }
+
+export default Navbar;

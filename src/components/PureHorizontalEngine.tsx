@@ -1,5 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
+
+
 
 export interface SectionInfo {
   id: string;
@@ -16,11 +18,6 @@ export function PureHorizontalEngine({ sections, children }: PureHorizontalEngin
   const totalWidthVw = sections.reduce((acc, sec) => acc + (sec.widthVw || 100), 0);
 
   const rawX = useMotionValue(0);
-  const smoothX = useSpring(rawX, {
-    stiffness: 90,
-    damping: 22,
-    restDelta: 0.05,
-  });
 
   const touchStartRef = useRef<number>(0);
   const currentXRef = useRef<number>(0);
@@ -64,7 +61,7 @@ export function PureHorizontalEngine({ sections, children }: PureHorizontalEngin
     };
 
     // Track motion value updates for top progress bar
-    const unsubscribe = smoothX.on("change", (val) => {
+    const unsubscribe = rawX.on("change", (val) => {
       const maxScroll = getMaxScroll();
       const absVal = Math.abs(val);
       const progress = maxScroll > 0 ? (absVal / maxScroll) * 100 : 0;
@@ -95,7 +92,7 @@ export function PureHorizontalEngine({ sections, children }: PureHorizontalEngin
       window.removeEventListener("resize", handleResize);
       unsubscribe();
     };
-  }, [totalWidthVw, rawX, smoothX]);
+  }, [totalWidthVw, rawX]);
 
   return (
     <div className="fixed inset-0 h-screen w-screen overflow-hidden z-10 select-none">
@@ -103,15 +100,15 @@ export function PureHorizontalEngine({ sections, children }: PureHorizontalEngin
       <div className="fixed top-0 left-0 right-0 h-1 bg-slate-900/70 z-50 pointer-events-none">
         <div
           ref={progressBarRef}
-          className="h-full bg-gradient-to-r from-sky-500 via-cyan-400 to-indigo-500 transition-all duration-150 ease-out shadow-[0_0_12px_rgba(56,189,248,0.85)]"
+          className="h-full bg-gradient-to-r from-sky-500 via-cyan-400 to-indigo-500 transition-all duration-150 ease-out shadow-sm"
           style={{ width: "0%" }}
         />
       </div>
 
       {/* Dynamic Multi-Width Horizontal Motion Track */}
       <motion.div
-        style={{ x: smoothX, width: `${totalWidthVw}vw` }}
-        className="flex h-screen items-center relative z-10 will-change-transform"
+        style={{ x: rawX, width: `${totalWidthVw}vw` }}
+        className="flex h-screen items-center relative z-10"
       >
         {children.map((child, idx) => {
           const widthVw = sections[idx]?.widthVw || 100;
@@ -131,3 +128,4 @@ export function PureHorizontalEngine({ sections, children }: PureHorizontalEngin
 }
 
 export default PureHorizontalEngine;
+

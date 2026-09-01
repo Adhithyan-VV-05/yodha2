@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import { ArrowRight, Shield } from "lucide-react";
-import { HeroRoboVisual } from "./HeroRoboVisual";
-import { YodhaTitleBanner } from "./YodhaTitleBanner";
+import { Zap, Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy } from "lucide-react";
 
 interface FirstLoadHeroProps {
   onOpenRegister: (trackName?: string) => void;
+  onOpenTrailer?: () => void;
 }
 
-export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
-  // Countdown Timer targeting 11 September 2026
+export function FirstLoadHero({ onOpenRegister, onOpenTrailer }: FirstLoadHeroProps) {
+  // Live countdown timer targeting 11 September 2026
   const [timeLeft, setTimeLeft] = useState({
     days: 10,
     hours: 11,
@@ -39,165 +38,223 @@ export function FirstLoadHero({ onOpenRegister }: FirstLoadHeroProps) {
     return () => clearInterval(timer);
   }, []);
 
-  const timerItems = [
-    { label: "DAYS", value: timeLeft.days },
-    { label: "HOURS", value: timeLeft.hours },
-    { label: "MINS", value: timeLeft.minutes },
-    { label: "SECS", value: timeLeft.seconds },
-  ];
-
   return (
-    <section id="hero-page" className="relative w-full h-full flex flex-col justify-between py-2 sm:py-3 px-3 sm:px-8 max-w-7xl mx-auto overflow-hidden select-none">
+    <section className="relative w-full min-h-screen pt-28 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
       
-      {/* ========================================================================= */}
-      {/* 1. PC / DESKTOP VIEW (EXACT SIZING MATCH TO LEFT SIDE OF MOCKUP)          */}
-      {/* ========================================================================= */}
-      <div className="hidden lg:flex flex-col justify-between h-full w-full py-1">
+      {/* HERO MAIN CONTENT GRID */}
+      <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full my-auto">
         
-        {/* TOP ROW: 2-COLUMN SPLIT (Left Details • Right AI Robot Mascot) */}
-        <div className="grid grid-cols-12 gap-6 items-center w-full my-auto">
+        {/* LEFT SIDE CONTENT COLUMN */}
+        <div className="lg:col-span-8 flex flex-col items-start text-left space-y-6">
           
-          {/* Left Column: YODHA Title, Subtext, Pill Badge, College Text, Blue CTA Button */}
-          <div className="col-span-7 flex flex-col items-start text-left space-y-4">
-            {/* YODHA Title Banner + WARRIORS OF AI subtext with cyan lines */}
-            <YodhaTitleBanner size="lg" align="left" />
+          {/* 1. TOP PILL BADGE */}
+          <button
+            onClick={() => onOpenRegister()}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/20 border border-purple-500/40 text-purple-700 font-mono text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-sm hover:border-purple-600 hover:scale-105 transition-all cursor-pointer"
+          >
+            <Zap className="w-4 h-4 text-purple-600 fill-purple-500/30" />
+            <span>48-HOUR HEALTHCARE AI HACKATHON</span>
+          </button>
 
-            {/* Pill Badge: 🛡️ 48-HOUR HEALTHCARE AI HACKATHON */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-400/50 text-cyan-300 font-mono text-xs font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-              <Shield className="w-3.5 h-3.5 text-cyan-400" />
-              <span>48-HOUR HEALTHCARE AI HACKATHON</span>
+          {/* 2. MAIN IMPACT HEADLINE (NO WHITE TEXT - DARK BLACK / CHARCOAL) */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-[1.02] font-sans">
+            BUILD AI SOLUTIONS <br />
+            THAT <span className="text-purple-600 font-black">SAVE LIVES</span> <br />
+            AND <span className="text-purple-600 font-black">PROTECT</span> <br />
+            OUR PLANET.
+          </h1>
+
+          <div className="w-12 h-1 bg-purple-600 rounded-full" />
+
+          {/* 3. SUBTITLE TEXT (DARK CHARCOAL & PURPLE ACCENT) */}
+          <p className="text-base sm:text-lg text-slate-800 max-w-xl font-medium leading-relaxed">
+            An autonomous innovation challenge for young minds with{" "}
+            <strong className="text-slate-950 font-black">bold ideas</strong> and{" "}
+            <strong className="text-purple-600 font-extrabold">bigger impact</strong>.
+          </p>
+
+          {/* 4. THREE STAT GLASS CARDS (DARK TEXT ON TRANSLUCENT WHITE GLASS) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 w-full max-w-2xl pt-2">
+            
+            {/* CARD 1 */}
+            <div className="p-3.5 rounded-2xl bg-white/80 border border-purple-300/40 backdrop-blur-xl flex items-center gap-3.5 shadow-md">
+              <div className="w-10 h-10 rounded-full bg-purple-100 border border-purple-300 p-2 flex items-center justify-center shrink-0">
+                <Clock className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider">
+                  48 HOURS
+                </span>
+                <span className="text-[10px] font-mono text-slate-600 uppercase font-semibold">
+                  OF NON-STOP INNOVATION
+                </span>
+              </div>
             </div>
 
-            {/* Subtitle: JYOTHI ENGINEERING COLLEGE (AUTONOMOUS) • DEPT OF AI & DATA SCIENCE */}
-            <div className="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed font-medium">
-              <p>JYOTHI ENGINEERING COLLEGE (AUTONOMOUS) •</p>
-              <p>DEPT OF AI & DATA SCIENCE</p>
+            {/* CARD 2 */}
+            <div className="p-3.5 rounded-2xl bg-white/80 border border-purple-300/40 backdrop-blur-xl flex items-center gap-3.5 shadow-md">
+              <div className="w-10 h-10 rounded-full bg-purple-100 border border-purple-300 p-2 flex items-center justify-center shrink-0">
+                <Code className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider">
+                  20+
+                </span>
+                <span className="text-[10px] font-mono text-slate-600 uppercase font-semibold">
+                  REAL-WORLD PROBLEMS
+                </span>
+              </div>
             </div>
 
-            {/* Blue Glowing Pill Button: REGISTER TEAM NOW ➔ */}
-            <button
-              onClick={() => onOpenRegister()}
-              className="px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 via-sky-400 to-cyan-400 text-slate-950 font-black text-xs tracking-widest uppercase hover:brightness-115 transition-all shadow-[0_0_30px_rgba(56,189,248,0.65)] flex items-center gap-2 cursor-pointer pointer-events-auto active:scale-95 hover:scale-105"
-            >
-              <span>REGISTER TEAM NOW</span>
-              <ArrowRight className="w-4 h-4 text-slate-950" />
-            </button>
+            {/* CARD 3 */}
+            <div className="p-3.5 rounded-2xl bg-white/80 border border-purple-300/40 backdrop-blur-xl flex items-center gap-3.5 shadow-md">
+              <div className="w-10 h-10 rounded-full bg-purple-100 border border-purple-300 p-2 flex items-center justify-center shrink-0">
+                <Target className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider">
+                  1 MISSION
+                </span>
+                <span className="text-[10px] font-mono text-slate-600 uppercase font-semibold">
+                  TO CREATE IMPACT
+                </span>
+              </div>
+            </div>
+
           </div>
 
-          {/* Right Column: Large AI Robot Mascot with subtle glowing aura */}
-          <div className="col-span-5 flex justify-center items-center relative">
-            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-            <HeroRoboVisual onOpenRegister={onOpenRegister} />
-          </div>
-
-        </div>
-
-        {/* BOTTOM ROW: CENTERED HACKATHON STARTS IN HEADER LINE + 4 CIRCULAR TIMERS */}
-        <div className="w-full flex flex-col items-center justify-center space-y-2 pt-1 pb-1">
-          {/* Header Line */}
-          <div className="flex items-center justify-center gap-4 w-full max-w-xl">
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-cyan-400/60 to-cyan-400" />
-            <span className="text-xs font-mono font-black tracking-widest text-cyan-300 uppercase shrink-0">
-              HACKATHON STARTS IN
-            </span>
-            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-cyan-400/60 to-cyan-400" />
-          </div>
-
-          {/* 4 Horizontal Circular Timer Pods */}
-          <div className="flex items-center justify-center gap-5 xl:gap-7">
-            {timerItems.map((item) => (
-              <div key={item.label} className="relative w-18 h-18 sm:w-20 sm:h-20 xl:w-22 xl:h-22 flex flex-col items-center justify-center">
-                <div className="absolute inset-[8%] rounded-full bg-[#030919]/90 border border-cyan-400/40 pointer-events-none shadow-[0_0_15px_rgba(56,189,248,0.25)]" />
-                <div className="absolute inset-0 w-full h-full pointer-events-none animate-spin-slow">
-                  <img src="/countdown circle.webp" alt={item.label} className="w-full h-full object-contain" />
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center text-center -translate-y-1 z-10">
-                  <div className="relative font-digital flex items-center justify-center">
-                    <span className="font-digital text-xl sm:text-2xl font-normal text-cyan-950/40 select-none">88</span>
-                    <span className="absolute inset-0 flex items-center justify-center font-digital text-xl sm:text-2xl font-normal text-cyan-300 filter drop-shadow-[0_0_10px_rgba(56,189,248,0.7)]">
-                      {String(item.value).padStart(2, "0")}
-                    </span>
-                  </div>
-                </div>
-                <div className="absolute bottom-[14%] left-0 right-0 text-center z-10">
-                  <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-cyan-300 tracking-wider uppercase">
-                    {item.label}
+          {/* 5. COUNTDOWN DECK + TRAILER + LOCATION */}
+          <div className="flex flex-wrap items-center gap-6 pt-4 w-full">
+            
+            {/* COUNTDOWN GLASS DECK */}
+            <div className="p-4 rounded-2xl bg-[#0b0818]/95 border border-purple-500/40 backdrop-blur-2xl flex flex-col space-y-2 shadow-[0_0_30px_rgba(168,85,247,0.2)]">
+              <span className="text-[10px] font-mono font-extrabold text-purple-400 uppercase tracking-widest text-center">
+                HACKATHON STARTS IN
+              </span>
+              <div className="flex items-center justify-center gap-3 text-center">
+                <div className="flex flex-col">
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                    {String(timeLeft.days).padStart(2, "0")}
                   </span>
+                  <span className="text-[8px] font-mono text-slate-400 font-bold uppercase">DAYS</span>
+                </div>
+                <span className="text-xl font-bold text-purple-400">:</span>
+                <div className="flex flex-col">
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                    {String(timeLeft.hours).padStart(2, "0")}
+                  </span>
+                  <span className="text-[8px] font-mono text-slate-400 font-bold uppercase">HOURS</span>
+                </div>
+                <span className="text-xl font-bold text-purple-400">:</span>
+                <div className="flex flex-col">
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                    {String(timeLeft.minutes).padStart(2, "0")}
+                  </span>
+                  <span className="text-[8px] font-mono text-slate-400 font-bold uppercase">MINUTES</span>
+                </div>
+                <span className="text-xl font-bold text-purple-400">:</span>
+                <div className="flex flex-col">
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                    {String(timeLeft.seconds).padStart(2, "0")}
+                  </span>
+                  <span className="text-[8px] font-mono text-slate-400 font-bold uppercase">SECONDS</span>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* WATCH TRAILER ACTION */}
+            <button
+              onClick={() => onOpenTrailer && onOpenTrailer()}
+              className="flex items-center gap-3 group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.5)] group-hover:scale-110 transition-all">
+                <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+              </div>
+              <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider group-hover:text-purple-600 transition-colors">
+                WATCH TRAILER
+              </span>
+            </button>
+
+            {/* LOCATION INFO */}
+            <div className="flex items-start gap-2.5 max-w-xs text-left ml-auto sm:ml-0">
+              <MapPin className="w-5 h-5 text-purple-600 shrink-0 mt-0.5" />
+              <div className="flex flex-col text-xs font-mono text-slate-800 space-y-0.5">
+                <span className="font-black text-slate-950">
+                  JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)
+                </span>
+                <div className="w-8 h-0.5 bg-purple-600/60 my-0.5" />
+                <span className="text-[10px] text-slate-600 font-bold uppercase">
+                  DEPT. OF AI & DATA SCIENCE
+                </span>
+              </div>
+            </div>
+
           </div>
+
         </div>
 
       </div>
 
-      {/* ========================================================================= */}
-      {/* 2. MOBILE VIEW (EXACT SIZING MATCH TO RIGHT SIDE OF MOCKUP)               */}
-      {/* ========================================================================= */}
-      <div className="flex lg:hidden flex-col justify-between h-full w-full py-1 text-center items-center space-y-1.5">
+      {/* 6. BOTTOM FLOATING FEATURE DOCK (4 COLUMNS: COLLABORATE • INNOVATE • IMPACT • WIN & GROW) */}
+      <div className="relative z-20 mt-12 w-full p-4 sm:p-5 rounded-3xl bg-[#050612]/95 border border-purple-500/30 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
-        {/* 1. YODHA Title Banner + WARRIORS OF AI */}
-        <div className="w-full flex justify-center scale-85 sm:scale-100">
-          <YodhaTitleBanner size="lg" align="center" />
-        </div>
-
-        {/* 2. Centered Hovering AI Robot Mascot */}
-        <div className="w-full flex justify-center my-auto max-h-[180px] sm:max-h-[220px]">
-          <HeroRoboVisual onOpenRegister={onOpenRegister} />
-        </div>
-
-        {/* 3. Pill Badge: 🛡️ 48-HOUR HEALTHCARE AI HACKATHON */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-950/70 border border-cyan-400/50 text-cyan-300 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
-          <Shield className="w-3 h-3 text-cyan-400" />
-          <span>48-HOUR HEALTHCARE AI HACKATHON</span>
-        </div>
-
-        {/* 4. Subtitle Text */}
-        <div className="text-[10px] sm:text-[11px] font-mono text-slate-300 leading-tight space-y-0.5 max-w-xs">
-          <p>JYOTHI ENGINEERING COLLEGE (AUTONOMOUS) •</p>
-          <p>DEPT OF AI & DATA SCIENCE</p>
-        </div>
-
-        {/* 5. Full-Width Glowing Blue Pill Button */}
-        <button
-          onClick={() => onOpenRegister()}
-          className="w-full max-w-xs py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-sky-400 to-cyan-400 text-slate-950 font-black text-xs tracking-widest uppercase hover:brightness-115 transition-all shadow-[0_0_20px_rgba(56,189,248,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-        >
-          <span>REGISTER TEAM NOW</span>
-          <ArrowRight className="w-3.5 h-3.5 text-slate-950" />
-        </button>
-
-        {/* 6. Bottom Section: HACKATHON STARTS IN + 4 Circular Timers */}
-        <div className="w-full flex flex-col items-center space-y-1 pt-0.5">
-          <div className="flex items-center justify-center gap-2 w-full max-w-xs">
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-cyan-400/70" />
-            <span className="text-[9px] font-mono font-black tracking-widest text-cyan-300 uppercase">
-              HACKATHON STARTS IN
-            </span>
-            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-cyan-400/70" />
+        {/* COL 1: COLLABORATE */}
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-full bg-purple-950/90 border border-purple-500/40 p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <Users className="w-5 h-5 text-purple-400" />
           </div>
+          <div className="flex flex-col text-left">
+            <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+              COLLABORATE
+            </span>
+            <span className="text-[11px] text-slate-400 leading-tight">
+              Work with brilliant minds from across the nation.
+            </span>
+          </div>
+        </div>
 
-          <div className="grid grid-cols-4 gap-1.5 w-full max-w-[240px]">
-            {timerItems.map((item) => (
-              <div key={item.label} className="relative aspect-square flex flex-col items-center justify-center">
-                <div className="absolute inset-[10%] rounded-full bg-[#030919]/90 border border-cyan-400/40 pointer-events-none" />
-                <div className="absolute inset-0 w-full h-full pointer-events-none animate-spin-slow">
-                  <img src="/countdown circle.webp" alt={item.label} className="w-full h-full object-contain" />
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center text-center -translate-y-0.5 z-10">
-                  <div className="relative font-digital flex items-center justify-center">
-                    <span className="font-digital text-base sm:text-lg font-normal text-cyan-300 filter drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]">
-                      {String(item.value).padStart(2, "0")}
-                    </span>
-                  </div>
-                </div>
-                <div className="absolute bottom-[10%] left-0 right-0 text-center z-10">
-                  <span className="text-[7px] font-mono font-extrabold text-cyan-300 uppercase tracking-tight">
-                    {item.label}
-                  </span>
-                </div>
-              </div>
-            ))}
+        {/* COL 2: INNOVATE */}
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-full bg-purple-950/90 border border-purple-500/40 p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <Lightbulb className="w-5 h-5 text-purple-400" />
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+              INNOVATE
+            </span>
+            <span className="text-[11px] text-slate-400 leading-tight">
+              Solve real-world healthcare challenges using AI.
+            </span>
+          </div>
+        </div>
+
+        {/* COL 3: IMPACT */}
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-full bg-purple-950/90 border border-purple-500/40 p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <Globe className="w-5 h-5 text-purple-400" />
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+              IMPACT
+            </span>
+            <span className="text-[11px] text-slate-400 leading-tight">
+              Build solutions that create a better tomorrow.
+            </span>
+          </div>
+        </div>
+
+        {/* COL 4: WIN & GROW */}
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-full bg-purple-950/90 border border-purple-500/40 p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <Trophy className="w-5 h-5 text-purple-400" />
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+              WIN & GROW
+            </span>
+            <span className="text-[11px] text-slate-400 leading-tight">
+              Exciting prizes, mentorship & career opportunities.
+            </span>
           </div>
         </div>
 

@@ -22,24 +22,24 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
-  background-color: #03060d !important;
-  overflow: hidden !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  width: 100vw !important;
+  background-color: #03060d;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+  width: 100%;
 }
 
 body {
-  background-color: #03060d !important;
+  background-color: #03060d;
   color: #f8fafc;
   font-family: var(--font-sans);
-  overflow: hidden !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  width: 100vw !important;
-  position: fixed;
-  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
 }
+
 
 /* Touch & Click Button Optimization for All Devices */
 button,
@@ -74,55 +74,21 @@ input[type="submit"],
 }
 
 .animate-spin-slow {
-  animation: spin-slow 25s linear infinite;
-  will-change: transform;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: high-quality;
+  animation: none !important;
 }
 
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 35s linear infinite;
-  will-change: transform;
+  animation: none !important;
 }
 
-/* Mobile View: Slower speed (55s) */
-@media (max-width: 640px) {
-  .animate-marquee {
-    animation: marquee 55s linear infinite;
-  }
+.ambient-orb-1 {
+  animation: none !important;
 }
 
-/* Custom Cyber Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #03060d;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
-  border: 1px solid rgba(56, 189, 248, 0.2);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #38bdf8;
-}
-
-/* Hide scrollbar for clean horizontal experience */
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
+.ambient-orb-2 {
+  animation: none !important;
 }
 
 /* 100vh Viewport Layout Constraint Utilities */
@@ -143,28 +109,15 @@ input[type="submit"],
   }
 }
 
-/* Smooth Ambient Background Floating Keyframes */
-@keyframes ambient-float-1 {
-  0% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(40px, -60px) scale(1.1); }
-  66% { transform: translate(-30px, 30px) scale(0.95); }
-  100% { transform: translate(0px, 0px) scale(1); }
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
-@keyframes ambient-float-2 {
-  0% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(-50px, 40px) scale(1.08); }
-  66% { transform: translate(25px, -35px) scale(0.92); }
-  100% { transform: translate(0px, 0px) scale(1); }
-}
 
-.ambient-orb-1 {
-  animation: ambient-float-1 20s ease-in-out infinite;
-}
-
-.ambient-orb-2 {
-  animation: ambient-float-2 25s ease-in-out infinite;
-}
 
 /* ULTRA-PREMIUM SECTION THEME GLASSMORPHIC UTILITIES */
 .glass-panel {
