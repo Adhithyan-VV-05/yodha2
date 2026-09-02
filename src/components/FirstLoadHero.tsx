@@ -69,7 +69,9 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-sm sm:text-lg text-slate-800 max-w-xl font-medium leading-relaxed font-sans"
         >
-          An autonomous innovation challenge for young minds with{" "}
+          An autonomous innovation{" "}
+          <strong className="text-slate-950 font-black max-sm:text-slate-950 max-sm:font-black">challenge</strong>{" "}
+          <span className="text-purple-600 font-bold max-sm:text-purple-600">for</span> young minds with{" "}
           <strong className="text-slate-950 font-black">bold ideas</strong> and{" "}
           <strong className="text-purple-600 font-extrabold">bigger impact</strong>.
         </motion.p>
@@ -86,7 +88,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             <Clock className="w-4 h-4 text-purple-600 shrink-0" />
             <div className="flex flex-col text-left">
               <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">48 HOURS</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase">NON-STOP</span>
+              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">NON-STOP</span>
             </div>
           </div>
 
@@ -95,7 +97,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             <Code className="w-4 h-4 text-purple-600 shrink-0" />
             <div className="flex flex-col text-left">
               <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">20+ PROBLEMS</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase">REAL WORLD</span>
+              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">REAL WORLD</span>
             </div>
           </div>
 
@@ -104,7 +106,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             <Target className="w-4 h-4 text-purple-600 shrink-0" />
             <div className="flex flex-col text-left">
               <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">1 MISSION</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase">AI IMPACT</span>
+              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">AI IMPACT</span>
             </div>
           </div>
         </motion.div>
@@ -112,10 +114,10 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
         {/* COUNTDOWN + WATCH TRAILER + LOCATION DECK */}
         <div className="flex flex-wrap items-center gap-4 pt-1">
           
-          {/* MINIMAL COUNTDOWN BOX (OCTOBER 1ST 2026 COUNTDOWN) */}
+          {/* MINIMAL COUNTDOWN BOX */}
           <div className="p-3.5 rounded-2xl bg-[#0b0818]/95 border border-purple-500/40 backdrop-blur-2xl flex flex-col space-y-1.5 shadow-md">
             <span className="text-[9px] font-mono font-extrabold text-purple-400 uppercase tracking-widest text-center">
-              HACKATHON STARTS OCT 1, 2026 IN
+              HACKATHON STARTS IN
             </span>
             <div className="flex items-center justify-center gap-2.5 text-center">
               <div className="flex flex-col">
@@ -156,7 +158,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 flex items-center justify-center shadow-md group-hover:scale-105 transition-all">
               <Play className="w-4 h-4 text-white fill-white ml-0.5" />
             </div>
-            <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider group-hover:text-purple-600 transition-colors">
+            <span className="text-xs font-mono font-black text-slate-950 max-sm:text-white uppercase tracking-wider group-hover:text-purple-600 transition-colors">
               TRAILER
             </span>
           </button>
@@ -164,9 +166,9 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           {/* MINIMAL LOCATION INFO */}
           <div className="flex items-start gap-2 max-w-xs text-left">
             <MapPin className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
-            <div className="flex flex-col text-[11px] font-mono text-slate-900 leading-tight">
-              <span className="font-black text-slate-950">JYOTHI ENGINEERING COLLEGE</span>
-              <span className="text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
+            <div className="flex flex-col text-[11px] font-mono text-slate-900 max-sm:text-white leading-tight">
+              <span className="font-black text-slate-950 max-sm:text-white uppercase">JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)</span>
+              <span className="text-[9px] text-slate-600 max-sm:text-slate-300 font-bold uppercase">DEPT. OF AI & DS</span>
             </div>
           </div>
 
