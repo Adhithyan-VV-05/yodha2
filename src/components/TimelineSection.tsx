@@ -65,30 +65,23 @@ export function TimelineSection() {
       <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-xs font-mono text-sky-400 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
-          >
-            <Calendar className="w-4 h-4 text-sky-400" />
-            <span>HACKATHON ROADMAP • 5 PHASES</span>
-          </motion.span>
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-3xl sm:text-5xl font-black text-white tracking-tight"
           >
             From Registration To Results
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             className="mt-4 text-slate-300 text-base"
           >
-            Five phases. One goal. <span className="text-sky-400 font-bold">Offline 48-Hour Coding Marathon</span> at Jyothi Engineering College Auditorium.
+            Five phases. One goal. <span className="text-purple-400 font-bold">Offline 48-Hour Coding Marathon</span> at Jyothi Engineering College Auditorium.
           </motion.p>
         </div>
 

@@ -36,29 +36,21 @@ export function VerticalYodhaCarousel() {
 
       {/* TOP HEADER TITLE */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/80 border border-purple-500/40 text-purple-300 font-mono text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-md mb-3"
-        >
-          <Camera className="w-4 h-4 text-purple-400" />
-          <span>PAST HACKATHON MOMENTS</span>
-        </motion.div>
-        
         <motion.h2
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-indigo-400 tracking-tight font-sans"
         >
           YODHA Hackathon Highlights
         </motion.h2>
 
         <motion.p
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false, margin: "-50px" }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto font-normal leading-relaxed mt-2"
         >
           Highlights & memories from past YODHA hackathon marathons organized by the Department of Artificial Intelligence & Data Science at Jyothi Engineering College.

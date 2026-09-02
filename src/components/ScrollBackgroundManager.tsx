@@ -96,17 +96,11 @@ export function ScrollBackgroundManager() {
         className="absolute inset-0 w-full h-full transition-opacity duration-150 ease-out"
         style={{ opacity: heroOpacity }}
       >
-        {/* Desktop PC Hero Image */}
+        {/* Hero Background Layer (bg-hills-day-pc.png) */}
         <img
-          src="/yodha-hero-bg-pc.png"
-          alt="Yodha Hero PC Background"
-          className="hidden md:block w-full h-full object-cover object-center"
-        />
-        {/* Mobile Hero Image */}
-        <img
-          src="/yodha-hero--bg-mob.png"
-          alt="Yodha Hero Mobile Background"
-          className="block md:hidden w-full h-full object-cover object-center"
+          src="/bg-hills-day-pc.png"
+          alt="Yodha Day Hills Background"
+          className="w-full h-full object-cover object-center"
         />
       </div>
 

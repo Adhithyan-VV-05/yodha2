@@ -148,23 +148,11 @@ export function WhyParticipateSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-3 sm:mb-6">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center gap-2 text-[10px] sm:text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest mb-1"
-          >
-            <span className="w-6 sm:w-12 h-[1px] bg-gradient-to-r from-transparent to-cyan-400" />
-            <span className="flex items-center gap-1">
-              <Zap className="w-3 h-3 text-cyan-400" /> SECTION 05 • PARTICIPANT ADVANTAGES
-            </span>
-            <span className="w-6 sm:w-12 h-[1px] bg-gradient-to-l from-transparent to-cyan-400" />
-          </motion.div>
-
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase font-sans leading-none"
           >
             WHY PARTICIPATE IN{" "}

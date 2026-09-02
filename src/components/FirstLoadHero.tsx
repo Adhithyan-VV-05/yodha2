@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { Zap, Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy } from "lucide-react";
+import { motion } from "framer-motion";
+import { Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy } from "lucide-react";
 
 interface FirstLoadHeroProps {
   onOpenRegister: (trackName?: string) => void;
   onOpenTrailer?: () => void;
 }
 
-export function FirstLoadHero({ onOpenRegister, onOpenTrailer }: FirstLoadHeroProps) {
+export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHeroProps) {
   // Live countdown timer targeting 11 September 2026
   const [timeLeft, setTimeLeft] = useState({
     days: 10,
@@ -14,6 +15,19 @@ export function FirstLoadHero({ onOpenRegister, onOpenTrailer }: FirstLoadHeroPr
     minutes: 30,
     seconds: 39,
   });
+
+  // Scroll position state for dynamic scroll exit animation
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const targetDate = new Date("2026-09-11T09:00:00+05:30").getTime();
@@ -38,43 +52,91 @@ export function FirstLoadHero({ onOpenRegister, onOpenTrailer }: FirstLoadHeroPr
     return () => clearInterval(timer);
   }, []);
 
+  // Calculate scroll offsets for smooth exit animation
+  const rockScrollOffset = Math.min(800, scrollY * 0.75);
+  const contentScrollOffset = -Math.min(500, scrollY * 0.55);
+  const heroContentOpacity = Math.max(0, 1 - scrollY / 550);
+
   return (
-    <section className="relative w-full min-h-screen pt-28 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
+    <section className="relative w-full min-h-screen pt-28 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10 overflow-hidden">
       
-      {/* HERO MAIN CONTENT GRID */}
-      <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full my-auto">
+      {/* SEPARATE MONOLITH ROCK OVERLAY (SLIDES IN FROM RIGHT + SIDEWAYS LANDING SHAKE + SCROLLS OFF TO RIGHT) */}
+      <div className="absolute right-0 bottom-0 top-12 w-full lg:w-[60%] h-full pointer-events-none z-10 flex items-end justify-end overflow-hidden">
+        <motion.img
+          src="/yodha-rock-pc.png"
+          alt="Yodha Monolith Rock"
+          initial={{ x: "120%" }}
+          animate={{ x: ["120%", "0%", "-14px", "10px", "-6px", "3px", "0%"] }}
+          transition={{
+            duration: 1.3,
+            delay: 0.2,
+            ease: "easeOut",
+            times: [0, 0.6, 0.72, 0.82, 0.9, 0.96, 1],
+          }}
+          style={{
+            transform: `translateX(${rockScrollOffset}px)`,
+          }}
+          className="h-[82%] max-h-[750px] w-auto object-contain object-right-bottom filter drop-shadow-[0_25px_60px_rgba(0,0,0,0.6)]"
+        />
+      </div>
+
+      {/* HERO MAIN CONTENT GRID (EMERGES FROM BELOW BASELINE + SCROLLS OFF TO LEFT) */}
+      <motion.div
+        style={{
+          transform: `translateX(${contentScrollOffset}px)`,
+          opacity: heroContentOpacity,
+        }}
+        className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full my-auto transition-opacity duration-75"
+      >
         
         {/* LEFT SIDE CONTENT COLUMN */}
         <div className="lg:col-span-8 flex flex-col items-start text-left space-y-6">
           
-          {/* 1. TOP PILL BADGE */}
-          <button
-            onClick={() => onOpenRegister()}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/20 border border-purple-500/40 text-purple-700 font-mono text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-sm hover:border-purple-600 hover:scale-105 transition-all cursor-pointer"
+          {/* 1. MAIN IMPACT HEADLINE (EMERGES FROM BELOW BASELINE) */}
+          <motion.h1
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-[1.02] font-sans"
           >
-            <Zap className="w-4 h-4 text-purple-600 fill-purple-500/30" />
-            <span>48-HOUR HEALTHCARE AI HACKATHON</span>
-          </button>
-
-          {/* 2. MAIN IMPACT HEADLINE (NO WHITE TEXT - DARK BLACK / CHARCOAL) */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-[1.02] font-sans">
             BUILD AI SOLUTIONS <br />
             THAT <span className="text-purple-600 font-black">SAVE LIVES</span> <br />
             AND <span className="text-purple-600 font-black">PROTECT</span> <br />
             OUR PLANET.
-          </h1>
+          </motion.h1>
 
-          <div className="w-12 h-1 bg-purple-600 rounded-full" />
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            className="w-12 h-1 bg-purple-600 rounded-full origin-left"
+          />
 
-          {/* 3. SUBTITLE TEXT (DARK CHARCOAL & PURPLE ACCENT) */}
-          <p className="text-base sm:text-lg text-slate-800 max-w-xl font-medium leading-relaxed">
+          {/* 2. SUBTITLE TEXT (TWINKLING / SHIMMER EFFECT ON INITIAL LOAD THEN NORMAL) */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{
+              opacity: [0, 0.2, 1, 0.3, 1, 0.6, 1],
+              y: 0,
+            }}
+            transition={{
+              opacity: { duration: 1.4, delay: 0.8, times: [0, 0.2, 0.4, 0.6, 0.75, 0.88, 1] },
+              y: { duration: 0.8, delay: 0.7, ease: "easeOut" },
+            }}
+            className="text-base sm:text-lg text-slate-800 max-w-xl font-medium leading-relaxed"
+          >
             An autonomous innovation challenge for young minds with{" "}
             <strong className="text-slate-950 font-black">bold ideas</strong> and{" "}
             <strong className="text-purple-600 font-extrabold">bigger impact</strong>.
-          </p>
+          </motion.p>
 
-          {/* 4. THREE STAT GLASS CARDS (DARK TEXT ON TRANSLUCENT WHITE GLASS) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 w-full max-w-2xl pt-2">
+          {/* 3. THREE STAT GLASS CARDS */}
+          <motion.div
+            initial={{ opacity: 0, y: 35 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 w-full max-w-2xl pt-2"
+          >
             
             {/* CARD 1 */}
             <div className="p-3.5 rounded-2xl bg-white/80 border border-purple-300/40 backdrop-blur-xl flex items-center gap-3.5 shadow-md">
@@ -121,10 +183,15 @@ export function FirstLoadHero({ onOpenRegister, onOpenTrailer }: FirstLoadHeroPr
               </div>
             </div>
 
-          </div>
+          </motion.div>
 
-          {/* 5. COUNTDOWN DECK + TRAILER + LOCATION */}
-          <div className="flex flex-wrap items-center gap-6 pt-4 w-full">
+          {/* 4. COUNTDOWN DECK + TRAILER + LOCATION */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
+            className="flex flex-wrap items-center gap-6 pt-4 w-full"
+          >
             
             {/* COUNTDOWN GLASS DECK */}
             <div className="p-4 rounded-2xl bg-[#0b0818]/95 border border-purple-500/40 backdrop-blur-2xl flex flex-col space-y-2 shadow-[0_0_30px_rgba(168,85,247,0.2)]">
@@ -189,14 +256,23 @@ export function FirstLoadHero({ onOpenRegister, onOpenTrailer }: FirstLoadHeroPr
               </div>
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
 
-      </div>
+      </motion.div>
 
-      {/* 6. BOTTOM FLOATING FEATURE DOCK (4 COLUMNS: COLLABORATE • INNOVATE • IMPACT • WIN & GROW) */}
-      <div className="relative z-20 mt-12 w-full p-4 sm:p-5 rounded-3xl bg-[#050612]/95 border border-purple-500/30 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* 5. BOTTOM FLOATING FEATURE DOCK */}
+      <motion.div
+        style={{
+          transform: `translateY(${Math.min(200, scrollY * 0.4)}px)`,
+          opacity: heroContentOpacity,
+        }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
+        className="relative z-20 mt-12 w-full p-4 sm:p-5 rounded-3xl bg-[#050612]/95 border border-purple-500/30 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         
         {/* COL 1: COLLABORATE */}
         <div className="flex items-center gap-3.5">
@@ -258,7 +334,7 @@ export function FirstLoadHero({ onOpenRegister, onOpenTrailer }: FirstLoadHeroPr
           </div>
         </div>
 
-      </div>
+      </motion.div>
 
     </section>
   );

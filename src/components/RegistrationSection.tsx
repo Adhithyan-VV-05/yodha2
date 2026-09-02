@@ -415,10 +415,6 @@ export function RegistrationSection({ isOpen = true, onClose, selectedTrack = "H
             <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-cover scale-110" />
           </div>
           <div>
-            <span className="text-xs font-mono text-purple-400 uppercase tracking-widest block mb-0.5 font-bold flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-spin" />
-              <span>TEAM REGISTRATION PORTAL</span>
-            </span>
             <h3 className="text-xl sm:text-2xl font-black text-white">
               Register Team for <span className="text-purple-400 font-sans">YODHA 2.0</span>
             </h3>

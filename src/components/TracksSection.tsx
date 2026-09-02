@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Cpu, Activity, ArrowRight, ShieldCheck, HeartPulse, Stethoscope } from "lucide-react";
+import { Cpu, ArrowRight, ShieldCheck, HeartPulse, Stethoscope } from "lucide-react";
 
 interface TracksSectionProps {
   onSelectTrack?: (trackName: string) => void;
@@ -30,14 +30,16 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
 
         {/* Right Column: Healthcare Track Details & Problem Statements */}
         <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/80 border border-red-500/40 text-red-300 font-mono text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-md">
-            <Activity className="w-4 h-4 text-red-400" />
-            <span>CORE THEME • HEALTHCARE AI INNOVATION</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight font-sans">
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight font-sans"
+          >
             Healthcare AI Track
-          </h2>
+          </motion.h2>
 
           <p className="text-base sm:text-lg text-slate-300 max-w-xl leading-relaxed">
             Transform clinical diagnostic workflows with machine learning models, medical image analysis, early disease prediction, and real-time patient monitoring algorithms.
@@ -59,20 +61,20 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
             </div>
             <div className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-950/85 border border-purple-500/30">
               <Cpu className="w-4 h-4 text-red-400 shrink-0" />
-              <span>Smart Hospital Systems</span>
+              <span>Generative AI for Healthcare</span>
             </div>
           </div>
 
-          {/* Action */}
-          <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+          <div className="pt-2">
             <button
               onClick={() => onOpenTrackPage("healthcare")}
-              className="px-8 py-3.5 rounded-full bg-gradient-to-r from-red-500 via-rose-600 to-red-700 text-white font-black text-xs sm:text-sm tracking-widest uppercase hover:brightness-110 transition-all shadow-[0_0_25px_rgba(239,68,68,0.5)] flex items-center gap-2 cursor-pointer active:scale-95"
+              className="px-6 py-3.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-purple-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:brightness-110 hover:scale-105 transition-all cursor-pointer"
             >
-              <span>EXPLORE HEALTHCARE PROBLEM STATEMENTS</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>EXPLORE ALL 20 PROBLEM STATEMENTS</span>
+              <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </div>
+
         </div>
 
       </div>
