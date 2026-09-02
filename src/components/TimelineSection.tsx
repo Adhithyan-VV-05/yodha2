@@ -1,155 +1,194 @@
 import { motion } from "framer-motion";
-import { MapPin, Sparkles } from "lucide-react";
+import { MapPin, Sparkles, Flag, CheckCircle2, Rocket, Award, ShieldAlert } from "lucide-react";
 import { Card3DTilt } from "./Card3DTilt";
 
 interface ScheduleItem {
   phase: string;
+  stepNum: string;
   time: string;
   title: string;
   description: string;
   category: string;
   location: string;
+  icon: typeof Rocket;
   isKey?: boolean;
 }
 
 const HACKATHON_PHASES: ScheduleItem[] = [
   {
     phase: "PHASE 1",
-    time: "ONLINE",
-    title: "Online Registration",
-    description: "Teams register online at yodha.aidajecc.in and submit team details and primary domain preference.",
-    category: "Registration",
-    location: "yodha.aidajecc.in",
+    stepNum: "01",
+    time: "OCTOBER 1ST",
+    title: "The 48-Hour Sprint",
+    description: "48 continuous hours of brainstorming, coding, and building, starting October 1st. The clock is ticking!",
+    category: "Coding Sprint",
+    location: "Jyothi Engg College",
+    icon: Rocket,
+    isKey: true,
   },
   {
     phase: "PHASE 2",
-    time: "RELEASE",
-    title: "Problem Statement Release & Proposal",
-    description: "Official problem statements released across Healthcare & Environmental AI tracks. Teams submit proposals.",
-    category: "Ideation",
-    location: "Online Portal",
-    isKey: true,
+    stepNum: "02",
+    time: "MILESTONES",
+    title: "The Checkpoint Challenge",
+    description: "Prove your progress through three rigorous checkpoints—from initial architecture review to final prototype validation.",
+    category: "Checkpoints",
+    location: "Auditorium Stage",
+    icon: ShieldAlert,
   },
   {
     phase: "PHASE 3",
-    time: "SHORTLIST",
-    title: "Shortlisting Top 40 Teams",
-    description: "Expert faculty & mentor panel reviews proposals and shortlists the top 40 teams for the offline marathon.",
-    category: "Evaluation",
-    location: "Jyothi Engg College",
-  },
-  {
-    phase: "PHASE 4",
-    time: "48 HOURS",
-    title: "Offline 48-Hour Coding Marathon",
-    description: "Shortlisted teams participate in the 48-hour non-stop prototype development marathon at Jyothi Engineering College Auditorium.",
-    category: "Coding Marathon",
-    location: "JEC Auditorium",
+    stepNum: "03",
+    time: "MENTORSHIP",
+    title: "Guided to Glory",
+    description: "Level up your solution with dedicated technical and industry mentoring sessions throughout your hackathon journey.",
+    category: "Mentoring",
+    location: "Mentoring Hub",
+    icon: Sparkles,
     isKey: true,
   },
   {
+    phase: "PHASE 4",
+    stepNum: "04",
+    time: "FIVE STAGES",
+    title: "Phase by Phase",
+    description: "Navigate the five phases of Yodha: Online Registration, Idea Submission, Selection, the 48-Hour Offline Marathon, and Final Judging.",
+    category: "Marathon",
+    location: "Campus Grounds",
+    icon: Flag,
+  },
+  {
     phase: "PHASE 5",
-    time: "FINALS",
-    title: "Final Judging & Prize Distribution",
-    description: "Live prototype demonstration to jury panel followed by grand prize distribution.",
+    stepNum: "05",
+    time: "OCTOBER 3RD",
+    title: "The Path to the Pitch",
+    description: "From the opening inauguration to the final project demonstrations on October 3rd—every single minute counts.",
     category: "Grand Finale",
     location: "Main Stage",
+    icon: Award,
     isKey: true,
   },
 ];
 
 export function TimelineSection() {
   return (
-    <section id="timeline" className="py-24 relative overflow-hidden bg-transparent">
+    <section id="timeline" className="py-24 relative overflow-hidden bg-transparent select-none">
+      {/* Background Ambient Purple Radial Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-[200px] pointer-events-none z-0" />
 
-      <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
           <motion.h2
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-50px" }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-3xl sm:text-5xl font-black text-white tracking-tight"
+            className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight font-heading"
           >
-            From Registration To Results
+            THE <span className="text-purple-400">JOURNEY</span>
           </motion.h2>
+
           <motion.p
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-50px" }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-4 text-slate-300 text-base"
+            className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed"
           >
-            Five phases. One goal. <span className="text-purple-400 font-bold">Offline 48-Hour Coding Marathon</span> at Jyothi Engineering College Auditorium.
+            Five phases. One goal. <strong className="text-purple-400 font-bold">Offline 48-Hour Coding Marathon</strong> at Jyothi Engineering College Auditorium.
           </motion.p>
         </div>
 
-        {/* Timeline Events List */}
-        <div className="relative border-l-2 border-gradient-to-b from-sky-400 via-indigo-500 to-purple-500 ml-4 sm:ml-28 space-y-8 pl-6 sm:pl-10">
-          <div className="absolute top-0 bottom-0 -left-[1px] w-[2px] bg-gradient-to-b from-sky-400 via-indigo-500 to-purple-500 shadow-[0_0_12px_rgba(56,189,248,0.8)]" />
+        {/* ZIGZAG TIMELINE CONTAINER */}
+        <div className="relative">
+          {/* CENTRAL GLOWING SPINE (Centered on Desktop, Left on Mobile) */}
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 -translate-x-1/2 w-[3px] bg-gradient-to-b from-purple-500 via-indigo-500 to-purple-600 shadow-[0_0_20px_rgba(168,85,247,0.8)] z-0" />
 
-          {HACKATHON_PHASES.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -35, scale: 0.92 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="relative group"
-            >
-              {/* Diamond Node */}
-              <motion.div
-                initial={{ scale: 0, rotate: -45 }}
-                whileInView={{ scale: 1, rotate: 45 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className={`absolute -left-[32px] sm:-left-[48px] top-4 w-5 h-5 rounded-sm border-2 transform rotate-45 transition-all duration-300 ${
-                  item.isKey
-                    ? "bg-sky-400 border-white shadow-[0_0_20px_rgba(56,189,248,0.9)]"
-                    : "bg-[#06080e] border-indigo-400/60 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                }`}
-              />
+          {/* TIMELINE ITEMS LIST */}
+          <div className="space-y-12 md:space-y-16">
+            {HACKATHON_PHASES.map((item, idx) => {
+              const isEven = idx % 2 === 0;
+              const IconComp = item.icon;
 
-              {/* Phase Badge (Desktop Left) */}
-              <div className="hidden sm:block absolute -left-32 top-3 text-xs font-mono font-bold text-sky-400 w-24 text-right">
-                {item.phase}
-              </div>
-
-              {/* 3D Card Container */}
-              <Card3DTilt intensity={8}>
-                <div
-                  className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
-                    item.isKey
-                      ? "bg-gradient-to-r from-sky-950/50 via-indigo-950/30 to-slate-950 border-sky-400/40 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-                      : "bg-white/[0.03] border-white/10 hover:border-white/20"
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className={`relative flex flex-col md:flex-row items-center ${
+                    isEven ? "md:flex-row-reverse" : ""
                   }`}
                 >
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                    <span className="sm:hidden text-xs font-mono text-sky-400 flex items-center gap-1 font-bold">
-                      {item.phase}
-                    </span>
-                    <span className="px-3 py-0.5 bg-white/10 border border-white/15 rounded-md text-[10px] font-mono text-sky-300 font-bold uppercase tracking-wider">
-                      {item.category}
-                    </span>
-                    <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1 ml-auto">
-                      <MapPin className="w-3.5 h-3.5 text-sky-400" /> {item.location}
-                    </span>
+                  {/* CENTRAL NODE CIRCLE WITH GLOWING STEP NUMBER */}
+                  <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
+                    <motion.div
+                      whileHover={{ scale: 1.15, rotate: 360 }}
+                      transition={{ duration: 0.4 }}
+                      className={`w-12 h-12 rounded-full border-2 bg-[#050817] flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.7)] cursor-pointer ${
+                        item.isKey
+                          ? "border-purple-400 shadow-[0_0_35px_rgba(168,85,247,0.9)]"
+                          : "border-purple-500/50"
+                      }`}
+                    >
+                      <span className="font-mono text-xs font-black text-purple-300">{item.stepNum}</span>
+                    </motion.div>
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                    {item.isKey && <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />}
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-slate-300 leading-relaxed font-normal">
-                    {item.description}
-                  </p>
-                </div>
-              </Card3DTilt>
-            </motion.div>
-          ))}
+                  {/* CONTENT CARD (50% Width on Desktop) */}
+                  <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? "md:pr-12 md:text-right" : "md:pl-12 md:text-left"}`}>
+                    <Card3DTilt intensity={6}>
+                      <div className="p-6 sm:p-8 rounded-3xl bg-[#060919]/90 border border-purple-500/30 backdrop-blur-2xl shadow-[0_0_40px_rgba(168,85,247,0.2)] hover:border-purple-400 hover:shadow-[0_0_50px_rgba(168,85,247,0.4)] transition-all duration-300 relative group overflow-hidden">
+                        {/* Ambient Aura Highlight inside Card */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-purple-500/20 transition-all" />
+
+                        {/* Top Info Bar */}
+                        <div className={`flex flex-wrap items-center gap-2 mb-3 ${isEven ? "md:justify-end" : "md:justify-start"}`}>
+                          <span className="px-3 py-1 bg-purple-950/80 border border-purple-500/40 rounded-full text-[10px] font-mono text-purple-300 font-bold uppercase tracking-wider">
+                            {item.category}
+                          </span>
+                          <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                            <span>{item.location}</span>
+                          </span>
+                        </div>
+
+                        {/* Title & Icon */}
+                        <div className={`flex items-center gap-3 mb-2.5 ${isEven ? "md:justify-end" : "md:justify-start"}`}>
+                          <div className="w-9 h-9 rounded-xl bg-purple-950/80 border border-purple-500/40 flex items-center justify-center shrink-0 shadow-md">
+                            <IconComp className="w-4 h-4 text-purple-400" />
+                          </div>
+                          <h3 className="text-lg sm:text-xl font-bold text-white font-heading">
+                            {item.title}
+                          </h3>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                          {item.description}
+                        </p>
+
+                        {/* Bottom Status Tag */}
+                        <div className={`mt-4 pt-3 border-t border-purple-500/20 flex items-center gap-2 text-[11px] font-mono text-purple-300 ${isEven ? "md:justify-end" : "md:justify-start"}`}>
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>{item.time}</span>
+                        </div>
+                      </div>
+                    </Card3DTilt>
+                  </div>
+
+                  {/* Empty Spacer Column for Desktop Symmetry */}
+                  <div className="hidden md:block md:w-1/2" />
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+export default TimelineSection;

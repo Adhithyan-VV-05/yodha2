@@ -40,9 +40,9 @@ export function VerticalYodhaCarousel() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-indigo-400 tracking-tight font-sans"
+          className="text-3xl sm:text-5xl font-black text-white tracking-tight font-heading"
         >
-          YODHA Hackathon Highlights
+          YODHA Hackathon <span className="text-purple-400">Highlights</span>
         </motion.h2>
 
         <motion.p

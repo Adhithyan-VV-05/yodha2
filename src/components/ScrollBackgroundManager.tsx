@@ -2,86 +2,44 @@ import { useState, useEffect } from "react";
 
 export function ScrollBackgroundManager() {
   const [heroOpacity, setHeroOpacity] = useState(1);
-  const [nightOpacity, setNightOpacity] = useState(0);
-  const [dayOpacity, setDayOpacity] = useState(0);
+  const [secondHalfOpacity, setSecondHalfOpacity] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const h = window.innerHeight;
-      const transitionWindow = h * 0.05; // Quick 5vh scroll window for background change at section end
-      const sectionHeight = h;
 
-      // 1. HERO SECTION BACKGROUND TRANSITION
-      // Hero section lasts for 100vh. First 95vh is 100% steady bright hero image.
-      // In the last 5vh of Hero (scrollY between 95vh and 100vh), it rapidly transitions into Section 2 & 3's Night theme.
-      const heroStable = sectionHeight - transitionWindow;
+      // 1. HERO BACKGROUND OPACITY:
+      // Completely visible (100%) from 0 to 40vh scroll.
+      // Begins fading after 40vh scroll (from 40vh to 90vh).
+      const fadeStart = h * 0.4;
+      const fadeEnd = h * 0.9;
 
-      let currentHeroOpacity = 0;
-      if (scrollY <= heroStable) {
+      let currentHeroOpacity = 1;
+      if (scrollY <= fadeStart) {
         currentHeroOpacity = 1;
-      } else if (scrollY < sectionHeight) {
-        const p = (scrollY - heroStable) / transitionWindow;
-        const smoothP = p * p * (3 - 2 * p); // smoothstep
-        currentHeroOpacity = 1 - smoothP;
+      } else if (scrollY < fadeEnd) {
+        currentHeroOpacity = 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart);
       } else {
         currentHeroOpacity = 0;
       }
-
-      // 2. NON-HERO SECTIONS (2 SECTIONS PER THEME, 5vh TRANSITION AT THE END OF THE 2nd SECTION)
-      // Block size = 2 * sectionHeight (200vh per theme block)
-      const scrolledPastHero = Math.max(0, scrollY - sectionHeight);
-      const blockSize = 2 * sectionHeight;
-      const blockIndex = Math.floor(scrolledPastHero / blockSize);
-      const offsetInBlock = scrolledPastHero % blockSize;
-      const stableZoneInBlock = blockSize - transitionWindow;
-
-      // Block schedule:
-      // Block 0 (Sections 2 & 3: About & Tracks) -> Night Theme
-      // Block 1 (Sections 4 & 5: SDG & Why) -> Day Theme
-      // Block 2 (Sections 6 & 7: Prizes & Timeline) -> Night Theme
-      // Block 3 (Sections 8 & 9: CTA/Gallery & Carousel) -> Day Theme
-
-      let currentBlockIsDay = blockIndex % 2 === 1;
-      let blockDayVal = currentBlockIsDay ? 1 : 0;
-
-      if (offsetInBlock >= stableZoneInBlock) {
-        // We are in the last 5vh of the 2nd section in the current theme block!
-        const transitionProgress = (offsetInBlock - stableZoneInBlock) / transitionWindow;
-        const smoothT = transitionProgress * transitionProgress * (3 - 2 * transitionProgress);
-
-        if (currentBlockIsDay) {
-          // Rapidly changing from Day Theme to Night Theme
-          blockDayVal = 1 - smoothT;
-        } else {
-          // Rapidly changing from Night Theme to Day Theme
-          blockDayVal = smoothT;
-        }
-      }
-
-      // Transition from Hero to Block 0 (Sections 2 & 3: Night) in the last 5vh of Hero
-      let finalNight = 0;
-      let finalDay = 0;
-
-      if (scrollY < sectionHeight) {
-        if (scrollY >= heroStable) {
-          const heroTransitionP = (scrollY - heroStable) / transitionWindow;
-          const smoothHeroP = heroTransitionP * heroTransitionP * (3 - 2 * heroTransitionP);
-          // Rapidly fading from Hero (100% Bright) into Night Theme (Block 0)
-          finalNight = smoothHeroP;
-          finalDay = 0;
-        } else {
-          finalNight = 0;
-          finalDay = 0;
-        }
-      } else {
-        finalDay = blockDayVal;
-        finalNight = 1 - blockDayVal;
-      }
-
       setHeroOpacity(currentHeroOpacity);
-      setNightOpacity(Math.min(1, Math.max(0, finalNight)));
-      setDayOpacity(Math.min(1, Math.max(0, finalDay)));
+
+      // 2. 1ST HALF VS 2ND HALF THEME SPLIT (DYNAMICALLY LOCATES 2ND HALF SECTIONS ON MOBILE & PC)
+      // 1st Half: Hero, About, Tracks, SDG -> Light Theme
+      // 2nd Half: Why Participate, Prizes, Timeline, CTA, Carousel, Footer -> Dark Theme
+      const targetSection = document.getElementById("why") || document.getElementById("prizes");
+      let splitPoint = h * 2.8;
+      if (targetSection) {
+        splitPoint = Math.max(h * 1.5, targetSection.offsetTop - h * 0.4);
+      }
+
+      if (scrollY >= splitPoint) {
+        const transitionP = Math.min(1, (scrollY - splitPoint) / (h * 0.4));
+        setSecondHalfOpacity(transitionP);
+      } else {
+        setSecondHalfOpacity(0);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -91,44 +49,47 @@ export function ScrollBackgroundManager() {
 
   return (
     <div className="fixed inset-0 w-screen h-screen pointer-events-none z-0 overflow-hidden">
-      {/* 1. HERO BACKGROUND LAYER (100% BRIGHT DAY IMAGE - NO DARK OVERLAYS) */}
+      
+      {/* 1. HERO BACKGROUND LAYER (100% COMPLETELY VISIBLE AT 0-40vh, FADES AFTER 40vh) */}
       <div
-        className="absolute inset-0 w-full h-full transition-opacity duration-150 ease-out"
+        className="absolute inset-0 w-full h-full transition-opacity duration-150 ease-out z-10"
         style={{ opacity: heroOpacity }}
       >
-        {/* Hero Background Layer (bg-hills-day-pc.png) */}
+        <picture className="w-full h-full">
+          <source media="(min-width: 640px)" srcSet="/yodha-hero-bg-pc.png" />
+          <img
+            src="/yodha-hero--bg-mob.png"
+            alt="Yodha Hero Background"
+            className="w-full h-full object-cover object-center"
+          />
+        </picture>
+      </div>
+
+      {/* 2. 1ST HALF LIGHT THEME DAY BACKDROP */}
+      <div
+        className="absolute inset-0 w-full h-full bg-[#f4f6fc] transition-opacity duration-300 pointer-events-none z-0"
+        style={{ opacity: 1 - secondHalfOpacity }}
+      >
         <img
           src="/bg-hills-day-pc.png"
-          alt="Yodha Day Hills Background"
-          className="w-full h-full object-cover object-center"
+          alt="1st Half Light Theme Backdrop"
+          className="w-full h-full object-cover object-center opacity-30"
         />
       </div>
 
-      {/* 2. NIGHT HILLS BACKGROUND LAYER */}
+      {/* 3. 2ND HALF DARK THEME MIDNIGHT BACKDROP */}
       <div
-        className="absolute inset-0 w-full h-full transition-opacity duration-150 ease-out"
-        style={{ opacity: nightOpacity }}
+        className="absolute inset-0 w-full h-full bg-[#03060d] transition-opacity duration-500 pointer-events-none z-0"
+        style={{ opacity: secondHalfOpacity }}
       >
         <img
           src="/bg-hills-night-pc.png"
-          alt="Night Background"
-          className="w-full h-full object-cover object-center"
+          alt="2nd Half Dark Theme Backdrop"
+          className="w-full h-full object-cover object-center opacity-70"
         />
-        <div className="absolute inset-0 bg-slate-950/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/40 pointer-events-none" />
       </div>
 
-      {/* 3. DAY HILLS BACKGROUND LAYER */}
-      <div
-        className="absolute inset-0 w-full h-full transition-opacity duration-150 ease-out"
-        style={{ opacity: dayOpacity }}
-      >
-        <img
-          src="/bg-hills-day-pc.png"
-          alt="Day Background"
-          className="w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-slate-950/10 pointer-events-none" />
-      </div>
     </div>
   );
 }

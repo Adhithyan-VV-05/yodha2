@@ -16,16 +16,17 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white font-sans"
+          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white font-heading"
         >
-          ₹70,000 National Cash{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">
-            Pool
-          </span>
+          PRIZE POOL & <span className="text-purple-400">REWARDS</span>
         </motion.h2>
 
-        <p className="text-sm sm:text-base text-slate-300">
-          Compete against top developers across India for national cash rewards, official trophies, plaques & KTU activity points.
+        <p className="text-sm sm:text-base text-slate-200 font-medium">
+          Battle it out for a massive total prize pool of ₹70,000!
+        </p>
+
+        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+          Claim the champion's title and walk away with the ₹30,000 first prize. Innovate, create an impact, and earn your share of the rewards, including a special ₹5,000 award for standout tech.
         </p>
       </div>
 

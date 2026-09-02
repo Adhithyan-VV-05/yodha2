@@ -152,12 +152,9 @@ export function WhyParticipateSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-50px" }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase font-sans leading-none"
+            className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase font-heading leading-none"
           >
-            WHY PARTICIPATE IN{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400 drop-shadow-[0_0_25px_rgba(56,189,248,0.6)]">
-              YODHA 2.0?
-            </span>
+            WHY PARTICIPATE IN <span className="text-purple-400">YODHA 2.0?</span>
           </motion.h2>
 
           <motion.p

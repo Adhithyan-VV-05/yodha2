@@ -5,7 +5,7 @@ export function SDGSection() {
   const sdgPcSrc = encodeURI("/sdg pc.png");
 
   return (
-    <section id="sdg" className="py-16 sm:py-24 relative overflow-hidden bg-transparent text-white select-none w-full z-10">
+    <section id="sdg" className="py-16 sm:py-24 relative overflow-hidden bg-transparent text-slate-900 select-none w-full z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center justify-center space-y-6 text-center">
         
         <motion.h2
@@ -13,9 +13,9 @@ export function SDGSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight font-sans max-w-3xl"
+          className="text-3xl sm:text-5xl font-black tracking-tight leading-tight font-heading text-slate-950 max-w-3xl"
         >
-          Aligning Healthcare AI with Global Impact
+          Aligning Healthcare AI with <span className="text-purple-700 font-heading">Global Impact</span>
         </motion.h2>
 
         <motion.div
@@ -30,12 +30,11 @@ export function SDGSection() {
             <img
               src={sdgMobileSrc}
               alt="UN Sustainable Development Goals"
-              className="w-full h-auto max-h-[60vh] max-w-full sm:max-w-6xl md:max-w-7xl object-contain drop-shadow-[0_12px_35px_rgba(0,0,0,0.5)] transition-all duration-300"
-              loading="lazy"
-              decoding="async"
+              className="w-full h-auto max-w-4xl object-contain filter drop-shadow-xl"
             />
           </picture>
         </motion.div>
+
       </div>
     </section>
   );

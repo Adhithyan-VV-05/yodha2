@@ -80,7 +80,7 @@ function App() {
           <CompactFooter />
         </div>
       ) : (
-        <div className="relative z-10 w-full min-h-screen flex flex-col">
+        <div className="relative z-10 w-full min-h-screen block">
           {/* Top Navbar Header */}
           <Navbar onOpenRegister={handleOpenRegisterWithTrack} />
 
