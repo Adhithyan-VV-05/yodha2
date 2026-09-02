@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Camera } from "lucide-react";
 import { YodhaImage } from "./YodhaImage";
 
 // Import all 20 past hackathon images from src/assets/carousel/

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MapPin, Calendar, Sparkles } from "lucide-react";
+import { MapPin, Sparkles } from "lucide-react";
 import { Card3DTilt } from "./Card3DTilt";
 
 interface ScheduleItem {

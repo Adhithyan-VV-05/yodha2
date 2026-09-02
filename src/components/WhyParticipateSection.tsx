@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   ChevronRight,
   ShieldCheck,
-  Zap,
 } from "lucide-react";
 
 export function WhyParticipateSection() {
