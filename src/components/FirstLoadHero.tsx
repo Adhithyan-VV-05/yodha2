@@ -53,8 +53,8 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
   }, []);
 
   // Calculate scroll offsets for smooth exit animation (entire rock slides RIGHT, contents slide LEFT)
-  const rockScrollOffset = Math.min(1800, scrollY * 1.1);
-  const contentScrollOffset = -Math.min(800, scrollY * 0.7);
+  const rockScrollOffset = Math.min(1800, scrollY * 1.2);
+  const contentScrollOffset = -Math.min(800, scrollY * 0.75);
   const heroContentOpacity = Math.max(0, 1 - scrollY / 500);
 
   return (
@@ -62,28 +62,36 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
       
       {/* SEPARATE FULL VIEWPORT MONOLITH ROCK OVERLAY (PADDING TOP, ENTERS FROM -10vh IN 1.5s, SCROLLS OFF TO RIGHT) */}
       <div className="absolute inset-0 w-screen h-screen pointer-events-none z-10 overflow-hidden left-1/2 -translate-x-1/2 pt-[5vh]">
-        <motion.img
-          src="/yodha-rock-pc.png"
-          alt="Yodha Monolith Rock"
-          initial={{ y: "-10vh", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            duration: 1.5,
-            delay: 0.2,
-            ease: [0.16, 1, 0.3, 1], // Ultra-smooth cubic bezier ease over 1.5s
-          }}
+        {/* Outer Scroll Wrapper (Handles translateX to the RIGHT on scroll) */}
+        <div
           style={{
             transform: `translateX(${rockScrollOffset}px)`,
+            willChange: "transform",
           }}
-          className="w-full h-full object-cover object-right-bottom filter drop-shadow-[0_25px_60px_rgba(0,0,0,0.6)]"
-        />
+          className="w-full h-full"
+        >
+          {/* Inner Motion Image (Handles -10vh -> 0 entrance animation in 1.5s) */}
+          <motion.img
+            src="/yodha-rock-pc.png"
+            alt="Yodha Monolith Rock"
+            initial={{ y: "-10vh", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+              duration: 1.5,
+              delay: 0.2,
+              ease: [0.16, 1, 0.3, 1], // Ultra-smooth cubic bezier ease over 1.5s
+            }}
+            className="w-full h-full object-cover object-right-bottom filter drop-shadow-[0_25px_60px_rgba(0,0,0,0.6)]"
+          />
+        </div>
       </div>
 
       {/* HERO MAIN CONTENT GRID (EMERGES FROM BELOW BASELINE + SCROLLS OFF TO LEFT) */}
-      <motion.div
+      <div
         style={{
           transform: `translateX(${contentScrollOffset}px)`,
           opacity: heroContentOpacity,
+          willChange: "transform, opacity",
         }}
         className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full my-auto transition-opacity duration-75"
       >
@@ -259,7 +267,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
         </div>
 
-      </motion.div>
+      </div>
 
       {/* 5. BOTTOM FLOATING FEATURE DOCK */}
       <motion.div
