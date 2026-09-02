@@ -12,7 +12,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const heroThreshold = window.innerHeight * 0.8;
+      const heroThreshold = window.innerHeight * 0.05;
       setScrolledPastHero(window.scrollY > heroThreshold);
     };
 

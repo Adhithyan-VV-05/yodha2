@@ -52,25 +52,29 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     return () => clearInterval(timer);
   }, []);
 
-  // Calculate scroll offsets for smooth exit animation (entire rock slides RIGHT, contents slide LEFT)
-  const rockScrollOffset = Math.min(1800, scrollY * 1.2);
-  const contentScrollOffset = -Math.min(800, scrollY * 0.75);
-  const heroContentOpacity = Math.max(0, 1 - scrollY / 500);
+  // Calculate 50% scroll progress: By 50% scroll down, rock and hero contents have 100% exited off-screen to sides
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+  const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
+  const scrollProgress50 = Math.min(1, scrollY / (vh * 0.5));
+
+  const rockScrollOffset = scrollProgress50 * (vw * 0.85);
+  const contentScrollOffset = -scrollProgress50 * (vw * 0.65);
+  const heroContentOpacity = Math.max(0, 1 - scrollProgress50);
 
   return (
     <section className="relative w-full min-h-screen pt-28 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
       
-      {/* SEPARATE FULL VIEWPORT MONOLITH ROCK OVERLAY (PADDING TOP, ENTERS FROM -10vh IN 1.5s, SCROLLS OFF TO RIGHT) */}
-      <div className="absolute inset-0 w-screen h-screen pointer-events-none z-10 overflow-hidden left-1/2 -translate-x-1/2 pt-[5vh]">
+      {/* SEPARATE PROPER-SIZED MONOLITH ROCK OVERLAY (ENTERS FROM -10vh IN 1.5s, EXITS TO RIGHT BY 50% SCROLL) */}
+      <div className="absolute right-0 bottom-0 top-[5vh] w-full lg:w-[50%] h-[95vh] pointer-events-none z-10 overflow-hidden flex items-end justify-end pt-[5vh]">
         {/* Outer Scroll Wrapper (Handles translateX to the RIGHT on scroll) */}
         <div
           style={{
             transform: `translateX(${rockScrollOffset}px)`,
             willChange: "transform",
           }}
-          className="w-full h-full"
+          className="w-full h-full flex items-end justify-end"
         >
-          {/* Inner Motion Image (Handles -10vh -> 0 entrance animation in 1.5s) */}
+          {/* Inner Motion Image (Handles -10vh -> 0 entrance animation in 1.5s with zero shake) */}
           <motion.img
             src="/yodha-rock-pc.png"
             alt="Yodha Monolith Rock"
@@ -81,12 +85,12 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
               delay: 0.2,
               ease: [0.16, 1, 0.3, 1], // Ultra-smooth cubic bezier ease over 1.5s
             }}
-            className="w-full h-full object-cover object-right-bottom filter drop-shadow-[0_25px_60px_rgba(0,0,0,0.6)]"
+            className="max-h-[85vh] w-auto object-contain object-right-bottom filter drop-shadow-[0_25px_60px_rgba(0,0,0,0.6)]"
           />
         </div>
       </div>
 
-      {/* HERO MAIN CONTENT GRID (EMERGES FROM BELOW BASELINE + SCROLLS OFF TO LEFT) */}
+      {/* HERO MAIN CONTENT GRID (EMERGES FROM BELOW BASELINE + EXITS TO LEFT BY 50% SCROLL) */}
       <div
         style={{
           transform: `translateX(${contentScrollOffset}px)`,
