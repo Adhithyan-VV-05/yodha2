@@ -52,25 +52,25 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     return () => clearInterval(timer);
   }, []);
 
-  // Calculate scroll offsets for smooth exit animation (rock slides RIGHT, contents slide LEFT)
-  const rockScrollOffset = Math.min(1200, scrollY * 0.85);
-  const contentScrollOffset = -Math.min(600, scrollY * 0.65);
+  // Calculate scroll offsets for smooth exit animation (entire rock slides RIGHT, contents slide LEFT)
+  const rockScrollOffset = Math.min(1800, scrollY * 1.1);
+  const contentScrollOffset = -Math.min(800, scrollY * 0.7);
   const heroContentOpacity = Math.max(0, 1 - scrollY / 500);
 
   return (
     <section className="relative w-full min-h-screen pt-28 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
       
-      {/* SEPARATE MONOLITH ROCK OVERLAY (5vh TOP MARGIN, ENTERS FROM BELOW WITH SMOOTH EASE, SCROLLS OFF TO RIGHT) */}
-      <div className="absolute top-[5vh] left-1/2 -translate-x-1/2 w-screen h-[95vh] pointer-events-none z-10 overflow-hidden">
+      {/* SEPARATE FULL VIEWPORT MONOLITH ROCK OVERLAY (PADDING TOP, ENTERS FROM -10vh IN 1.5s, SCROLLS OFF TO RIGHT) */}
+      <div className="absolute inset-0 w-screen h-screen pointer-events-none z-10 overflow-hidden left-1/2 -translate-x-1/2 pt-[5vh]">
         <motion.img
           src="/yodha-rock-pc.png"
           alt="Yodha Monolith Rock"
-          initial={{ y: "100vh", opacity: 0 }}
+          initial={{ y: "-10vh", opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{
-            duration: 1.4,
+            duration: 1.5,
             delay: 0.2,
-            ease: [0.16, 1, 0.3, 1], // Ultra-smooth cubic bezier ease
+            ease: [0.16, 1, 0.3, 1], // Ultra-smooth cubic bezier ease over 1.5s
           }}
           style={{
             transform: `translateX(${rockScrollOffset}px)`,
