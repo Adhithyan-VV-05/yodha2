@@ -53,20 +53,20 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
   }, []);
 
   // Calculate scroll offsets for smooth exit animation
-  const rockScrollOffset = Math.min(800, scrollY * 0.75);
-  const contentScrollOffset = -Math.min(500, scrollY * 0.55);
+  const rockScrollOffset = Math.min(1200, scrollY * 0.85);
+  const contentScrollOffset = -Math.min(600, scrollY * 0.65);
   const heroContentOpacity = Math.max(0, 1 - scrollY / 550);
 
   return (
-    <section className="relative w-full min-h-screen pt-28 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10 overflow-hidden">
+    <section className="relative w-full min-h-screen pt-28 sm:pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
       
-      {/* SEPARATE MONOLITH ROCK OVERLAY (SLIDES IN FROM RIGHT + SIDEWAYS LANDING SHAKE + SCROLLS OFF TO RIGHT) */}
-      <div className="absolute right-0 bottom-0 top-12 w-full lg:w-[60%] h-full pointer-events-none z-10 flex items-end justify-end overflow-hidden">
+      {/* SEPARATE FULL VIEWPORT 100vw x 100vh MONOLITH ROCK OVERLAY */}
+      <div className="absolute inset-0 w-screen h-screen pointer-events-none z-10 overflow-hidden left-1/2 -translate-x-1/2">
         <motion.img
           src="/yodha-rock-pc.png"
           alt="Yodha Monolith Rock"
-          initial={{ x: "120%" }}
-          animate={{ x: ["120%", "0%", "-14px", "10px", "-6px", "3px", "0%"] }}
+          initial={{ x: "100vw" }}
+          animate={{ x: ["100vw", "0vw", "-16px", "12px", "-6px", "3px", "0vw"] }}
           transition={{
             duration: 1.3,
             delay: 0.2,
@@ -76,7 +76,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           style={{
             transform: `translateX(${rockScrollOffset}px)`,
           }}
-          className="h-[82%] max-h-[750px] w-auto object-contain object-right-bottom filter drop-shadow-[0_25px_60px_rgba(0,0,0,0.6)]"
+          className="w-full h-full object-cover object-right-bottom filter drop-shadow-[0_25px_60px_rgba(0,0,0,0.6)]"
         />
       </div>
 
