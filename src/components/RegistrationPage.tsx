@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { RegistrationSection } from "./RegistrationSection";
-import { CompactFooter } from "./CompactFooter";
 
 interface RegistrationPageProps {
   onBack: () => void;
@@ -41,9 +40,6 @@ export function RegistrationPage({ onBack, selectedTrack }: RegistrationPageProp
       <main className="relative z-10 w-full flex-1 max-w-5xl mx-auto px-4 py-6 sm:py-10">
         <RegistrationSection selectedTrack={selectedTrack} />
       </main>
-
-      {/* GLASSMORPHISM FOOTER */}
-      <CompactFooter />
     </div>
   );
 }

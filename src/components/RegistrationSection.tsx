@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, Users, ShieldCheck, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift, ChevronDown } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
@@ -70,6 +70,9 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
   // Generated Referral Code on Success
   const [generatedReferralCode, setGeneratedReferralCode] = useState("");
   const [copiedReferralCode, setCopiedReferralCode] = useState(false);
+
+  // Step 4 Payment Confirmation State
+  const [isConfirmedForPayment, setIsConfirmedForPayment] = useState(false);
 
   // Validate Entered Warrior Referral Code on Click of Verify Logo/Button
   const handleVerifyReferralCode = async (codeVal: string) => {
@@ -327,23 +330,13 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative bg-[#050818]/95 border-2 border-purple-500/40 rounded-3xl p-6 sm:p-10 backdrop-blur-2xl shadow-[0_0_60px_rgba(168,85,247,0.3)] w-full overflow-hidden text-white"
+        className="w-full text-white"
       >
-        {/* HEADER BRANDING */}
-        <div className="flex items-center justify-between border-b border-purple-500/20 pb-6 mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-purple-950/80 border border-purple-500/40 p-2 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-              <Users className="w-6 h-6 text-purple-400" />
-            </div>
-            <div>
-              <h3 className="text-xl sm:text-2xl font-black font-heading text-white">
-                TEAM REGISTRATION PORTAL
-              </h3>
-              <p className="text-xs text-purple-300 font-mono mt-0.5">
-                48-Hour National AI Hackathon • Department of AI & Data Science
-              </p>
-            </div>
-          </div>
+        {/* CENTERED BIG HEADER BRANDING (NO ICON) */}
+        <div className="flex flex-col items-center justify-center text-center border-b border-purple-500/20 pb-6 mb-8">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading text-white tracking-tight uppercase">
+            TEAM <span className="text-purple-400">REGISTRATION</span>
+          </h2>
         </div>
 
         {/* SUBMISSION SUCCESS SCREEN */}
@@ -464,9 +457,9 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
           </div>
         ) : (
           <div>
-            {/* STEP PROGRESS BAR */}
+            {/* STEP PROGRESS BAR (DYNAMIC TO TEAM SIZE) */}
             <div className="flex items-center justify-between mb-8 relative">
-              {[1, 2, 3, 4].map((stepNum) => (
+              {(teamSize === 1 ? [1, 2, 4] : [1, 2, 3, 4]).map((stepNum, idx) => (
                 <div key={stepNum} className="flex flex-col items-center relative z-10">
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center font-mono font-bold text-xs transition-all ${
@@ -477,10 +470,10 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                         : "bg-slate-900 text-slate-400 border border-slate-700"
                     }`}
                   >
-                    {currentStep > stepNum ? "✓" : stepNum}
+                    {currentStep > stepNum ? "✓" : idx + 1}
                   </div>
                   <span className="text-[10px] font-mono text-slate-400 mt-1 font-semibold uppercase">
-                    {stepNum === 1 ? "Track & PS" : stepNum === 2 ? "Leader" : stepNum === 3 ? "Members" : "Confirm"}
+                    {stepNum === 1 ? "Track & PS" : stepNum === 2 ? "Leader" : stepNum === 3 ? `Members (${teamSize - 1})` : "Confirm"}
                   </span>
                 </div>
               ))}
@@ -500,7 +493,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-bold font-heading text-white">Step 1: Team & Problem Statement</h4>
-                  <p className="text-xs text-slate-400">Enter your team details and select your Healthcare AI problem statement.</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -520,27 +512,30 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1.5">Team Size *</label>
-                    <select
-                      value={teamSize}
-                      onChange={(e) => setTeamSize(Number(e.target.value))}
-                      className="w-full px-4 py-3 bg-slate-900 border border-purple-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-purple-400"
-                    >
-                      <option value={1}>1 Participant (Solo Entry)</option>
-                      <option value={2}>2 Members</option>
-                      <option value={3}>3 Members</option>
-                      <option value={4}>4 Members (Full Team)</option>
-                    </select>
+                    <label className="block text-xs font-mono text-slate-300 mb-1.5 font-bold">Team Size *</label>
+                    <div className="relative">
+                      <select
+                        value={teamSize}
+                        onChange={(e) => setTeamSize(Number(e.target.value))}
+                        className="w-full appearance-none bg-[#080b21] border border-purple-500/40 rounded-2xl px-5 py-3 pr-11 text-sm font-mono font-bold text-white focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-500/30 cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all"
+                      >
+                        <option value={1} className="bg-[#080b21] text-white">1 Participant (Solo Entry)</option>
+                        <option value={2} className="bg-[#080b21] text-white">2 Members</option>
+                        <option value={3} className="bg-[#080b21] text-white">3 Members</option>
+                        <option value={4} className="bg-[#080b21] text-white">4 Members (Full Team)</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-purple-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
                   </div>
                 </div>
 
                 {/* WARRIOR REFERRAL CODE FIELD */}
                 <div>
                   <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold mb-1.5">
-                    <Gift className="w-3.5 h-3.5 text-amber-400" />
+                    <Gift className="w-3.5 h-3.5 text-purple-400" />
                     <span>Warrior Referral Code (Optional)</span>
                   </label>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
                     <input
                       type="text"
                       value={usedReferralCode}
@@ -550,24 +545,24 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                         if (!val.trim()) setReferralCheckState({ status: "idle" });
                       }}
                       placeholder="e.g. WARR-X8K9"
-                      className="flex-1 px-4 py-3 bg-slate-900 border border-purple-500/30 rounded-xl text-sm font-mono text-white uppercase focus:outline-none focus:border-amber-400"
+                      className="flex-1 w-full px-4 py-3 bg-slate-900 border border-purple-500/30 rounded-2xl text-sm font-mono text-white uppercase focus:outline-none focus:border-purple-400"
                     />
                     <button
                       type="button"
                       onClick={() => handleVerifyReferralCode(usedReferralCode)}
                       disabled={referralCheckState.status === "checking"}
-                      className="px-4 py-3 bg-amber-400 hover:bg-amber-300 text-black font-mono text-xs font-bold uppercase rounded-xl flex items-center gap-2 shadow-md cursor-pointer shrink-0"
+                      className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-mono text-xs font-bold uppercase rounded-2xl flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.4)] border border-purple-400/40 cursor-pointer shrink-0 transition-all active:scale-95"
                     >
                       {referralCheckState.status === "checking" ? (
-                        <Loader2 className="w-4 h-4 animate-spin text-black" />
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
                       ) : (
-                        <ShieldCheck className="w-4 h-4" />
+                        <ShieldCheck className="w-4 h-4 text-white" />
                       )}
                       <span>VERIFY</span>
                     </button>
                   </div>
                   {referralCheckState.message && (
-                    <p className={`text-xs font-mono mt-1 ${referralCheckState.status === "valid" ? "text-emerald-400" : "text-rose-400"}`}>
+                    <p className={`text-xs font-mono mt-1.5 ${referralCheckState.status === "valid" ? "text-emerald-400" : "text-rose-400"}`}>
                       {referralCheckState.message}
                     </p>
                   )}
@@ -579,9 +574,8 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                     <div>
                       <label className="text-xs font-mono text-purple-300 font-bold uppercase tracking-wider flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-purple-400" />
-                        <span>SELECT PROBLEM STATEMENT (HEALTHCARE AI TRACK)</span>
+                        <span>SELECT YOUR PROBLEM STATEMENTS</span>
                       </label>
-                      <p className="text-[11px] text-slate-400">Click on any Problem Statement below to select it for your team.</p>
                     </div>
 
                     <div className="relative w-full sm:w-64">
@@ -664,7 +658,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-bold font-heading text-white">Step 2: Team Leader Details</h4>
-                  <p className="text-xs text-slate-400">Primary point of contact for competition notices.</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -762,7 +755,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-bold font-heading text-white">Step 3: Team Members Details</h4>
-                  <p className="text-xs text-slate-400">Enter details for remaining {teamSize - 1} team member(s).</p>
                 </div>
 
                 {Array.from({ length: teamSize - 1 }).map((_, index) => (
@@ -842,7 +834,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-bold font-heading text-white">Step 4: Confirm Registration</h4>
-                  <p className="text-xs text-slate-400">Review your team details before final submission.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/80 border border-purple-500/30 text-xs font-mono space-y-2">
@@ -864,32 +855,47 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </div>
                 </div>
 
-                <div className="pt-4 flex justify-between">
+                <div className="pt-4 flex justify-between gap-4 flex-wrap">
                   <button
                     type="button"
-                    onClick={() => setCurrentStep(teamSize === 1 ? 2 : 3)}
-                    className="px-6 py-3 rounded-full bg-slate-900 border border-slate-700 text-slate-300 text-xs font-mono font-bold uppercase"
+                    onClick={() => {
+                      setIsConfirmedForPayment(false);
+                      setCurrentStep(teamSize === 1 ? 2 : 3);
+                    }}
+                    className="px-6 py-3 rounded-full bg-slate-900 border border-slate-700 text-slate-300 text-xs font-mono font-bold uppercase cursor-pointer"
                   >
                     BACK
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleSubmitRegistration}
-                    disabled={status === "submitting"}
-                    className="px-10 py-4 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-[0_0_25px_rgba(168,85,247,0.5)] hover:scale-105 transition-all cursor-pointer"
-                  >
-                    {status === "submitting" ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin text-white" />
-                        <span>SUBMITTING REGISTRATION...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>SUBMIT REGISTRATION</span>
-                        <ArrowRight className="w-4 h-4 text-white" />
-                      </>
-                    )}
-                  </button>
+
+                  {!isConfirmedForPayment ? (
+                    <button
+                      type="button"
+                      onClick={() => setIsConfirmedForPayment(true)}
+                      className="px-8 py-3.5 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:scale-105 transition-all cursor-pointer"
+                    >
+                      <span>CONFIRM DETAILS</span>
+                      <ChevronRight className="w-4 h-4 text-white" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleSubmitRegistration}
+                      disabled={status === "submitting"}
+                      className="px-9 py-4 rounded-full bg-gradient-to-r from-emerald-600 via-purple-600 to-violet-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2.5 shadow-[0_0_30px_rgba(52,211,153,0.5)] hover:scale-105 transition-all cursor-pointer animate-pulse"
+                    >
+                      {status === "submitting" ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-white" />
+                          <span>PROCESSING PAYMENT & REGISTRATION...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>PROCEED TO PAY & SUBMIT</span>
+                          <ArrowRight className="w-4 h-4 text-white" />
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
             )}

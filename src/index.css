@@ -56,6 +56,34 @@ html {
   width: 100%;
 }
 
+/* GLOBAL & CONTAINER MINIMAL PURPLE CYBERPUNK SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(5, 8, 24, 0.7);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.5);
+  border-radius: 9999px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.85);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+}
+
+/* Firefox Custom Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.5) rgba(5, 8, 24, 0.7);
+}
+
 body {
   background-color: #03060d;
   color: #f8fafc;

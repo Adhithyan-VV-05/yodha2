@@ -76,7 +76,6 @@ function App() {
             onBack={() => handleSelectPage("home")}
             onOpenRegisterWithTrack={handleOpenRegisterWithTrack}
           />
-          <CompactFooter />
         </div>
       ) : (
         <div className="relative z-10 w-full min-h-screen block">

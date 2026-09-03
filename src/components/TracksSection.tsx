@@ -46,9 +46,11 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, margin: "-50px" }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-3xl sm:text-5xl font-black tracking-tight leading-tight font-heading text-slate-950"
+              className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-normal leading-snug font-heading text-slate-950 flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1"
             >
-              THE HEALTHCARE THEME
+              <span>THE</span>
+              <span className="text-red-600 font-black">HEALTHCARE</span>
+              <span>THEME</span>
             </motion.h2>
           </div>
 
