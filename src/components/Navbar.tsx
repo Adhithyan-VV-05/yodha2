@@ -12,9 +12,14 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Hide navbar completely inside the Hero section (scrollY <= 35vh).
-      // Shows only after user scrolls past the hero section.
-      setShowNavbar(window.scrollY > window.innerHeight * 0.35);
+      // Navbar ONLY appears when user scroll reaches the About section on all devices
+      const aboutElem = document.getElementById("about");
+      if (aboutElem) {
+        const rect = aboutElem.getBoundingClientRect();
+        setShowNavbar(rect.top <= window.innerHeight * 0.85);
+      } else {
+        setShowNavbar(window.scrollY > window.innerHeight * 0.85);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -31,20 +36,28 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
   ];
 
   return (
-    <>
-      {/* LIQUID GLASSMORPHISM NAVBAR WITH ROUNDED BOTTOM EDGES (NO NAVBAR IN HERO SECTION) */}
-      <header
-        className={`fixed top-0 left-1/2 -translate-x-1/2 z-40 max-w-6xl w-[94%] transition-all duration-500 transform ${
-          showNavbar
-            ? "translate-y-0 opacity-100 pointer-events-auto"
-            : "-translate-y-24 opacity-0 pointer-events-none"
+    <header
+      className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 max-w-6xl w-[94%] transition-all duration-500 transform ${
+        showNavbar
+          ? "translate-y-0 opacity-100 pointer-events-auto"
+          : "-translate-y-28 opacity-0 pointer-events-none"
+      }`}
+    >
+      {/* LIQUID GLASSMORPHISM CONTAINER THAT EXPANDS VERTICALLY ON MOBILE */}
+      <div
+        className={`w-full px-5 py-3.5 rounded-b-3xl bg-white/60 dark:bg-[#060817]/80 border-b border-x border-white/70 dark:border-purple-500/50 backdrop-blur-3xl shadow-[0_15px_35px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.6)] transition-all duration-300 ease-in-out ${
+          menuOpen ? "rounded-3xl shadow-[0_20px_45px_rgba(124,58,237,0.3)]" : ""
         }`}
       >
-        {/* LIQUID GLASSMORPHISM CONTAINER (ROUNDED BOTTOM EDGES: rounded-b-3xl) */}
-        <div className="w-full px-6 py-3.5 rounded-b-3xl bg-white/45 dark:bg-[#060817]/65 border-b border-x border-white/60 dark:border-purple-500/40 backdrop-blur-3xl shadow-[0_15px_35px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.5)] flex items-center justify-between">
+        {/* TOP COMPACT ROW: BRAND LOGO + DESKTOP NAV / MOBILE HAMBURGER TOGGLE */}
+        <div className="flex items-center justify-between">
           
           {/* BRAND LOGO */}
-          <a href="#" className="flex items-center gap-2.5 group shrink-0">
+          <a
+            href="#"
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center gap-2.5 group shrink-0"
+          >
             <div className="w-9 h-9 rounded-full overflow-hidden border border-purple-500/60 shadow-[0_0_15px_rgba(168,85,247,0.4)] shrink-0">
               <img src={logo} alt="YODHA Logo" className="w-full h-full object-cover scale-110" />
             </div>
@@ -88,65 +101,55 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             </button>
           </div>
 
-          {/* MOBILE HAMBURGER TOGGLE */}
+          {/* MOBILE HAMBURGER ICON TOGGLE */}
           <div className="flex lg:hidden items-center">
             <button
-              onClick={() => setMenuOpen(true)}
-              className="p-2 text-slate-950 dark:text-white hover:text-purple-600 cursor-pointer"
-              aria-label="Open Navigation Menu"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 text-slate-950 dark:text-white hover:text-purple-600 transition-colors cursor-pointer"
+              aria-label={menuOpen ? "Close Navigation Menu" : "Open Navigation Menu"}
             >
-              <Menu size={24} />
+              {menuOpen ? <X size={24} className="text-purple-500" /> : <Menu size={24} />}
             </button>
           </div>
 
         </div>
-      </header>
 
-      {/* FULLSCREEN MOBILE NAV OVERLAY */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-3xl flex flex-col justify-between p-6 text-white animate-in fade-in duration-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline">
-              <span className="font-heading font-black text-2xl text-white tracking-tight">YODHA</span>
-              <span className="text-purple-400 font-bold text-xs font-mono ml-1.5">2.0</span>
-            </div>
-            <button onClick={() => setMenuOpen(false)} className="p-2 text-white">
-              <X size={26} />
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-6 my-auto text-left">
+        {/* EXPANDABLE VERTICAL MOBILE NAVIGATION PANEL (SCALES DOWN ON CLICK) */}
+        {menuOpen && (
+          <div className="flex lg:hidden flex-col gap-3 pt-4 pb-2 mt-3 border-t border-white/40 dark:border-purple-500/30 animate-in fade-in slide-in-from-top-3 duration-300">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => {
-                  setMenuOpen(false);
+                  setMenuOpen(false); // Collapses back down so all contents are properly visible
                   if (link.isAction) {
                     e.preventDefault();
                     onOpenRegister();
                   }
                 }}
-                className="text-xl font-heading font-bold text-slate-100 hover:text-purple-400 transition-colors uppercase tracking-widest"
+                className="py-2 px-3 rounded-xl hover:bg-purple-500/10 text-slate-900 dark:text-slate-100 font-mono font-bold text-sm hover:text-purple-600 dark:hover:text-purple-400 transition-colors uppercase tracking-wider flex items-center justify-between"
               >
-                {link.name}
+                <span>{link.name}</span>
+                <span className="text-purple-400 text-xs">→</span>
               </a>
             ))}
-          </div>
 
-          <button
-            onClick={() => {
-              setMenuOpen(false);
-              onOpenRegister();
-            }}
-            className="w-full py-4 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-mono text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(168,85,247,0.5)]"
-          >
-            <span>REGISTER NOW</span>
-            <ArrowRight className="w-4 h-4 text-white" />
-          </button>
-        </div>
-      )}
-    </>
+            <button
+              onClick={() => {
+                setMenuOpen(false); // Collapses back down
+                onOpenRegister();
+              }}
+              className="mt-2 w-full py-3 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.5)] active:scale-95 transition-all"
+            >
+              <span>REGISTER NOW</span>
+              <ArrowRight className="w-3.5 h-3.5 text-white" />
+            </button>
+          </div>
+        )}
+
+      </div>
+    </header>
   );
 }
 
