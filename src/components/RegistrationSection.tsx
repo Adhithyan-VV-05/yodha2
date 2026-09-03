@@ -827,7 +827,21 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </button>
                   <button
                     type="button"
-                    onClick={() => setCurrentStep(4)}
+                    onClick={() => {
+                      for (let i = 0; i < teamSize - 1; i++) {
+                        const m = members[i];
+                        if (!m?.fullName?.trim() || !m?.email?.trim() || !m?.phone?.trim() || !m?.organization?.trim()) {
+                          setErrorMessage(`Please fill all required fields for Member #${i + 2}.`);
+                          return;
+                        }
+                      }
+                      if (Object.keys(fieldErrors).length > 0) {
+                        setErrorMessage("Please resolve all duplicate email/phone errors before proceeding.");
+                        return;
+                      }
+                      setErrorMessage("");
+                      setCurrentStep(4);
+                    }}
                     className="px-8 py-3.5 rounded-full bg-purple-600 hover:bg-purple-500 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2"
                   >
                     <span>NEXT: CONFIRM</span>
