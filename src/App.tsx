@@ -4,7 +4,6 @@ import { HeroSection } from "./components/HeroSection";
 import { AboutSection } from "./components/AboutSection";
 import { TracksSection } from "./components/TracksSection";
 import { SDGSection } from "./components/SDGSection";
-import { WhyParticipateSection } from "./components/WhyParticipateSection";
 import { PrizesSection } from "./components/PrizesSection";
 import { TimelineSection } from "./components/TimelineSection";
 import { ClosingCTA } from "./components/ClosingCTA";
@@ -101,10 +100,7 @@ function App() {
           {/* 4. UN Sustainable Development Goals */}
           <SDGSection />
 
-          {/* 5. Why Participate? */}
-          <WhyParticipateSection />
-
-          {/* 6. Prizes & Trophies */}
+          {/* 5. Prizes & Trophies */}
           <PrizesSection onOpenRegister={() => handleOpenRegisterWithTrack()} />
 
           {/* 7. Hackathon Timeline */}

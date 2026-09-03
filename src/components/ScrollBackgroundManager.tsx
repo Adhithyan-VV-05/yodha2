@@ -27,8 +27,8 @@ export function ScrollBackgroundManager() {
 
       // 2. 1ST HALF VS 2ND HALF THEME SPLIT (DYNAMICALLY LOCATES 2ND HALF SECTIONS ON MOBILE & PC)
       // 1st Half: Hero, About, Tracks, SDG -> Light Theme
-      // 2nd Half: Why Participate, Prizes, Timeline, CTA, Carousel, Footer -> Dark Theme
-      const targetSection = document.getElementById("why") || document.getElementById("prizes");
+      // 2nd Half: Prizes, Timeline, CTA, Carousel, Footer -> Dark Theme
+      const targetSection = document.getElementById("prizes");
       let splitPoint = h * 2.8;
       if (targetSection) {
         splitPoint = Math.max(h * 1.5, targetSection.offsetTop - h * 0.4);
