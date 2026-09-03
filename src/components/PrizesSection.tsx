@@ -30,13 +30,13 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
         </p>
       </div>
 
-      {/* 3 PODIUM CARDS GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch w-full max-w-5xl mx-auto">
+      {/* 3 PODIUM CARDS - HORIZONTALLY SCROLLABLE ON MOBILE, SNAP-CENTER */}
+      <div className="flex md:grid md:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-6 items-stretch w-full max-w-5xl mx-auto px-4 py-4 scrollbar-none justify-start md:justify-center">
         
         {/* 1ST PLACE - GOLD CARD */}
         <div
           onClick={() => onOpenRegister && onOpenRegister()}
-          className="p-8 rounded-3xl bg-[#030816]/90 border-2 border-amber-400 backdrop-blur-2xl shadow-[0_0_35px_rgba(245,158,11,0.25)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
+          className="w-[85vw] max-w-[340px] md:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-[#030816]/90 border-2 border-amber-400 backdrop-blur-2xl shadow-[0_0_35px_rgba(245,158,11,0.25)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
         >
           <div className="w-full h-48 flex items-center justify-center relative">
             <div className="absolute inset-0 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -67,7 +67,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
         {/* 2ND PLACE - SILVER CARD */}
         <div
           onClick={() => onOpenRegister && onOpenRegister()}
-          className="p-8 rounded-3xl bg-[#030816]/90 border border-slate-400 backdrop-blur-2xl shadow-[0_0_25px_rgba(148,163,184,0.2)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
+          className="w-[85vw] max-w-[340px] md:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-[#030816]/90 border border-slate-400 backdrop-blur-2xl shadow-[0_0_25px_rgba(148,163,184,0.2)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
         >
           <div className="w-full h-48 flex items-center justify-center relative">
             <div className="absolute inset-0 bg-slate-400/10 rounded-full blur-2xl pointer-events-none" />
@@ -98,7 +98,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
         {/* 3RD PLACE - BRONZE CARD */}
         <div
           onClick={() => onOpenRegister && onOpenRegister()}
-          className="p-8 rounded-3xl bg-[#030816]/90 border border-amber-700/60 backdrop-blur-2xl shadow-[0_0_25px_rgba(180,83,9,0.2)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
+          className="w-[85vw] max-w-[340px] md:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-[#030816]/90 border border-amber-700/60 backdrop-blur-2xl shadow-[0_0_25px_rgba(180,83,9,0.2)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
         >
           <div className="w-full h-48 flex items-center justify-center relative">
             <div className="absolute inset-0 bg-amber-700/10 rounded-full blur-2xl pointer-events-none" />

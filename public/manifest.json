@@ -1,0 +1,15 @@
+{
+  "short_name": "YODHA 2.0",
+  "name": "YODHA 2 – Warriors of AI Hackathon",
+  "icons": [
+    {
+      "src": "/logo.webp",
+      "type": "image/webp",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#03060d",
+  "theme_color": "#050816",
+  "display": "standalone"
+}
