@@ -224,19 +224,7 @@ export function SDGSection() {
         
         {/* TOP EDITORIAL HEADER */}
         <div className="text-center space-y-3 max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center justify-center gap-3"
-          >
-            <div className="w-10 sm:w-16 h-[1px] bg-gradient-to-r from-transparent via-purple-400 to-purple-500/70" />
-            <span className="text-[10px] sm:text-xs font-mono font-bold tracking-[0.25em] text-purple-600 uppercase">
-              IDEAS FOR A BETTER TOMORROW
-            </span>
-            <div className="w-10 sm:w-16 h-[1px] bg-gradient-to-l from-transparent via-purple-400 to-purple-500/70" />
-          </motion.div>
+
 
           <motion.h2
             initial={{ opacity: 0, y: 25 }}

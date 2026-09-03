@@ -97,7 +97,7 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
               className="px-7 py-4 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-purple-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2.5 shadow-lg hover:brightness-110 hover:scale-105 transition-all cursor-pointer active:scale-95"
             >
               <FileText className="w-4 h-4 text-white" />
-              <span>EXPLORE ALL 20 PROBLEM STATEMENTS</span>
+              <span>EXPLORE ALL PS</span>
               <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </div>
