@@ -37,7 +37,7 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
 
   const bannerUrl =
     (typeof import.meta !== "undefined" && import.meta.env?.VITE_BANNER_URL) ||
-    "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.png";
+    "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.webp";
 
   const membersHtml = (data.members || []).map((m, idx) => `
     <div style="background-color: #0d1222; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">

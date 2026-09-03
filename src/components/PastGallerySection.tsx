@@ -3,26 +3,26 @@ import { Camera } from "lucide-react";
 import { YodhaImage } from "./YodhaImage";
 
 // Import all 20 past hackathon images
-import img1 from "../assets/carousel/1.jpeg";
-import img2 from "../assets/carousel/2.jpeg";
-import img3 from "../assets/carousel/3.jpeg";
-import img4 from "../assets/carousel/4.jpeg";
-import img5 from "../assets/carousel/5.jpeg";
-import img6 from "../assets/carousel/6.jpeg";
-import img7 from "../assets/carousel/7.jpeg";
-import img8 from "../assets/carousel/8.jpeg";
-import img9 from "../assets/carousel/9.jpeg";
-import img10 from "../assets/carousel/10.jpeg";
-import img11 from "../assets/carousel/11.jpeg";
-import img12 from "../assets/carousel/12.jpeg";
-import img13 from "../assets/carousel/13.jpeg";
-import img14 from "../assets/carousel/14.jpeg";
-import img15 from "../assets/carousel/15.jpeg";
-import img16 from "../assets/carousel/16.jpeg";
-import img17 from "../assets/carousel/17.jpeg";
-import img18 from "../assets/carousel/18.jpeg";
-import img19 from "../assets/carousel/19.jpeg";
-import img20 from "../assets/carousel/20.jpeg";
+import img1 from "../assets/carousel/1.webp";
+import img2 from "../assets/carousel/2.webp";
+import img3 from "../assets/carousel/3.webp";
+import img4 from "../assets/carousel/4.webp";
+import img5 from "../assets/carousel/5.webp";
+import img6 from "../assets/carousel/6.webp";
+import img7 from "../assets/carousel/7.webp";
+import img8 from "../assets/carousel/8.webp";
+import img9 from "../assets/carousel/9.webp";
+import img10 from "../assets/carousel/10.webp";
+import img11 from "../assets/carousel/11.webp";
+import img12 from "../assets/carousel/12.webp";
+import img13 from "../assets/carousel/13.webp";
+import img14 from "../assets/carousel/14.webp";
+import img15 from "../assets/carousel/15.webp";
+import img16 from "../assets/carousel/16.webp";
+import img17 from "../assets/carousel/17.webp";
+import img18 from "../assets/carousel/18.webp";
+import img19 from "../assets/carousel/19.webp";
+import img20 from "../assets/carousel/20.webp";
 
 const CAROUSEL_IMAGES = [
   img1, img2, img3, img4, img5, img6, img7, img8, img9, img10,

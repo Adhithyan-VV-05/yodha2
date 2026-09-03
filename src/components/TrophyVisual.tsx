@@ -12,10 +12,10 @@ export function TrophyVisual({ rank, className = "" }: TrophyVisualProps) {
 
   // High-Resolution Transparent 3D Online Trophy Image URLs
   const trophyImage = isGold
-    ? "https://cdn-icons-png.flaticon.com/512/3112/3112946.png"
+    ? "https://cdn-icons-png.flaticon.com/512/3112/3112946.webp"
     : isSilver
-    ? "https://cdn-icons-png.flaticon.com/512/3112/3112955.png"
-    : "https://cdn-icons-png.flaticon.com/512/3112/3112963.png";
+    ? "https://cdn-icons-png.flaticon.com/512/3112/3112955.webp"
+    : "https://cdn-icons-png.flaticon.com/512/3112/3112963.webp";
 
   const glowColor = isGold
     ? "rgba(245, 158, 11, 0.45)"

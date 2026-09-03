@@ -328,7 +328,7 @@ export function SolutionDomainsSection() {
                   >
                     {/* Metallic Cyber Edge Armor Frame Texture */}
                     <img
-                      src="/metallic_card_frame.png"
+                      src="/metallic_card_frame.webp"
                       alt=""
                       className={`absolute inset-0 w-full h-full object-fill pointer-events-none mix-blend-screen transition-opacity ${
                         isCenter ? "opacity-60" : "opacity-30"

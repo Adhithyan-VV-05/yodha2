@@ -19,7 +19,7 @@ import {
   Award,
   Layers
 } from "lucide-react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.webp";
 
 interface HeroCommandCenterProps {
   onOpenRegister: (trackName?: string) => void;

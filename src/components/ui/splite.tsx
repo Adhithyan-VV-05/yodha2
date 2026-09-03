@@ -1,6 +1,6 @@
 import { Component, type ReactNode, useState, useEffect } from 'react';
 import Spline from '@splinetool/react-spline';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo.webp';
 
 interface ErrorBoundaryProps {
   children: ReactNode;

@@ -17,7 +17,7 @@ export function RegistrationPage({ onBack, selectedTrack }: RegistrationPageProp
       {/* Dynamic Background Hills & Purple Glow matching site theme */}
       <div className="fixed inset-0 w-screen h-screen pointer-events-none z-0 overflow-hidden">
         <img
-          src="/bg-hills-night-pc.png"
+          src="/bg-hills-night-pc.webp"
           alt="Night Hills Background"
           className="w-full h-full object-cover object-center opacity-85"
         />

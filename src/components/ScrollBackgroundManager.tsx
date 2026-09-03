@@ -56,9 +56,9 @@ export function ScrollBackgroundManager() {
         style={{ opacity: heroOpacity }}
       >
         <picture className="w-full h-full">
-          <source media="(min-width: 640px)" srcSet="/yodha-hero-bg-pc.png" />
+          <source media="(min-width: 640px)" srcSet="/yodha-hero-bg-pc.webp" />
           <img
-            src="/yodha-hero--bg-mob.png"
+            src="/yodha-hero--bg-mob.webp"
             alt="Yodha Hero Background"
             className="w-full h-full object-cover object-center"
           />
@@ -71,7 +71,7 @@ export function ScrollBackgroundManager() {
         style={{ opacity: 1 - secondHalfOpacity }}
       >
         <img
-          src="/bg-hills-day-pc.png"
+          src="/bg-hills-day-pc.webp"
           alt="1st Half Light Theme Backdrop"
           className="w-full h-full object-cover object-center opacity-30"
         />
@@ -83,7 +83,7 @@ export function ScrollBackgroundManager() {
         style={{ opacity: secondHalfOpacity }}
       >
         <img
-          src="/bg-hills-night-pc.png"
+          src="/bg-hills-night-pc.webp"
           alt="2nd Half Dark Theme Backdrop"
           className="w-full h-full object-cover object-center opacity-70"
         />

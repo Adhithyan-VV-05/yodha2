@@ -1,10 +1,10 @@
 // Utility helper to dynamically load problem statement images from src/assets/ps/
-const psImagesGlob = import.meta.glob('/src/assets/ps/*.jpeg', {
+const psImagesGlob = import.meta.glob('/src/assets/ps/*.webp', {
   eager: true,
   import: 'default',
 }) as Record<string, string>;
 
-const relativePsImagesGlob = import.meta.glob('../assets/ps/*.jpeg', {
+const relativePsImagesGlob = import.meta.glob('../assets/ps/*.webp', {
   eager: true,
   import: 'default',
 }) as Record<string, string>;
@@ -13,18 +13,18 @@ const relativePsImagesGlob = import.meta.glob('../assets/ps/*.jpeg', {
  * Returns the resolved image URL for a problem statement ID (1 to 20).
  */
 export function getProblemStatementImage(id: number): string {
-  const absoluteKey = `/src/assets/ps/${id}.jpeg`;
+  const absoluteKey = `/src/assets/ps/${id}.webp`;
   if (psImagesGlob[absoluteKey]) {
     return psImagesGlob[absoluteKey];
   }
 
-  const relativeKey = `../assets/ps/${id}.jpeg`;
+  const relativeKey = `../assets/ps/${id}.webp`;
   if (relativePsImagesGlob[relativeKey]) {
     return relativePsImagesGlob[relativeKey];
   }
 
   // Fallback direct path for public/Vite server fallback
-  return `/src/assets/ps/${id}.jpeg`;
+  return `/src/assets/ps/${id}.webp`;
 }
 
 /**
