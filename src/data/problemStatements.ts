@@ -47,16 +47,16 @@ export interface ProblemStatementStyle {
 // Breakdown: 3 Easy (IDs 1-3), 4 Medium (IDs 4-7), 3 Hard (IDs 8-10)
 // ------------------------------------------------------------------------------
 export const HEALTHCARE_PROBLEM_STATEMENTS: ProblemStatement[] = [
-  // EASY (IDs 1 to 3)
+  // IDs 1 to 6
   {
     "id": 1,
-    "title": "Silent Health Guardian",
-    "slug": "silent-health-guardian",
+    "title": "AI-Powered Patient Monitoring",
+    "slug": "ai-powered-patient-monitoring",
     "category": "Healthcare",
     "difficulty": "Easy",
     "sdgs": ["SDG 3"],
-    "tags": ["AI", "Healthcare", "Remote Monitoring", "IoT"],
-    "cardDescription": "Many patients fail to recognize early warning signs of deteriorating health. Design an intelligent assistant that continuously monitors routine health indicators and alerts users before conditions become critical.",
+    "tags": ["Patient Care", "Healthcare", "Remote Monitoring", "IoT"],
+    "cardDescription": "Develop an AI solution for real-time patient monitoring and early detection of critical health events.",
     "readMore": {
       "background": "Chronic illnesses often worsen because patients miss subtle changes in their daily health. Continuous monitoring and timely intervention can significantly improve outcomes.",
       "challenge": "Develop a smart monitoring platform capable of collecting routine health information from wearable devices or manual inputs, detecting abnormal patterns, and notifying both patients and caregivers.",
@@ -78,144 +78,143 @@ export const HEALTHCARE_PROBLEM_STATEMENTS: ProblemStatement[] = [
   },
   {
     "id": 2,
-    "title": "CareBridge AI Assistant",
-    "slug": "carebridge-ai-assistant",
+    "title": "Early Disease Detection",
+    "slug": "early-disease-detection",
     "category": "Healthcare",
-    "difficulty": "Easy",
+    "difficulty": "Medium",
     "sdgs": ["SDG 3", "SDG 10"],
-    "tags": ["Accessibility", "Healthcare", "AI", "Voice"],
-    "cardDescription": "Healthcare remains inaccessible for many elderly and differently-abled individuals. Build an inclusive digital assistant that simplifies access to medical guidance and appointment booking.",
+    "tags": ["Diagnostics", "Healthcare", "AI", "Imaging"],
+    "cardDescription": "Create AI models to detect diseases at an earlier stage using medical imaging and clinical data.",
     "readMore": {
-      "background": "Many patients face challenges in booking appointments, understanding prescriptions, or accessing medical guidance due to language, literacy, or physical limitations.",
-      "challenge": "Design an accessible healthcare assistant that supports multilingual communication, voice interaction, appointment scheduling, and simplified medical guidance.",
+      "background": "Early detection of chronic diseases, cancers, and cardiovascular anomalies exponentially increases treatment success rates.",
+      "challenge": "Design an accessible healthcare diagnostic platform that ingests multi-modal medical imaging (X-Ray, MRI, CT) and patient clinical records to detect risk markers early.",
       "objectives": [
-        "Improve healthcare accessibility",
-        "Support multilingual voice interaction",
-        "Assist elderly users with appointment routing",
-        "Reduce dependence on manual clinic check-in"
+        "Improve early diagnostic sensitivity and accuracy",
+        "Support multi-modal clinical imaging segmentation",
+        "Assist radiologists with prioritized risk alerts",
+        "Reduce diagnostic backlog in rural clinics"
       ],
       "constraints": [
-        "Must be simple to use for non-tech-savvy users",
-        "Should support low-bandwidth devices",
-        "Must prioritize web accessibility (WCAG)"
+        "Must preserve patient medical privacy",
+        "Should provide explainable AI heatmaps",
+        "Must serve as clinician decision support"
       ],
-      "expectedOutcome": "An inclusive healthcare platform capable of improving patient engagement across diverse populations.",
-      "innovationScope": ["Speech Recognition", "NLP", "Accessibility"],
-      "suggestedTechnologies": ["Whisper", "Gemini AI", "React", "Firebase"]
+      "expectedOutcome": "An early disease detection platform enabling proactive clinical intervention.",
+      "innovationScope": ["Medical Computer Vision", "Diagnostic AI", "Explainable AI"],
+      "suggestedTechnologies": ["PyTorch", "OpenCV", "FastAPI", "React"]
     }
   },
   {
     "id": 3,
-    "title": "SafeDose Medication Companion",
-    "slug": "safedose-medication-companion",
+    "title": "Personalized Treatment Plans",
+    "slug": "personalized-treatment-plans",
     "category": "Healthcare",
-    "difficulty": "Easy",
+    "difficulty": "Medium",
     "sdgs": ["SDG 3"],
-    "tags": ["Medication", "AI", "Healthcare", "Patient Safety"],
-    "cardDescription": "Medication errors and missed dosages remain leading causes of preventable healthcare complications. Build an intelligent assistant that improves medication adherence and checks interaction risks.",
+    "tags": ["Digital Health", "AI", "Healthcare", "Personalized Medicine"],
+    "cardDescription": "Design AI systems to recommend personalized treatment plans based on patient history.",
     "readMore": {
-      "background": "Patients often forget dosage schedules or unintentionally combine medicines that produce harmful side effects or allergic reactions.",
-      "challenge": "Create an AI-powered medication companion capable of reminding patients, identifying potential drug-drug interactions, and keeping caregivers updated.",
+      "background": "Standardized treatment protocols often fail to account for individual patient comorbidities, lifestyle variables, and historical drug responses.",
+      "challenge": "Create an AI-powered personalized treatment engine that analyzes longitudinal EHR records and patient vitals to generate tailored therapeutic pathways.",
       "objectives": [
-        "Improve medication compliance",
-        "Reduce dangerous prescription interaction risks",
-        "Increase patient treatment awareness",
-        "Support family caregiver tracking"
+        "Personalize patient therapeutic pathways",
+        "Reduce adverse drug reaction risks",
+        "Improve long-term treatment compliance",
+        "Support oncologists and clinicians with evidence-backed options"
       ],
       "constraints": [
         "Must explicitly disclaim professional doctor substitution",
-        "Should remain simple for elderly users",
-        "Must provide instant interaction warnings"
+        "Should provide clear clinical rationale for recommendations",
+        "Must ensure strict data encryption"
       ],
-      "expectedOutcome": "A personalized medication safety companion improving treatment adherence.",
-      "innovationScope": ["Recommendation Systems", "Drug Interaction Graphs", "Patient Safety"],
-      "suggestedTechnologies": ["Firebase", "React", "Gemini AI", "RxNorm API"]
+      "expectedOutcome": "A personalized digital health assistant optimizing patient treatment outcomes.",
+      "innovationScope": ["Recommendation Systems", "EHR Analytics", "Patient Safety"],
+      "suggestedTechnologies": ["Firebase", "React", "Gemini AI", "Python"]
     }
   },
 
-  // MEDIUM (IDs 4 to 7)
   {
     "id": 4,
-    "title": "MedSync Clinical Navigator",
-    "slug": "medsync-clinical-navigator",
+    "title": "Accelerating Drug Discovery",
+    "slug": "accelerating-drug-discovery",
     "category": "Healthcare",
-    "difficulty": "Medium",
+    "difficulty": "Hard",
     "sdgs": ["SDG 3", "SDG 9"],
-    "tags": ["Healthcare", "AI", "Hospital", "Workflow"],
-    "cardDescription": "Hospitals struggle with fragmented patient records across labs, pharmacies, and radiology. Create an intelligent system that connects clinical workflows and accelerates treatment decision-making.",
+    "tags": ["Drug Discovery", "AI", "Bioinformatics", "Pharma"],
+    "cardDescription": "Build AI tools to identify promising drug candidates and accelerate the research pipeline.",
     "readMore": {
-      "background": "Patient information is frequently distributed across laboratories, imaging centers, pharmacies, and clinical departments, resulting in delays and diagnostic bottlenecks.",
-      "challenge": "Build a unified healthcare intelligence platform capable of consolidating patient records from multiple sources while assisting clinicians through contextual insights.",
+      "background": "Traditional pharmaceutical drug discovery takes over a decade and billions of dollars to identify viable lead compounds.",
+      "challenge": "Build a computational molecular AI engine that predicts target protein-ligand binding affinity, screens virtual chemical libraries, and predicts ADMET toxicity profiles.",
       "objectives": [
-        "Reduce clinical treatment delays",
-        "Improve EHR information accessibility",
-        "Support faster diagnostic decisions",
-        "Enhance inter-departmental hospital workflow"
+        "Accelerate virtual lead compound screening from months to days",
+        "Predict molecular binding affinity and toxicity early",
+        "Reduce wet-lab trial costs and drug development timelines",
+        "Identify novel therapeutic candidates for emerging pathogens"
       ],
       "constraints": [
-        "Must maintain strict HIPAA / GDPR patient confidentiality",
-        "Should integrate with standard hospital EHR protocols",
-        "Must serve as clinician decision support, not replacement"
+        "Must handle complex SMILES molecular structures",
+        "Must adhere to chemical informatics standards",
+        "Predictions must cite molecular docking physics benchmarks"
       ],
-      "expectedOutcome": "A connected healthcare ecosystem streamlining clinical workflows and patient care.",
-      "innovationScope": ["Healthcare Informatics", "Explainable AI", "EHR Data Fusion"],
-      "suggestedTechnologies": ["FHIR", "FastAPI", "PostgreSQL", "React"]
+      "expectedOutcome": "An AI bioinformatics platform accelerating early-stage drug discovery.",
+      "innovationScope": ["Graph Neural Networks", "Molecular Docking AI", "Pharma Informatics"],
+      "suggestedTechnologies": ["RDKit", "PyTorch Geometric", "FastAPI", "React"]
     }
   },
   {
     "id": 5,
-    "title": "PulseShield Emergency Triage Intelligence",
-    "slug": "pulseshield-emergency-intelligence",
+    "title": "Outbreak Prediction",
+    "slug": "outbreak-prediction",
     "category": "Healthcare",
-    "difficulty": "Medium",
+    "difficulty": "Easy",
     "sdgs": ["SDG 3", "SDG 11"],
-    "tags": ["Emergency", "AI", "IoT", "Triage"],
-    "cardDescription": "Emergency response teams often receive incomplete patient data during critical transit. Develop an intelligent platform that speeds up trauma triage and ambulance-to-ER coordination.",
+    "tags": ["Public Health", "AI", "Epidemiology", "Surveillance"],
+    "cardDescription": "Develop models to predict and prevent disease outbreaks using population and environmental data.",
     "readMore": {
-      "background": "Delays in retrieving patient history and vital trends during ambulance transit directly impact emergency trauma survival rates.",
-      "challenge": "Design an emergency triage intelligence platform capable of collecting real-time patient vitals during transport, predicting trauma severity, and alerting ER staff before arrival.",
+      "background": "Infectious disease outbreaks spread rapidly before traditional public health reporting catches up.",
+      "challenge": "Design a public health surveillance platform that analyzes climate data, hospital admission trends, and mobility data to forecast epidemic vector hotspots.",
       "objectives": [
-        "Reduce emergency room admission delays",
-        "Improve pre-hospital triage accuracy",
-        "Support rapid trauma team preparation",
-        "Enhance ambulance-hospital telemetry coordination"
+        "Forecast viral and vector-borne outbreak hotspots 14 days early",
+        "Improve public health resource allocation",
+        "Alert municipal health officers to emerging cluster risks",
+        "Provide public preventive safety guidance"
       ],
       "constraints": [
-        "Must operate reliably over cellular/unstable mobile networks",
-        "Should prioritize vital alarm telemetry",
-        "Must ensure encrypted data transmission"
+        "Must operate with anonymized aggregate data",
+        "Should handle missing regional health feeds",
+        "Must prioritize early spatial alerts"
       ],
-      "expectedOutcome": "An AI-assisted emergency triage network reducing critical care latency.",
-      "innovationScope": ["Telemetry Edge AI", "Triage Decision Support", "Emergency Healthcare"],
-      "suggestedTechnologies": ["Firebase", "React", "TensorFlow Lite", "WebSockets"]
+      "expectedOutcome": "An AI epidemic surveillance system enabling proactive public health containment.",
+      "innovationScope": ["Epidemiological AI", "Spatial-Temporal Modeling", "Public Health"],
+      "suggestedTechnologies": ["Python", "Prophet", "Leaflet GIS", "React"]
     }
   },
   {
     "id": 6,
-    "title": "MindMirror Wellness Network",
-    "slug": "mindmirror-wellness-network",
+    "title": "Assistive AI for Differently-Abled",
+    "slug": "assistive-ai-differently-abled",
     "category": "Healthcare",
-    "difficulty": "Medium",
-    "sdgs": ["SDG 3"],
-    "tags": ["Mental Health", "AI", "NLP", "Wellness"],
-    "cardDescription": "Mental health conditions often go unnoticed until severe crisis occurs. Design an intelligent platform capable of detecting behavioral stress signals and offering early wellness interventions.",
+    "difficulty": "Hard",
+    "sdgs": ["SDG 3", "SDG 10"],
+    "tags": ["Accessibility", "AI", "Computer Vision", "Assistive Tech"],
+    "cardDescription": "Create AI-powered solutions to improve accessibility and independence for differently-abled individuals.",
     "readMore": {
-      "background": "Stress, anxiety, and burnout frequently remain unaddressed due to lack of regular mood tracking and social stigma around seeking mental health support.",
-      "challenge": "Develop an AI-powered wellness network that analyzes voluntary user logs, voice sentiment, and behavioral sleep patterns to provide personalized wellness coping strategies while protecting privacy.",
+      "background": "Visually impaired, hearing impaired, and mobility impaired individuals encounter daily urban navigation and communication barriers.",
+      "challenge": "Develop an integrated multimodal assistive companion utilizing computer vision, real-time spatial scene description, sign language translation, and voice interaction.",
       "objectives": [
-        "Promote early mental wellness awareness",
-        "Deliver personalized coping strategies",
-        "Support therapists with anonymized longitudinal mood trends",
-        "Encourage proactive preventive care"
+        "Empower visually impaired users with real-time audio scene description",
+        "Translate sign language gestures into text/speech instantly",
+        "Detect obstacle hazards and indoor navigation waypoints",
+        "Ensure full hands-free accessibility"
       ],
       "constraints": [
-        "Must preserve complete user anonymity and privacy",
-        "Should explicitly avoid clinical psychiatric diagnosis",
-        "Must provide safe, crisis helpline escalation paths"
+        "Must process camera feeds with sub-second latency",
+        "Should operate on mobile or wearable smart glasses",
+        "Must prioritize user safety alerts"
       ],
-      "expectedOutcome": "A compassionate digital mental health assistant promoting early wellness care.",
-      "innovationScope": ["Natural Language Sentiment Analysis", "Behavioral Analytics", "Privacy-Preserving AI"],
-      "suggestedTechnologies": ["Gemini AI", "Whisper", "Firebase", "React"]
+      "expectedOutcome": "An inclusive multimodal assistive AI platform enhancing independence.",
+      "innovationScope": ["Multimodal Vision-Language", "Real-Time Gesture Translation", "Accessibility Tech"],
+      "suggestedTechnologies": ["MediaPipe", "YOLOv8", "Whisper", "React Native / Web"]
     }
   },
   {
