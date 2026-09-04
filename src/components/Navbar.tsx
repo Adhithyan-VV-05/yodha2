@@ -32,6 +32,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
     { name: "PROBLEMS", href: "#tracks" },
     { name: "JOURNEY", href: "#timeline" },
     { name: "PRIZES", href: "#prizes" },
+    { name: "FAQ", href: "#faq" },
     { name: "REGISTER", href: "#register", isAction: true },
   ];
 

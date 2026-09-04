@@ -14,6 +14,7 @@ import { TrackPage } from "./components/TrackPage";
 import { ScrollBackgroundManager } from "./components/ScrollBackgroundManager";
 import { TrailerModal } from "./components/TrailerModal";
 import { IntroLoader } from "./components/IntroLoader";
+import { FAQSection } from "./components/FAQSection";
 import { trackUserSession } from "./lib/firebase";
 
 function App() {
@@ -109,7 +110,10 @@ function App() {
           {/* 5. Prizes & Trophies */}
           <PrizesSection onOpenRegister={() => handleOpenRegisterWithTrack()} />
 
-          {/* 8. Join Movement Closing CTA */}
+          {/* 6. FAQ Section (Cinematic Editorial Accordion) */}
+          <FAQSection />
+
+          {/* 7. Join Movement Closing CTA */}
           <ClosingCTA onOpenRegister={() => handleOpenRegisterWithTrack()} />
 
           {/* 9. Vertical YODHA Moving Carousel */}

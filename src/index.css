@@ -9,13 +9,14 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: "Outfit", sans-serif;
+  --font-heading: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --font-digital: "Digital-7 Mono", "Share Tech Mono", monospace;
 }
 
 h1, h2, h3, h4, .font-heading {
-  font-family: var(--font-heading), "Outfit", sans-serif;
+  font-family: var(--font-heading), "Playfair Display", "Cormorant Garamond", serif;
 }
 
 .font-sans {
@@ -24,6 +25,10 @@ h1, h2, h3, h4, .font-heading {
 
 .font-mono {
   font-family: var(--font-mono), "JetBrains Mono", monospace;
+}
+
+.font-serif {
+  font-family: var(--font-serif), "Playfair Display", "Cormorant Garamond", serif;
 }
 
 @keyframes slowGradientShift {
