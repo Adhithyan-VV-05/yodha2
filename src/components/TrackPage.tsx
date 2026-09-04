@@ -113,7 +113,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* TOP HEADER ROW: BACK BUTTON (LEFT) + IDEAS PEOPLE IMPACT (RIGHT) */}
+        {/* TOP HEADER ROW: BACK BUTTON (LEFT) */}
         <div className="flex items-center justify-between mb-6 sm:mb-10 pt-2">
           <button
             onClick={onBack}
@@ -122,12 +122,6 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
             <ArrowLeft className="w-3.5 h-3.5 text-purple-400" />
             <span>BACK TO HOME</span>
           </button>
-
-          <div className="hidden sm:block text-right font-mono text-[10px] tracking-[0.25em] text-slate-400 uppercase leading-tight">
-            <div>IDEAS</div>
-            <div>PEOPLE</div>
-            <div>IMPACT</div>
-          </div>
         </div>
 
         {/* SECTION HEADER AREA */}
@@ -247,7 +241,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="rounded-3xl p-4 sm:p-5 flex flex-col justify-between bg-[#070e1c]/70 border border-purple-500/30 hover:border-purple-400/70 backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.5)] transition-all duration-300 group relative overflow-hidden"
+                className="rounded-3xl p-4 sm:p-5 flex flex-col justify-between bg-transparent border border-purple-500/35 hover:border-purple-400/80 backdrop-blur-sm transition-all duration-300 group relative overflow-hidden"
               >
                 <div>
                   {/* Image Banner */}
