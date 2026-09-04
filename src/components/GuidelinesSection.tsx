@@ -27,12 +27,12 @@ const GUIDELINES: GuidelineItem[] = [
   {
     id: "02",
     icon: CreditCard,
-    text: "A registration fee of ₹500 per team is mandatory to confirm participation.",
+    text: "A registration fee of ₹700 per team is mandatory to confirm participation.",
   },
   {
     id: "03",
     icon: MapPin,
-    text: "Selected teams must attend the 24-hour offline hackathon at Jyothi Engineering College, Cheruthuruthy.",
+    text: "Selected teams must attend the 48-hour offline hackathon at Jyothi Engineering College, Cheruthuruthy.",
   },
   {
     id: "04",
@@ -42,7 +42,7 @@ const GUIDELINES: GuidelineItem[] = [
   {
     id: "05",
     icon: Leaf,
-    text: "All ideas must align with the theme — Healthcare and Environmental Safety.",
+    text: "All ideas must align with the theme — Healthcare.",
   },
   {
     id: "06",
