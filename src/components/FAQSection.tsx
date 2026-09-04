@@ -19,25 +19,25 @@ const FAQ_ITEMS: FAQItem[] = [
     id: "02",
     question: "What is the theme of the hackathon?",
     answer:
-      "The theme of YODHA is Healthcare. Teams will work on guided problem statements focused on using Artificial Intelligence and Data Science to address real-world healthcare challenges.",
+      "The theme of YODHA is Healthcare. Teams will work on guided problem statements focused on using AI and Data Science to address challenges such as disease prediction, early diagnosis, patient monitoring, and medical data management.",
   },
   {
     id: "03",
     question: "Who can participate?",
     answer:
-      "The hackathon is open to college students from across India with knowledge in areas such as Artificial Intelligence, Data Science, Python, Machine Learning, and Web Development.",
+      "The hackathon is open to college students from across India with knowledge in areas such as AI, Data Science, Python, Machine Learning, and Web Development.",
   },
   {
     id: "04",
     question: "How many members can be in a team?",
     answer:
-      "Each team must have 4 members. A total of 25 teams will be selected for the offline hackathon.",
+      "Each team must have 4 members. A total of 25 teams, with up to 100 participants, will be selected for the offline hackathon.",
   },
   {
     id: "05",
     question: "When and where will YODHA take place?",
     answer:
-      "YODHA will take place from 1 October to 3 October 2026 as a continuous 48-hour offline hackathon at the College Auditorium, Jyothi Engineering College, Cheruthuruthy.",
+      "YODHA will be conducted from 1 October to 3 October 2026, running continuously for 48 hours. The event will be held offline at the College Auditorium, Jyothi Engineering College, Cheruthuruthy.",
   },
   {
     id: "06",
@@ -49,19 +49,19 @@ const FAQ_ITEMS: FAQItem[] = [
     id: "07",
     question: "How are teams selected?",
     answer:
-      "Teams first register online and submit a brief idea based on the provided healthcare problem statements. The submitted ideas are evaluated by the selection panel, and the 25 best teams are shortlisted.",
+      "Teams first register online and submit a brief idea based on the given healthcare problem statements. The submitted ideas are evaluated by the faculty panel, and the 25 best teams are shortlisted for the 48-hour offline hackathon.",
   },
   {
     id: "08",
     question: "What should teams build during the hackathon?",
     answer:
-      "Selected teams will receive real-world healthcare problem statements and work continuously for 48 hours to develop a functional prototype. Teams will then demonstrate and present their solution.",
+      "Selected teams will receive real-world healthcare problem statements from industry partners and work continuously to develop a functional prototype. Teams are expected to demonstrate their solution and explain how it addresses the given problem.",
   },
   {
     id: "09",
     question: "How will projects be evaluated?",
     answer:
-      "Projects are evaluated through mid-hackathon checkpoints and final judging. Evaluation includes problem understanding, AI strategy, technical implementation, innovation, usability, scalability, real-world impact, presentation, and live demonstration.",
+      "Projects are evaluated through mid-hackathon checkpoints and final judging. Evaluation considers factors such as problem understanding, AI strategy, technical implementation, innovation, usability, scalability, real-world impact, presentation, and live demonstration.",
   },
   {
     id: "10",
