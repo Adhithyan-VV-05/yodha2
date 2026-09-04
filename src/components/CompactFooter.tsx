@@ -21,6 +21,12 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
 
   return (
     <footer className="relative w-full bg-transparent text-white select-none z-20 py-12 md:py-16 px-4 sm:px-6 lg:px-8">
+      {/* COOL THIN PURPLE SEPARATOR LINE ABOVE FOOTER */}
+      <div className="relative w-full max-w-6xl mx-auto mb-10 sm:mb-12">
+        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+        <div className="absolute left-1/2 -top-0.5 -translate-x-1/2 w-48 sm:w-64 h-[2px] bg-gradient-to-r from-transparent via-purple-400 to-transparent blur-[3px] opacity-80" />
+      </div>
+
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
         
         {/* BRAND MINIMAL HEADER */}

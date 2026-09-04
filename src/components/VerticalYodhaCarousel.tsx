@@ -23,26 +23,8 @@ import img19 from "../assets/carousel/19.webp";
 import img20 from "../assets/carousel/20.webp";
 
 const HIGHLIGHT_PHOTOS = [
-  { src: img1, caption: "Ideas. People. Impact.", tag: "YODHA" },
-  { src: img2, caption: "Inspiring Conversations", tag: "YODHA" },
-  { src: img3, caption: "Builders of a Better Tomorrow", tag: "YODHA" },
-  { src: img4, caption: "Code. Collaborate. Create.", tag: "YODHA" },
-  { src: img5, caption: "A Community in Action", tag: "YODHA" },
-  { src: img6, caption: "National AI Innovation", tag: "YODHA" },
-  { src: img7, caption: "High-Octane Hackathon Marathon", tag: "YODHA" },
-  { src: img8, caption: "48 Hours Non-Stop Sprint", tag: "YODHA" },
-  { src: img9, caption: "Mentorship & Guidance", tag: "YODHA" },
-  { src: img10, caption: "Prototyping & Pitching", tag: "YODHA" },
-  { src: img11, caption: "Collaborative Energy", tag: "YODHA" },
-  { src: img12, caption: "Future Tech Leaders", tag: "YODHA" },
-  { src: img13, caption: "Department of AI & DS", tag: "YODHA" },
-  { src: img14, caption: "Jyothi Engineering College", tag: "YODHA" },
-  { src: img15, caption: "Healthcare AI Breakthroughs", tag: "YODHA" },
-  { src: img16, caption: "Awarding Excellence", tag: "YODHA" },
-  { src: img17, caption: "Memories & Milestones", tag: "YODHA" },
-  { src: img18, caption: "National Participant Network", tag: "YODHA" },
-  { src: img19, caption: "Passion & Purpose", tag: "YODHA" },
-  { src: img20, caption: "Warriors of AI", tag: "YODHA" },
+  img1, img2, img3, img4, img5, img6, img7, img8, img9, img10,
+  img11, img12, img13, img14, img15, img16, img17, img18, img19, img20
 ];
 
 export function VerticalYodhaCarousel() {
@@ -84,7 +66,7 @@ export function VerticalYodhaCarousel() {
 
         {/* CONTINUOUS CINEMATIC FILM RIBBON FLOW (3D PERSPECTIVE & HORIZONTAL MASK) */}
         <div
-          className="relative w-full overflow-hidden py-6"
+          className="relative w-full overflow-hidden py-6 pointer-events-none"
           style={{
             maskImage:
               "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
@@ -104,30 +86,19 @@ export function VerticalYodhaCarousel() {
               }}
               className="flex items-center gap-4 sm:gap-6 w-max py-4 px-4 [transform-style:preserve-3d]"
             >
-              {doubleSequence.map((item, idx) => (
+              {doubleSequence.map((imgSrc, idx) => (
                 <div
                   key={`film-card-${idx}`}
-                  className="w-[260px] sm:w-[360px] md:w-[420px] aspect-[16/10] shrink-0 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 bg-[#070e1c]/65 border border-purple-500/35 backdrop-blur-2xl shadow-[0_15px_35px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300 hover:scale-[1.03] hover:border-purple-400/80 hover:shadow-[0_0_35px_rgba(168,85,247,0.35)] group relative overflow-hidden flex flex-col justify-between cursor-default"
+                  className="w-[260px] sm:w-[360px] md:w-[420px] aspect-[16/10] shrink-0 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 bg-[#070e1c]/65 border border-purple-500/35 backdrop-blur-2xl shadow-[0_15px_35px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] relative overflow-hidden flex flex-col justify-between"
                 >
                   {/* PHOTO CONTAINER */}
                   <div className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative bg-slate-950">
                     <img
-                      src={item.src}
-                      alt={item.caption}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      src={imgSrc}
+                      alt={`YODHA Hackathon Highlight ${idx + 1}`}
+                      className="w-full h-full object-cover"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
-
-                    {/* SUBTLE CAPTION OVERLAY */}
-                    <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-white z-10">
-                      <span className="text-xs sm:text-sm font-serif font-normal tracking-wide text-slate-100 drop-shadow-md truncate max-w-[75%]">
-                        {item.caption}
-                      </span>
-                      <span className="text-[9px] sm:text-[10px] font-mono tracking-widest text-purple-300/80 uppercase">
-                        — {item.tag}
-                      </span>
-                    </div>
                   </div>
                 </div>
               ))}
