@@ -105,21 +105,6 @@ export function VerticalYodhaCarousel() {
             </motion.div>
           </div>
         </div>
-
-        {/* BOTTOM SLOGAN & FOOTER BAR */}
-        <div className="mt-10 sm:mt-14 text-center space-y-2 max-w-4xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-3">
-            <div className="w-8 sm:w-16 h-[1px] bg-slate-700/60" />
-            <span className="text-[10px] sm:text-xs font-mono font-medium tracking-[0.35em] text-slate-400 uppercase">
-              MOMENTS THAT CONTINUE TO INSPIRE
-            </span>
-            <div className="w-8 sm:w-16 h-[1px] bg-slate-700/60" />
-          </div>
-
-          <div className="text-[9px] sm:text-[11px] font-mono tracking-[0.3em] text-slate-500 uppercase pt-1">
-            IDEAS &nbsp;•&nbsp; PEOPLE &nbsp;•&nbsp; INNOVATION &nbsp;•&nbsp; COMMUNITY &nbsp;•&nbsp; IMPACT
-          </div>
-        </div>
       </div>
     </section>
   );
