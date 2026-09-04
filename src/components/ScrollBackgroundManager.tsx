@@ -67,13 +67,13 @@ export function ScrollBackgroundManager() {
 
       {/* 2. 1ST HALF LIGHT THEME DAY BACKDROP */}
       <div
-        className="absolute inset-0 w-full h-full bg-[#f4f6fc] transition-opacity duration-300 pointer-events-none z-0"
+        className="absolute inset-0 w-full h-full transition-opacity duration-300 pointer-events-none z-0"
         style={{ opacity: 1 - secondHalfOpacity }}
       >
         <img
           src="/bg-hills-day-pc.webp"
           alt="1st Half Light Theme Backdrop"
-          className="w-full h-full object-cover object-center opacity-30"
+          className="w-full h-full object-cover object-center opacity-100"
         />
       </div>
 

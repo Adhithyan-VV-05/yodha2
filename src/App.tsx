@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Navbar } from "./components/Navbar";
 import { HeroSection } from "./components/HeroSection";
 import { AboutSection } from "./components/AboutSection";
 import { TracksSection } from "./components/TracksSection";
-import { SDGSection } from "./components/SDGSection";
 import { PrizesSection } from "./components/PrizesSection";
 import { TimelineSection } from "./components/TimelineSection";
 import { ClosingCTA } from "./components/ClosingCTA";
@@ -13,9 +13,11 @@ import { VerticalYodhaCarousel } from "./components/VerticalYodhaCarousel";
 import { TrackPage } from "./components/TrackPage";
 import { ScrollBackgroundManager } from "./components/ScrollBackgroundManager";
 import { TrailerModal } from "./components/TrailerModal";
+import { IntroLoader } from "./components/IntroLoader";
 import { trackUserSession } from "./lib/firebase";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [trailerModalOpen, setTrailerModalOpen] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
   const [activePage, setActivePage] = useState<"home" | "healthcare" | "register">("home");
@@ -60,6 +62,11 @@ function App() {
   return (
     <div className="w-full min-h-screen bg-[#03060d] text-white selection:bg-purple-500 selection:text-white font-sans relative overflow-x-hidden">
       
+      {/* INITIAL PRELOADER: GATES SITE UNTIL HERO & BACKGROUND IMAGES ARE LOADED */}
+      <AnimatePresence>
+        {isLoading && <IntroLoader onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+
       {/* Dynamic Scroll-Driven Fixed Background (Night/Day Hills) for All Non-Hero Sections */}
       {activePage === "home" && <ScrollBackgroundManager />}
 
@@ -96,14 +103,11 @@ function App() {
             onOpenTrackPage={(tType) => handleSelectPage(tType)}
           />
 
-          {/* 4. UN Sustainable Development Goals */}
-          <SDGSection />
+          {/* 4. Hackathon Journey (Timeline) in SDG Position */}
+          <TimelineSection />
 
           {/* 5. Prizes & Trophies */}
           <PrizesSection onOpenRegister={() => handleOpenRegisterWithTrack()} />
-
-          {/* 7. Hackathon Timeline */}
-          <TimelineSection />
 
           {/* 8. Join Movement Closing CTA */}
           <ClosingCTA onOpenRegister={() => handleOpenRegisterWithTrack()} />

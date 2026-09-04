@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift, ChevronDown } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
 import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
 import { YodhaImage } from "./YodhaImage";
+import { CyberDropdown } from "./ui/CyberDropdown";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
   getPSImage,
@@ -513,19 +514,16 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
 
                   <div>
                     <label className="block text-xs font-mono text-slate-300 mb-1.5 font-bold">Team Size *</label>
-                    <div className="relative">
-                      <select
-                        value={teamSize}
-                        onChange={(e) => setTeamSize(Number(e.target.value))}
-                        className="w-full appearance-none bg-[#080b21] border border-purple-500/40 rounded-2xl px-5 py-3 pr-11 text-sm font-mono font-bold text-white focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-500/30 cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all"
-                      >
-                        <option value={1} className="bg-[#080b21] text-white">1 Participant (Solo Entry)</option>
-                        <option value={2} className="bg-[#080b21] text-white">2 Members</option>
-                        <option value={3} className="bg-[#080b21] text-white">3 Members</option>
-                        <option value={4} className="bg-[#080b21] text-white">4 Members (Full Team)</option>
-                      </select>
-                      <ChevronDown className="w-4 h-4 text-purple-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    </div>
+                    <CyberDropdown
+                      options={[
+                        { value: 1, label: "1 Participant (Solo Entry)", badge: "SOLO" },
+                        { value: 2, label: "2 Members", badge: "DUO" },
+                        { value: 3, label: "3 Members", badge: "TRIO" },
+                        { value: 4, label: "4 Members (Full Team)", badge: "SQUAD" },
+                      ]}
+                      value={teamSize}
+                      onChange={(val) => setTeamSize(Number(val))}
+                    />
                   </div>
                 </div>
 

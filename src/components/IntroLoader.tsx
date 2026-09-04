@@ -14,26 +14,42 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
     let timerId: number | null = null;
 
     const runRealPreloader = async () => {
+      const imagesToPreload = [
+        "/yodha-hero-bg-pc.webp",
+        "/yodha-hero--bg-mob.webp",
+        "/bg-hills-day-pc.webp",
+        "/bg-hills-night-pc.webp",
+        "/logo.webp",
+      ];
+
       let loadedCount = 0;
-      const totalAssets = 3;
+      const totalAssets = imagesToPreload.length + 2; // +1 for fonts, +1 for DOM
 
       const updateProgress = () => {
         loadedCount++;
-        const pct = Math.min(80, Math.floor((loadedCount / totalAssets) * 80));
+        const pct = Math.min(90, Math.floor((loadedCount / totalAssets) * 90));
         setProgress((prev) => Math.max(prev, pct));
       };
 
-      // 1. Preload Logo Image
-      const logoPromise = new Promise((resolve) => {
-        const img = new Image();
-        img.src = "/logo.webp";
-        if (img.complete) {
-          updateProgress();
-          resolve(true);
-        } else {
-          img.onload = () => { updateProgress(); resolve(true); };
-          img.onerror = () => { updateProgress(); resolve(true); };
-        }
+      // 1. Preload Background Images & Logo
+      const imgPromises = imagesToPreload.map((src) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = src;
+          if (img.complete) {
+            updateProgress();
+            resolve(true);
+          } else {
+            img.onload = () => {
+              updateProgress();
+              resolve(true);
+            };
+            img.onerror = () => {
+              updateProgress();
+              resolve(true);
+            };
+          }
+        });
       });
 
       // 2. Preload Web Fonts
@@ -48,28 +64,33 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
           updateProgress();
           resolve(true);
         } else {
-          window.addEventListener("DOMContentLoaded", () => {
-            updateProgress();
-            resolve(true);
-          }, { once: true });
+          window.addEventListener(
+            "DOMContentLoaded",
+            () => {
+              updateProgress();
+              resolve(true);
+            },
+            { once: true }
+          );
         }
       });
 
-      await Promise.all([logoPromise, fontsPromise, domPromise]);
+      // Wait until ALL background images + fonts + DOM are 100% ready
+      await Promise.all([...imgPromises, fontsPromise, domPromise]);
 
       const startTime = performance.now();
-      const fillDuration = 500;
+      const fillDuration = 400;
 
       const stepFill = (now: number) => {
         const elapsed = now - startTime;
-        const currentPct = Math.min(100, Math.floor(80 + (elapsed / fillDuration) * 20));
+        const currentPct = Math.min(100, Math.floor(90 + (elapsed / fillDuration) * 10));
         setProgress(currentPct);
 
         if (elapsed < fillDuration) {
           animId = requestAnimationFrame(stepFill);
         } else {
           setProgress(100);
-          timerId = window.setTimeout(onComplete, 300);
+          timerId = window.setTimeout(onComplete, 250);
         }
       };
 

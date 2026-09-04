@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Sparkles, X, Search, CheckCircle2, ChevronRight, Maximize2, Filter, ChevronDown } from "lucide-react";
+import { ArrowLeft, Sparkles, X, Search, CheckCircle2, ChevronRight, Maximize2, Filter } from "lucide-react";
 import { YodhaImage } from "./YodhaImage";
+import { CyberDropdown } from "./ui/CyberDropdown";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
   getPSImage,
@@ -60,9 +61,20 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
   });
 
   return (
-    <div className="min-h-screen bg-[#03060d] text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-x-hidden select-none">
+    <div className="min-h-screen bg-transparent text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-x-hidden select-none">
+      
+      {/* OUR NIGHT HILLS THEME BACKGROUND IMAGE LAYER */}
+      <div className="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+        <img
+          src="/bg-hills-night-pc.webp"
+          alt="Yodha Night Hills Background"
+          className="w-full h-full object-cover object-center opacity-75"
+        />
+        <div className="absolute inset-0 bg-slate-950/55 pointer-events-none" />
+      </div>
+
       {/* Background Aura Glow */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-purple-600/10 blur-[200px] pointer-events-none z-0" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-purple-600/15 blur-[200px] pointer-events-none z-0" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Top Header Navigation */}
@@ -87,7 +99,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
         </div>
 
         {/* Search & Difficulty Filter Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 bg-[#060919]/95 border border-purple-500/30 p-4 rounded-2xl backdrop-blur-xl shadow-xl">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 bg-slate-950/70 border border-purple-500/30 p-4 rounded-2xl backdrop-blur-xl shadow-2xl">
           {/* Search Box */}
           <div className="relative w-full sm:w-96">
             <Search className="w-4 h-4 text-purple-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -106,19 +118,17 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
               <Filter className="w-3.5 h-3.5 text-purple-400" />
               <span>DIFFICULTY:</span>
             </span>
-            <div className="relative w-full sm:w-52">
-              <select
-                value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value)}
-                className="w-full appearance-none bg-slate-900 border border-purple-500/40 rounded-xl px-4 py-2.5 pr-10 text-xs font-mono font-bold text-white focus:outline-none focus:border-purple-400 cursor-pointer transition-all uppercase tracking-wider"
-              >
-                <option value="All">All Difficulties</option>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-purple-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
+            <CyberDropdown
+              options={[
+                { value: "All", label: "ALL DIFFICULTIES" },
+                { value: "Easy", label: "EASY LEVEL", badge: "EASY" },
+                { value: "Medium", label: "MEDIUM LEVEL", badge: "MEDIUM" },
+                { value: "Hard", label: "HARD LEVEL", badge: "HARD" },
+              ]}
+              value={selectedDifficulty}
+              onChange={(val) => setSelectedDifficulty(val as string)}
+              className="w-full sm:w-56"
+            />
           </div>
         </div>
 
@@ -134,7 +144,7 @@ export function TrackPage({ trackType, onBack, onOpenRegisterWithTrack }: TrackP
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="rounded-3xl p-5 sm:p-6 flex flex-col justify-between border bg-[#060919]/90 border-purple-500/30 backdrop-blur-xl shadow-xl relative overflow-hidden transition-all group"
+                className="rounded-3xl p-5 sm:p-6 flex flex-col justify-between border bg-slate-950/70 border-purple-500/30 hover:border-purple-400/60 backdrop-blur-xl shadow-2xl relative overflow-hidden transition-all group"
               >
                 <div>
                   {/* Image Card Container */}

@@ -12,7 +12,7 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
   return (
     <section id="tracks" className="relative w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-slate-900 select-none z-10">
       
-      {/* 1ST HALF LIGHT THEME CONTAINER */}
+      {/* 1ST HALF LIGHT THEME CONTAINER (AS IT WAS BEFORE) */}
       <div className="max-w-6xl mx-auto w-full p-6 sm:p-10 lg:p-12 rounded-3xl bg-white/90 border border-purple-200 backdrop-blur-2xl shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         
         {/* Left Column: Health Robot Visual */}
