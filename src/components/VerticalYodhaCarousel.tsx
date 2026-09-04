@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { YodhaImage } from "./YodhaImage";
 
 // Import all 20 past hackathon images from src/assets/carousel/
 import img1 from "../assets/carousel/1.webp";
@@ -23,87 +22,133 @@ import img18 from "../assets/carousel/18.webp";
 import img19 from "../assets/carousel/19.webp";
 import img20 from "../assets/carousel/20.webp";
 
+const HIGHLIGHT_PHOTOS = [
+  { src: img1, caption: "Ideas. People. Impact.", tag: "YODHA" },
+  { src: img2, caption: "Inspiring Conversations", tag: "YODHA" },
+  { src: img3, caption: "Builders of a Better Tomorrow", tag: "YODHA" },
+  { src: img4, caption: "Code. Collaborate. Create.", tag: "YODHA" },
+  { src: img5, caption: "A Community in Action", tag: "YODHA" },
+  { src: img6, caption: "National AI Innovation", tag: "YODHA" },
+  { src: img7, caption: "High-Octane Hackathon Marathon", tag: "YODHA" },
+  { src: img8, caption: "48 Hours Non-Stop Sprint", tag: "YODHA" },
+  { src: img9, caption: "Mentorship & Guidance", tag: "YODHA" },
+  { src: img10, caption: "Prototyping & Pitching", tag: "YODHA" },
+  { src: img11, caption: "Collaborative Energy", tag: "YODHA" },
+  { src: img12, caption: "Future Tech Leaders", tag: "YODHA" },
+  { src: img13, caption: "Department of AI & DS", tag: "YODHA" },
+  { src: img14, caption: "Jyothi Engineering College", tag: "YODHA" },
+  { src: img15, caption: "Healthcare AI Breakthroughs", tag: "YODHA" },
+  { src: img16, caption: "Awarding Excellence", tag: "YODHA" },
+  { src: img17, caption: "Memories & Milestones", tag: "YODHA" },
+  { src: img18, caption: "National Participant Network", tag: "YODHA" },
+  { src: img19, caption: "Passion & Purpose", tag: "YODHA" },
+  { src: img20, caption: "Warriors of AI", tag: "YODHA" },
+];
+
 export function VerticalYodhaCarousel() {
-  const col1Images = [img1, img2, img3, img4, img5, img6, img7];
-  const col2Images = [img8, img9, img10, img11, img12, img13, img14];
-  const col3Images = [img15, img16, img17, img18, img19, img20];
+  const doubleSequence = [...HIGHLIGHT_PHOTOS, ...HIGHLIGHT_PHOTOS];
 
   return (
-    <section id="carousel" className="relative w-full min-h-[85vh] py-16 sm:py-24 px-4 flex flex-col justify-center items-center overflow-hidden select-none bg-transparent text-white z-10">
-      {/* Background Aura */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050c1f]/70 to-transparent pointer-events-none z-0" />
+    <section
+      id="carousel"
+      className="relative w-full py-20 sm:py-28 lg:py-32 px-0 z-20 select-none overflow-hidden"
+    >
+      <div className="w-full relative">
+        {/* HEADER AREA */}
+        <div className="text-center mb-10 sm:mb-14 space-y-2.5 max-w-4xl mx-auto px-4">
+          {/* SUBTITLE TRACKING LABEL */}
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-8 sm:w-12 h-[1px] bg-slate-700/60" />
+            <span className="text-xs font-mono font-medium tracking-[0.35em] text-slate-400 uppercase">
+              HACKATHON ARCHIVES
+            </span>
+            <div className="w-8 sm:w-12 h-[1px] bg-slate-700/60" />
+          </div>
 
-      {/* TOP HEADER TITLE */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-50px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-3xl sm:text-5xl font-black text-white tracking-tight font-heading"
+          {/* MAIN CINEMATIC SERIF HIGHLIGHTS TITLE */}
+          <motion.h2
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="font-serif text-5xl sm:text-7xl lg:text-8xl font-normal tracking-tight text-white py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]"
+          >
+            YODHA Hackathon <span className="text-purple-400">Highlights</span>
+          </motion.h2>
+
+          {/* SUBTITLE */}
+          <p className="text-[11px] sm:text-xs font-mono tracking-[0.3em] text-slate-400 uppercase max-w-xl mx-auto">
+            Highlights & memories from past YODHA hackathon marathons
+          </p>
+        </div>
+
+        {/* CONTINUOUS CINEMATIC FILM RIBBON FLOW (3D PERSPECTIVE & HORIZONTAL MASK) */}
+        <div
+          className="relative w-full overflow-hidden py-6"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+          }}
         >
-          YODHA Hackathon <span className="text-purple-400">Highlights</span>
-        </motion.h2>
+          {/* PERSPECTIVE STAGE */}
+          <div className="w-full [perspective:1200px]">
+            {/* INFINITE MOVING FILM STRIP TRACK */}
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{
+                duration: 45,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="flex items-center gap-4 sm:gap-6 w-max py-4 px-4 [transform-style:preserve-3d]"
+            >
+              {doubleSequence.map((item, idx) => (
+                <div
+                  key={`film-card-${idx}`}
+                  className="w-[260px] sm:w-[360px] md:w-[420px] aspect-[16/10] shrink-0 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 bg-[#070e1c]/65 border border-purple-500/35 backdrop-blur-2xl shadow-[0_15px_35px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-300 hover:scale-[1.03] hover:border-purple-400/80 hover:shadow-[0_0_35px_rgba(168,85,247,0.35)] group relative overflow-hidden flex flex-col justify-between cursor-default"
+                >
+                  {/* PHOTO CONTAINER */}
+                  <div className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative bg-slate-950">
+                    <img
+                      src={item.src}
+                      alt={item.caption}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
 
-        <motion.p
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-50px" }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto font-normal leading-relaxed mt-2"
-        >
-          Highlights & memories from past YODHA hackathon marathons organized by the Department of Artificial Intelligence & Data Science at Jyothi Engineering College.
-        </motion.p>
-      </div>
-
-      {/* CONTINUOUS VERTICAL MOVING CAROUSEL GRID (FULL BRIGHTNESS 100%) */}
-      <div className="relative w-full h-[65vh] grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 px-2 md:px-12 opacity-95 pointer-events-none z-10 overflow-hidden">
-        
-        {/* COLUMN 1: SCROLLS UP INFINITELY */}
-        <div className="h-full overflow-hidden relative">
-          <motion.div
-            animate={{ y: ["0%", "-50%"] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="flex flex-col gap-4"
-          >
-            {[...col1Images, ...col1Images].map((img, idx) => (
-              <div key={`col1-${idx}`} className="w-full aspect-[4/3] rounded-2xl overflow-hidden border border-purple-500/40 bg-slate-950/80 shadow-2xl shrink-0">
-                <YodhaImage src={img} alt="Past Yodha Movement" className="w-full h-full object-cover" loading="lazy" />
-              </div>
-            ))}
-          </motion.div>
+                    {/* SUBTLE CAPTION OVERLAY */}
+                    <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-white z-10">
+                      <span className="text-xs sm:text-sm font-serif font-normal tracking-wide text-slate-100 drop-shadow-md truncate max-w-[75%]">
+                        {item.caption}
+                      </span>
+                      <span className="text-[9px] sm:text-[10px] font-mono tracking-widest text-purple-300/80 uppercase">
+                        — {item.tag}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
-        {/* COLUMN 2: SCROLLS DOWN INFINITELY */}
-        <div className="h-full overflow-hidden relative">
-          <motion.div
-            animate={{ y: ["-50%", "0%"] }}
-            transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-            className="flex flex-col gap-4"
-          >
-            {[...col2Images, ...col2Images].map((img, idx) => (
-              <div key={`col2-${idx}`} className="w-full aspect-[4/3] rounded-2xl overflow-hidden border border-indigo-500/40 bg-slate-950/80 shadow-2xl shrink-0">
-                <YodhaImage src={img} alt="Past Yodha Movement" className="w-full h-full object-cover" loading="lazy" />
-              </div>
-            ))}
-          </motion.div>
-        </div>
+        {/* BOTTOM SLOGAN & FOOTER BAR */}
+        <div className="mt-10 sm:mt-14 text-center space-y-2 max-w-4xl mx-auto px-4">
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-8 sm:w-16 h-[1px] bg-slate-700/60" />
+            <span className="text-[10px] sm:text-xs font-mono font-medium tracking-[0.35em] text-slate-400 uppercase">
+              MOMENTS THAT CONTINUE TO INSPIRE
+            </span>
+            <div className="w-8 sm:w-16 h-[1px] bg-slate-700/60" />
+          </div>
 
-        {/* COLUMN 3 (DESKTOP ONLY): SCROLLS UP INFINITELY */}
-        <div className="hidden md:block h-full overflow-hidden relative">
-          <motion.div
-            animate={{ y: ["0%", "-50%"] }}
-            transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-            className="flex flex-col gap-4"
-          >
-            {[...col3Images, ...col3Images].map((img, idx) => (
-              <div key={`col3-${idx}`} className="w-full aspect-[4/3] rounded-2xl overflow-hidden border border-violet-500/40 bg-slate-950/80 shadow-2xl shrink-0">
-                <YodhaImage src={img} alt="Past Yodha Movement" className="w-full h-full object-cover" loading="lazy" />
-              </div>
-            ))}
-          </motion.div>
+          <div className="text-[9px] sm:text-[11px] font-mono tracking-[0.3em] text-slate-500 uppercase pt-1">
+            IDEAS &nbsp;•&nbsp; PEOPLE &nbsp;•&nbsp; INNOVATION &nbsp;•&nbsp; COMMUNITY &nbsp;•&nbsp; IMPACT
+          </div>
         </div>
-
       </div>
     </section>
   );
