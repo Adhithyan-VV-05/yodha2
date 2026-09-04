@@ -11,43 +11,6 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
       className="relative w-full py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-12 z-20 select-none overflow-hidden"
     >
       <div className="max-w-7xl mx-auto relative">
-        {/* DESKTOP EDITORIAL SIDEBARS (VISIBLE ON LG SCREENS ONLY) */}
-
-        {/* TOP LEFT BRANDING (DESKTOP) */}
-        <div className="hidden lg:block absolute top-0 left-0 space-y-1 text-left">
-          <div className="text-[11px] font-mono tracking-[0.25em] text-slate-400 font-semibold uppercase">
-            YODHA
-          </div>
-          <div className="text-[9px] font-mono tracking-[0.3em] text-slate-500 uppercase">
-            WARRIORS OF AI
-          </div>
-        </div>
-
-        {/* TOP RIGHT SLOGAN (DESKTOP) */}
-        <div className="hidden lg:block absolute top-0 right-0 text-right text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
-          IDEAS
-          <br />
-          TODAY
-          <br />
-          A HEALTHIER
-          <br />
-          TOMORROW
-        </div>
-
-        {/* BOTTOM LEFT BRANDING (DESKTOP) */}
-        <div className="hidden lg:block absolute bottom-0 left-0 text-left text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
-          A NATIONAL-LEVEL
-          <br />
-          HACKATHON
-        </div>
-
-        {/* BOTTOM RIGHT BRANDING (DESKTOP) */}
-        <div className="hidden lg:block absolute bottom-0 right-0 text-right text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
-          YODHA
-          <br />
-          WARRIORS OF AI
-        </div>
-
         {/* MAIN CONTAINER */}
         <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
           {/* HEADER AREA */}
@@ -245,12 +208,6 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
               ₹5,000
             </div>
           </motion.div>
-
-          {/* MOBILE BOTTOM BRANDING */}
-          <div className="block lg:hidden mt-12 text-center text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase space-y-1">
-            <div>YODHA</div>
-            <div>WARRIORS OF AI</div>
-          </div>
         </div>
       </div>
     </section>

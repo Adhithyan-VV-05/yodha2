@@ -86,29 +86,8 @@ export function FAQSection() {
       <div className="max-w-7xl mx-auto relative">
         {/* DESKTOP EDITORIAL SIDEBARS (VISIBLE ON LG SCREENS ONLY) */}
         
-        {/* TOP LEFT BRANDING (DESKTOP) */}
-        <div className="hidden lg:block absolute top-0 left-0 space-y-1 text-left">
-          <div className="text-[11px] font-mono tracking-[0.25em] text-slate-400 font-semibold uppercase">
-            YODHA
-          </div>
-          <div className="text-[9px] font-mono tracking-[0.3em] text-slate-500 uppercase">
-            WARRIORS OF AI
-          </div>
-        </div>
-
-        {/* TOP RIGHT SLOGAN (DESKTOP) */}
-        <div className="hidden lg:block absolute top-0 right-0 text-right text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
-          IDEAS
-          <br />
-          TODAY
-          <br />
-          A HEALTHIER
-          <br />
-          TOMORROW
-        </div>
-
         {/* LEFT COLUMN: EDITORIAL "STILL CURIOUS?" BLOCK (DESKTOP) */}
-        <div className="hidden lg:flex absolute left-0 top-36 flex-col justify-between h-[520px] w-64 pr-6 text-left">
+        <div className="hidden lg:flex absolute left-0 top-36 flex-col justify-start h-[520px] w-64 pr-6 text-left">
           <div className="space-y-5">
             <h3 className="font-serif text-4xl xl:text-5xl font-light text-slate-100 leading-tight tracking-tight">
               Still
@@ -126,19 +105,6 @@ export function FAQSection() {
               BIGGER.
             </p>
           </div>
-
-          <div className="text-[9px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
-            A NATIONAL-LEVEL
-            <br />
-            HACKATHON
-          </div>
-        </div>
-
-        {/* BOTTOM RIGHT BRANDING (DESKTOP) */}
-        <div className="hidden lg:block absolute bottom-0 right-0 text-right text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
-          YODHA
-          <br />
-          WARRIORS OF AI
         </div>
 
         {/* MAIN CONTAINER: CENTER CONTENT & ACCORDION */}
@@ -261,13 +227,6 @@ export function FAQSection() {
               );
             })}
           </div>
-
-          {/* MOBILE BOTTOM BRANDING */}
-          <div className="block lg:hidden mt-12 text-center text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase space-y-1">
-            <div>YODHA</div>
-            <div>WARRIORS OF AI</div>
-          </div>
-
         </div>
       </div>
     </section>
