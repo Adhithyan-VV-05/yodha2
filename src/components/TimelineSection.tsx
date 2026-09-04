@@ -74,10 +74,10 @@ export function TimelineSection() {
         {/* EDITORIAL SECTION HEADER IN SDG LIGHT THEME */}
         <div className="text-center space-y-3 max-w-4xl mx-auto">
           <motion.h2
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-950 tracking-tight"
           >
             THE <span className="text-purple-600 font-extrabold">JOURNEY</span>

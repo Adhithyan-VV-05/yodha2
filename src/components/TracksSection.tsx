@@ -42,10 +42,10 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
             </span>
 
             <motion.h2
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 35 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, margin: "-50px" }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-normal leading-snug font-heading text-slate-950 flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1"
             >
               <span>THE</span>

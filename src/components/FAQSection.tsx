@@ -123,9 +123,15 @@ export function FAQSection() {
             </div>
 
             {/* MAIN CINEMATIC SERIF FAQ TITLE */}
-            <h2 className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+            <motion.h2
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]"
+            >
               FAQ
-            </h2>
+            </motion.h2>
 
             {/* FIND YOUR ANSWERS HERE */}
             <p className="text-[11px] sm:text-xs font-mono tracking-[0.35em] text-slate-400 uppercase">
