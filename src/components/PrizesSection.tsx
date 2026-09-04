@@ -6,126 +6,252 @@ interface PrizesSectionProps {
 
 export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
   return (
-    <section id="prizes" className="relative w-full py-16 sm:py-24 px-4 sm:px-8 max-w-7xl mx-auto select-none z-10">
-      
-      {/* HEADER SECTION */}
-      <div className="text-center max-w-3xl mx-auto space-y-3 pb-12">
-        
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-50px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white font-heading"
-        >
-          PRIZE POOL & <span className="text-purple-400">REWARDS</span>
-        </motion.h2>
+    <section
+      id="prizes"
+      className="relative w-full py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-12 z-20 select-none overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto relative">
+        {/* DESKTOP EDITORIAL SIDEBARS (VISIBLE ON LG SCREENS ONLY) */}
 
-        <p className="text-sm sm:text-base text-slate-200 font-medium">
-          Battle it out for a massive total prize pool of ₹70,000!
-        </p>
-
-        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-          Claim the champion's title and walk away with the ₹30,000 first prize. Innovate, create an impact, and earn your share of the rewards, including a special ₹5,000 award for standout tech.
-        </p>
-      </div>
-
-      {/* 3 PODIUM CARDS - HORIZONTALLY SCROLLABLE ON MOBILE, SNAP-CENTER */}
-      <div className="flex md:grid md:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-6 items-stretch w-full max-w-5xl mx-auto px-4 py-4 scrollbar-none justify-start md:justify-center">
-        
-        {/* 1ST PLACE - GOLD CARD */}
-        <div
-          onClick={() => onOpenRegister && onOpenRegister()}
-          className="w-[85vw] max-w-[340px] md:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-[#030816]/90 border-2 border-amber-400 backdrop-blur-2xl shadow-[0_0_35px_rgba(245,158,11,0.25)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
-        >
-          <div className="w-full h-48 flex items-center justify-center relative">
-            <div className="absolute inset-0 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
-            <img
-              src="/gold.webp"
-              alt="1st Place Gold Trophy"
-              className="max-h-44 object-contain filter drop-shadow-[0_10px_20px_rgba(245,158,11,0.45)] group-hover:scale-110 transition-transform"
-            />
+        {/* TOP LEFT BRANDING (DESKTOP) */}
+        <div className="hidden lg:block absolute top-0 left-0 space-y-1 text-left">
+          <div className="text-[11px] font-mono tracking-[0.25em] text-slate-400 font-semibold uppercase">
+            YODHA
           </div>
-
-          <div className="w-full pt-4 space-y-2">
-            <span className="text-xs font-mono font-extrabold text-amber-400 uppercase tracking-widest block">
-              1ST PLACE WINNER
-            </span>
-
-            <div className="h-[1px] w-16 bg-amber-500/40 mx-auto my-2" />
-
-            <h3 className="text-4xl font-black text-amber-300 font-mono">
-              ₹30,000
-            </h3>
-
-            <p className="text-xs font-medium text-slate-300 leading-relaxed pt-2">
-              Gold Trophy • Seed Incubation Slot • AI Cloud Credits • KTU Certification
-            </p>
+          <div className="text-[9px] font-mono tracking-[0.3em] text-slate-500 uppercase">
+            WARRIORS OF AI
           </div>
         </div>
 
-        {/* 2ND PLACE - SILVER CARD */}
-        <div
-          onClick={() => onOpenRegister && onOpenRegister()}
-          className="w-[85vw] max-w-[340px] md:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-[#030816]/90 border border-slate-400 backdrop-blur-2xl shadow-[0_0_25px_rgba(148,163,184,0.2)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
-        >
-          <div className="w-full h-48 flex items-center justify-center relative">
-            <div className="absolute inset-0 bg-slate-400/10 rounded-full blur-2xl pointer-events-none" />
-            <img
-              src="/silver.webp"
-              alt="2nd Place Silver Trophy"
-              className="max-h-44 object-contain filter drop-shadow-[0_10px_20px_rgba(148,163,184,0.35)] group-hover:scale-110 transition-transform"
-            />
-          </div>
-
-          <div className="w-full pt-4 space-y-2">
-            <span className="text-xs font-mono font-extrabold text-slate-300 uppercase tracking-widest block">
-              2ND PLACE RUNNER-UP
-            </span>
-
-            <div className="h-[1px] w-16 bg-slate-400/40 mx-auto my-2" />
-
-            <h3 className="text-4xl font-black text-slate-200 font-mono">
-              ₹20,000
-            </h3>
-
-            <p className="text-xs font-medium text-slate-300 leading-relaxed pt-2">
-              Silver Trophy • Mentorship Track • AI Credits • KTU Certification
-            </p>
-          </div>
+        {/* TOP RIGHT SLOGAN (DESKTOP) */}
+        <div className="hidden lg:block absolute top-0 right-0 text-right text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
+          IDEAS
+          <br />
+          TODAY
+          <br />
+          A HEALTHIER
+          <br />
+          TOMORROW
         </div>
 
-        {/* 3RD PLACE - BRONZE CARD */}
-        <div
-          onClick={() => onOpenRegister && onOpenRegister()}
-          className="w-[85vw] max-w-[340px] md:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-[#030816]/90 border border-amber-700/60 backdrop-blur-2xl shadow-[0_0_25px_rgba(180,83,9,0.2)] flex flex-col items-center justify-between text-center cursor-pointer hover:scale-105 transition-all group"
-        >
-          <div className="w-full h-48 flex items-center justify-center relative">
-            <div className="absolute inset-0 bg-amber-700/10 rounded-full blur-2xl pointer-events-none" />
-            <img
-              src="/bronze.webp"
-              alt="3rd Place Bronze Trophy"
-              className="max-h-44 object-contain filter drop-shadow-[0_10px_20px_rgba(180,83,9,0.35)] group-hover:scale-110 transition-transform"
-            />
-          </div>
-
-          <div className="w-full pt-4 space-y-2">
-            <span className="text-xs font-mono font-extrabold text-amber-500 uppercase tracking-widest block">
-              3RD PLACE EXCELLENCE
-            </span>
-
-            <div className="h-[1px] w-16 bg-amber-700/40 mx-auto my-2" />
-
-            <h3 className="text-4xl font-black text-amber-400 font-mono">
-              ₹10,000
-            </h3>
-
-            <p className="text-xs font-medium text-slate-300 leading-relaxed pt-2">
-              Excellence Plaque • AI Credits • KTU Certification
-            </p>
-          </div>
+        {/* BOTTOM LEFT BRANDING (DESKTOP) */}
+        <div className="hidden lg:block absolute bottom-0 left-0 text-left text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
+          A NATIONAL-LEVEL
+          <br />
+          HACKATHON
         </div>
 
+        {/* BOTTOM RIGHT BRANDING (DESKTOP) */}
+        <div className="hidden lg:block absolute bottom-0 right-0 text-right text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase leading-relaxed">
+          YODHA
+          <br />
+          WARRIORS OF AI
+        </div>
+
+        {/* MAIN CONTAINER */}
+        <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
+          {/* HEADER AREA */}
+          <div className="text-center mb-12 sm:mb-16 space-y-2.5 w-full">
+            {/* SUBTITLE TRACKING LABEL */}
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-8 sm:w-12 h-[1px] bg-slate-700/60" />
+              <span className="text-xs font-mono font-medium tracking-[0.35em] text-slate-400 uppercase">
+                REWARDS FOR IMPACT
+              </span>
+              <div className="w-8 sm:w-12 h-[1px] bg-slate-700/60" />
+            </div>
+
+            {/* MAIN CINEMATIC SERIF PRIZES TITLE */}
+            <h2 className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+              PRIZES
+            </h2>
+
+            {/* RECOGNIZING IDEAS THAT CREATE REAL IMPACT */}
+            <p className="text-[11px] sm:text-xs font-mono tracking-[0.3em] text-slate-400 uppercase max-w-md mx-auto px-4">
+              RECOGNIZING IDEAS THAT CREATE REAL IMPACT.
+            </p>
+          </div>
+
+          {/* DESKTOP TROPHY LAYOUT (3 COLUMNS: 2ND | 1ST | 3RD) */}
+          <div className="hidden md:grid grid-cols-3 gap-6 lg:gap-12 items-end w-full max-w-4xl mx-auto pt-4 pb-8">
+            {/* 2ND PRIZE - SILVER TROPHY */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              onClick={() => onOpenRegister && onOpenRegister()}
+              className="flex flex-col items-center text-center group cursor-pointer"
+            >
+              <div className="relative mb-4 flex items-center justify-center">
+                <img
+                  src="/silver.webp"
+                  alt="Second prize trophy"
+                  className="w-44 sm:w-48 lg:w-56 h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:-translate-y-2 transition-transform duration-300"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-xs font-serif tracking-[0.25em] text-slate-300 uppercase block font-medium">
+                  2ND PRIZE
+                </span>
+                <div className="font-serif text-3xl lg:text-4xl text-slate-200 font-normal tracking-tight group-hover:text-white transition-colors">
+                  ₹20,000
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 1ST PRIZE - GOLD TROPHY (CENTER DOMINANT, LARGER & HIGHER) */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              onClick={() => onOpenRegister && onOpenRegister()}
+              className="flex flex-col items-center text-center group cursor-pointer -mt-8 pb-2"
+            >
+              <div className="relative mb-4 flex items-center justify-center">
+                <img
+                  src="/gold.webp"
+                  alt="First prize trophy"
+                  className="w-56 sm:w-64 lg:w-76 h-auto object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)] group-hover:-translate-y-2.5 transition-transform duration-300 scale-105"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-xs sm:text-sm font-serif tracking-[0.25em] text-amber-300 uppercase block font-medium">
+                  1ST PRIZE
+                </span>
+                <div className="font-serif text-4xl lg:text-5xl text-amber-200 font-normal tracking-tight group-hover:text-amber-100 transition-colors">
+                  ₹30,000
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 3RD PRIZE - BRONZE TROPHY */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              onClick={() => onOpenRegister && onOpenRegister()}
+              className="flex flex-col items-center text-center group cursor-pointer"
+            >
+              <div className="relative mb-4 flex items-center justify-center">
+                <img
+                  src="/bronze.webp"
+                  alt="Third prize trophy"
+                  className="w-44 sm:w-48 lg:w-56 h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:-translate-y-2 transition-transform duration-300"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-xs font-serif tracking-[0.25em] text-amber-500/90 uppercase block font-medium">
+                  3RD PRIZE
+                </span>
+                <div className="font-serif text-3xl lg:text-4xl text-amber-400/90 font-normal tracking-tight group-hover:text-amber-300 transition-colors">
+                  ₹15,000
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* MOBILE / TABLET TROPHY LAYOUT (SINGLE COLUMN VERTICAL FLOW: 1ST -> 2ND -> 3RD) */}
+          <div className="flex md:hidden flex-col items-center gap-12 w-full pt-2 pb-6">
+            {/* 1ST PRIZE (GOLD) */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              onClick={() => onOpenRegister && onOpenRegister()}
+              className="flex flex-col items-center text-center active:scale-98 transition-transform"
+            >
+              <img
+                src="/gold.webp"
+                alt="First prize trophy"
+                className="w-56 sm:w-64 h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.7)] mb-3"
+              />
+              <span className="text-xs font-serif tracking-[0.25em] text-amber-300 uppercase font-medium">
+                1ST PRIZE
+              </span>
+              <div className="font-serif text-4xl text-amber-200 font-normal tracking-tight mt-1">
+                ₹30,000
+              </div>
+            </motion.div>
+
+            {/* 2ND PRIZE (SILVER) */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              onClick={() => onOpenRegister && onOpenRegister()}
+              className="flex flex-col items-center text-center active:scale-98 transition-transform"
+            >
+              <img
+                src="/silver.webp"
+                alt="Second prize trophy"
+                className="w-48 sm:w-52 h-auto object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.6)] mb-3"
+              />
+              <span className="text-xs font-serif tracking-[0.25em] text-slate-300 uppercase font-medium">
+                2ND PRIZE
+              </span>
+              <div className="font-serif text-3xl text-slate-200 font-normal tracking-tight mt-1">
+                ₹20,000
+              </div>
+            </motion.div>
+
+            {/* 3RD PRIZE (BRONZE) */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              onClick={() => onOpenRegister && onOpenRegister()}
+              className="flex flex-col items-center text-center active:scale-98 transition-transform"
+            >
+              <img
+                src="/bronze.webp"
+                alt="Third prize trophy"
+                className="w-48 sm:w-52 h-auto object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.6)] mb-3"
+              />
+              <span className="text-xs font-serif tracking-[0.25em] text-amber-500/90 uppercase font-medium">
+                3RD PRIZE
+              </span>
+              <div className="font-serif text-3xl text-amber-400/90 font-normal tracking-tight mt-1">
+                ₹15,000
+              </div>
+            </motion.div>
+          </div>
+
+          {/* SPECIAL AWARD SECTION */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-12 sm:mt-16 text-center space-y-2 w-full"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-10 sm:w-16 h-[1px] bg-slate-700/60" />
+              <span className="text-[11px] sm:text-xs font-mono font-medium tracking-[0.35em] text-slate-400 uppercase">
+                SPECIAL AWARD
+              </span>
+              <div className="w-10 sm:w-16 h-[1px] bg-slate-700/60" />
+            </div>
+
+            <div className="font-serif text-4xl sm:text-5xl font-normal text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 tracking-tight pt-1">
+              ₹5,000
+            </div>
+          </motion.div>
+
+          {/* MOBILE BOTTOM BRANDING */}
+          <div className="block lg:hidden mt-12 text-center text-[10px] font-mono tracking-[0.25em] text-slate-500 uppercase space-y-1">
+            <div>YODHA</div>
+            <div>WARRIORS OF AI</div>
+          </div>
+        </div>
       </div>
     </section>
   );
