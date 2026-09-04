@@ -13,7 +13,7 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
     <section id="tracks" className="relative w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-slate-900 select-none z-10">
       
       {/* 1ST HALF LIGHT THEME CONTAINER (AS IT WAS BEFORE) */}
-      <div className="max-w-6xl mx-auto w-full p-6 sm:p-10 lg:p-12 rounded-3xl bg-white/90 border border-purple-200 backdrop-blur-2xl shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <div className="max-w-6xl mx-auto w-full p-6 sm:p-10 lg:p-12 rounded-3xl bg-white/90 border border-blue-200 backdrop-blur-2xl shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         
         {/* Left Column: Health Robot Visual */}
         <motion.div
@@ -23,7 +23,7 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
           onClick={() => onOpenTrackPage("healthcare")}
           className="lg:col-span-5 flex flex-col items-center justify-center cursor-pointer group relative"
         >
-          <div className="absolute inset-0 bg-red-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all pointer-events-none" />
+          <div className="absolute inset-0 bg-red-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all pointer-events-none" />
 
           <img
             src={healthRoboSrc}
@@ -96,7 +96,7 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
           <div className="pt-2">
             <button
               onClick={() => onOpenTrackPage("healthcare")}
-              className="px-7 py-4 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-purple-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2.5 shadow-lg hover:brightness-110 hover:scale-105 transition-all cursor-pointer active:scale-95"
+              className="px-7 py-4 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-blue-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2.5 shadow-lg hover:brightness-110 hover:scale-105 transition-all cursor-pointer active:scale-95"
             >
               <FileText className="w-4 h-4 text-white" />
               <span>EXPLORE ALL PS</span>

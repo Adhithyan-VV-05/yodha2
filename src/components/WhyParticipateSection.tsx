@@ -102,14 +102,14 @@ export function WhyParticipateSection() {
       num: "05",
       title: "1-on-1 Expert Mentorship",
       subtitle: "Get technical feedback and architectural guidance from industry software architects & AI researchers.",
-      icon: <Network className="w-6 h-6 text-purple-400" />,
+      icon: <Network className="w-6 h-6 text-blue-400" />,
       badge: "EXPERT GUIDANCE",
       stat: "Industry Mentors",
       highlight: "Live Code Reviews",
-      color: "from-purple-500/20 via-purple-500/10 to-transparent",
-      accentColor: "text-purple-400",
-      borderColor: "border-purple-500/40",
-      glowColor: "shadow-[0_0_30px_rgba(168,85,247,0.25)]",
+      color: "from-blue-500/20 via-blue-500/10 to-transparent",
+      accentColor: "text-blue-400",
+      borderColor: "border-blue-500/40",
+      glowColor: "shadow-[0_0_30px_rgba(59,130,246,0.25)]",
       points: [
         "1-on-1 architectural reviews during building hours",
         "Guidance on model deployment & API scaling",
@@ -154,7 +154,7 @@ export function WhyParticipateSection() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase font-heading leading-none"
           >
-            WHY PARTICIPATE IN <span className="text-purple-400">YODHA 2.0?</span>
+            WHY PARTICIPATE IN <span className="text-blue-400">YODHA 2.0?</span>
           </motion.h2>
 
           <motion.p

@@ -100,7 +100,7 @@ export function PureHorizontalEngine({ sections, children }: PureHorizontalEngin
       <div className="fixed top-0 left-0 right-0 h-1 bg-slate-900/70 z-50 pointer-events-none">
         <div
           ref={progressBarRef}
-          className="h-full bg-gradient-to-r from-sky-500 via-cyan-400 to-indigo-500 transition-all duration-150 ease-out shadow-sm"
+          className="h-full bg-gradient-to-r from-sky-500 via-cyan-400 to-blue-600 transition-all duration-150 ease-out shadow-sm"
           style={{ width: "0%" }}
         />
       </div>

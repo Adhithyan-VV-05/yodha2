@@ -12,7 +12,7 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div
           onClick={onOpenRegister}
-          className="p-8 sm:p-14 rounded-3xl bg-slate-950/95 border-2 border-purple-500/40 backdrop-blur-2xl shadow-[0_0_50px_rgba(168,85,247,0.25)] text-center relative overflow-hidden flex flex-col items-center cursor-pointer hover:border-purple-400 transition-all group"
+          className="p-8 sm:p-14 rounded-3xl bg-slate-950/95 border-2 border-blue-500/40 backdrop-blur-2xl shadow-[0_0_50px_rgba(59,130,246,0.25)] text-center relative overflow-hidden flex flex-col items-center cursor-pointer hover:border-blue-400 transition-all group"
         >
           {/* YODHA Helmet Logo Container */}
           <motion.div
@@ -21,7 +21,7 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
             viewport={{ once: true }}
             className="mb-4 relative z-20"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-purple-400/60 bg-[#020510] p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-blue-400/60 bg-[#020510] p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(59,130,246,0.5)]">
               <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-contain" />
             </div>
           </motion.div>
@@ -31,8 +31,8 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
             <YodhaTitleBanner align="center" size="sm" />
           </div>
 
-          <span className="px-4 py-1.5 bg-purple-950/80 border border-purple-500/40 rounded-full text-xs font-mono text-purple-300 font-bold uppercase tracking-widest mb-3 inline-flex items-center gap-2 shadow-md relative z-20">
-            <Shield className="w-4 h-4 text-purple-400" />
+          <span className="px-4 py-1.5 bg-blue-950/80 border border-blue-500/40 rounded-full text-xs font-mono text-blue-300 font-bold uppercase tracking-widest mb-3 inline-flex items-center gap-2 shadow-md relative z-20">
+            <Shield className="w-4 h-4 text-blue-400" />
             <span>JOIN THE MOVEMENT</span>
           </span>
 
@@ -42,7 +42,7 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
 
           <button
             onClick={() => onOpenRegister()}
-            className="mt-8 px-10 py-4 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white font-mono font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(139,92,246,0.6)] hover:brightness-115 hover:scale-105 transition-all cursor-pointer relative z-30 pointer-events-auto"
+            className="mt-8 px-10 py-4 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-600 text-white font-mono font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:brightness-115 hover:scale-105 transition-all cursor-pointer relative z-30 pointer-events-auto"
           >
             <Sparkles className="w-4 h-4 text-white" />
             <span>REGISTER TODAY</span>

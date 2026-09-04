@@ -52,7 +52,7 @@ export function YodhaImage({
             {showLogoGlow && (
               <>
                 <div className="absolute w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-sky-500/20 border-t-sky-400 animate-spin shadow-[0_0_15px_rgba(56,189,248,0.3)]" />
-                <div className="absolute w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-indigo-500/20 border-b-purple-400 animate-spin-slow" />
+                <div className="absolute w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-sky-500/20 border-b-blue-400 animate-spin-slow" />
               </>
             )}
             <img

@@ -15,7 +15,7 @@ export function AboutSection() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight max-w-4xl font-heading text-slate-950"
         >
-          ABOUT THE <span className="text-purple-600 font-heading">HACKATHON</span>
+          ABOUT THE <span className="text-blue-600 font-heading">HACKATHON</span>
         </motion.h2>
 
         <motion.p
@@ -32,26 +32,26 @@ export function AboutSection() {
           Align your code with a cause by innovating for UN Sustainable Development Goals, specifically Good Health and Well-Being.
         </p>
 
-        <p className="text-xs sm:text-sm text-purple-900 max-w-3xl leading-relaxed font-semibold">
+        <p className="text-xs sm:text-sm text-blue-900 max-w-3xl leading-relaxed font-semibold">
           Proudly organized by the Department of Artificial Intelligence and Data Science at Jyothi Engineering College to foster a culture of creativity and collaboration.
         </p>
 
         {/* 1ST HALF LIGHT THEME STAT CARDS */}
         <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-4xl text-left">
-          <div className="p-4 rounded-2xl bg-white/90 border border-purple-200 backdrop-blur-xl shadow-md">
-            <span className="text-[10px] font-mono text-purple-700 block font-bold uppercase tracking-wider">DURATION</span>
+          <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
+            <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">DURATION</span>
             <span className="text-base font-bold text-slate-950">48 Hours Non-Stop</span>
           </div>
-          <div className="p-4 rounded-2xl bg-white/90 border border-purple-200 backdrop-blur-xl shadow-md">
-            <span className="text-[10px] font-mono text-purple-700 block font-bold uppercase tracking-wider">MODE</span>
+          <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
+            <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">MODE</span>
             <span className="text-base font-bold text-slate-950">Offline Campus Sprint</span>
           </div>
-          <div className="p-4 rounded-2xl bg-white/90 border border-purple-200 backdrop-blur-xl shadow-md">
-            <span className="text-[10px] font-mono text-purple-700 block font-bold uppercase tracking-wider">PRIZE POOL</span>
+          <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
+            <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">PRIZE POOL</span>
             <span className="text-base font-bold text-slate-950">₹70,000 INR Pool</span>
           </div>
-          <div className="p-4 rounded-2xl bg-white/90 border border-purple-200 backdrop-blur-xl shadow-md">
-            <span className="text-[10px] font-mono text-purple-700 block font-bold uppercase tracking-wider">CERTIFICATION</span>
+          <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
+            <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">CERTIFICATION</span>
             <span className="text-base font-bold text-slate-950">KTU Activity Points</span>
           </div>
         </div>
@@ -62,7 +62,7 @@ export function AboutSection() {
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-8 border-t border-slate-300">
         
         <div className="lg:col-span-6 flex flex-col justify-center text-center lg:text-left space-y-4">
-          <span className="text-xs font-mono font-bold text-purple-700 uppercase tracking-widest">ORGANIZING BODY</span>
+          <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">ORGANIZING BODY</span>
           <h3 className="text-2xl sm:text-4xl font-black text-slate-950 font-heading">
             Department of AI & Data Science
           </h3>
@@ -72,7 +72,7 @@ export function AboutSection() {
         </div>
 
         <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200 shadow-xl space-y-4 text-left">
-          <span className="text-xs font-mono font-bold text-purple-700 uppercase tracking-widest">HOST CAMPUS</span>
+          <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">HOST CAMPUS</span>
           <h4 className="text-xl font-bold text-slate-950 font-heading">
             Jyothi Engineering College (Autonomous)
           </h4>

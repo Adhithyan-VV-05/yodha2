@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SDG_ITEMS, getNextSdgId, type SDGItem } from "../data/sdgData";
 
 // UN Emblem Official Vector Component
-function UNEmblemLogo({ className = "w-20 h-20 text-purple-600" }: { className?: string }) {
+function UNEmblemLogo({ className = "w-20 h-20 text-blue-600" }: { className?: string }) {
   return (
     <svg viewBox="0 0 200 200" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
       {/* Globe Grid Circles */}
@@ -234,7 +234,7 @@ export function SDGSection() {
             className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 font-heading leading-[1.15]"
           >
             Aligning Healthcare AI with <br className="hidden sm:inline" />
-            <span className="text-purple-600 font-extrabold">
+            <span className="text-blue-600 font-extrabold">
               Global Impact
             </span>
           </motion.h2>
@@ -255,15 +255,15 @@ export function SDGSection() {
         {/* ------------------------------------------------------------------ */}
         <div className="hidden lg:flex relative w-full h-[680px] items-center justify-center">
 
-          {/* STATIONARY MAIN CENTER CIRCLE WITH PROMINENT PURPLE BORDER */}
-          <div className="relative z-20 flex items-center justify-center">
+          {/* STATIONARY MAIN CENTER CIRCLE WITH PROMINENT BLUE BORDER */}
+          <div className="relative z-40 flex items-center justify-center">
             <div className="w-[360px] h-[360px] rounded-full relative p-1.5 flex items-center justify-center">
-              {/* Outer Glowing Purple Ring Accent */}
-              <div className="absolute inset-0 rounded-full border-4 border-purple-500/80 shadow-[0_0_40px_rgba(168,85,247,0.35)] pointer-events-none" />
+              {/* Outer Glowing Blue Ring Accent */}
+              <div className="absolute inset-0 rounded-full border-4 border-blue-500/80 shadow-[0_0_40px_rgba(59,130,246,0.35)] pointer-events-none" />
 
               {/* Inner Glass Center Disc */}
-              <div className="w-full h-full rounded-full bg-white/90 backdrop-blur-2xl border border-purple-200/60 shadow-[0_20px_60px_rgba(124,58,237,0.2),inset_0_1px_2px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-                <UNEmblemLogo className="w-48 h-48 text-purple-600/10 absolute inset-0 m-auto pointer-events-none z-0" />
+              <div className="w-full h-full rounded-full bg-white/90 backdrop-blur-2xl border border-blue-200/60 shadow-[0_20px_60px_rgba(59,130,246,0.2),inset_0_1px_2px_rgba(255,255,255,0.9)] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                <UNEmblemLogo className="w-48 h-48 text-blue-600/10 absolute inset-0 m-auto pointer-events-none z-0" />
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeItem.id}
@@ -273,11 +273,11 @@ export function SDGSection() {
                     transition={{ duration: 0.4 }}
                     className="flex flex-col items-center justify-center max-w-[260px]"
                   >
-                    <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-purple-100/90 border border-purple-300 text-purple-700 font-mono text-[11px] font-bold tracking-wider uppercase mb-2.5">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-100/90 border border-blue-300 text-blue-700 font-mono text-[11px] font-bold tracking-wider uppercase mb-2.5">
                       <span>SDG {activeItem.id}</span>
                     </div>
 
-                    <div className="w-14 h-14 rounded-full bg-purple-600 border border-purple-500 shadow-md flex items-center justify-center text-white mb-2.5 shadow-purple-300">
+                    <div className="w-14 h-14 rounded-full bg-blue-600 border border-blue-500 shadow-md flex items-center justify-center text-white mb-2.5 shadow-blue-300">
                       <SDGVectorIcon iconName={activeItem.iconName} className="w-7 h-7" />
                     </div>
 
@@ -319,24 +319,24 @@ export function SDGSection() {
                   aria-label={`Select SDG ${card.id} ${card.title.replace("\n", " ")}`}
                   className={`w-[290px] rounded-3xl p-4 flex items-center justify-between text-left transition-all duration-300 cursor-pointer relative overflow-hidden backdrop-blur-xl border ${
                     card.isActive
-                      ? "bg-white/95 border-purple-500/90 shadow-[0_0_35px_rgba(168,85,247,0.35)] scale-[1.04] ring-2 ring-purple-400/50"
-                      : "bg-white/75 hover:bg-white/90 border-white/90 shadow-[0_10px_35px_rgba(124,58,237,0.08)] hover:shadow-[0_15px_40px_rgba(124,58,237,0.15)] hover:border-purple-200/90"
+                      ? "bg-white/95 border-blue-500/90 shadow-[0_0_35px_rgba(59,130,246,0.35)] scale-[1.04] ring-2 ring-blue-400/50"
+                      : "bg-white/75 hover:bg-white/90 border-white/90 shadow-[0_10px_35px_rgba(59,130,246,0.08)] hover:shadow-[0_15px_40px_rgba(59,130,246,0.15)] hover:border-blue-200/90"
                   }`}
                 >
                   <div className="flex items-center gap-3 shrink-0">
-                    {/* Small Icon Holder Dot: Vibrant Purple Fill on Selected Card */}
+                    {/* Small Icon Holder Dot: Vibrant Blue Fill on Selected Card */}
                     <div
                       className={`w-12 h-12 rounded-full border shadow-inner flex items-center justify-center shrink-0 transition-all ${
                         card.isActive
-                          ? "bg-purple-600 border-purple-500 text-white shadow-[0_0_15px_rgba(168,85,247,0.5)]"
-                          : "bg-purple-50/90 border-purple-200/70 text-purple-600"
+                          ? "bg-blue-600 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                          : "bg-blue-50/90 border-blue-200/70 text-blue-600"
                       }`}
                     >
                       <SDGVectorIcon iconName={card.iconName} className="w-6 h-6" />
                     </div>
 
                     <div>
-                      <span className="text-[11px] font-mono font-bold tracking-wider text-purple-600 uppercase block mb-0.5">
+                      <span className="text-[11px] font-mono font-bold tracking-wider text-blue-600 uppercase block mb-0.5">
                         SDG {card.id}
                       </span>
                       <h3 className="font-bold text-slate-900 text-xs sm:text-sm leading-snug whitespace-pre-line">
@@ -348,14 +348,14 @@ export function SDGSection() {
                   <div className="flex flex-col items-end justify-center shrink-0 pl-2">
                     <span
                       className={`font-mono font-black text-2xl leading-none transition-colors ${
-                        card.isActive ? "text-purple-600" : "text-purple-300/60"
+                        card.isActive ? "text-blue-600" : "text-blue-300/60"
                       }`}
                     >
                       {card.numberStr}
                     </span>
                     <span
                       className={`text-xs mt-1 transition-transform ${
-                        card.isActive ? "translate-x-1 text-purple-600 font-bold" : "text-purple-400/70"
+                        card.isActive ? "translate-x-1 text-blue-600 font-bold" : "text-blue-400/70"
                       }`}
                     >
                       →
@@ -375,9 +375,9 @@ export function SDGSection() {
           
           <div className="relative w-[320px] h-[320px] sm:w-[360px] sm:h-[360px] flex items-center justify-center">
 
-            {/* MOBILE MAIN CENTER HUB DISK WITH PURPLE BORDER */}
-            <div className="w-[210px] h-[210px] sm:w-[240px] sm:h-[240px] rounded-full bg-white/90 backdrop-blur-2xl border-4 border-purple-500/80 shadow-[0_15px_45px_rgba(124,58,237,0.25)] flex flex-col items-center justify-center p-4 text-center z-20 relative overflow-hidden">
-              <UNEmblemLogo className="w-36 h-36 text-purple-600/10 absolute inset-0 m-auto pointer-events-none z-0" />
+            {/* MOBILE MAIN CENTER HUB DISK WITH BLUE BORDER */}
+            <div className="w-[210px] h-[210px] sm:w-[240px] sm:h-[240px] rounded-full bg-white/90 backdrop-blur-2xl border-4 border-blue-500/80 shadow-[0_15px_45px_rgba(59,130,246,0.25)] flex flex-col items-center justify-center p-4 text-center z-20 relative overflow-hidden">
+              <UNEmblemLogo className="w-36 h-36 text-blue-600/10 absolute inset-0 m-auto pointer-events-none z-0" />
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeItem.id}
@@ -387,7 +387,7 @@ export function SDGSection() {
                   transition={{ duration: 0.35 }}
                   className="flex flex-col items-center justify-center max-w-[190px]"
                 >
-                  <span className="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-mono text-[10px] font-bold tracking-wider uppercase mb-1.5">
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-mono text-[10px] font-bold tracking-wider uppercase mb-1.5">
                     SDG {activeItem.id}
                   </span>
 
@@ -427,8 +427,8 @@ export function SDGSection() {
                     aria-label={`Select SDG ${circle.id}`}
                     className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-xl border ${
                       circle.isActive
-                        ? "bg-purple-600 border-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.6)] scale-110 ring-2 ring-purple-300"
-                        : "bg-white/85 border-purple-200/80 text-purple-600 shadow-[0_6px_20px_rgba(124,58,237,0.1)] hover:scale-105"
+                        ? "bg-blue-600 border-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] scale-110 ring-2 ring-blue-300"
+                        : "bg-white/85 border-blue-200/80 text-blue-600 shadow-[0_6px_20px_rgba(59,130,246,0.1)] hover:scale-105"
                     }`}
                   >
                     <SDGVectorIcon iconName={circle.iconName} className="w-5 h-5 sm:w-6 sm:h-6" />

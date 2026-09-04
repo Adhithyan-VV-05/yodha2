@@ -177,7 +177,7 @@ export function FAQSection() {
                       aria-expanded={isOpen}
                       aria-controls={`faq-answer-${item.id}`}
                       id={`faq-header-${item.id}`}
-                      className="w-full min-h-[56px] sm:min-h-[64px] px-4 sm:px-6 py-4 flex items-center justify-between text-left group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/70 rounded-2xl"
+                      className="w-full min-h-[56px] sm:min-h-[64px] px-4 sm:px-6 py-4 flex items-center justify-between text-left group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 rounded-2xl"
                     >
                       <div className="flex items-center gap-3.5 sm:gap-5 flex-1 pr-3 min-w-0">
                         {/* ITEM NUMBER */}

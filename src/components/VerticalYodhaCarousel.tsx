@@ -55,7 +55,7 @@ export function VerticalYodhaCarousel() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="font-serif text-5xl sm:text-7xl lg:text-8xl font-normal tracking-tight text-white py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]"
           >
-            YODHA Hackathon <span className="text-purple-400">Highlights</span>
+            YODHA Hackathon <span className="text-blue-400">Highlights</span>
           </motion.h2>
 
           {/* SUBTITLE */}
@@ -89,7 +89,7 @@ export function VerticalYodhaCarousel() {
               {doubleSequence.map((imgSrc, idx) => (
                 <div
                   key={`film-card-${idx}`}
-                  className="w-[260px] sm:w-[360px] md:w-[420px] aspect-[16/10] shrink-0 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 bg-[#070e1c]/65 border border-purple-500/35 backdrop-blur-2xl shadow-[0_15px_35px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] relative overflow-hidden flex flex-col justify-between"
+                  className="w-[260px] sm:w-[360px] md:w-[420px] aspect-[16/10] shrink-0 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 bg-[#070e1c]/65 border border-blue-500/35 backdrop-blur-2xl shadow-[0_15px_35px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] relative overflow-hidden flex flex-col justify-between"
                 >
                   {/* PHOTO CONTAINER */}
                   <div className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative bg-slate-950">

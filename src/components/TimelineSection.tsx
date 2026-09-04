@@ -80,7 +80,7 @@ export function TimelineSection() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-950 tracking-tight"
           >
-            THE <span className="text-purple-600 font-extrabold">JOURNEY</span>
+            THE <span className="text-blue-600 font-extrabold">JOURNEY</span>
           </motion.h2>
 
           <motion.p
@@ -91,7 +91,7 @@ export function TimelineSection() {
             className="text-xs sm:text-base text-slate-700 font-mono font-semibold max-w-2xl mx-auto"
           >
             {selectedDay ? (
-              <span className="flex items-center justify-center gap-2 text-purple-700 font-bold">
+              <span className="flex items-center justify-center gap-2 text-blue-700 font-bold">
                 <span>{selectedDay.dayId}</span> • <span>{selectedDay.subtitle}</span>
               </span>
             ) : (
@@ -128,8 +128,8 @@ export function TimelineSection() {
                     y2={`calc(50% + ${posY}px)`}
                     className={`transition-all duration-500 ${
                       isHighlighted
-                        ? "stroke-purple-600 stroke-[3px] filter drop-shadow-[0_0_12px_rgba(147,51,234,0.6)]"
-                        : "stroke-purple-400/50 stroke-[1.5px]"
+                        ? "stroke-blue-600 stroke-[3px] filter drop-shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+                        : "stroke-blue-400/50 stroke-[1.5px]"
                     }`}
                   />
                   <circle
@@ -137,7 +137,7 @@ export function TimelineSection() {
                     cy={`calc(50% + ${posY}px)`}
                     r={isHighlighted ? "6" : "4"}
                     className={`transition-all duration-500 ${
-                      isHighlighted ? "fill-purple-600 stroke-white stroke-2" : "fill-purple-500"
+                      isHighlighted ? "fill-blue-600 stroke-white stroke-2" : "fill-blue-500"
                     }`}
                   />
                 </g>
@@ -168,7 +168,7 @@ export function TimelineSection() {
                     <button
                       type="button"
                       onClick={handleBackToDays}
-                      className="px-6 py-3.5 rounded-3xl bg-purple-600 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-[0_10px_25px_rgba(147,51,234,0.35)] hover:scale-105 active:scale-95 flex items-center gap-2"
+                      className="px-6 py-3.5 rounded-3xl bg-blue-600 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-[0_10px_25px_rgba(59,130,246,0.35)] hover:scale-105 active:scale-95 flex items-center gap-2"
                     >
                       <ArrowLeft className="w-4 h-4 text-white" />
                       <span>BACK TO DAYS</span>
@@ -194,13 +194,13 @@ export function TimelineSection() {
                     <button
                       type="button"
                       onClick={() => handleSelectDay(dayData)}
-                      className="w-72 rounded-3xl p-6 text-left transition-all duration-300 cursor-pointer backdrop-blur-2xl border bg-white/90 border-purple-200/90 shadow-[0_10px_35px_rgba(124,58,237,0.1)] hover:bg-white hover:border-purple-400 hover:shadow-[0_20px_45px_rgba(124,58,237,0.2)] hover:scale-105"
+                      className="w-72 rounded-3xl p-6 text-left transition-all duration-300 cursor-pointer backdrop-blur-2xl border bg-white/90 border-blue-200/90 shadow-[0_10px_35px_rgba(59,130,246,0.1)] hover:bg-white hover:border-blue-400 hover:shadow-[0_20px_45px_rgba(59,130,246,0.2)] hover:scale-105"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-mono font-black text-purple-600 uppercase tracking-widest">
+                        <span className="text-xs font-mono font-black text-blue-600 uppercase tracking-widest">
                           {dayData.dayId}
                         </span>
-                        <Calendar className="w-4.5 h-4.5 text-purple-600" />
+                        <Calendar className="w-4.5 h-4.5 text-blue-600" />
                       </div>
                       <h4 className="text-base font-bold text-slate-950 font-heading leading-snug">
                         {dayData.subtitle}
@@ -231,16 +231,16 @@ export function TimelineSection() {
                     onClick={() => handleSelectActivity(actData)}
                     className={`w-64 p-4 rounded-3xl backdrop-blur-2xl transition-all duration-300 text-left border cursor-pointer ${
                       isSelected
-                        ? "bg-purple-600 border-purple-500 shadow-[0_15px_40px_rgba(147,51,234,0.35)] text-white scale-105"
-                        : "bg-white/90 border-purple-200/80 hover:border-purple-400 hover:bg-white shadow-[0_10px_30px_rgba(124,58,237,0.08)] hover:shadow-[0_15px_40px_rgba(124,58,237,0.18)] text-slate-950"
+                        ? "bg-blue-600 border-blue-500 shadow-[0_15px_40px_rgba(59,130,246,0.35)] text-white scale-105"
+                        : "bg-white/90 border-blue-200/80 hover:border-blue-400 hover:bg-white shadow-[0_10px_30px_rgba(59,130,246,0.08)] hover:shadow-[0_15px_40px_rgba(59,130,246,0.18)] text-slate-950"
                     }`}
                   >
                     <div className="flex items-center justify-between gap-1 mb-1.5">
-                      <span className={`text-[11px] font-mono font-bold flex items-center gap-1.5 truncate ${isSelected ? "text-purple-100" : "text-purple-600"}`}>
-                        <Clock className={`w-3.5 h-3.5 shrink-0 ${isSelected ? "text-white" : "text-purple-600"}`} />
+                      <span className={`text-[11px] font-mono font-bold flex items-center gap-1.5 truncate ${isSelected ? "text-blue-100" : "text-blue-600"}`}>
+                        <Clock className={`w-3.5 h-3.5 shrink-0 ${isSelected ? "text-white" : "text-blue-600"}`} />
                         <span>{actData.time}</span>
                       </span>
-                      <span className={`text-xs font-mono shrink-0 ${isSelected ? "text-white" : "text-purple-600"}`}>→</span>
+                      <span className={`text-xs font-mono shrink-0 ${isSelected ? "text-white" : "text-blue-600"}`}>→</span>
                     </div>
                     <h5 className={`text-xs sm:text-sm font-bold font-heading line-clamp-2 leading-snug ${isSelected ? "text-white" : "text-slate-950"}`}>
                       {actData.title}
@@ -254,11 +254,11 @@ export function TimelineSection() {
           {/* STATIONARY MAIN CENTER CIRCLE (HIGHER Z-INDEX z-40 + PURE GLASSMORPHISM WITHOUT SOLID BACKGROUND) */}
           <div className="relative z-40 flex items-center justify-center">
             <div className="w-[360px] h-[360px] rounded-full relative p-1.5 flex items-center justify-center">
-              {/* Outer Glowing Purple Ring Accent */}
-              <div className="absolute inset-0 rounded-full border-4 border-purple-500/80 shadow-[0_0_45px_rgba(168,85,247,0.35)] pointer-events-none" />
+              {/* Outer Glowing Blue Ring Accent */}
+              <div className="absolute inset-0 rounded-full border-4 border-blue-500/80 shadow-[0_0_45px_rgba(59,130,246,0.35)] pointer-events-none" />
 
               {/* Inner Pure Glass Center Disc (No solid bg fill, pure glassmorphism) */}
-              <div className="w-full h-full rounded-full bg-slate-950/40 backdrop-blur-2xl border border-purple-400/50 shadow-[0_20px_60px_rgba(168,85,247,0.3)] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden text-white">
+              <div className="w-full h-full rounded-full bg-slate-950/40 backdrop-blur-2xl border border-blue-400/50 shadow-[0_20px_60px_rgba(59,130,246,0.3)] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden text-white">
                 <AnimatePresence mode="wait">
                   {selectedActivity ? (
                     <motion.div
@@ -269,8 +269,8 @@ export function TimelineSection() {
                       transition={{ duration: 0.3 }}
                       className="flex flex-col items-center justify-center max-w-[270px] space-y-2 relative z-10"
                     >
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-950/80 border border-purple-400/60 text-purple-300 font-mono text-[11px] font-bold">
-                        <Clock className="w-3.5 h-3.5 text-purple-400" />
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-400/60 text-blue-300 font-mono text-[11px] font-bold">
+                        <Clock className="w-3.5 h-3.5 text-blue-400" />
                         <span>{selectedActivity.time}</span>
                       </div>
 
@@ -278,7 +278,7 @@ export function TimelineSection() {
                         {selectedActivity.title}
                       </h3>
 
-                      <div className="w-12 h-[1px] bg-purple-400/60 my-1" />
+                      <div className="w-12 h-[1px] bg-blue-400/60 my-1" />
 
                       <p className="text-xs text-slate-200 font-sans leading-relaxed font-normal max-w-[270px] drop-shadow-sm">
                         {selectedActivity.description}
@@ -293,7 +293,7 @@ export function TimelineSection() {
                       transition={{ duration: 0.3 }}
                       className="flex flex-col items-center justify-center max-w-[260px] space-y-2 relative z-10"
                     >
-                      <span className="text-[10px] font-mono font-extrabold text-purple-400 tracking-[0.25em] uppercase drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]">
+                      <span className="text-[10px] font-mono font-extrabold text-blue-400 tracking-[0.25em] uppercase drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">
                         {selectedDay.kicker}
                       </span>
 
@@ -301,7 +301,7 @@ export function TimelineSection() {
                         {selectedDay.dayId}
                       </h3>
 
-                      <p className="text-xs font-mono text-purple-300 font-bold drop-shadow-sm">
+                      <p className="text-xs font-mono text-blue-300 font-bold drop-shadow-sm">
                         {selectedDay.subtitle}
                       </p>
                     </motion.div>
@@ -314,7 +314,7 @@ export function TimelineSection() {
                       transition={{ duration: 0.3 }}
                       className="flex flex-col items-center justify-center max-w-[250px] space-y-2 relative z-10"
                     >
-                      <span className="text-[10px] font-mono font-extrabold text-purple-400 tracking-[0.25em] uppercase drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]">
+                      <span className="text-[10px] font-mono font-extrabold text-blue-400 tracking-[0.25em] uppercase drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">
                         YODHA 2.0
                       </span>
 
@@ -322,7 +322,7 @@ export function TimelineSection() {
                         THE JOURNEY
                       </h3>
 
-                      <div className="w-12 h-[1px] bg-purple-400 my-1" />
+                      <div className="w-12 h-[1px] bg-blue-400 my-1" />
 
                       <p className="text-[11px] font-mono text-slate-200 font-bold drop-shadow-sm">
                         3 DAYS • 48 HOURS
@@ -344,7 +344,7 @@ export function TimelineSection() {
           <div className="relative w-[330px] h-[330px] sm:w-[370px] sm:h-[370px] flex items-center justify-center">
 
             {/* MOBILE MAIN CENTER HUB DISC (HIGHER Z-INDEX z-40 + PURE GLASSMORPHISM WITHOUT SOLID BACKGROUND) */}
-            <div className="w-[180px] h-[180px] sm:w-[210px] sm:h-[210px] rounded-full bg-slate-950/40 backdrop-blur-2xl border-4 border-purple-500/80 shadow-[0_12px_40px_rgba(168,85,247,0.3)] flex flex-col items-center justify-center p-3.5 text-center z-40 relative overflow-hidden text-white">
+            <div className="w-[180px] h-[180px] sm:w-[210px] sm:h-[210px] rounded-full bg-slate-950/40 backdrop-blur-2xl border-4 border-blue-500/80 shadow-[0_12px_40px_rgba(59,130,246,0.3)] flex flex-col items-center justify-center p-3.5 text-center z-40 relative overflow-hidden text-white">
               <AnimatePresence mode="wait">
                 {selectedActivity ? (
                   <motion.div
@@ -355,8 +355,8 @@ export function TimelineSection() {
                     transition={{ duration: 0.3 }}
                     className="flex flex-col items-center justify-center max-w-[155px] sm:max-w-[180px] space-y-1 relative z-10"
                   >
-                    <span className="px-2 py-0.5 rounded-full bg-purple-950/80 text-purple-300 font-mono text-[8px] sm:text-[9px] font-bold flex items-center gap-1 border border-purple-500/40">
-                      <Clock className="w-2.5 h-2.5 text-purple-400" />
+                    <span className="px-2 py-0.5 rounded-full bg-blue-950/80 text-blue-300 font-mono text-[8px] sm:text-[9px] font-bold flex items-center gap-1 border border-blue-500/40">
+                      <Clock className="w-2.5 h-2.5 text-blue-400" />
                       <span>{selectedActivity.time}</span>
                     </span>
 
@@ -364,7 +364,7 @@ export function TimelineSection() {
                       {selectedActivity.title}
                     </h3>
 
-                    <div className="w-8 h-[1px] bg-purple-400/60 my-0.5" />
+                    <div className="w-8 h-[1px] bg-blue-400/60 my-0.5" />
 
                     <p className="text-[9px] sm:text-[10px] text-slate-200 font-sans leading-tight font-normal max-w-[155px] sm:max-w-[180px] line-clamp-3">
                       {selectedActivity.description}
@@ -379,7 +379,7 @@ export function TimelineSection() {
                     transition={{ duration: 0.3 }}
                     className="flex flex-col items-center justify-center max-w-[150px] sm:max-w-[170px] space-y-1 relative z-10"
                   >
-                    <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-purple-400 tracking-wider uppercase">
+                    <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-blue-400 tracking-wider uppercase">
                       {selectedDay.kicker}
                     </span>
 
@@ -387,7 +387,7 @@ export function TimelineSection() {
                       {selectedDay.dayId}
                     </h3>
 
-                    <p className="text-[9px] sm:text-[10px] font-mono text-purple-300 font-bold">
+                    <p className="text-[9px] sm:text-[10px] font-mono text-blue-300 font-bold">
                       {selectedDay.subtitle}
                     </p>
                   </motion.div>
@@ -400,7 +400,7 @@ export function TimelineSection() {
                     transition={{ duration: 0.3 }}
                     className="flex flex-col items-center justify-center max-w-[150px] sm:max-w-[170px] space-y-1 relative z-10"
                   >
-                    <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-purple-400 tracking-wider uppercase">
+                    <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-blue-400 tracking-wider uppercase">
                       YODHA 2.0
                     </span>
 
@@ -436,7 +436,7 @@ export function TimelineSection() {
                       <button
                         type="button"
                         onClick={handleBackToDays}
-                        className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-purple-600 border-2 border-purple-400 text-white flex items-center justify-center shadow-[0_0_15px_rgba(147,51,234,0.4)] active:scale-95 cursor-pointer"
+                        className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-blue-600 border-2 border-blue-400 text-white flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)] active:scale-95 cursor-pointer"
                         title="Back to Days"
                       >
                         <ArrowLeft className="w-4 h-4 text-white" />
@@ -458,7 +458,7 @@ export function TimelineSection() {
                       <button
                         type="button"
                         onClick={() => handleSelectDay(dayData)}
-                        className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-white/90 border-2 border-purple-400 text-purple-700 font-mono text-[11px] sm:text-xs font-black uppercase flex items-center justify-center shadow-[0_6px_20px_rgba(124,58,237,0.15)] hover:scale-110 active:scale-95 cursor-pointer"
+                        className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-white/90 border-2 border-blue-400 text-blue-700 font-mono text-[11px] sm:text-xs font-black uppercase flex items-center justify-center shadow-[0_6px_20px_rgba(59,130,246,0.15)] hover:scale-110 active:scale-95 cursor-pointer"
                       >
                         DAY {dayData.id}
                       </button>
@@ -484,8 +484,8 @@ export function TimelineSection() {
                       onClick={() => handleSelectActivity(actData)}
                       className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex flex-col items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-xl border ${
                         isSelected
-                          ? "bg-purple-600 border-purple-400 text-white shadow-[0_0_20px_rgba(147,51,234,0.6)] scale-110 ring-2 ring-purple-300"
-                          : "bg-white/90 border-purple-300/80 text-purple-700 hover:border-purple-500 shadow-[0_4px_15px_rgba(124,58,237,0.12)]"
+                          ? "bg-blue-600 border-blue-400 text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] scale-110 ring-2 ring-blue-300"
+                          : "bg-white/90 border-blue-300/80 text-blue-700 hover:border-blue-500 shadow-[0_4px_15px_rgba(59,130,246,0.12)]"
                       }`}
                     >
                       <span className="font-mono text-[9px] sm:text-[10px] font-extrabold leading-none tracking-tighter">

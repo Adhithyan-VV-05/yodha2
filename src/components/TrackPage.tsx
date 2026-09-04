@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Sparkles, Search, ArrowRight, ChevronUp, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Search, ArrowRight, ChevronUp, CheckCircle2 } from "lucide-react";
 import { YodhaImage } from "./YodhaImage";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
@@ -46,7 +46,7 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
       </div>
 
       {/* Background Aura Glow */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-purple-600/15 blur-[200px] pointer-events-none z-0" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-blue-600/15 blur-[200px] pointer-events-none z-0" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         
@@ -54,9 +54,9 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
         <div className="flex items-center justify-between mb-6 sm:mb-10 pt-2">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#081122]/80 border border-purple-500/35 text-slate-200 hover:text-white font-mono text-xs font-medium uppercase tracking-wider cursor-pointer hover:border-purple-400 transition-all shadow-lg backdrop-blur-xl"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#081122]/80 border border-blue-500/35 text-slate-200 hover:text-white font-mono text-xs font-medium uppercase tracking-wider cursor-pointer hover:border-blue-400 transition-all shadow-lg backdrop-blur-xl"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-purple-400" />
+            <ArrowLeft className="w-3.5 h-3.5 text-blue-400" />
             <span>BACK TO HOME</span>
           </button>
         </div>
@@ -74,7 +74,7 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
 
           {/* MAIN CINEMATIC TITLE */}
           <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-white py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
-            Healthcare AI <span className="text-purple-400">Problem Statements</span>
+            Healthcare AI <span className="text-blue-400">Problem Statements</span>
           </h1>
 
           {/* SUPPORTING DESCRIPTION */}
@@ -85,9 +85,9 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
 
         {/* SEARCH BAR (NO DIFFICULTY FILTERS) */}
         <div className="max-w-7xl mx-auto mb-10">
-          <div className="relative w-full bg-[#070e1c]/80 border border-purple-500/35 rounded-2xl px-4 py-3 backdrop-blur-xl focus-within:border-purple-400/80 transition-all shadow-lg">
+          <div className="relative w-full bg-[#070e1c]/80 border border-blue-500/35 rounded-2xl px-4 py-3 backdrop-blur-xl focus-within:border-blue-400/80 transition-all shadow-lg">
             <div className="flex items-center">
-              <Search className="w-4 h-4 text-purple-400 mr-3 shrink-0" />
+              <Search className="w-4 h-4 text-blue-400 mr-3 shrink-0" />
               <input
                 type="text"
                 value={searchQuery}
@@ -113,8 +113,8 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 className={`rounded-3xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between ${
                   isExpanded
-                    ? "col-span-1 md:col-span-2 lg:col-span-3 bg-transparent border-2 border-purple-400/80 p-6 sm:p-8 backdrop-blur-sm shadow-[0_0_50px_rgba(168,85,247,0.25)]"
-                    : "col-span-1 bg-transparent border border-purple-500/35 hover:border-purple-400/80 backdrop-blur-sm p-4 sm:p-5"
+                    ? "col-span-1 md:col-span-2 lg:col-span-3 bg-transparent border-2 border-blue-400/80 p-6 sm:p-8 backdrop-blur-sm shadow-[0_0_50px_rgba(59,130,246,0.25)]"
+                    : "col-span-1 bg-transparent border border-blue-500/35 hover:border-blue-400/80 backdrop-blur-sm p-4 sm:p-5"
                 }`}
               >
                 {!isExpanded ? (
@@ -123,7 +123,7 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                     {/* Image Banner */}
                     <div
                       onClick={() => toggleExpand(st.id)}
-                      className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-3 bg-black border border-purple-500/20 shadow-md cursor-pointer group/img"
+                      className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-3 bg-black border border-blue-500/20 shadow-md cursor-pointer group/img"
                     >
                       <YodhaImage
                         src={psImage}
@@ -142,7 +142,7 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                     {/* Title */}
                     <h3
                       onClick={() => toggleExpand(st.id)}
-                      className="text-lg sm:text-xl font-serif font-normal text-white mb-2 leading-snug hover:text-purple-300 transition-colors cursor-pointer"
+                      className="text-lg sm:text-xl font-serif font-normal text-white mb-2 leading-snug hover:text-blue-300 transition-colors cursor-pointer"
                     >
                       {st.title}
                     </h3>
@@ -155,10 +155,10 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                     {/* View Challenge Link */}
                     <button
                       onClick={() => toggleExpand(st.id)}
-                      className="text-purple-400 font-mono text-xs font-bold tracking-wider hover:text-purple-300 flex items-center gap-1.5 transition-colors cursor-pointer pt-1 self-start group/btn"
+                      className="text-blue-400 font-mono text-xs font-bold tracking-wider hover:text-blue-300 flex items-center gap-1.5 transition-colors cursor-pointer pt-1 self-start group/btn"
                     >
                       <span>View Challenge</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-purple-400 group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-3.5 h-3.5 text-blue-400 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                   </div>
                 ) : (
@@ -172,26 +172,27 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                       className="w-full space-y-6"
                     >
                       {/* Top Header Controls: ID Label + Icon-Only Collapse Button */}
-                      <div className="flex items-center justify-between border-b border-purple-500/25 pb-3">
-                        <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold bg-purple-950/80 text-purple-300 border border-purple-500/40">
+                      <div className="flex items-center justify-between border-b border-blue-500/25 pb-3">
+                        <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold bg-blue-950/80 text-blue-300 border border-blue-500/40">
                           ID #{st.id.toString().padStart(2, "0")} &nbsp;|&nbsp; {subCategory}
                         </span>
 
                         <button
                           onClick={() => toggleExpand(st.id)}
-                          className="p-1.5 sm:p-2 rounded-full bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 hover:text-white transition-colors cursor-pointer"
+                          className="p-1.5 sm:p-2 rounded-full bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 hover:text-white transition-colors cursor-pointer"
                           aria-label="Collapse"
                           title="Collapse"
                         >
-                          <ChevronUp className="w-5 h-5 text-purple-300" />
+                          <ChevronUp className="w-5 h-5 text-blue-300" />
                         </button>
                       </div>
 
-                      {/* Main Grid Body: Left Column (Image + Key Objectives), Right Column (Title + Context + Challenge + Register Now) */}
+                      {/* Main Grid Body: PC (Left: Image + Key Objectives, Right: Title + Context + Challenge + Register Now) */}
+                      {/* Mobile Order: Image -> Title -> Context -> Challenge -> Key Objectives -> Register Now */}
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
-                        {/* Left Column: Image Banner + Key Objectives directly under image */}
+                        {/* Left Column: Image Banner + Key Objectives (PC View Only under Image) */}
                         <div className="lg:col-span-5 space-y-5">
-                          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl bg-black">
+                          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-blue-500/30 shadow-2xl bg-black">
                             <YodhaImage
                               src={psImage}
                               alt={st.title}
@@ -200,8 +201,8 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
                           </div>
 
-                          {/* Key Objectives directly under image with clean text hierarchy */}
-                          <div className="space-y-3 pt-1">
+                          {/* Key Objectives directly under image (VISIBLE ON DESKTOP LG VIEWS ONLY) */}
+                          <div className="hidden lg:block space-y-3 pt-1">
                             <h4 className="text-xs sm:text-sm font-mono text-emerald-400 uppercase tracking-widest font-bold flex items-center gap-2">
                               <span className="w-2 h-2 rounded-full bg-emerald-400" />
                               <span>KEY OBJECTIVES</span>
@@ -217,7 +218,7 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                           </div>
                         </div>
 
-                        {/* Right Column: Title, Context, Challenge & REGISTER NOW -> Button */}
+                        {/* Right Column: Title, Context, Challenge, Key Objectives (Mobile View Only at last) & REGISTER NOW -> Button */}
                         <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
                           {/* Title */}
                           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-white leading-tight">
@@ -226,7 +227,7 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
 
                           {/* Background Context */}
                           <div className="space-y-1.5">
-                            <h4 className="text-xs sm:text-sm font-mono text-purple-400 uppercase tracking-widest font-bold">
+                            <h4 className="text-xs sm:text-sm font-mono text-blue-400 uppercase tracking-widest font-bold">
                               BACKGROUND CONTEXT
                             </h4>
                             <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
@@ -236,7 +237,7 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
 
                           {/* The Challenge */}
                           <div className="space-y-1.5">
-                            <h4 className="text-xs sm:text-sm font-mono text-purple-300 uppercase tracking-widest font-bold">
+                            <h4 className="text-xs sm:text-sm font-mono text-blue-300 uppercase tracking-widest font-bold">
                               THE CHALLENGE
                             </h4>
                             <p className="text-sm sm:text-base text-slate-100 font-normal leading-relaxed">
@@ -244,11 +245,27 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                             </p>
                           </div>
 
+                          {/* Key Objectives (VISIBLE ON MOBILE VIEWS AT THE LAST BEFORE BUTTON) */}
+                          <div className="block lg:hidden space-y-3 pt-2">
+                            <h4 className="text-xs sm:text-sm font-mono text-emerald-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                              <span>KEY OBJECTIVES</span>
+                            </h4>
+                            <ul className="space-y-2.5">
+                              {st.readMore.objectives.map((obj, i) => (
+                                <li key={i} className="flex items-start gap-2.5 text-sm sm:text-base text-slate-200 leading-snug">
+                                  <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0 mt-0.5" />
+                                  <span>{obj}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
                           {/* REGISTER NOW -> Button Only */}
                           <div className="pt-4">
                             <button
                               onClick={() => onOpenRegisterWithTrack("Healthcare AI")}
-                              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:scale-105 transition-all shadow-xl active:scale-95 group/btn"
+                              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:scale-105 transition-all shadow-xl active:scale-95 group/btn"
                             >
                               <span>REGISTER NOW</span>
                               <ArrowRight className="w-4 h-4 text-white group-hover/btn:translate-x-1 transition-transform" />

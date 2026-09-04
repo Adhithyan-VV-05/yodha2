@@ -33,22 +33,22 @@ export function PastGallerySection() {
   const chainImages = [...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES];
 
   return (
-    <section id="gallery" className="py-16 sm:py-24 relative overflow-hidden bg-transparent border-t border-b border-purple-500/20 z-10 w-full text-white select-none">
+    <section id="gallery" className="py-16 sm:py-24 relative overflow-hidden bg-transparent border-t border-b border-blue-500/20 z-10 w-full text-white select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-8 text-center">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-xs font-mono text-purple-400 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
+          className="text-xs font-mono text-blue-400 uppercase tracking-widest block mb-2 font-bold flex items-center justify-center gap-2"
         >
-          <Camera className="w-4 h-4 text-purple-400" />
+          <Camera className="w-4 h-4 text-blue-400" />
           <span>PAST HACKATHON MOMENTS</span>
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-indigo-400 tracking-tight font-sans"
+          className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-sky-400 tracking-tight font-sans"
         >
           YODHA Hackathon Highlights
         </motion.h2>
@@ -67,7 +67,7 @@ export function PastGallerySection() {
           {chainImages.map((src, idx) => (
             <div
               key={idx}
-              className="relative w-64 sm:w-80 h-44 sm:h-56 rounded-2xl sm:rounded-3xl overflow-hidden border border-purple-500/30 bg-slate-950/90 shrink-0 shadow-xl"
+              className="relative w-64 sm:w-80 h-44 sm:h-56 rounded-2xl sm:rounded-3xl overflow-hidden border border-blue-500/30 bg-slate-950/90 shrink-0 shadow-xl"
             >
               <YodhaImage
                 src={src}

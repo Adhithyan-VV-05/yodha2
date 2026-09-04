@@ -44,7 +44,7 @@ h1, h2, h3, h4, .font-heading {
 }
 
 .animate-gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 25%, #c084fc 50%, #818cf8 75%, #ffffff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #dbeafe 25%, #60a5fa 50%, #3b82f6 75%, #ffffff 100%);
   background-size: 250% 250%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -61,7 +61,7 @@ html {
   width: 100%;
 }
 
-/* GLOBAL & CONTAINER MINIMAL PURPLE CYBERPUNK SCROLLBAR */
+/* GLOBAL & CONTAINER MINIMAL BLUE SCROLLBAR */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -73,20 +73,20 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.5);
+  background: rgba(59, 130, 246, 0.5);
   border-radius: 9999px;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(168, 85, 247, 0.85);
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+  background: rgba(59, 130, 246, 0.85);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.7);
 }
 
 /* Firefox Custom Scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.5) rgba(5, 8, 24, 0.7);
+  scrollbar-color: rgba(59, 130, 246, 0.5) rgba(5, 8, 24, 0.7);
 }
 
 body {
@@ -99,7 +99,6 @@ body {
   width: 100%;
   position: relative;
 }
-
 
 /* Touch & Click Button Optimization for All Devices */
 button,
@@ -177,8 +176,6 @@ input[type="submit"],
   display: none;
 }
 
-
-
 /* ULTRA-PREMIUM SECTION THEME GLASSMORPHIC UTILITIES */
 .glass-panel {
   background: rgba(15, 23, 42, 0.45);
@@ -194,11 +191,11 @@ input[type="submit"],
   box-shadow: 0 8px 32px 0 rgba(4, 20, 27, 0.5);
 }
 
-.glass-panel-violet {
-  background: rgba(15, 12, 36, 0.55);
+.glass-panel-blue {
+  background: rgba(12, 20, 36, 0.55);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(15, 12, 36, 0.5);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(12, 20, 36, 0.5);
 }
 
 .glass-panel-gold {

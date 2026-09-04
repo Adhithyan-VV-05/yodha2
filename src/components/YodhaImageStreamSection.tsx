@@ -37,8 +37,8 @@ export function YodhaImageStreamSection() {
       className="relative w-full py-20 sm:py-28 px-4 flex flex-col justify-center items-center overflow-hidden select-none bg-transparent text-white z-10"
     >
       {/* Background Radial Glow & Gradient */}
-      <div className="absolute inset-0 bg-radial-at-c from-purple-950/30 via-slate-950/80 to-[#03060d] pointer-events-none z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/20 to-transparent pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-radial-at-c from-blue-950/30 via-slate-950/80 to-[#03060d] pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-950/20 to-transparent pointer-events-none z-0" />
 
       {/* SECTION HEADER BLOCK */}
       <div className="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
@@ -49,9 +49,9 @@ export function YodhaImageStreamSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/80 border border-purple-500/40 text-purple-300 font-mono text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-lg mb-4"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-950/80 border border-blue-500/40 text-blue-300 font-mono text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-lg mb-4"
         >
-          <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+          <Sparkles className="w-3.5 h-3.5 text-blue-400" />
           <span>THE EXPERIENCE</span>
         </motion.div>
 
@@ -61,7 +61,7 @@ export function YodhaImageStreamSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="text-3xl sm:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100 to-indigo-300 tracking-tight font-sans"
+          className="text-3xl sm:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-sky-300 tracking-tight font-sans"
         >
           Moments that made YODHA.
         </motion.h2>
@@ -79,10 +79,10 @@ export function YodhaImageStreamSection() {
       </div>
 
       {/* 3D PERSPECTIVE CORRIDOR CONTAINER */}
-      <div className="relative w-full max-w-7xl h-[520px] sm:h-[640px] lg:h-[720px] overflow-hidden flex items-center justify-center rounded-3xl border border-purple-500/20 bg-slate-950/40 backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+      <div className="relative w-full max-w-7xl h-[520px] sm:h-[640px] lg:h-[720px] overflow-hidden flex items-center justify-center rounded-3xl border border-blue-500/20 bg-slate-950/40 backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.8)]">
         
         {/* Perspective Center Glow Beam */}
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-950/40 via-transparent to-purple-950/40 pointer-events-none z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-950/40 via-transparent to-blue-950/40 pointer-events-none z-10" />
         <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#03060d] to-transparent z-20 pointer-events-none" />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#03060d] to-transparent z-20 pointer-events-none" />
 
@@ -103,7 +103,7 @@ export function YodhaImageStreamSection() {
               {leftImages.map((imgSrc, idx) => (
                 <div
                   key={`left-${idx}`}
-                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-purple-500/40 bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.6)] group transition-transform duration-300 hover:scale-105"
+                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-blue-500/40 bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.6)] group transition-transform duration-300 hover:scale-105"
                 >
                   <img
                     src={imgSrc}
@@ -119,8 +119,8 @@ export function YodhaImageStreamSection() {
 
           {/* CENTER PERSPECTIVE VANISHING AMBIENCE */}
           <div className="absolute inset-y-0 w-[24%] md:w-[20%] z-20 flex flex-col items-center justify-center pointer-events-none text-center px-2">
-            <div className="w-full h-[80%] rounded-full bg-purple-600/10 blur-3xl pointer-events-none" />
-            <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-purple-500/40 to-transparent opacity-60" />
+            <div className="w-full h-[80%] rounded-full bg-blue-600/10 blur-3xl pointer-events-none" />
+            <div className="w-[1px] h-full bg-gradient-to-b from-transparent via-blue-500/40 to-transparent opacity-60" />
           </div>
 
           {/* RIGHT 3D PERSPECTIVE STREAM RAIL */}
@@ -137,7 +137,7 @@ export function YodhaImageStreamSection() {
               {rightImages.map((imgSrc, idx) => (
                 <div
                   key={`right-${idx}`}
-                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-purple-500/40 bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.6)] group transition-transform duration-300 hover:scale-105"
+                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-blue-500/40 bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.6)] group transition-transform duration-300 hover:scale-105"
                 >
                   <img
                     src={imgSrc}
@@ -154,19 +154,19 @@ export function YodhaImageStreamSection() {
         </div>
 
         {/* BOTTOM BADGE BAR */}
-        <div className="absolute bottom-6 z-30 flex items-center justify-center gap-6 px-6 py-2.5 rounded-full bg-slate-950/90 border border-purple-500/40 backdrop-blur-2xl text-xs font-mono text-slate-300 shadow-xl">
+        <div className="absolute bottom-6 z-30 flex items-center justify-center gap-6 px-6 py-2.5 rounded-full bg-slate-950/90 border border-blue-500/40 backdrop-blur-2xl text-xs font-mono text-slate-300 shadow-xl">
           <div className="flex items-center gap-2">
-            <Users className="w-3.5 h-3.5 text-purple-400" />
+            <Users className="w-3.5 h-3.5 text-blue-400" />
             <span>100+ PARTICIPANTS</span>
           </div>
-          <span className="w-1 h-1 rounded-full bg-purple-500" />
+          <span className="w-1 h-1 rounded-full bg-blue-500" />
           <div className="flex items-center gap-2">
-            <Award className="w-3.5 h-3.5 text-purple-400" />
+            <Award className="w-3.5 h-3.5 text-blue-400" />
             <span>₹70,000 PRIZE POOL</span>
           </div>
-          <span className="w-1 h-1 rounded-full bg-purple-500 hidden sm:inline-block" />
+          <span className="w-1 h-1 rounded-full bg-blue-500 hidden sm:inline-block" />
           <div className="hidden sm:flex items-center gap-2">
-            <Camera className="w-3.5 h-3.5 text-purple-400" />
+            <Camera className="w-3.5 h-3.5 text-blue-400" />
             <span>20 HACKATHON MOMENTS</span>
           </div>
         </div>

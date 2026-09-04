@@ -21,9 +21,9 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
 
   return (
     <footer className="relative w-full bg-transparent text-white select-none z-20 py-12 md:py-16 px-4 sm:px-6 lg:px-8">
-      {/* CLEAN THIN PURPLE SEPARATOR LINE ABOVE FOOTER */}
+      {/* CLEAN THIN BLUE SEPARATOR LINE ABOVE FOOTER */}
       <div className="w-full max-w-6xl mx-auto mb-10 sm:mb-12">
-        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
+        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
       </div>
 
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
@@ -34,9 +34,9 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
           <div>
             <h4 className="text-lg font-black font-heading tracking-tight text-white flex items-center justify-center md:justify-start gap-1">
               <span>YODHA</span>
-              <span className="text-purple-400 font-bold">2.0</span>
+              <span className="text-blue-400 font-bold">2.0</span>
             </h4>
-            <p className="text-[10px] font-mono text-purple-300/80 uppercase tracking-widest">
+            <p className="text-[10px] font-mono text-blue-300/80 uppercase tracking-widest">
               Warriors of AI • Dept of AD, JECC
             </p>
           </div>
@@ -44,16 +44,16 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
 
         {/* INLINE NAV LINKS */}
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-mono text-slate-300">
-          <button onClick={() => scrollToSection("about")} className="hover:text-purple-300 transition-colors cursor-pointer">
+          <button onClick={() => scrollToSection("about")} className="hover:text-blue-300 transition-colors cursor-pointer">
             About
           </button>
-          <button onClick={() => scrollToSection("tracks")} className="hover:text-purple-300 transition-colors cursor-pointer">
+          <button onClick={() => scrollToSection("tracks")} className="hover:text-blue-300 transition-colors cursor-pointer">
             Problem Statements
           </button>
-          <button onClick={() => scrollToSection("timeline")} className="hover:text-purple-300 transition-colors cursor-pointer">
+          <button onClick={() => scrollToSection("timeline")} className="hover:text-blue-300 transition-colors cursor-pointer">
             Journey
           </button>
-          <button onClick={() => scrollToSection("prizes")} className="hover:text-purple-300 transition-colors cursor-pointer">
+          <button onClick={() => scrollToSection("prizes")} className="hover:text-blue-300 transition-colors cursor-pointer">
             Prizes
           </button>
           <button
@@ -61,7 +61,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
               if (onOpenRegister) onOpenRegister();
               else scrollToSection("register");
             }}
-            className="hover:text-purple-300 font-bold text-purple-400 transition-colors cursor-pointer"
+            className="hover:text-blue-300 font-bold text-blue-400 transition-colors cursor-pointer"
           >
             Register
           </button>
@@ -73,21 +73,21 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
             href="https://www.instagram.com/yodha_hackathon.official?igsh=cmxiNGs2c2hiMDdy"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-purple-300 transition-colors"
+            className="hover:text-blue-300 transition-colors"
           >
             Instagram
           </a>
           <span className="text-slate-600">•</span>
-          <a href="mailto:yodha.aidajecc.in@gmail.com" className="hover:text-purple-300 transition-colors">
+          <a href="mailto:yodha.aidajecc.in@gmail.com" className="hover:text-blue-300 transition-colors">
             Email
           </a>
           <span className="text-slate-600">•</span>
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1 hover:text-purple-300 transition-colors cursor-pointer text-slate-300 font-bold"
+            className="inline-flex items-center gap-1 hover:text-blue-300 transition-colors cursor-pointer text-slate-300 font-bold"
           >
             <span>Top</span>
-            <ArrowUp className="w-3.5 h-3.5 text-purple-400" />
+            <ArrowUp className="w-3.5 h-3.5 text-blue-400" />
           </button>
         </div>
 

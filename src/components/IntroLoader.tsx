@@ -15,8 +15,8 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
 
     const runRealPreloader = async () => {
       const imagesToPreload = [
-        "/yodha-hero-bg-pc.webp",
-        "/yodha-hero--bg-mob.webp",
+        "/yodha-hero-bg2-pc.png",
+        "/yodha-hero--bg2-mob.png",
         "/bg-hills-day-pc.webp",
         "/bg-hills-night-pc.webp",
         "/logo.webp",
