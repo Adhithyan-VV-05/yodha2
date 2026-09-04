@@ -169,45 +169,64 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.25 }}
-                      className="w-full space-y-6"
+                      className="w-full space-y-5"
                     >
-                      {/* Top Header Controls: ID Label + Hide Details Button */}
-                      <div className="flex items-center justify-between border-b border-purple-500/25 pb-4">
+                      {/* Top Header Controls: ID Label + Icon-Only Collapse Button */}
+                      <div className="flex items-center justify-between border-b border-purple-500/25 pb-3">
                         <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold bg-purple-950/80 text-purple-300 border border-purple-500/40">
                           ID #{st.id.toString().padStart(2, "0")} &nbsp;|&nbsp; {subCategory}
                         </span>
 
                         <button
                           onClick={() => toggleExpand(st.id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-white font-mono text-xs font-bold uppercase transition-colors cursor-pointer"
+                          className="p-1.5 sm:p-2 rounded-full bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 hover:text-white transition-colors cursor-pointer"
+                          aria-label="Collapse"
+                          title="Collapse"
                         >
-                          <span>Hide Details</span>
-                          <ChevronUp className="w-4 h-4 text-purple-300" />
+                          <ChevronUp className="w-5 h-5 text-purple-300" />
                         </button>
                       </div>
 
-                      {/* Main Grid Body: Image Left, Details Right on PC */}
-                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                        {/* Left Side: Full Image */}
-                        <div className="lg:col-span-5 relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl bg-black">
-                          <YodhaImage
-                            src={psImage}
-                            alt={st.title}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                      {/* Main Grid Body: Left Column (Image + Key Objectives), Right Column (Title + Context + Challenge + Register Now) */}
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+                        {/* Left Column: Image Banner + Key Objectives directly under image */}
+                        <div className="lg:col-span-5 space-y-4">
+                          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl bg-black">
+                            <YodhaImage
+                              src={psImage}
+                              alt={st.title}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                          </div>
+
+                          {/* Key Objectives directly under image */}
+                          <div className="p-4 rounded-2xl bg-slate-900/60 border border-purple-500/25 space-y-2.5">
+                            <h4 className="text-xs font-mono text-emerald-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                              <span>KEY OBJECTIVES</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {st.readMore.objectives.map((obj, i) => (
+                                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-slate-300 leading-snug">
+                                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                                  <span>{obj}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
 
-                        {/* Right Side: Detailed Content */}
-                        <div className="lg:col-span-7 space-y-5">
+                        {/* Right Column: Detailed Title, Context, Challenge & REGISTER NOW Button */}
+                        <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
                           {/* Title */}
                           <h2 className="text-2xl sm:text-4xl font-serif font-normal text-white leading-tight">
                             {st.title}
                           </h2>
 
                           {/* Background Context */}
-                          <div>
-                            <h4 className="text-xs font-mono text-purple-400 uppercase tracking-widest font-bold mb-1.5">
+                          <div className="space-y-1">
+                            <h4 className="text-xs font-mono text-purple-400 uppercase tracking-widest font-bold">
                               BACKGROUND CONTEXT
                             </h4>
                             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
@@ -216,8 +235,8 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                           </div>
 
                           {/* The Challenge */}
-                          <div className="p-4 rounded-2xl bg-purple-950/40 border border-purple-500/35">
-                            <h4 className="text-xs font-mono text-purple-300 uppercase tracking-widest font-bold mb-1.5">
+                          <div className="p-4 sm:p-5 rounded-2xl bg-purple-950/40 border border-purple-500/35 space-y-1.5">
+                            <h4 className="text-xs font-mono text-purple-300 uppercase tracking-widest font-bold">
                               THE CHALLENGE
                             </h4>
                             <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed">
@@ -225,29 +244,14 @@ export function TrackPage({ onBack, onOpenRegisterWithTrack }: TrackPageProps) {
                             </p>
                           </div>
 
-                          {/* Key Objectives */}
-                          <div>
-                            <h4 className="text-xs font-mono text-emerald-400 uppercase tracking-widest font-bold mb-2">
-                              KEY OBJECTIVES
-                            </h4>
-                            <ul className="space-y-2">
-                              {st.readMore.objectives.map((obj, i) => (
-                                <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
-                                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                                  <span>{obj}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          {/* Register CTA Button */}
+                          {/* REGISTER NOW Button Only */}
                           <div className="pt-2">
                             <button
                               onClick={() => onOpenRegisterWithTrack("Healthcare AI")}
-                              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2.5 cursor-pointer hover:scale-105 transition-all shadow-xl active:scale-95"
+                              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2.5 cursor-pointer hover:scale-105 transition-all shadow-xl active:scale-95"
                             >
                               <Sparkles className="w-4 h-4 text-white" />
-                              <span>Register Team for Healthcare AI Track</span>
+                              <span>REGISTER NOW</span>
                             </button>
                           </div>
                         </div>
