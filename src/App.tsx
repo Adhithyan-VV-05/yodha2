@@ -6,7 +6,8 @@ import { AboutSection } from "./components/AboutSection";
 import { TracksSection } from "./components/TracksSection";
 import { PrizesSection } from "./components/PrizesSection";
 import { TimelineSection } from "./components/TimelineSection";
-import { ClosingCTA } from "./components/ClosingCTA";
+import { FAQSection } from "./components/FAQSection";
+import { GuidelinesSection } from "./components/GuidelinesSection";
 import { RegistrationPage } from "./components/RegistrationPage";
 import { CompactFooter } from "./components/CompactFooter";
 import { VerticalYodhaCarousel } from "./components/VerticalYodhaCarousel";
@@ -14,7 +15,6 @@ import { TrackPage } from "./components/TrackPage";
 import { ScrollBackgroundManager } from "./components/ScrollBackgroundManager";
 import { TrailerModal } from "./components/TrailerModal";
 import { IntroLoader } from "./components/IntroLoader";
-import { FAQSection } from "./components/FAQSection";
 import { trackUserSession } from "./lib/firebase";
 
 function App() {
@@ -113,8 +113,8 @@ function App() {
           {/* 6. FAQ Section (Cinematic Editorial Accordion) */}
           <FAQSection />
 
-          {/* 7. Join Movement Closing CTA */}
-          <ClosingCTA onOpenRegister={() => handleOpenRegisterWithTrack()} />
+          {/* 7. Guidelines Section */}
+          <GuidelinesSection />
 
           {/* 9. Vertical YODHA Moving Carousel */}
           <VerticalYodhaCarousel />
