@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { ExternalLink, Globe, Landmark } from "lucide-react";
 
 export function AboutSection() {
   return (
@@ -68,30 +69,62 @@ export function AboutSection() {
       </div>
 
       {/* PANEL 2: INSTITUTION & DEPT OF AI & DS (ORGANIZING BODY) */}
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-8 border-t border-slate-300">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch pt-8 border-t border-slate-300">
         
-        <div className="lg:col-span-6 flex flex-col justify-center text-center lg:text-left space-y-4">
-          <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">ORGANIZING BODY</span>
-          <h3 className="text-2xl sm:text-4xl font-black text-slate-950 font-heading">
-            <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline decoration-blue-500/50 transition-colors">
+        {/* AIDA DEPT CARD WITH DEDICATED VISIT BUTTON */}
+        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200 shadow-xl flex flex-col justify-between space-y-6 text-left">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Globe className="w-4 h-4 text-blue-600" />
+              <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">ORGANIZING BODY</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-950 font-heading">
               Department of AI & Data Science (AIDA)
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
+              The Department of Artificial Intelligence and Data Science (AIDA) at Jyothi Engineering College is dedicated to pioneering innovation, nurturing technical talent, and bridging academic excellence with real-world industry impact.
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <a
+              href="https://aidajecc.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span>VISIT AIDA WEBSITE</span>
+              <ExternalLink className="w-4 h-4 text-white" />
             </a>
-          </h3>
-          <p className="text-sm text-slate-700 leading-relaxed font-sans">
-            The <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">Department of Artificial Intelligence and Data Science (AIDA)</a> at <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">Jyothi Engineering College</a> is dedicated to pioneering innovation, nurturing technical talent, and bridging academic excellence with real-world industry impact.
-          </p>
+          </div>
         </div>
 
-        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200 shadow-xl space-y-4 text-left">
-          <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">HOST CAMPUS</span>
-          <h4 className="text-xl font-bold text-slate-950 font-heading">
-            <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline decoration-blue-500/50 transition-colors">
+        {/* HOST CAMPUS CARD WITH DEDICATED VISIT BUTTON */}
+        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200 shadow-xl flex flex-col justify-between space-y-6 text-left">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Landmark className="w-4 h-4 text-blue-600" />
+              <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">HOST CAMPUS</span>
+            </div>
+            <h4 className="text-xl sm:text-2xl font-bold text-slate-950 font-heading">
               Jyothi Engineering College (Autonomous)
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              Cheruthuruthy, Thrissur, Kerala — A premier NAAC accredited engineering campus equipped with state-of-the-art AI labs, high-performance computing clusters, and modern innovation spaces.
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <a
+              href="https://www.jecc.ac.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-950 hover:bg-slate-900 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer border border-slate-800"
+            >
+              <span>VISIT JECC WEBSITE</span>
+              <ExternalLink className="w-4 h-4 text-sky-400" />
             </a>
-          </h4>
-          <p className="text-xs text-slate-700 leading-relaxed">
-            Cheruthuruthy, Thrissur, Kerala — A premier NAAC accredited engineering campus equipped with state-of-the-art AI labs, high-performance computing clusters, and modern innovation spaces. Visit <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">aidajecc.in</a> & <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">jecc.ac.in</a>.
-          </p>
+          </div>
         </div>
 
       </div>

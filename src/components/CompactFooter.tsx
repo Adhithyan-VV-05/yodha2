@@ -1,5 +1,5 @@
 "use client";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, ExternalLink } from "lucide-react";
 import logo from "../assets/logo.webp";
 
 interface CompactFooterProps {
@@ -38,7 +38,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
               <span className="text-blue-400 font-bold">2.0</span>
             </h4>
             <p className="text-[10px] font-mono text-blue-300/80 uppercase tracking-widest">
-              Warriors of AI • <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white underline">Dept of AD (AIDA)</a>, <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white underline">JECC</a>
+              Warriors of AI • Dept of AI & Data Science (AIDA) • JECC
             </p>
           </div>
         </div>
@@ -68,24 +68,25 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
           </button>
         </nav>
 
-        {/* SOCIAL & BACK TO TOP */}
+        {/* DEDICATED SITE BUTTONS & SOCIAL & BACK TO TOP */}
         <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-slate-400">
           <a
             href="https://aidajecc.in/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-blue-300 transition-colors text-blue-400 font-bold"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-950 border border-blue-500/40 text-blue-300 hover:text-white hover:border-blue-400 transition-all font-semibold"
           >
-            AIDA Portal
+            <span>AIDA Site</span>
+            <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
           </a>
-          <span className="text-slate-600">•</span>
           <a
             href="https://www.jecc.ac.in/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-blue-300 transition-colors text-blue-400 font-bold"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 transition-all font-semibold"
           >
-            JECC Campus
+            <span>JECC Site</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
           </a>
           <span className="text-slate-600">•</span>
           <a
