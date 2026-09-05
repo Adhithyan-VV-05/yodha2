@@ -70,8 +70,18 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             transition={{ duration: 0.55, delay: 0.5 }}
             className="text-xs sm:text-sm lg:text-base text-slate-900 font-semibold max-w-lg leading-relaxed font-sans"
           >
-            A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>, where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong>.<br />
-            And <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
+            {/* PC VIEW: EXACT 2 SENTENCES MATCHING PC REFERENCE IMAGE 1 */}
+            <span className="hidden sm:inline">
+              A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>, where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong>.<br />
+              And <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
+            </span>
+
+            {/* MOBILE VIEW: EXACT 3 LINES MATCHING MOBILE REFERENCE IMAGE 2 */}
+            <span className="sm:hidden">
+              A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>, where technology meets<br />
+              <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong><br />
+              leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
+            </span>
           </motion.p>
         </div>
 
@@ -168,11 +178,14 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           </button>
 
           {/* MINIMAL LOCATION INFO */}
-          <div className="flex items-start gap-2 max-w-xs text-left">
-            <MapPin className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <div className="flex flex-col text-[11px] font-mono text-slate-900 leading-tight">
+          <div className="flex items-center gap-2 max-w-xs text-left">
+            <div className="hidden sm:flex w-7 h-7 rounded-full bg-slate-950 text-white items-center justify-center font-mono font-bold text-[11px] shrink-0 border border-slate-800">
+              N
+            </div>
+            <MapPin className="sm:hidden w-4 h-4 text-blue-600 shrink-0" />
+            <div className="flex flex-col text-[10px] sm:text-[11px] font-mono text-slate-900 leading-tight">
               <span className="font-black text-slate-950 uppercase">JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)</span>
-              <span className="text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
+              <span className="text-[8px] sm:text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
             </div>
           </div>
 
