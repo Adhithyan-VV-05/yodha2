@@ -1,21 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Navbar } from "./components/Navbar";
 import { HeroSection } from "./components/HeroSection";
-import { AboutSection } from "./components/AboutSection";
-import { TracksSection } from "./components/TracksSection";
-import { PrizesSection } from "./components/PrizesSection";
-import { TimelineSection } from "./components/TimelineSection";
-import { FAQSection } from "./components/FAQSection";
-import { GuidelinesSection } from "./components/GuidelinesSection";
-import { RegistrationPage } from "./components/RegistrationPage";
 import { CompactFooter } from "./components/CompactFooter";
-import { VerticalYodhaCarousel } from "./components/VerticalYodhaCarousel";
-import { TrackPage } from "./components/TrackPage";
 import { ScrollBackgroundManager } from "./components/ScrollBackgroundManager";
-import { TrailerModal } from "./components/TrailerModal";
 import { IntroLoader } from "./components/IntroLoader";
-import { trackUserSession } from "./lib/firebase";
+
+// Lazy load non-hero sections below the fold for optimal initial load speed
+const AboutSection = lazy(() => import("./components/AboutSection").then((m) => ({ default: m.AboutSection })));
+const TracksSection = lazy(() => import("./components/TracksSection").then((m) => ({ default: m.TracksSection })));
+const PrizesSection = lazy(() => import("./components/PrizesSection").then((m) => ({ default: m.PrizesSection })));
+const TimelineSection = lazy(() => import("./components/TimelineSection").then((m) => ({ default: m.TimelineSection })));
+const FAQSection = lazy(() => import("./components/FAQSection").then((m) => ({ default: m.FAQSection })));
+const GuidelinesSection = lazy(() => import("./components/GuidelinesSection").then((m) => ({ default: m.GuidelinesSection })));
+const RegistrationPage = lazy(() => import("./components/RegistrationPage").then((m) => ({ default: m.RegistrationPage })));
+const VerticalYodhaCarousel = lazy(() => import("./components/VerticalYodhaCarousel").then((m) => ({ default: m.VerticalYodhaCarousel })));
+const TrackPage = lazy(() => import("./components/TrackPage").then((m) => ({ default: m.TrackPage })));
+const TrailerModal = lazy(() => import("./components/TrailerModal").then((m) => ({ default: m.TrailerModal })));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,87 +72,84 @@ function App() {
     };
     window.addEventListener("popstate", handlePopState);
 
-    // Start Firebase visit increment & session duration tracking telemetry
-    const cleanupSessionTracker = trackUserSession();
-
-    // Static Document Title
     document.title = "YODHA 2.0 — WARRIORS OF AI";
 
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      cleanupSessionTracker();
     };
   }, []);
 
   return (
     <div className="w-full min-h-screen bg-[#03060d] text-white selection:bg-blue-600 selection:text-white font-sans relative overflow-x-hidden">
       
-      {/* INITIAL PRELOADER: GATES SITE UNTIL HERO & BACKGROUND IMAGES ARE LOADED */}
+      {/* INITIAL PRELOADER */}
       <AnimatePresence>
         {isLoading && <IntroLoader onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* Dynamic Scroll-Driven Fixed Background (Night/Day Hills) for All Non-Hero Sections */}
+      {/* Dynamic Scroll-Driven Fixed Background */}
       {activePage === "home" && <ScrollBackgroundManager />}
 
       {/* DEDICATED FULL PAGE VIEWS */}
-      {activePage === "register" ? (
-        <RegistrationPage
-          onBack={() => handleSelectPage("home")}
-          selectedTrack={selectedTrack}
-        />
-      ) : activePage === "healthcare" ? (
-        <div className="min-h-screen w-full relative z-20">
-          <TrackPage
-            trackType={activePage}
+      <Suspense fallback={<div className="min-h-screen bg-[#03060d]" />}>
+        {activePage === "register" ? (
+          <RegistrationPage
             onBack={() => handleSelectPage("home")}
-            onOpenRegisterWithTrack={handleOpenRegisterWithTrack}
+            selectedTrack={selectedTrack}
           />
-        </div>
-      ) : (
-        <div className="relative z-10 w-full min-h-screen block">
-          {/* Top Navbar Header */}
-          <Navbar onOpenRegister={handleOpenRegisterWithTrack} />
+        ) : activePage === "healthcare" ? (
+          <div className="min-h-screen w-full relative z-20">
+            <TrackPage
+              trackType={activePage}
+              onBack={() => handleSelectPage("home")}
+              onOpenRegisterWithTrack={handleOpenRegisterWithTrack}
+            />
+          </div>
+        ) : (
+          <div className="relative z-10 w-full min-h-screen block">
+            {/* Top Navbar Header */}
+            <Navbar onOpenRegister={handleOpenRegisterWithTrack} />
 
-          {/* 1. Hero Section */}
-          <HeroSection
-            onOpenRegister={handleOpenRegisterWithTrack}
-            onOpenTrailer={() => setTrailerModalOpen(true)}
-          />
+            {/* 1. Hero Section (Loaded Immediately) */}
+            <HeroSection
+              onOpenRegister={handleOpenRegisterWithTrack}
+              onOpenTrailer={() => setTrailerModalOpen(true)}
+            />
 
-          {/* 2. About YODHA 2.0 */}
-          <AboutSection />
+            {/* 2. About YODHA 2.0 */}
+            <AboutSection />
 
-          {/* 3. Healthcare AI Tracks */}
-          <TracksSection
-            onOpenTrackPage={(tType) => handleSelectPage(tType)}
-          />
+            {/* 3. Healthcare AI Tracks */}
+            <TracksSection
+              onOpenTrackPage={(tType) => handleSelectPage(tType)}
+            />
 
-          {/* 4. Hackathon Journey (Timeline) in SDG Position */}
-          <TimelineSection />
+            {/* 4. Hackathon Journey (Timeline) */}
+            <TimelineSection />
 
-          {/* 5. Prizes & Trophies */}
-          <PrizesSection onOpenRegister={() => handleOpenRegisterWithTrack()} />
+            {/* 5. Prizes & Trophies */}
+            <PrizesSection onOpenRegister={() => handleOpenRegisterWithTrack()} />
 
-          {/* 6. FAQ Section (Cinematic Editorial Accordion) */}
-          <FAQSection />
+            {/* 6. FAQ Section */}
+            <FAQSection />
 
-          {/* 7. Guidelines Section */}
-          <GuidelinesSection />
+            {/* 7. Guidelines Section */}
+            <GuidelinesSection />
 
-          {/* 9. Vertical YODHA Moving Carousel */}
-          <VerticalYodhaCarousel />
+            {/* 9. Vertical YODHA Moving Carousel */}
+            <VerticalYodhaCarousel />
 
-          {/* 10. Glassmorphism Footer */}
-          <CompactFooter />
+            {/* 10. Glassmorphism Footer */}
+            <CompactFooter />
 
-          {/* Trailer Video Modal Popup */}
-          <TrailerModal
-            isOpen={trailerModalOpen}
-            onClose={() => setTrailerModalOpen(false)}
-          />
-        </div>
-      )}
+            {/* Trailer Video Modal Popup */}
+            <TrailerModal
+              isOpen={trailerModalOpen}
+              onClose={() => setTrailerModalOpen(false)}
+            />
+          </div>
+        )}
+      </Suspense>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy } from "lucide-react";
 
 interface FirstLoadHeroProps {
@@ -17,6 +17,25 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     seconds: 40,
   });
 
+  // Mobile 1.5s cycling phrase state (stacked words)
+  const mobilePhrases = [
+    { word1: "RISE", word2: "AS", word3: "WARRIORS," },
+    { word1: "THINK", word2: "AS", word3: "INNOVATORS," },
+    { word1: "BUILD", word2: "FOR", word3: "HUMANITY." },
+  ];
+  const [mobileIndex, setMobileIndex] = useState(0);
+
+  // PC Typewriter animation state (displays ONE sentence at a time)
+  const pcSentences = [
+    { text: "RISE AS ", keyword: "WARRIORS," },
+    { text: "THINK AS ", keyword: "INNOVATORS," },
+    { text: "BUILD FOR ", keyword: "HUMANITY." },
+  ];
+  const [pcIndex, setPcIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Timer Countdown Effect
   useEffect(() => {
     const targetDate = new Date("2026-10-01T09:00:00+05:30").getTime();
 
@@ -40,128 +59,158 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     return () => clearInterval(timer);
   }, []);
 
+  // Mobile sentence cycle interval (1.5 seconds per sentence)
+  useEffect(() => {
+    const mobileTimer = setInterval(() => {
+      setMobileIndex((prev) => (prev + 1) % mobilePhrases.length);
+    }, 1500);
+    return () => clearInterval(mobileTimer);
+  }, [mobilePhrases.length]);
+
+  // PC Typewriter effect
+  useEffect(() => {
+    const currentItem = pcSentences[pcIndex];
+    const fullText = currentItem.text + currentItem.keyword;
+    let timer: NodeJS.Timeout;
+
+    if (!isDeleting) {
+      if (charIndex < fullText.length) {
+        timer = setTimeout(() => {
+          setCharIndex((prev) => prev + 1);
+        }, 60);
+      } else {
+        // Pause for 1.5 seconds when full sentence is typed
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 1500);
+      }
+    } else {
+      if (charIndex > 0) {
+        timer = setTimeout(() => {
+          setCharIndex((prev) => prev - 1);
+        }, 35);
+      } else {
+        setIsDeleting(false);
+        setPcIndex((prev) => (prev + 1) % pcSentences.length);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, pcIndex, pcSentences]);
+
+  // Helper to render PC typewriter sentence with blue keyword styling
+  const renderPcTypewriterSentence = () => {
+    const currentItem = pcSentences[pcIndex];
+    const prefixLen = currentItem.text.length;
+
+    if (charIndex <= prefixLen) {
+      return (
+        <span className="text-slate-950 font-black">
+          {currentItem.text.slice(0, charIndex)}
+        </span>
+      );
+    } else {
+      const keywordChars = currentItem.keyword.slice(0, charIndex - prefixLen);
+      return (
+        <span>
+          <span className="text-slate-950 font-black">{currentItem.text}</span>
+          <span className="text-blue-600 font-serif font-black drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+            {keywordChars}
+          </span>
+        </span>
+      );
+    }
+  };
+
+  const activeMobilePhrase = mobilePhrases[mobileIndex];
+
   return (
-    <section className="relative w-full min-h-screen pt-12 sm:pt-20 lg:pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
+    <section className="relative w-full min-h-screen pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
       
-      {/* MAIN IMPACT HEADLINE & BRIEF - CONSTRAINED MAX WIDTH TO KEEP ROCK PILLAR FULLY VISIBLE ON THE RIGHT */}
-      <div className="relative z-20 max-w-xl lg:max-w-xl max-sm:my-0 max-sm:pt-1 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
+      {/* DESKTOP (PC) VIEW LAYOUT (POSITIONED AT 30VH BELOW TOP, SLIGHTLY ALIGNED LEFT) */}
+      <div className="hidden sm:block relative z-20 max-w-2xl pt-[28vh] space-y-4">
         
-        {/* AWWWARDS-TIER CINEMATIC HEADLINE WITH UNBREAKABLE SINGLE-LINE SENTENCES */}
-        <motion.h1
-          initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[22px] min-[360px]:text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 uppercase leading-[1.12] font-sans"
-        >
-          <span className="block whitespace-nowrap">
-            RISE AS <span className="text-blue-600 font-serif font-black">WARRIORS</span>,
-          </span>
-          <span className="block whitespace-nowrap">
-            THINK AS <span className="text-blue-600 font-serif font-black">INNOVATORS</span>,
-          </span>
-          <span className="block whitespace-nowrap">
-            BUILD FOR <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
-          </span>
-        </motion.h1>
-
-        {/* BLUE GRADIENT ACCENT BAR */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-          className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full origin-left shadow-[0_0_10px_rgba(59,130,246,0.6)]"
-        />
-
-        {/* SUBHEADLINE BRIEF - BREAKING ONLY AT COMMAS */}
-        <div>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.5 }}
-            className="text-xs sm:text-sm lg:text-base text-slate-900 font-semibold max-w-lg leading-relaxed font-sans"
-          >
-            A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br />
-            where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
-          </motion.p>
+        {/* TYPEWRITER PC HEADLINE - ONE SENTENCE AT A TIME */}
+        <div className="h-20 flex items-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.08] font-sans">
+            {renderPcTypewriterSentence()}
+            <span className="inline-block w-1.5 h-10 bg-blue-600 ml-1 animate-pulse" />
+          </h1>
         </div>
 
-        {/* 3 STAT CARDS PLACED JUST ABOVE THE TIMER (WITH BLUE ICON CIRCLE BADGES MATCHING IMAGE 1 & 2) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.6 }}
-          className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-lg pt-2"
-        >
-          {/* CARD 1 */}
-          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
-              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+        {/* BLUE GRADIENT ACCENT BAR */}
+        <div className="w-14 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.6)]" />
+
+        {/* SUBHEADLINE BRIEF */}
+        <p className="text-sm lg:text-base text-slate-900 font-semibold max-w-lg leading-relaxed font-sans">
+          A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br />
+          where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
+        </p>
+
+        {/* 3 STAT CARDS IN A ROW */}
+        <div className="grid grid-cols-3 gap-3 w-full max-w-lg pt-1">
+          <div className="p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
+            <div className="w-7 h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4 text-blue-600" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">48 HOURS</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">NON-STOP</span>
+              <span className="text-xs font-mono font-black text-slate-950">48 HOURS</span>
+              <span className="text-[9px] font-mono text-slate-600 font-bold uppercase">NON-STOP</span>
             </div>
           </div>
 
-          {/* CARD 2 */}
-          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
-              <Code className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+          <div className="p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
+            <div className="w-7 h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+              <Code className="w-4 h-4 text-blue-600" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">16 PROBLEMS</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">REAL WORLD</span>
+              <span className="text-xs font-mono font-black text-slate-950">16 PROBLEMS</span>
+              <span className="text-[9px] font-mono text-slate-600 font-bold uppercase">REAL WORLD</span>
             </div>
           </div>
 
-          {/* CARD 3 */}
-          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
-              <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+          <div className="p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
+            <div className="w-7 h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+              <Target className="w-4 h-4 text-blue-600" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">CREATE IMPACT</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">AI MISSION</span>
+              <span className="text-xs font-mono font-black text-slate-950">CREATE IMPACT</span>
+              <span className="text-[9px] font-mono text-slate-600 font-bold uppercase">AI MISSION</span>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* COUNTDOWN + WATCH TRAILER DECK */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.7 }}
-          className="flex items-center gap-4 pt-1"
-        >
-          {/* MINIMAL COUNTDOWN BOX */}
-          <div className="p-3.5 rounded-2xl bg-[#08112d]/95 border border-blue-500/40 backdrop-blur-2xl flex flex-col space-y-1.5 shadow-md">
+        {/* TIMER + TRAILER + JYOTHY LOCATION ALL IN ONE SINGLE ROW ON PC */}
+        <div className="flex items-center gap-5 pt-2 flex-nowrap">
+          {/* COUNTDOWN BOX */}
+          <div className="p-3.5 rounded-2xl bg-[#08112d]/95 border border-blue-500/40 backdrop-blur-2xl flex flex-col space-y-1 shadow-md shrink-0">
             <span className="text-[9px] font-mono font-extrabold text-blue-400 uppercase tracking-widest text-center">
               HACKATHON STARTS IN
             </span>
-            <div className="flex items-center justify-center gap-2.5 text-center">
+            <div className="flex items-center justify-center gap-2 text-center">
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black font-mono text-white">
+                <span className="text-xl font-black font-mono text-white">
                   {String(timeLeft.days).padStart(2, "0")}
                 </span>
                 <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">DAYS</span>
               </div>
-              <span className="text-lg font-bold text-blue-400">:</span>
+              <span className="text-base font-bold text-blue-400">:</span>
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black font-mono text-white">
+                <span className="text-xl font-black font-mono text-white">
                   {String(timeLeft.hours).padStart(2, "0")}
                 </span>
                 <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">HRS</span>
               </div>
-              <span className="text-lg font-bold text-blue-400">:</span>
+              <span className="text-base font-bold text-blue-400">:</span>
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black font-mono text-white">
+                <span className="text-xl font-black font-mono text-white">
                   {String(timeLeft.minutes).padStart(2, "0")}
                 </span>
                 <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">MIN</span>
               </div>
-              <span className="text-lg font-bold text-blue-400">:</span>
+              <span className="text-base font-bold text-blue-400">:</span>
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black font-mono text-white">
+                <span className="text-xl font-black font-mono text-white">
                   {String(timeLeft.seconds).padStart(2, "0")}
                 </span>
                 <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">SEC</span>
@@ -169,10 +218,10 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             </div>
           </div>
 
-          {/* WATCH TRAILER ACTION */}
+          {/* TRAILER BUTTON */}
           <button
             onClick={() => onOpenTrailer && onOpenTrailer()}
-            className="flex items-center gap-2.5 group cursor-pointer"
+            className="flex items-center gap-2 group cursor-pointer shrink-0"
           >
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md group-hover:scale-105 transition-all">
               <Play className="w-4 h-4 text-white fill-white ml-0.5" />
@@ -181,32 +230,146 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
               TRAILER
             </span>
           </button>
-        </motion.div>
 
-        {/* LOCATION DECK BELOW TIMER MATCHING REFERENCE IMAGE */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.75 }}
-          className="flex items-center gap-2 pt-2 max-w-xs text-left"
-        >
-          <div className="hidden sm:flex w-7 h-7 rounded-full bg-slate-950 text-white items-center justify-center font-mono font-bold text-[11px] shrink-0 border border-slate-800">
-            N
+          {/* JYOTHY LOCATION WITH BLUE MAP PIN (NO N BADGE) IN SAME ROW */}
+          <div className="flex items-center gap-2 text-left shrink-0">
+            <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
+            <div className="flex flex-col text-[10px] lg:text-[11px] font-mono text-slate-900 leading-tight">
+              <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
+              <span className="text-[8px] lg:text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
+            </div>
           </div>
-          <MapPin className="sm:hidden w-5 h-5 text-blue-600 shrink-0" />
-          <div className="flex flex-col text-[10px] sm:text-[11px] font-mono text-slate-900 leading-tight">
-            <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
-            <span className="text-[8px] sm:text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
-          </div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* BOTTOM DECK: SHORTENED MINIMAL FEATURE DOCK WITH CENTERED SEPARATING LINES */}
+      {/* MOBILE VIEW LAYOUT (STACKED WORDS CYCLING 1.5s + CONTENT PLACED BELOW 60VH) */}
+      <div className="block sm:hidden relative z-20 w-full pt-16">
+        
+        {/* CYCLING STACKED PHRASE ANIMATION (TOP SECTION) */}
+        <div className="h-32 flex flex-col justify-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={mobileIndex}
+              initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className="flex flex-col text-left space-y-0.5"
+            >
+              <span className="text-2xl font-black text-slate-950 uppercase font-sans tracking-tight">
+                {activeMobilePhrase.word1}
+              </span>
+              <span className="text-2xl font-black text-slate-950 uppercase font-sans tracking-tight">
+                {activeMobilePhrase.word2}
+              </span>
+              <span className="text-2xl font-black text-blue-600 font-serif tracking-tight">
+                {activeMobilePhrase.word3}
+              </span>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* SUBHEADLINE & ALL SUBSEQUENT CONTENTS PLACED BELOW 60VH ON MOBILE */}
+        <div className="pt-[22vh] space-y-4">
+          <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full" />
+
+          {/* SUBHEADLINE BRIEF BELOW 60VH */}
+          <p className="text-xs text-slate-900 font-semibold leading-relaxed font-sans">
+            A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br />
+            where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
+          </p>
+
+          {/* 3 STAT CARDS BELOW 60VH */}
+          <div className="grid grid-cols-3 gap-2 w-full pt-1">
+            <div className="p-2 rounded-xl bg-white/90 border border-blue-200 flex items-center gap-1.5 shadow-sm">
+              <div className="w-6 h-6 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+                <Clock className="w-3.5 h-3.5 text-blue-600" />
+              </div>
+              <span className="text-[10px] font-mono font-black text-slate-950">48 HOURS</span>
+            </div>
+
+            <div className="p-2 rounded-xl bg-white/90 border border-blue-200 flex items-center gap-1.5 shadow-sm">
+              <div className="w-6 h-6 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+                <Code className="w-3.5 h-3.5 text-blue-600" />
+              </div>
+              <span className="text-[10px] font-mono font-black text-slate-950">16 PROBLEMS</span>
+            </div>
+
+            <div className="p-2 rounded-xl bg-white/90 border border-blue-200 flex items-center gap-1.5 shadow-sm">
+              <div className="w-6 h-6 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+                <Target className="w-3.5 h-3.5 text-blue-600" />
+              </div>
+              <span className="text-[10px] font-mono font-black text-slate-950">CREATE IMPACT</span>
+            </div>
+          </div>
+
+          {/* TIMER + TRAILER BELOW 60VH */}
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <div className="p-3 rounded-2xl bg-[#08112d]/95 border border-blue-500/40 backdrop-blur-2xl flex flex-col space-y-1 shadow-md">
+              <span className="text-[8px] font-mono font-extrabold text-blue-400 uppercase tracking-widest text-center">
+                HACKATHON STARTS IN
+              </span>
+              <div className="flex items-center justify-center gap-2 text-center">
+                <div className="flex flex-col">
+                  <span className="text-lg font-black font-mono text-white">
+                    {String(timeLeft.days).padStart(2, "0")}
+                  </span>
+                  <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">DAYS</span>
+                </div>
+                <span className="text-sm font-bold text-blue-400">:</span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-black font-mono text-white">
+                    {String(timeLeft.hours).padStart(2, "0")}
+                  </span>
+                  <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">HRS</span>
+                </div>
+                <span className="text-sm font-bold text-blue-400">:</span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-black font-mono text-white">
+                    {String(timeLeft.minutes).padStart(2, "0")}
+                  </span>
+                  <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">MIN</span>
+                </div>
+                <span className="text-sm font-bold text-blue-400">:</span>
+                <div className="flex flex-col">
+                  <span className="text-lg font-black font-mono text-white">
+                    {String(timeLeft.seconds).padStart(2, "0")}
+                  </span>
+                  <span className="text-[7px] font-mono text-slate-400 font-bold uppercase">SEC</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onOpenTrailer && onOpenTrailer()}
+              className="flex items-center gap-2 group cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md">
+                <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+              </div>
+              <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider">
+                TRAILER
+              </span>
+            </button>
+          </div>
+
+          {/* JYOTHY LOCATION BELOW 60VH */}
+          <div className="flex items-center gap-2 text-left pt-1">
+            <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
+            <div className="flex flex-col text-[10px] font-mono text-slate-900 leading-tight">
+              <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
+              <span className="text-[8px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* BOTTOM FEATURE DECK */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="w-full px-2 py-2.5 sm:px-4 sm:py-3.5 rounded-2xl bg-[#050612]/95 border border-blue-500/40 backdrop-blur-xl shadow-lg flex items-center justify-between gap-1 sm:gap-2 text-xs font-mono"
+        className="w-full px-2 py-2.5 sm:px-4 sm:py-3.5 rounded-2xl bg-[#050612]/95 border border-blue-500/40 backdrop-blur-xl shadow-lg flex items-center justify-between gap-1 sm:gap-2 text-xs font-mono mt-6"
       >
         <div className="flex-1 flex items-center justify-center gap-1 sm:gap-2 px-0.5 sm:px-2 min-w-0">
           <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 shrink-0" />
