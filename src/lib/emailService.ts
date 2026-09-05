@@ -28,10 +28,9 @@ export async function sendRegistrationEmail(
   payload: RegistrationEmailPayload
 ): Promise<{ success: boolean; dispatchedTo?: string; isMock?: boolean; error?: string }> {
   try {
-    console.info(`📧 [BREVO EMAIL SERVICE] Requesting Netlify Function send-email for Team Leader '${payload.leaderName}' (${payload.leaderEmail})...`);
+    console.info(`📧 [GMAIL EMAIL SERVICE] Requesting Next.js API /api/send-email for Team Leader '${payload.leaderName}' (${payload.leaderEmail})...`);
 
-    // Call Netlify Function /.netlify/functions/send-email
-    const response = await fetch("/.netlify/functions/send-email", {
+    const response = await fetch("/api/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -39,19 +38,20 @@ export async function sendRegistrationEmail(
 
     if (response.ok) {
       const resData = await response.json();
-      console.info("✅ [BREVO EMAIL SERVICE] Success response:", resData);
+      console.info("✅ [GMAIL EMAIL SERVICE] Success response:", resData);
       return { success: true, dispatchedTo: payload.leaderEmail, isMock: resData.isMock || false };
     } else {
       const errText = await response.text();
-      console.warn("⚠️ [BREVO EMAIL SERVICE] Netlify function returned non-200 status:", response.status, errText);
+      console.warn("⚠️ [GMAIL EMAIL SERVICE] /api/send-email returned non-200 status:", response.status, errText);
       return { success: true, dispatchedTo: payload.leaderEmail, isMock: true, error: errText };
     }
   } catch (err: any) {
     // Non-blocking fallback: Log error but ensure registration flow completes 100% successfully
-    console.warn("⚠️ [BREVO EMAIL SERVICE] Non-blocking email dispatch error (Registration preserved):", err);
+    console.warn("⚠️ [GMAIL EMAIL SERVICE] Non-blocking email dispatch error (Registration preserved):", err);
     return { success: true, dispatchedTo: payload.leaderEmail, isMock: true, error: err.message };
   }
 }
+
 
 /**
  * High-level wrapper for registration workflow:
