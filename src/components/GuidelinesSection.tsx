@@ -123,20 +123,12 @@ export function GuidelinesSection() {
                   transition={{ duration: 0.5, delay: index * 0.04 }}
                   className="w-full"
                 >
-                  <div className="w-full h-full p-4 sm:p-5 rounded-2xl transition-all duration-300 backdrop-blur-xl bg-[#070e1c]/45 hover:bg-[#091224]/60 border border-slate-700/40 hover:border-slate-500/50 shadow-[0_6px_24px_rgba(0,0,0,0.3)] hover:-translate-y-1 group flex items-start sm:items-center gap-3.5 sm:gap-5">
-                    {/* NUMBER */}
-                    <span className="font-serif text-base sm:text-lg text-slate-300/90 font-normal tracking-wide shrink-0 pt-0.5 sm:pt-0">
-                      {item.id}
-                    </span>
-
-                    {/* THIN VERTICAL DIVIDER */}
-                    <div className="w-[1px] h-5 bg-slate-700/70 shrink-0 self-center" />
-
+                  <div className="w-full h-full p-4 sm:p-5 rounded-2xl transition-all duration-300 backdrop-blur-xl bg-[#070e1c]/45 hover:bg-[#091224]/60 border border-slate-700/40 hover:border-slate-500/50 shadow-[0_6px_24px_rgba(0,0,0,0.3)] hover:-translate-y-1 group flex items-center gap-3.5 sm:gap-4">
                     {/* MONOCHROME LINE ICON */}
                     <IconComponent className="w-5 h-5 text-slate-300/90 group-hover:text-white transition-colors shrink-0 stroke-[1.75] self-center" />
 
                     {/* TEXT CONTENT */}
-                    <p className="text-xs sm:text-sm font-normal text-slate-200 group-hover:text-white transition-colors leading-relaxed font-sans flex-1">
+                    <p className="text-xs sm:text-sm font-normal text-slate-200 group-hover:text-white transition-colors leading-relaxed font-sans flex-1 self-center">
                       {item.text}
                     </p>
                   </div>

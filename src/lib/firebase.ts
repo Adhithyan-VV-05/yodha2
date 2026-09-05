@@ -123,18 +123,71 @@ export interface UserSessionData {
   inactiveDurationSeconds: number;
   isOnline: boolean;
   isTabActive: boolean;
-  deviceType: string;
+  deviceType: "Mobile" | "Tablet" | "Desktop";
   screenResolution: string;
+  viewportResolution: string;
+  pixelRatio: number;
+  orientation: string;
   userAgent: string;
   createdAt: any;
   lastActive: any;
 }
 
 /**
- * 1. AUTOMATIC REALTIME SITE VISIT & ACTIVE TIME TRACKER
+ * Enhanced Screen & Display Device Type Detector
+ * Evaluates screen width, orientation, device pixel ratio, and user-agent string
+ */
+export function getDeviceTypeFromScreen(): {
+  deviceType: "Mobile" | "Tablet" | "Desktop";
+  screenResolution: string;
+  viewportResolution: string;
+  pixelRatio: number;
+  orientation: string;
+} {
+  if (typeof window === "undefined") {
+    return {
+      deviceType: "Desktop",
+      screenResolution: "0x0",
+      viewportResolution: "0x0",
+      pixelRatio: 1,
+      orientation: "unknown",
+    };
+  }
+
+  const width = window.innerWidth || (typeof screen !== "undefined" ? screen.width : 1024);
+  const userAgent = navigator.userAgent;
+  const isMobileUA = /Android|iPhone|iPod/i.test(userAgent);
+  const isTabletUA = /iPad|Android(?!.*Mobile)/i.test(userAgent);
+
+  let deviceType: "Mobile" | "Tablet" | "Desktop" = "Desktop";
+  if (isMobileUA || width < 640) {
+    deviceType = "Mobile";
+  } else if (isTabletUA || (width >= 640 && width <= 1024)) {
+    deviceType = "Tablet";
+  } else {
+    deviceType = "Desktop";
+  }
+
+  const screenRes = typeof screen !== "undefined" ? `${screen.width}x${screen.height}` : `${window.innerWidth}x${window.innerHeight}`;
+  const viewportRes = `${window.innerWidth}x${window.innerHeight}`;
+  const pixelRatio = window.devicePixelRatio || 1;
+  const orientation = window.innerHeight > window.innerWidth ? "Portrait" : "Landscape";
+
+  return {
+    deviceType,
+    screenResolution: screenRes,
+    viewportResolution: viewportRes,
+    pixelRatio,
+    orientation,
+  };
+}
+
+/**
+ * AUTOMATIC REALTIME SITE VISIT & ACTIVE TIME TRACKER
  * - Tracks exact ACTIVE focus time spent on website.
- * - Tab switches, window blur, or hidden tabs PAUSE active time accumulation automatically.
- * - Syncs realtime state to Firestore for live external dashboard monitoring.
+ * - Increments `activeLiveUsers` (+1) when user is actively viewing/focused on tab.
+ * - Decrements `activeLiveUsers` (-1) when user switches tabs, minimizes window, or exits.
+ * - Syncs starting time, ending time, active duration, and screen metrics to Firestore `user_sessions`.
  */
 export function trackUserSession(): () => void {
   if (typeof window === "undefined") return () => {};
@@ -147,12 +200,12 @@ export function trackUserSession(): () => void {
   const dayName = now.toLocaleDateString("en-US", { weekday: "long" });
   const startTimeReadable = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const deviceType = isMobile ? "Mobile" : "Desktop";
-  const screenResolution = `${window.innerWidth}x${window.innerHeight}`;
-
+  const screenMetrics = getDeviceTypeFromScreen();
   let accumulatedActiveMs = 0;
-  let activePeriodStart: number | null = document.visibilityState === "visible" && document.hasFocus() ? Date.now() : null;
+
+  const initialIsActive = document.visibilityState === "visible" && document.hasFocus();
+  let activePeriodStart: number | null = initialIsActive ? Date.now() : null;
+  let isCurrentlyCountedActive = initialIsActive;
 
   const getActiveSeconds = (): number => {
     let totalMs = accumulatedActiveMs;
@@ -172,7 +225,7 @@ export function trackUserSession(): () => void {
     statsRef,
     {
       totalVisits: increment(1),
-      activeLiveUsers: increment(1),
+      activeLiveUsers: initialIsActive ? increment(1) : increment(0),
       lastVisitTime: serverTimestamp(),
       lastVisitDate: dateStr,
     },
@@ -181,7 +234,6 @@ export function trackUserSession(): () => void {
 
   // 2. Initialize session document in `user_sessions`
   const sessionRef = doc(db, "user_sessions", sessionId);
-  const isCurrentlyActive = document.visibilityState === "visible" && document.hasFocus();
 
   const initialData: Record<string, any> = {
     sessionId,
@@ -195,9 +247,12 @@ export function trackUserSession(): () => void {
     totalDurationSeconds: 0,
     inactiveDurationSeconds: 0,
     isOnline: true,
-    isTabActive: isCurrentlyActive,
-    deviceType,
-    screenResolution,
+    isTabActive: initialIsActive,
+    deviceType: screenMetrics.deviceType,
+    screenResolution: screenMetrics.screenResolution,
+    viewportResolution: screenMetrics.viewportResolution,
+    pixelRatio: screenMetrics.pixelRatio,
+    orientation: screenMetrics.orientation,
     userAgent: navigator.userAgent,
     createdAt: serverTimestamp(),
     lastActive: serverTimestamp(),
@@ -207,7 +262,7 @@ export function trackUserSession(): () => void {
 
   let lastActiveSecsSaved = 0;
 
-  // Sync session state to Firestore
+  // Sync session state & duration metrics to Firestore
   const syncSessionToFirestore = (isEnding = false, isTabActiveState?: boolean) => {
     const activeSecs = getActiveSeconds();
     const totalSecs = getTotalSeconds();
@@ -242,7 +297,7 @@ export function trackUserSession(): () => void {
     }).catch(() => {});
   };
 
-  // Event handlers for visibility change and focus/blur
+  // Event handler for tab visibility change, window focus, and window blur
   const handleVisibilityOrFocusChange = () => {
     const isVisibleAndFocused = document.visibilityState === "visible" && document.hasFocus();
 
@@ -251,11 +306,31 @@ export function trackUserSession(): () => void {
       if (activePeriodStart === null) {
         activePeriodStart = Date.now();
       }
+
+      // Increment activeLiveUsers (+1) if user wasn't previously counted as active
+      if (!isCurrentlyCountedActive) {
+        isCurrentlyCountedActive = true;
+        setDoc(
+          statsRef,
+          { activeLiveUsers: increment(1) },
+          { merge: true }
+        ).catch(() => {});
+      }
     } else {
       // User switched AWAY from tab - pause active clock & record accumulated time
       if (activePeriodStart !== null) {
         accumulatedActiveMs += Date.now() - activePeriodStart;
         activePeriodStart = null;
+      }
+
+      // Decrement activeLiveUsers (-1) when tab loses focus or becomes hidden
+      if (isCurrentlyCountedActive) {
+        isCurrentlyCountedActive = false;
+        setDoc(
+          statsRef,
+          { activeLiveUsers: increment(-1) },
+          { merge: true }
+        ).catch(() => {});
       }
     }
 
@@ -284,12 +359,15 @@ export function trackUserSession(): () => void {
 
     syncSessionToFirestore(true, false);
 
-    // Decrement active live users counter
-    setDoc(
-      statsRef,
-      { activeLiveUsers: increment(-1) },
-      { merge: true }
-    ).catch(() => {});
+    // Decrement active live users counter if user was currently active
+    if (isCurrentlyCountedActive) {
+      isCurrentlyCountedActive = false;
+      setDoc(
+        statsRef,
+        { activeLiveUsers: increment(-1) },
+        { merge: true }
+      ).catch(() => {});
+    }
   };
 
   window.addEventListener("beforeunload", handleUnload);
@@ -555,6 +633,7 @@ export async function saveTeamToFirebase(
         dayOfWeek: dayName,
         leaderName: data.leader.fullName,
         leaderEmail: data.leader.email,
+        pptLink: data.pptLink || null,
         warriorReferralCode,
         usedReferralCode: usedCode || null,
         submittedAt: now.toISOString(),
