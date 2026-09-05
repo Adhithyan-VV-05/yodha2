@@ -63,7 +63,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
   useEffect(() => {
     const cycleTimer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % phrases.length);
-    }, 2500);
+    },3000);
     return () => clearInterval(cycleTimer);
   }, [phrases.length]);
 
@@ -207,7 +207,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
       <div className="block sm:hidden relative z-20 w-full pt-12">
         
         {/* HEADING SECTION: CYCLING STACKED PHRASE + UNDERLINE ATTACHED RIGHT UNDER HEADING */}
-        <div className="pl-[25vw] flex flex-col items-start space-y-3">
+        <div className="pl-[5vw] flex flex-col items-start space-y-3">
           <div className="h-36 flex flex-col justify-center">
             <AnimatePresence mode="wait">
               <motion.div
