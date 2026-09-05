@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Lock, Sparkles } from "lucide-react";
+import { Lock } from "lucide-react";
 import { CARD_BACKGROUNDS } from "../data/cardBackgrounds";
 
 export function RiddleTeaserSection() {
@@ -43,7 +43,6 @@ export function RiddleTeaserSection() {
 
           <h3 className="text-lg sm:text-2xl font-black text-white mb-2 flex items-center gap-2">
             <span>Solve the Riddle & Avail 80% Discount on Selection of Your Team!</span>
-            <Sparkles className="w-5 h-5 text-blue-300 shrink-0 hidden sm:inline" />
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5 max-w-4xl">
             The official Yodha 2.0 AI riddle challenge will be unlocked soon. Solve it correctly to claim an exclusive <strong className="text-white font-bold">80% discount</strong> on your team selection fees!

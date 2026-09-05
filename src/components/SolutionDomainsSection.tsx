@@ -9,7 +9,6 @@ import {
   Leaf,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   CheckCircle2,
   X,
   Pointer,
@@ -503,7 +502,6 @@ export function SolutionDomainsSection() {
               </p>
 
               <h4 className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-400" />
                 <span>Key Capabilities & Impact</span>
               </h4>
 

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sparkles,
   Lightbulb,
   Calendar,
   Trophy,
@@ -247,7 +246,6 @@ export function HeroCommandCenter({ onOpenRegister }: HeroCommandCenterProps) {
               {/* Track Switcher Bar */}
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-sky-400" />
                   AI Challenge Generator
                 </span>
 

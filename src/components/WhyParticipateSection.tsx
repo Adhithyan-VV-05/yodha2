@@ -7,7 +7,6 @@ import {
   Users,
   Network,
   Award,
-  Sparkles,
   CheckCircle2,
   ChevronRight,
   ShieldCheck,
@@ -317,7 +316,6 @@ export function WhyParticipateSection() {
                 {/* Bottom Footer Info */}
                 <div className="relative z-10 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-xs font-mono text-slate-400 gap-2">
                   <div className="flex items-center gap-2">
-                    <Sparkles className={`w-4 h-4 ${current.accentColor}`} />
                     <span>YODHA 2.0 National Hackathon Standard</span>
                   </div>
                   <span className="text-slate-300 font-bold">

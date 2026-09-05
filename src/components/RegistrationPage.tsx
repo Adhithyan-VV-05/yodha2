@@ -29,10 +29,10 @@ export function RegistrationPage({ onBack, selectedTrack }: RegistrationPageProp
       <div className="relative z-30 max-w-7xl mx-auto w-full px-4 sm:px-8 pt-6 sm:pt-8 pb-2">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-slate-950/90 border border-blue-500/50 text-blue-300 hover:text-white hover:border-blue-400 font-mono text-xs font-bold uppercase tracking-wider backdrop-blur-2xl transition-all cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-105 active:scale-95"
+          aria-label="Back"
+          className="inline-flex items-center justify-center p-3 rounded-full bg-slate-950/90 border border-blue-500/50 text-blue-300 hover:text-white hover:border-blue-400 backdrop-blur-2xl transition-all cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-105 active:scale-95"
         >
-          <ArrowLeft className="w-4 h-4 text-blue-400" />
-          <span>Back to Main Portal</span>
+          <ArrowLeft className="w-5 h-5 text-blue-400" />
         </button>
       </div>
 

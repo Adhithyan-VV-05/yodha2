@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Shield } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 import { YodhaTitleBanner } from "./YodhaTitleBanner";
 
 interface ClosingCTAProps {
@@ -44,13 +44,12 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
             onClick={() => onOpenRegister()}
             className="mt-8 px-10 py-4 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-600 text-white font-mono font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:brightness-115 hover:scale-105 transition-all cursor-pointer relative z-30 pointer-events-auto"
           >
-            <Sparkles className="w-4 h-4 text-white" />
             <span>REGISTER TODAY</span>
             <ArrowRight className="w-5 h-5 text-white" />
           </button>
 
           <span className="text-xs font-mono text-slate-400 mt-6 relative z-20">
-            Jyothi Engineering College (Autonomous), Cheruthuruthy, Thrissur • <a href="mailto:yodha@jecc.ac.in" className="text-blue-400 underline hover:text-blue-300">yodha@jecc.ac.in</a> • <strong className="text-white">yodha.aidajecc.in</strong>
+            <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 underline">Jyothi Engineering College (Autonomous)</a>, Cheruthuruthy • <a href="mailto:yodha@jecc.ac.in" className="text-blue-400 underline hover:text-blue-300">yodha@jecc.ac.in</a> • <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="text-white underline font-bold">aidajecc.in</a>
           </span>
 
         </div>

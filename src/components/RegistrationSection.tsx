@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, Sparkles, ChevronRight, Search, Check, Copy, Gift } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
@@ -72,8 +72,8 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
   const [generatedReferralCode, setGeneratedReferralCode] = useState("");
   const [copiedReferralCode, setCopiedReferralCode] = useState(false);
 
-  // Step 4 Payment Confirmation State
-  const [isConfirmedForPayment, setIsConfirmedForPayment] = useState(false);
+  // Referral Info Toggle State
+  const [showReferralInfo, setShowReferralInfo] = useState(false);
 
   // Validate Entered Warrior Referral Code on Click of Verify Logo/Button
   const handleVerifyReferralCode = async (codeVal: string) => {
@@ -513,7 +513,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1.5 font-bold">Team Size (Min 2, Max 4) *</label>
+                    <label className="block text-xs font-mono text-slate-300 mb-1.5 font-bold">Team Size *</label>
                     <CyberDropdown
                       options={[
                         { value: 2, label: "2 Members", badge: "DUO" },
@@ -526,12 +526,47 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </div>
                 </div>
 
-                {/* WARRIOR REFERRAL CODE FIELD */}
+                {/* WARRIOR REFERRAL CODE FIELD WITH (i) INFO BUTTON */}
                 <div>
-                  <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold mb-1.5">
-                    <Gift className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Warrior Referral Code (Optional)</span>
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
+                      <Gift className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Warrior Referral Code (Optional)</span>
+                    </label>
+
+                    {/* CIRCULAR (i) INFO BUTTON */}
+                    <button
+                      type="button"
+                      onClick={() => setShowReferralInfo(!showReferralInfo)}
+                      className="p-1 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center gap-1 text-[11px] font-mono cursor-pointer"
+                      title="Why use a referral code?"
+                    >
+                      <Info className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="text-[10px] font-bold">Why refer?</span>
+                    </button>
+                  </div>
+
+                  {/* EXPANDABLE REFERRAL BENEFIT BRIEF */}
+                  {showReferralInfo && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mb-3 p-3.5 rounded-2xl bg-blue-950/80 border border-blue-400/40 text-xs font-mono text-blue-200 space-y-1.5 leading-relaxed shadow-lg"
+                    >
+                      <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                        <Gift className="w-4 h-4 text-amber-400" />
+                        <span>Why enter a Warrior Referral Code?</span>
+                      </div>
+                      <p className="text-[11px] text-slate-200">
+                        • <strong>Fee Discount:</strong> Shortlisted teams using a valid Warrior Referral Code get an exclusive discount on their final registration fee upon selection.
+                      </p>
+                      <p className="text-[11px] text-slate-200">
+                        • <strong>Bonus Swag & Rewards:</strong> Gives your team higher eligibility for special innovation gifts, mentor support packs, and ambassador perks!
+                      </p>
+                    </motion.div>
+                  )}
+
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
                     <input
                       type="text"
@@ -570,7 +605,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
                     <div>
                       <label className="text-xs font-mono text-blue-300 font-bold uppercase tracking-wider flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-blue-400" />
                         <span>SELECT YOUR PROBLEM STATEMENTS</span>
                       </label>
                     </div>
@@ -854,44 +888,30 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                 <div className="pt-4 flex justify-between gap-4 flex-wrap">
                   <button
                     type="button"
-                    onClick={() => {
-                      setIsConfirmedForPayment(false);
-                      setCurrentStep(3);
-                    }}
-                    className="px-6 py-3 rounded-full bg-slate-900 border border-slate-700 text-slate-300 text-xs font-mono font-bold uppercase cursor-pointer"
+                    onClick={() => setCurrentStep(3)}
+                    className="px-6 py-3 rounded-full bg-slate-900 border border-slate-700 text-slate-300 text-xs font-mono font-bold uppercase cursor-pointer hover:bg-slate-800"
                   >
                     BACK
                   </button>
 
-                  {!isConfirmedForPayment ? (
-                    <button
-                      type="button"
-                      onClick={() => setIsConfirmedForPayment(true)}
-                      className="px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:scale-105 transition-all cursor-pointer"
-                    >
-                      <span>CONFIRM DETAILS</span>
-                      <ChevronRight className="w-4 h-4 text-white" />
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleSubmitRegistration}
-                      disabled={status === "submitting"}
-                      className="px-9 py-4 rounded-full bg-gradient-to-r from-emerald-600 via-blue-600 to-sky-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2.5 shadow-[0_0_30px_rgba(52,211,153,0.5)] hover:scale-105 transition-all cursor-pointer animate-pulse"
-                    >
-                      {status === "submitting" ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin text-white" />
-                          <span>PROCESSING PAYMENT & REGISTRATION...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>PROCEED TO PAY & SUBMIT</span>
-                          <ArrowRight className="w-4 h-4 text-white" />
-                        </>
-                      )}
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={handleSubmitRegistration}
+                    disabled={status === "submitting"}
+                    className="px-9 py-4 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-600 text-white font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2.5 shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-105 transition-all cursor-pointer"
+                  >
+                    {status === "submitting" ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span>SUBMITTING REGISTRATION...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>SUBMIT REGISTRATION</span>
+                        <ArrowRight className="w-4 h-4 text-white" />
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
             )}

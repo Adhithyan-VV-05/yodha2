@@ -45,9 +45,9 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
       {/* MAIN IMPACT HEADLINE & BRIEF */}
       <div className="relative z-20 max-w-3xl my-auto space-y-4 py-4">
         <motion.h1
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
           className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-[1.05] font-heading"
         >
           RISE AS <span className="text-blue-600 font-black">WARRIORS</span>, <br />
@@ -58,14 +58,14 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="w-10 h-1 bg-blue-600 rounded-full origin-left"
+          transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+          className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full origin-left shadow-[0_0_10px_rgba(59,130,246,0.6)]"
         />
 
         <motion.p
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          transition={{ duration: 0.55, delay: 0.5 }}
           className="text-sm sm:text-lg text-slate-800 max-w-xl font-medium leading-relaxed font-sans"
         >
           An autonomous innovation{" "}
@@ -77,9 +77,9 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
         {/* 3 STAT CARDS PLACED JUST ABOVE THE TIMER */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.55 }}
+          transition={{ duration: 0.55, delay: 0.6 }}
           className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-xl pt-2"
         >
           {/* CARD 1 */}
@@ -111,7 +111,12 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
         </motion.div>
 
         {/* COUNTDOWN + WATCH TRAILER + LOCATION DECK */}
-        <div className="flex flex-wrap items-center gap-4 pt-1">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.7 }}
+          className="flex flex-wrap items-center gap-4 pt-1"
+        >
           
           {/* MINIMAL COUNTDOWN BOX */}
           <div className="p-3.5 rounded-2xl bg-[#08112d]/95 border border-blue-500/40 backdrop-blur-2xl flex flex-col space-y-1.5 shadow-md">
@@ -171,7 +176,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             </div>
           </div>
 
-        </div>
+        </motion.div>
       </div>
 
       {/* BOTTOM DECK: SHORTENED MINIMAL FEATURE DOCK WITH CENTERED SEPARATING LINES */}

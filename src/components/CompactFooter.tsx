@@ -37,7 +37,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
               <span className="text-blue-400 font-bold">2.0</span>
             </h4>
             <p className="text-[10px] font-mono text-blue-300/80 uppercase tracking-widest">
-              Warriors of AI • Dept of AD, JECC
+              Warriors of AI • <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white underline">Dept of AD (AIDA)</a>, <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white underline">JECC</a>
             </p>
           </div>
         </div>
@@ -68,7 +68,25 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
         </nav>
 
         {/* SOCIAL & BACK TO TOP */}
-        <div className="flex items-center gap-3.5 text-xs font-mono text-slate-400">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-slate-400">
+          <a
+            href="https://aidajecc.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-blue-300 transition-colors text-blue-400 font-bold"
+          >
+            AIDA Portal
+          </a>
+          <span className="text-slate-600">•</span>
+          <a
+            href="https://www.jecc.ac.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-blue-300 transition-colors text-blue-400 font-bold"
+          >
+            JECC Campus
+          </a>
+          <span className="text-slate-600">•</span>
           <a
             href="https://www.instagram.com/yodha_hackathon.official?igsh=cmxiNGs2c2hiMDdy"
             target="_blank"

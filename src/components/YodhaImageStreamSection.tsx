@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, Camera, Award, Users } from "lucide-react";
+import { Camera, Award, Users } from "lucide-react";
 
 // Import all 20 past hackathon photographs
 import img1 from "../assets/carousel/1.webp";
@@ -51,7 +51,6 @@ export function YodhaImageStreamSection() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-950/80 border border-blue-500/40 text-blue-300 font-mono text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-lg mb-4"
         >
-          <Sparkles className="w-3.5 h-3.5 text-blue-400" />
           <span>THE EXPERIENCE</span>
         </motion.div>
 

@@ -1,4 +1,4 @@
-import { Sparkles, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { YodhaImage } from "./YodhaImage";
 
 interface TrophyVisualProps {
@@ -42,10 +42,6 @@ export function TrophyVisual({ rank, className = "" }: TrophyVisualProps) {
           className="w-full h-full object-contain filter brightness-105 contrast-105"
         />
 
-        {/* Sparkle Icon */}
-        <div className="absolute -top-2 -right-2 text-amber-300">
-          <Sparkles className="w-6 h-6 filter drop-shadow-[0_0_10px_rgba(245,158,11,0.9)]" />
-        </div>
       </div>
 
       {/* Badge Text */}
