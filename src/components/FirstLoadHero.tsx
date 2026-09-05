@@ -49,11 +49,11 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 max-sm:text-white uppercase leading-[1.05] font-heading"
+          className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-[1.05] font-heading"
         >
-          RISE AS <span className="text-blue-600 max-sm:text-sky-400 font-black">WARRIORS</span>, <br />
-          THINK AS <span className="text-blue-600 max-sm:text-sky-400 font-black">INNOVATORS</span>, <br />
-          BUILD FOR <span className="text-blue-600 max-sm:text-sky-400 font-black">HUMANITY</span>.
+          RISE AS <span className="text-blue-600 font-black">WARRIORS</span>, <br />
+          THINK AS <span className="text-blue-600 font-black">INNOVATORS</span>, <br />
+          BUILD FOR <span className="text-blue-600 font-black">HUMANITY</span>.
         </motion.h1>
 
         <motion.div
@@ -63,16 +63,16 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full origin-left shadow-[0_0_10px_rgba(59,130,246,0.6)]"
         />
 
-        <div className="max-sm:border-l-2 max-sm:border-blue-400 max-sm:pl-3">
+        <div className="border-l-2 border-blue-500 pl-3 sm:border-l-0 sm:pl-0">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.5 }}
-            className="text-xs sm:text-sm lg:text-base text-slate-900 max-sm:text-slate-200 font-semibold max-w-xl leading-relaxed font-sans"
+            className="text-xs sm:text-sm lg:text-base text-slate-950 font-semibold max-w-xl leading-relaxed font-sans"
           >
-            A battlefield for <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">bold ideas</strong>,<br className="hidden sm:inline" />{" "}
-            where technology meets <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">purpose</strong><br />
-            and <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">impact</strong>.
+            A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br className="hidden sm:inline" />{" "}
+            where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong><br />
+            and <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
           </motion.p>
         </div>
 
