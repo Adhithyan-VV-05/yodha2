@@ -49,11 +49,11 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-[1.05] font-heading"
+          className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 max-sm:text-white uppercase leading-[1.05] font-heading"
         >
-          RISE AS <span className="text-blue-600 font-black">WARRIORS</span>, <br />
-          THINK AS <span className="text-blue-600 font-black">INNOVATORS</span>, <br />
-          BUILD FOR <span className="text-blue-600 font-black">HUMANITY</span>.
+          RISE AS <span className="text-blue-600 max-sm:text-sky-400 font-black">WARRIORS</span>, <br />
+          THINK AS <span className="text-blue-600 max-sm:text-sky-400 font-black">INNOVATORS</span>, <br />
+          BUILD FOR <span className="text-blue-600 max-sm:text-sky-400 font-black">HUMANITY</span>.
         </motion.h1>
 
         <motion.div
@@ -63,15 +63,18 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full origin-left shadow-[0_0_10px_rgba(59,130,246,0.6)]"
         />
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.5 }}
-          className="text-xs sm:text-sm lg:text-base text-slate-900 font-semibold max-w-xl leading-relaxed font-sans"
-        >
-          A <strong className="text-blue-600 font-black">battlefield</strong> for <strong className="text-slate-950 font-black">bold ideas</strong>, where <strong className="text-slate-950 font-black">technology</strong> finds <span className="text-blue-600 font-bold">purpose</span><br className="hidden sm:inline" />{" "}
-          and <span className="text-blue-600 font-extrabold">innovation</span> leaves an <strong className="text-blue-600 font-black">impact</strong>.
-        </motion.p>
+        <div className="max-sm:border-l-2 max-sm:border-blue-400 max-sm:pl-3">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.5 }}
+            className="text-xs sm:text-sm lg:text-base text-slate-900 max-sm:text-slate-200 font-semibold max-w-xl leading-relaxed font-sans"
+          >
+            A battlefield for <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">bold ideas</strong>,<br className="hidden sm:inline" />{" "}
+            where technology meets <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">purpose</strong><br />
+            and <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">impact</strong>.
+          </motion.p>
+        </div>
 
         {/* 3 STAT CARDS PLACED JUST ABOVE THE TIMER */}
         <motion.div
@@ -81,29 +84,29 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-xl pt-2"
         >
           {/* CARD 1 */}
-          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <Clock className="w-4 h-4 text-blue-600 shrink-0" />
+          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 max-sm:bg-blue-950/80 border border-blue-200 max-sm:border-blue-500/40 backdrop-blur-md flex items-center gap-2 shadow-sm">
+            <Clock className="w-4 h-4 text-blue-600 max-sm:text-sky-400 shrink-0" />
             <div className="flex flex-col text-left">
-              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">48 HOURS</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">NON-STOP</span>
+              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950 max-sm:text-white">48 HOURS</span>
+              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 max-sm:text-blue-300 font-bold uppercase hidden sm:block">NON-STOP</span>
             </div>
           </div>
 
           {/* CARD 2 */}
-          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <Code className="w-4 h-4 text-blue-600 shrink-0" />
+          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 max-sm:bg-blue-950/80 border border-blue-200 max-sm:border-blue-500/40 backdrop-blur-md flex items-center gap-2 shadow-sm">
+            <Code className="w-4 h-4 text-blue-600 max-sm:text-sky-400 shrink-0" />
             <div className="flex flex-col text-left">
-              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">16 PROBLEMS</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">REAL WORLD</span>
+              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950 max-sm:text-white">16 PROBLEMS</span>
+              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 max-sm:text-blue-300 font-bold uppercase hidden sm:block">REAL WORLD</span>
             </div>
           </div>
 
           {/* CARD 3 */}
-          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <Target className="w-4 h-4 text-blue-600 shrink-0" />
+          <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 max-sm:bg-blue-950/80 border border-blue-200 max-sm:border-blue-500/40 backdrop-blur-md flex items-center gap-2 shadow-sm">
+            <Target className="w-4 h-4 text-blue-600 max-sm:text-sky-400 shrink-0" />
             <div className="flex flex-col text-left">
-              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">1 MISSION</span>
-              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">AI IMPACT</span>
+              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950 max-sm:text-white">CREATE IMPACT</span>
+              <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 max-sm:text-blue-300 font-bold uppercase hidden sm:block">AI MISSION</span>
             </div>
           </div>
         </motion.div>
