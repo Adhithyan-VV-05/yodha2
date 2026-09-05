@@ -41,10 +41,10 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen pt-12 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
+    <section className="relative w-full min-h-screen pt-10 sm:pt-20 lg:pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
       
       {/* MAIN IMPACT HEADLINE & BRIEF */}
-      <div className="relative z-20 max-w-3xl max-sm:my-0 max-sm:pt-2 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
+      <div className="relative z-20 max-w-3xl max-sm:my-0 max-sm:pt-1 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
         <motion.h1
           initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -67,11 +67,10 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.5 }}
-          className="text-base sm:text-xl text-slate-800 max-sm:text-slate-100 font-medium leading-snug sm:leading-relaxed font-sans"
+          className="text-xs sm:text-sm lg:text-base text-slate-900 font-semibold max-w-xl leading-relaxed font-sans"
         >
-          A <strong className="text-blue-600 max-sm:text-blue-400 font-black">battlefield</strong> for <strong className="text-slate-950 max-sm:text-white font-extrabold">bold ideas</strong>,<br />
-          where <strong className="text-slate-950 max-sm:text-white font-black">technology</strong> finds <span className="text-blue-600 max-sm:text-sky-400 font-bold">purpose</span> and <span className="text-blue-600 max-sm:text-blue-400 font-extrabold">innovation</span><br />
-          leaves an <strong className="text-blue-600 max-sm:text-cyan-400 font-black">impact</strong>.
+          A <strong className="text-blue-600 font-black">battlefield</strong> for <strong className="text-slate-950 font-black">bold ideas</strong>, where <strong className="text-slate-950 font-black">technology</strong> finds <span className="text-blue-600 font-bold">purpose</span><br className="hidden sm:inline" />{" "}
+          and <span className="text-blue-600 font-extrabold">innovation</span> leaves an <strong className="text-blue-600 font-black">impact</strong>.
         </motion.p>
 
         {/* 3 STAT CARDS PLACED JUST ABOVE THE TIMER */}
