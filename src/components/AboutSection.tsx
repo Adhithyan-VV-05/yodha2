@@ -67,26 +67,30 @@ export function AboutSection() {
 
       </div>
 
-      {/* PANEL 2: INSTITUTION & DEPT OF AI & DS */}
+      {/* PANEL 2: INSTITUTION & DEPT OF AI & DS (ORGANIZING BODY) */}
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-8 border-t border-slate-300">
         
         <div className="lg:col-span-6 flex flex-col justify-center text-center lg:text-left space-y-4">
           <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">ORGANIZING BODY</span>
           <h3 className="text-2xl sm:text-4xl font-black text-slate-950 font-heading">
-            Department of AI & Data Science
+            <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline decoration-blue-500/50 transition-colors">
+              Department of AI & Data Science (AIDA)
+            </a>
           </h3>
           <p className="text-sm text-slate-700 leading-relaxed font-sans">
-            The Department of Artificial Intelligence and Data Science at Jyothi Engineering College is dedicated to pioneering innovation, nurturing technical talent, and bridging academic excellence with real-world industry impact.
+            The <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">Department of Artificial Intelligence and Data Science (AIDA)</a> at <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">Jyothi Engineering College</a> is dedicated to pioneering innovation, nurturing technical talent, and bridging academic excellence with real-world industry impact.
           </p>
         </div>
 
         <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200 shadow-xl space-y-4 text-left">
           <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">HOST CAMPUS</span>
           <h4 className="text-xl font-bold text-slate-950 font-heading">
-            Jyothi Engineering College (Autonomous)
+            <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline decoration-blue-500/50 transition-colors">
+              Jyothi Engineering College (Autonomous)
+            </a>
           </h4>
           <p className="text-xs text-slate-700 leading-relaxed">
-            Cheruthuruthy, Thrissur, Kerala — A premier NAAC accredited engineering campus equipped with state-of-the-art AI labs, high-performance computing clusters, and modern innovation spaces.
+            Cheruthuruthy, Thrissur, Kerala — A premier NAAC accredited engineering campus equipped with state-of-the-art AI labs, high-performance computing clusters, and modern innovation spaces. Visit <a href="https://aidajecc.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">aidajecc.in</a> & <a href="https://www.jecc.ac.in/" target="_blank" rel="noopener noreferrer" className="text-blue-700 font-bold hover:underline">jecc.ac.in</a>.
           </p>
         </div>
 
