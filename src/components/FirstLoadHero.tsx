@@ -235,15 +235,15 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           <div className="w-14 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
         </div>
 
-        {/* SUBHEADLINE & ALL SUBSEQUENT CONTENTS PLACED BELOW */}
-        <div className="pt-[16vh] space-y-4">
-          {/* SUBHEADLINE BRIEF */}
-          <p className="text-xs text-slate-900 font-semibold leading-relaxed font-sans">
-            A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br />
-            where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
+        {/* SUBHEADLINE & ALL SUBSEQUENT CONTENTS PLACED 20VH BELOW ON MOBILE */}
+        <div className="pt-[20vh] space-y-4">
+          {/* SUBHEADLINE BRIEF BELOW 20VH - WHITE TEXT FOR MOBILE NO-BACKGROUND PORTION */}
+          <p className="text-xs text-white font-semibold leading-relaxed font-sans">
+            A battlefield for <strong className="text-blue-400 font-extrabold">bold ideas</strong>,<br />
+            where technology meets <strong className="text-blue-400 font-extrabold">purpose</strong> and <strong className="text-blue-400 font-extrabold">innovation</strong> leaves an <strong className="text-blue-400 font-extrabold">impact</strong>.
           </p>
 
-          {/* 3 STAT CARDS BELOW 60VH */}
+          {/* 3 STAT CARDS BELOW 20VH */}
           <div className="grid grid-cols-3 gap-2 w-full pt-1">
             <div className="p-2 rounded-xl bg-white/90 border border-blue-200 flex items-center gap-1.5 shadow-sm">
               <div className="w-6 h-6 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
@@ -267,7 +267,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             </div>
           </div>
 
-          {/* TIMER + TRAILER BELOW 60VH */}
+          {/* TIMER + TRAILER BELOW 20VH */}
           <div className="flex flex-wrap items-center gap-3 pt-1">
             <div className="p-3 rounded-2xl bg-[#08112d]/95 border border-blue-500/40 backdrop-blur-2xl flex flex-col space-y-1 shadow-md">
               <span className="text-[8px] font-mono font-extrabold text-blue-400 uppercase tracking-widest text-center">
@@ -311,18 +311,18 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
               <div className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md">
                 <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
               </div>
-              <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider">
+              <span className="text-xs font-mono font-black text-white uppercase tracking-wider">
                 TRAILER
               </span>
             </button>
           </div>
 
-          {/* JYOTHY LOCATION BELOW 60VH - HORIZONTALLY CENTERED ON MOBILE */}
+          {/* JYOTHY LOCATION BELOW 20VH - HORIZONTALLY CENTERED ON MOBILE WITH WHITE TEXT */}
           <div className="flex items-center justify-center text-center gap-2 pt-2 w-full mx-auto">
-            <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
-            <div className="flex flex-col text-[10px] font-mono text-slate-900 leading-tight text-center">
-              <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
-              <span className="text-[8px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
+            <MapPin className="w-5 h-5 text-blue-400 shrink-0" />
+            <div className="flex flex-col text-[10px] font-mono leading-tight text-center">
+              <span className="font-black text-white uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
+              <span className="text-[8px] text-slate-300 font-bold uppercase">DEPT. OF AI & DS</span>
             </div>
           </div>
         </div>
