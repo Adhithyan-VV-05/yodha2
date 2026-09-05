@@ -144,14 +144,13 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           </div>
         </motion.div>
 
-        {/* COUNTDOWN + WATCH TRAILER + LOCATION DECK */}
+        {/* COUNTDOWN + WATCH TRAILER DECK */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.7 }}
-          className="flex flex-wrap items-center gap-4 pt-1"
+          className="flex items-center gap-4 pt-1"
         >
-          
           {/* MINIMAL COUNTDOWN BOX */}
           <div className="p-3.5 rounded-2xl bg-[#08112d]/95 border border-blue-500/40 backdrop-blur-2xl flex flex-col space-y-1.5 shadow-md">
             <span className="text-[9px] font-mono font-extrabold text-blue-400 uppercase tracking-widest text-center">
@@ -200,19 +199,23 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
               TRAILER
             </span>
           </button>
+        </motion.div>
 
-          {/* MINIMAL LOCATION INFO - DARK "N" CIRCLE ON PC, BLUE MAP PIN ON MOBILE */}
-          <div className="flex items-center gap-2 max-w-xs text-left">
-            <div className="hidden sm:flex w-7 h-7 rounded-full bg-slate-950 text-white items-center justify-center font-mono font-bold text-[11px] shrink-0 border border-slate-800">
-              N
-            </div>
-            <MapPin className="sm:hidden w-5 h-5 text-blue-600 shrink-0" />
-            <div className="flex flex-col text-[10px] sm:text-[11px] font-mono text-slate-900 leading-tight">
-              <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
-              <span className="text-[8px] sm:text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
-            </div>
+        {/* LOCATION DECK BELOW TIMER MATCHING REFERENCE IMAGE */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.75 }}
+          className="flex items-center gap-2 pt-2 max-w-xs text-left"
+        >
+          <div className="hidden sm:flex w-7 h-7 rounded-full bg-slate-950 text-white items-center justify-center font-mono font-bold text-[11px] shrink-0 border border-slate-800">
+            N
           </div>
-
+          <MapPin className="sm:hidden w-5 h-5 text-blue-600 shrink-0" />
+          <div className="flex flex-col text-[10px] sm:text-[11px] font-mono text-slate-900 leading-tight">
+            <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
+            <span className="text-[8px] sm:text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
+          </div>
         </motion.div>
       </div>
 
