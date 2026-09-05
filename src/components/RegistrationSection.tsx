@@ -144,6 +144,23 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
     ];
 
     const currentVal = fieldType === "email" ? trimmed.toLowerCase() : trimmed;
+
+    // TEMPORARY TEST EXEMPTION for testing email (adhithyanvv2005@gmail.com / adhithyanvv200@gmail.com)
+    const isTestBypassEmail = fieldType === "email" && (
+      currentVal === "adhithyanvv2005@gmail.com" ||
+      currentVal === "adhithyanvv200@gmail.com" ||
+      currentVal.startsWith("adhithyanvv200")
+    );
+
+    if (isTestBypassEmail) {
+      setFieldErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[fieldKey];
+        return copy;
+      });
+      return;
+    }
+
     const inFormMatch = allFormFields.find(
       (f) => f.key !== fieldKey && f.type === fieldType && f.val && f.val === currentVal
     );

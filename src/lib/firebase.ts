@@ -464,7 +464,16 @@ export async function checkParticipantDuplicate(
   const normalizedEmail = email?.trim().toLowerCase();
   const normalizedPhone = phone?.trim();
 
-  if (normalizedEmail) {
+  // TEMPORARY TEST EXEMPTION: Allow test email (adhithyanvv2005@gmail.com / adhithyanvv200@gmail.com) to register multiple times for template testing
+  const isTestBypassEmail = Boolean(
+    normalizedEmail && (
+      normalizedEmail === "adhithyanvv2005@gmail.com" ||
+      normalizedEmail === "adhithyanvv200@gmail.com" ||
+      normalizedEmail.startsWith("adhithyanvv200")
+    )
+  );
+
+  if (normalizedEmail && !isTestBypassEmail) {
     try {
       // Query array-contains for allEmails
       const qEmailArray = query(collection(db, "registrations"), where("allEmails", "array-contains", normalizedEmail));
