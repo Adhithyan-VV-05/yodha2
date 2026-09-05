@@ -46,16 +46,22 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
       {/* MAIN IMPACT HEADLINE & BRIEF - CONSTRAINED MAX WIDTH TO KEEP ROCK PILLAR FULLY VISIBLE ON THE RIGHT */}
       <div className="relative z-20 max-w-xl lg:max-w-xl max-sm:my-0 max-sm:pt-1 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
         
-        {/* HEADLINE WITH LINE BREAKS ONLY AT COMMAS */}
+        {/* AWWWARDS-TIER CINEMATIC HEADLINE WITH UNBREAKABLE SINGLE-LINE SENTENCES */}
         <motion.h1
           initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 uppercase leading-[1.08] font-sans"
+          className="text-[22px] min-[360px]:text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 uppercase leading-[1.12] font-sans"
         >
-          RISE AS <span className="text-blue-600 font-serif font-black">WARRIORS</span>, <br />
-          THINK AS <span className="text-blue-600 font-serif font-black">INNOVATORS</span>, <br />
-          BUILD FOR <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
+          <span className="block whitespace-nowrap">
+            RISE AS <span className="text-blue-600 font-serif font-black">WARRIORS</span>,
+          </span>
+          <span className="block whitespace-nowrap">
+            THINK AS <span className="text-blue-600 font-serif font-black">INNOVATORS</span>,
+          </span>
+          <span className="block whitespace-nowrap">
+            BUILD FOR <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
+          </span>
         </motion.h1>
 
         {/* BLUE GRADIENT ACCENT BAR */}
