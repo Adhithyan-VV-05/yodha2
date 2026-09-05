@@ -45,17 +45,33 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
       
       {/* MAIN IMPACT HEADLINE & BRIEF - CONSTRAINED MAX WIDTH TO KEEP ROCK PILLAR FULLY VISIBLE ON THE RIGHT */}
       <div className="relative z-20 max-w-xl lg:max-w-xl max-sm:my-0 max-sm:pt-1 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
+        
+        {/* PC & MOBILE RESPONSIVE HEADLINE MATCHING REFERENCE IMAGES 1 & 2 */}
         <motion.h1
           initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 uppercase leading-[1.05] font-heading"
+          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 uppercase leading-[1.08] font-sans"
         >
-          RISE AS <span className="text-blue-600 font-black">WARRIORS</span>, <br />
-          THINK AS <span className="text-blue-600 font-black">INNOVATORS</span>, <br />
-          BUILD FOR <span className="text-blue-600 font-black">HUMANITY</span>.
+          {/* DESKTOP (PC) HEADLINE - 3 LINES (IMAGE 1) */}
+          <span className="hidden sm:inline">
+            RISE AS <span className="text-blue-600 font-serif font-black">WARRIORS</span>, <br />
+            THINK AS <span className="text-blue-600 font-serif font-black">INNOVATORS</span>, <br />
+            BUILD FOR <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
+          </span>
+
+          {/* MOBILE HEADLINE - 6 LINES (IMAGE 2) */}
+          <span className="sm:hidden">
+            RISE AS <br />
+            <span className="text-blue-600 font-serif font-black">WARRIORS</span>, <br />
+            THINK AS <br />
+            <span className="text-blue-600 font-serif font-black">INNOVATORS</span>, <br />
+            BUILD FOR <br />
+            <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
+          </span>
         </motion.h1>
 
+        {/* BLUE GRADIENT ACCENT BAR */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -63,6 +79,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full origin-left shadow-[0_0_10px_rgba(59,130,246,0.6)]"
         />
 
+        {/* SUBHEADLINE BRIEF */}
         <div>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -76,16 +93,17 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
               And <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
             </span>
 
-            {/* MOBILE VIEW: EXACT 3 LINES MATCHING MOBILE REFERENCE IMAGE 2 */}
+            {/* MOBILE VIEW: EXACT 3-LINE WRAPPING MATCHING MOBILE REFERENCE IMAGE 2 */}
             <span className="sm:hidden">
-              A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>, where technology meets<br />
+              A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br />
+              where technology meets<br />
               <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong><br />
               leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
             </span>
           </motion.p>
         </div>
 
-        {/* 3 STAT CARDS PLACED JUST ABOVE THE TIMER */}
+        {/* 3 STAT CARDS PLACED JUST ABOVE THE TIMER (WITH BLUE ICON CIRCLE BADGES MATCHING IMAGE 1 & 2) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -94,7 +112,9 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
         >
           {/* CARD 1 */}
           <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <Clock className="w-4 h-4 text-blue-600 shrink-0" />
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+            </div>
             <div className="flex flex-col text-left">
               <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">48 HOURS</span>
               <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">NON-STOP</span>
@@ -103,7 +123,9 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
           {/* CARD 2 */}
           <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <Code className="w-4 h-4 text-blue-600 shrink-0" />
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+              <Code className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+            </div>
             <div className="flex flex-col text-left">
               <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">16 PROBLEMS</span>
               <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">REAL WORLD</span>
@@ -112,7 +134,9 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
           {/* CARD 3 */}
           <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
-            <Target className="w-4 h-4 text-blue-600 shrink-0" />
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100/80 border border-blue-200/60 flex items-center justify-center shrink-0">
+              <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+            </div>
             <div className="flex flex-col text-left">
               <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">CREATE IMPACT</span>
               <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">AI MISSION</span>
@@ -177,14 +201,14 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             </span>
           </button>
 
-          {/* MINIMAL LOCATION INFO */}
+          {/* MINIMAL LOCATION INFO - DARK "N" CIRCLE ON PC, BLUE MAP PIN ON MOBILE */}
           <div className="flex items-center gap-2 max-w-xs text-left">
             <div className="hidden sm:flex w-7 h-7 rounded-full bg-slate-950 text-white items-center justify-center font-mono font-bold text-[11px] shrink-0 border border-slate-800">
               N
             </div>
-            <MapPin className="sm:hidden w-4 h-4 text-blue-600 shrink-0" />
+            <MapPin className="sm:hidden w-5 h-5 text-blue-600 shrink-0" />
             <div className="flex flex-col text-[10px] sm:text-[11px] font-mono text-slate-900 leading-tight">
-              <span className="font-black text-slate-950 uppercase">JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)</span>
+              <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
               <span className="text-[8px] sm:text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
             </div>
           </div>
