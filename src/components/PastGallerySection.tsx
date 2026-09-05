@@ -33,7 +33,7 @@ export function PastGallerySection() {
   const chainImages = [...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES];
 
   return (
-    <section id="gallery" className="py-16 sm:py-24 relative overflow-hidden bg-transparent border-t border-b border-blue-500/20 z-10 w-full text-white select-none">
+    <section id="gallery" className="py-10 sm:py-14 relative overflow-hidden bg-transparent border-t border-b border-blue-500/20 z-10 w-full text-white select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-8 text-center">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
@@ -44,14 +44,24 @@ export function PastGallerySection() {
           <Camera className="w-4 h-4 text-blue-400" />
           <span>PAST HACKATHON MOMENTS</span>
         </motion.span>
-        <motion.h2
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-sky-400 tracking-tight font-sans"
+        <motion.div
+          initial={{ opacity: 0, y: 35, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center justify-center space-y-2 text-center"
         >
-          YODHA Hackathon Highlights
-        </motion.h2>
+          <h2 className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-sky-400 tracking-tight font-sans">
+            YODHA Hackathon Highlights
+          </h2>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="h-1 w-24 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+          />
+        </motion.div>
       </div>
 
       {/* CONTINUOUS INFINITE MOVING PHOTO CAROUSEL */}

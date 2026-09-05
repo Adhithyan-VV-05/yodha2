@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, Clock, ChevronRight } from "lucide-react";
 import { TIMELINE_DAYS } from "../data/timelineData";
 import type { DayItem, ActivityItem } from "../data/timelineData";
 
@@ -67,21 +67,30 @@ export function TimelineSection() {
     <section
       ref={sectionRef}
       id="timeline"
-      className="py-16 sm:py-24 relative overflow-hidden bg-transparent text-slate-950 select-none w-full z-10"
+      className="py-10 sm:py-14 relative overflow-hidden bg-transparent text-slate-950 select-none w-full z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center justify-center space-y-8">
         
         {/* EDITORIAL SECTION HEADER IN SDG LIGHT THEME */}
         <div className="text-center space-y-3 max-w-4xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-950 tracking-tight"
+            className="flex flex-col items-center justify-center space-y-2 text-center"
           >
-            THE <span className="text-blue-600 font-extrabold">JOURNEY</span>
-          </motion.h2>
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-950 tracking-tight">
+              THE <span className="text-blue-600 font-extrabold">JOURNEY</span>
+            </h2>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-1 w-24 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+            />
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 15 }}
@@ -200,7 +209,10 @@ export function TimelineSection() {
                         <span className="text-xs font-mono font-black text-blue-600 uppercase tracking-widest">
                           {dayData.dayId}
                         </span>
-                        <Calendar className="w-4.5 h-4.5 text-blue-600" />
+                        <div className="flex items-center gap-1 text-blue-600 font-mono text-[11px] font-bold group-hover:translate-x-1 transition-transform">
+                          <span>View</span>
+                          <ChevronRight className="w-4 h-4 text-blue-600 animate-pulse" />
+                        </div>
                       </div>
                       <h4 className="text-base font-bold text-slate-950 font-heading leading-snug">
                         {dayData.subtitle}
@@ -458,9 +470,10 @@ export function TimelineSection() {
                       <button
                         type="button"
                         onClick={() => handleSelectDay(dayData)}
-                        className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-white/90 border-2 border-blue-400 text-blue-700 font-mono text-[11px] sm:text-xs font-black uppercase flex items-center justify-center shadow-[0_6px_20px_rgba(59,130,246,0.15)] hover:scale-110 active:scale-95 cursor-pointer"
+                        className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/95 border-2 border-blue-500 text-blue-700 font-mono text-[10px] sm:text-xs font-black uppercase flex flex-col items-center justify-center shadow-[0_6px_20px_rgba(59,130,246,0.25)] hover:scale-110 active:scale-95 cursor-pointer relative"
                       >
-                        DAY {dayData.id}
+                        <span>DAY {dayData.id}</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-blue-600 animate-pulse mt-0.5" />
                       </button>
                     </motion.div>
                   );

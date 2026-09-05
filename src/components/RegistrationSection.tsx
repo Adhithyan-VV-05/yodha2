@@ -458,9 +458,9 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
           </div>
         ) : (
           <div>
-            {/* STEP PROGRESS BAR (DYNAMIC TO TEAM SIZE) */}
+            {/* STEP PROGRESS BAR */}
             <div className="flex items-center justify-between mb-8 relative">
-              {(teamSize === 1 ? [1, 2, 4] : [1, 2, 3, 4]).map((stepNum, idx) => (
+              {[1, 2, 3, 4].map((stepNum, idx) => (
                 <div key={stepNum} className="flex flex-col items-center relative z-10">
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center font-mono font-bold text-xs transition-all ${
@@ -513,10 +513,9 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1.5 font-bold">Team Size *</label>
+                    <label className="block text-xs font-mono text-slate-300 mb-1.5 font-bold">Team Size (Min 2, Max 4) *</label>
                     <CyberDropdown
                       options={[
-                        { value: 1, label: "1 Participant (Solo Entry)", badge: "SOLO" },
                         { value: 2, label: "2 Members", badge: "DUO" },
                         { value: 3, label: "3 Members", badge: "TRIO" },
                         { value: 4, label: "4 Members (Full Team)", badge: "SQUAD" },
@@ -736,12 +735,11 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                         return;
                       }
                       setErrorMessage("");
-                      if (teamSize === 1) setCurrentStep(4);
-                      else setCurrentStep(3);
+                      setCurrentStep(3);
                     }}
                     className="px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2"
                   >
-                    <span>{teamSize === 1 ? "NEXT: CONFIRM" : "NEXT: TEAM MEMBERS"}</span>
+                    <span>NEXT: TEAM MEMBERS</span>
                     <ChevronRight className="w-4 h-4 text-white" />
                   </button>
                 </div>
@@ -858,7 +856,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                     type="button"
                     onClick={() => {
                       setIsConfirmedForPayment(false);
-                      setCurrentStep(teamSize === 1 ? 2 : 3);
+                      setCurrentStep(3);
                     }}
                     className="px-6 py-3 rounded-full bg-slate-900 border border-slate-700 text-slate-300 text-xs font-mono font-bold uppercase cursor-pointer"
                   >

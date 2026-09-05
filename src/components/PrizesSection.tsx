@@ -8,7 +8,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
   return (
     <section
       id="prizes"
-      className="relative w-full py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-12 z-20 select-none overflow-hidden"
+      className="relative w-full py-12 sm:py-16 px-4 sm:px-6 lg:px-12 z-20 select-none overflow-hidden"
     >
       <div className="max-w-7xl mx-auto relative">
         {/* MAIN CONTAINER */}
@@ -25,15 +25,24 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
             </div>
 
             {/* MAIN CINEMATIC SERIF PRIZES TITLE */}
-            <motion.h2
-              initial={{ opacity: 0, y: 35 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            <motion.div
+              initial={{ opacity: 0, y: 35, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]"
+              className="flex flex-col items-center justify-center space-y-2 text-center"
             >
-              PRIZES
-            </motion.h2>
+              <h2 className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+                PRIZES
+              </h2>
+              <motion.div
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="h-1 w-24 bg-gradient-to-r from-amber-500 via-amber-300 to-blue-500 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.6)]"
+              />
+            </motion.div>
 
             {/* RECOGNIZING IDEAS THAT CREATE REAL IMPACT */}
             <p className="text-[11px] sm:text-xs font-mono tracking-[0.3em] text-slate-400 uppercase max-w-md mx-auto px-4">
@@ -52,13 +61,17 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
               onClick={() => onOpenRegister && onOpenRegister()}
               className="flex flex-col items-center text-center group cursor-pointer"
             >
-              <div className="relative mb-4 flex items-center justify-center">
+              <motion.div
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+                className="relative mb-4 flex items-center justify-center"
+              >
                 <img
                   src="/silver.webp"
                   alt="Second prize trophy"
-                  className="w-44 sm:w-48 lg:w-56 h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:-translate-y-2 transition-transform duration-300"
+                  className="w-44 sm:w-48 lg:w-56 h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
                 />
-              </div>
+              </motion.div>
 
               <div className="space-y-1">
                 <span className="text-xs font-serif tracking-[0.25em] text-slate-300 uppercase block font-medium">
@@ -79,13 +92,17 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
               onClick={() => onOpenRegister && onOpenRegister()}
               className="flex flex-col items-center text-center group cursor-pointer -mt-8 pb-2"
             >
-              <div className="relative mb-4 flex items-center justify-center">
+              <motion.div
+                animate={{ y: [0, -16, 0] }}
+                transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative mb-4 flex items-center justify-center"
+              >
                 <img
                   src="/gold.webp"
                   alt="First prize trophy"
-                  className="w-56 sm:w-64 lg:w-76 h-auto object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)] group-hover:-translate-y-2.5 transition-transform duration-300 scale-105"
+                  className="w-56 sm:w-64 lg:w-76 h-auto object-contain filter drop-shadow-[0_25px_45px_rgba(59,130,246,0.3)] group-hover:scale-108 transition-transform duration-300 scale-105"
                 />
-              </div>
+              </motion.div>
 
               <div className="space-y-1">
                 <span className="text-xs sm:text-sm font-serif tracking-[0.25em] text-amber-300 uppercase block font-medium">
@@ -106,13 +123,17 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
               onClick={() => onOpenRegister && onOpenRegister()}
               className="flex flex-col items-center text-center group cursor-pointer"
             >
-              <div className="relative mb-4 flex items-center justify-center">
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+                className="relative mb-4 flex items-center justify-center"
+              >
                 <img
                   src="/bronze.webp"
                   alt="Third prize trophy"
-                  className="w-44 sm:w-48 lg:w-56 h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:-translate-y-2 transition-transform duration-300"
+                  className="w-44 sm:w-48 lg:w-56 h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
                 />
-              </div>
+              </motion.div>
 
               <div className="space-y-1">
                 <span className="text-xs font-serif tracking-[0.25em] text-amber-500/90 uppercase block font-medium">
@@ -136,11 +157,16 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
               onClick={() => onOpenRegister && onOpenRegister()}
               className="flex flex-col items-center text-center active:scale-98 transition-transform"
             >
-              <img
-                src="/gold.webp"
-                alt="First prize trophy"
-                className="w-56 sm:w-64 h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.7)] mb-3"
-              />
+              <motion.div
+                animate={{ y: [0, -14, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img
+                  src="/gold.webp"
+                  alt="First prize trophy"
+                  className="w-56 sm:w-64 h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(59,130,246,0.3)] mb-3"
+                />
+              </motion.div>
               <span className="text-xs font-serif tracking-[0.25em] text-amber-300 uppercase font-medium">
                 1ST PRIZE
               </span>
@@ -158,11 +184,16 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
               onClick={() => onOpenRegister && onOpenRegister()}
               className="flex flex-col items-center text-center active:scale-98 transition-transform"
             >
-              <img
-                src="/silver.webp"
-                alt="Second prize trophy"
-                className="w-48 sm:w-52 h-auto object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.6)] mb-3"
-              />
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img
+                  src="/silver.webp"
+                  alt="Second prize trophy"
+                  className="w-48 sm:w-52 h-auto object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.6)] mb-3"
+                />
+              </motion.div>
               <span className="text-xs font-serif tracking-[0.25em] text-slate-300 uppercase font-medium">
                 2ND PRIZE
               </span>
@@ -180,11 +211,16 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
               onClick={() => onOpenRegister && onOpenRegister()}
               className="flex flex-col items-center text-center active:scale-98 transition-transform"
             >
-              <img
-                src="/bronze.webp"
-                alt="Third prize trophy"
-                className="w-48 sm:w-52 h-auto object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.6)] mb-3"
-              />
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img
+                  src="/bronze.webp"
+                  alt="Third prize trophy"
+                  className="w-48 sm:w-52 h-auto object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.6)] mb-3"
+                />
+              </motion.div>
               <span className="text-xs font-serif tracking-[0.25em] text-amber-500/90 uppercase font-medium">
                 3RD PRIZE
               </span>

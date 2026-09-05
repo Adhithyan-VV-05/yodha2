@@ -31,7 +31,7 @@ const FAQ_ITEMS: FAQItem[] = [
     id: "04",
     question: "How many members can be in a team?",
     answer:
-      "Each team must have 4 members. A total of 25 teams, with up to 100 participants, will be selected for the offline hackathon.",
+      "Teams must consist of 2 to 4 members. Solo participation is not allowed. All shortlisted teams will be selected for the 48-hour offline hackathon.",
   },
   {
     id: "05",
@@ -49,7 +49,7 @@ const FAQ_ITEMS: FAQItem[] = [
     id: "07",
     question: "How are teams selected?",
     answer:
-      "Teams first register online and submit a brief idea based on the given healthcare problem statements. The submitted ideas are evaluated by the faculty panel, and the 25 best teams are shortlisted for the 48-hour offline hackathon.",
+      "Teams first register online and submit a brief idea based on the given problem statements. The submitted ideas are evaluated by the expert panel, and shortlisted teams are invited for the 48-hour offline hackathon.",
   },
   {
     id: "08",
@@ -81,7 +81,7 @@ export function FAQSection() {
   return (
     <section
       id="faq"
-      className="relative w-full py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-12 z-20 select-none overflow-hidden"
+      className="relative w-full py-10 sm:py-14 px-4 sm:px-6 lg:px-12 z-20 select-none overflow-hidden"
     >
       <div className="max-w-7xl mx-auto relative">
         {/* DESKTOP EDITORIAL SIDEBARS (VISIBLE ON LG SCREENS ONLY) */}
@@ -123,15 +123,24 @@ export function FAQSection() {
             </div>
 
             {/* MAIN CINEMATIC SERIF FAQ TITLE */}
-            <motion.h2
-              initial={{ opacity: 0, y: 35 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            <motion.div
+              initial={{ opacity: 0, y: 35, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]"
+              className="flex flex-col items-center justify-center space-y-2 text-center"
             >
-              FAQ
-            </motion.h2>
+              <h2 className="font-serif text-6xl sm:text-8xl lg:text-9xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 py-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+                FAQ
+              </h2>
+              <motion.div
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="h-1 w-24 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+              />
+            </motion.div>
 
             {/* FIND YOUR ANSWERS HERE */}
             <p className="text-[11px] sm:text-xs font-mono tracking-[0.35em] text-slate-400 uppercase">

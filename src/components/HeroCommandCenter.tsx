@@ -107,8 +107,8 @@ const TIMELINE_HIGHLIGHTS = [
   {
     day: "PHASE 3",
     time: "STEP 03",
-    title: "Shortlisting Top 40 Teams",
-    desc: "Expert faculty & mentor panel reviews proposals and shortlists top 40 teams.",
+    title: "Shortlisting Teams",
+    desc: "Expert faculty & mentor panel reviews proposals and shortlists teams.",
     status: "normal",
   },
   {

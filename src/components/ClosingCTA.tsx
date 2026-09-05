@@ -8,7 +8,7 @@ interface ClosingCTAProps {
 
 export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
   return (
-    <section id="cta" className="py-16 sm:py-24 relative overflow-hidden bg-transparent w-full text-white select-none z-10">
+    <section id="cta" className="py-10 sm:py-14 relative overflow-hidden bg-transparent w-full text-white select-none z-10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div
           onClick={onOpenRegister}
@@ -50,7 +50,7 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
           </button>
 
           <span className="text-xs font-mono text-slate-400 mt-6 relative z-20">
-            Jyothi Engineering College (Autonomous), Cheruthuruthy, Thrissur • <strong className="text-white">yodha.aidajecc.in</strong>
+            Jyothi Engineering College (Autonomous), Cheruthuruthy, Thrissur • <a href="mailto:yodha@jecc.ac.in" className="text-blue-400 underline hover:text-blue-300">yodha@jecc.ac.in</a> • <strong className="text-white">yodha.aidajecc.in</strong>
           </span>
 
         </div>

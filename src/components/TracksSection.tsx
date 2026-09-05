@@ -10,7 +10,7 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
   const healthRoboSrc = encodeURI("/health robo.webp");
 
   return (
-    <section id="tracks" className="relative w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-slate-900 select-none z-10">
+    <section id="tracks" className="relative w-full py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-slate-900 select-none z-10">
       
       {/* 1ST HALF LIGHT THEME CONTAINER (AS IT WAS BEFORE) */}
       <div className="max-w-6xl mx-auto w-full p-6 sm:p-10 lg:p-12 rounded-3xl bg-white/90 border border-blue-200 backdrop-blur-2xl shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -41,17 +41,26 @@ export function TracksSection({ onOpenTrackPage }: TracksSectionProps) {
               <span>CORE THEME • HEALTHCARE AI INNOVATION</span>
             </span>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 35 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            <motion.div
+              initial={{ opacity: 0, y: 35, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-normal leading-snug font-heading text-slate-950 flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1"
+              className="flex flex-col items-center lg:items-start space-y-2"
             >
-              <span>THE</span>
-              <span className="text-red-600 font-black">HEALTHCARE</span>
-              <span>THEME</span>
-            </motion.h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-normal leading-snug font-heading text-slate-950 flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1">
+                <span>THE</span>
+                <span className="text-red-600 font-black">HEALTHCARE</span>
+                <span>THEME</span>
+              </h2>
+              <motion.div
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="h-1 w-24 bg-gradient-to-r from-red-600 via-rose-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(239,68,68,0.6)] origin-left"
+              />
+            </motion.div>
           </div>
 
           <p className="text-base sm:text-lg text-slate-700 max-w-xl leading-relaxed">

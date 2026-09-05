@@ -78,8 +78,8 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
             Instagram
           </a>
           <span className="text-slate-600">•</span>
-          <a href="mailto:yodha.aidajecc.in@gmail.com" className="hover:text-blue-300 transition-colors">
-            Email
+          <a href="mailto:yodha@jecc.ac.in" className="hover:text-blue-300 transition-colors">
+            yodha@jecc.ac.in
           </a>
           <span className="text-slate-600">•</span>
           <button

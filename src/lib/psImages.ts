@@ -30,7 +30,7 @@ export function getProblemStatementImage(id: number): string {
 /**
  * Preloaded map of problem statement images indexed by statement ID.
  */
-export const PS_IMAGES_MAP: Record<number, string> = Array.from({ length: 20 }, (_, i) => i + 1).reduce(
+export const PS_IMAGES_MAP: Record<number, string> = Array.from({ length: 16 }, (_, i) => i + 1).reduce(
   (acc, id) => {
     acc[id] = getProblemStatementImage(id);
     return acc;

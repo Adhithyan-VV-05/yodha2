@@ -2,21 +2,29 @@ import { motion } from "framer-motion";
 
 export function AboutSection() {
   return (
-    <section id="about" className="relative w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-slate-900 select-none z-10 space-y-16">
+    <section id="about" className="relative w-full py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-slate-900 select-none z-10 space-y-12">
       
       {/* PANEL 1: ABOUT YODHA 2.0 */}
       <div className="w-full flex flex-col justify-center items-center text-center space-y-6">
         
-        {/* HEADING (1ST HALF LIGHT THEME DARK ACCENT) */}
-        <motion.h2
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
+        <motion.div
+          initial={{ opacity: 0, y: 35, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight max-w-4xl font-heading text-slate-950"
+          className="flex flex-col items-center justify-center space-y-2 text-center"
         >
-          ABOUT THE <span className="text-blue-600 font-heading">HACKATHON</span>
-        </motion.h2>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight max-w-4xl font-heading text-slate-950">
+            ABOUT THE <span className="text-blue-600 font-heading">HACKATHON</span>
+          </h2>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="h-1 w-24 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+          />
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 25 }}

@@ -147,15 +147,24 @@ export function WhyParticipateSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-3 sm:mb-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, margin: "-50px" }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase font-heading leading-none"
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center justify-center space-y-2 text-center"
           >
-            WHY PARTICIPATE IN <span className="text-blue-400">YODHA 2.0?</span>
-          </motion.h2>
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase font-heading leading-none">
+              WHY PARTICIPATE IN <span className="text-blue-400">YODHA 2.0?</span>
+            </h2>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-1 w-24 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+            />
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 15 }}

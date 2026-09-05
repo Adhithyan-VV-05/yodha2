@@ -218,7 +218,7 @@ export function SDGSection() {
     <section
       ref={sectionRef}
       id="sdg"
-      className="py-16 sm:py-24 relative overflow-hidden bg-transparent text-slate-900 select-none w-full z-10"
+      className="py-10 sm:py-14 relative overflow-hidden bg-transparent text-slate-900 select-none w-full z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center justify-center space-y-8 sm:space-y-12">
         
@@ -226,18 +226,27 @@ export function SDGSection() {
         <div className="text-center space-y-3 max-w-4xl mx-auto">
 
 
-          <motion.h2
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 font-heading leading-[1.15]"
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center justify-center space-y-2 text-center"
           >
-            Aligning Healthcare AI with <br className="hidden sm:inline" />
-            <span className="text-blue-600 font-extrabold">
-              Global Impact
-            </span>
-          </motion.h2>
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 font-heading leading-[1.15]">
+              Aligning Healthcare AI with <br className="hidden sm:inline" />
+              <span className="text-blue-600 font-extrabold">
+                Global Impact
+              </span>
+            </h2>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-1 w-24 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+            />
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}

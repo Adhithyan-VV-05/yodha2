@@ -95,7 +95,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 border border-blue-200 backdrop-blur-md flex items-center gap-2 shadow-sm">
             <Code className="w-4 h-4 text-blue-600 shrink-0" />
             <div className="flex flex-col text-left">
-              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">20+ PROBLEMS</span>
+              <span className="text-[10px] sm:text-xs font-mono font-black text-slate-950">16 PROBLEMS</span>
               <span className="text-[8px] sm:text-[9px] font-mono text-slate-600 font-bold uppercase hidden sm:block">REAL WORLD</span>
             </div>
           </div>
