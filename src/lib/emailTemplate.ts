@@ -356,7 +356,6 @@
 
 
 
-
 export interface TeamMemberDetails {
   role: string;
   fullName: string;
@@ -384,42 +383,33 @@ export interface RegistrationEmailPayload {
 }
 
 /**
- * Generate a premium, high-impact HTML email template matching YODHA 2.0 theme.
- * Dual PC and Mobile responsive design with zero line breakages or layout overflows.
+ * Generates the YODHA 2.0 registration confirmation email.
+ * The returned string is intended to be passed to your mail provider as the HTML body.
  */
-export function generateEmailTemplate(
-  data: RegistrationEmailPayload
-): string {
+export function generateEmailTemplate(data: RegistrationEmailPayload): string {
   const websiteUrl =
     data.websiteUrl ||
-    (typeof process !== "undefined" &&
-      process.env?.NEXT_PUBLIC_WEBSITE_URL) ||
+    (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WEBSITE_URL) ||
     (typeof process !== "undefined" && process.env?.VITE_WEBSITE_URL) ||
     "https://yodha.aidajecc.in/";
 
   const contactEmail =
     data.contactEmail ||
-    (typeof process !== "undefined" &&
-      process.env?.NEXT_PUBLIC_CONTACT_EMAIL) ||
+    (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_CONTACT_EMAIL) ||
     (typeof process !== "undefined" && process.env?.VITE_CONTACT_EMAIL) ||
     "yodha@jecc.ac.in";
 
   const bannerUrl =
-    (typeof process !== "undefined" &&
-      process.env?.NEXT_PUBLIC_BANNER_URL) ||
-    (typeof process !== "undefined" &&
-      process.env?.VITE_BANNER_URL) ||
+    (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_BANNER_URL) ||
+    (typeof process !== "undefined" && process.env?.VITE_BANNER_URL) ||
     "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.webp";
 
-  /**
-   * Escape dynamic values before placing them inside HTML.
-   */
   const escapeHtml = (value: unknown): string =>
     String(value ?? "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
+      .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#039;");
 
   const e = escapeHtml;
@@ -428,500 +418,1683 @@ export function generateEmailTemplate(
   const safeContactEmail = e(contactEmail);
   const safeReferralCode = e(data.referralCode);
 
-  /**
-   * Referral URL.
-   */
-  const referralTarget = `${websiteUrl.replace(/\/+$/, "")}/register?ref=${encodeURIComponent(
-    data.referralCode
-  )}`;
+  const referralTarget =
+    `${websiteUrl.replace(/\\+$/, "")}/register?ref=${encodeURIComponent(data.referralCode)}`;
 
-  /**
-   * WhatsApp share URL.
-   */
-  const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(
-    `🚀 Join YODHA 2.0 – Warriors of AI!\n\nUse my Warrior Referral Code: ${data.referralCode}\n\nRegister your team here: ${referralTarget}`
-  )}`;
+  const whatsappShareUrl =
+    `https://wa.me/?text=${encodeURIComponent(
+      `🚀 Join YODHA 2.0 – Warriors of AI!\n\nUse my Warrior Referral Code: ${data.referralCode}\n\nRegister your team here: ${referralTarget}`
+    )}`;
 
-  /**
-   * Email share URL.
-   */
-  const emailShareUrl = `mailto:?subject=${encodeURIComponent(
-    "Invitation: Join YODHA 2.0 – Warriors of AI"
-  )}&body=${encodeURIComponent(
-    `Hey Cyber Warrior,\n\nWe are building the future at YODHA 2.0 – Warriors of AI Hackathon.\n\nUse my official Warrior Referral Code: ${data.referralCode}\n\nRegister your team here:\n${referralTarget}\n\nSee you on the leaderboard!`
-  )}`;
+  const emailShareUrl =
+    `mailto:?subject=${encodeURIComponent(
+      "Invitation: Join YODHA 2.0 – Warriors of AI"
+    )}&body=${encodeURIComponent(
+      `Hey Cyber Warrior,\n\nWe are building the future at YODHA 2.0 – Warriors of AI Hackathon.\n\nUse my official Warrior Referral Code: ${data.referralCode}\n\nRegister your team here:\n${referralTarget}\n\nSee you on the leaderboard!`
+    )}`;
 
-  /**
-   * Team members roster HTML generator.
-   */
-  const membersHtml = (data.members || [])
-    .map(
-      (member, index) => `
-        <tr>
-          <td style="padding: 0 0 10px 0;">
-            <table
-              role="presentation"
-              width="100%"
-              cellpadding="0"
-              cellspacing="0"
-              border="0"
-              style="
-                background: #091224;
-                border: 1px solid #1e2e4a;
-                border-radius: 12px;
-                width: 100%;
-              "
-            >
-              <tr>
-                <td style="padding: 14px 16px;">
-                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                    <tr>
-                      <td style="font-family: Arial, Helvetica, sans-serif;">
-                        <div style="font-size: 10px; line-height: 1.2; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 800; color: #38bdf8;">
-                          ${e(member.role || `WARRIOR ${index + 1}`)}
-                        </div>
-                        <div style="padding-top: 4px; font-size: 15px; line-height: 1.35; font-weight: 800; color: #ffffff;">
-                          ${e(member.fullName)}
-                        </div>
-                        <div style="padding-top: 6px; font-size: 12px; line-height: 1.5; color: #94a3b8; word-break: break-word;">
-                          ${member.email ? `<span style="color: #cbd5e1;">✉️ ${e(member.email)}</span>` : ""}
-                          ${member.phone ? `<span style="display: inline-block; margin-left: 8px; color: #cbd5e1;">📞 ${e(member.phone)}</span>` : ""}
-                          ${member.organization ? `<div style="padding-top: 4px; color: #94a3b8;">🏛️ ${e(member.organization)}</div>` : ""}
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      `
-    )
-    .join("");
+  const membersHtml = (data.members || []).map((m, index) => `
+    <div class="member">
+      <div class="member-number">${String(index + 1).padStart(2, "0")}</div>
+      <div>
+        <div class="member-role">${e(m.role || `Warrior ${index + 1}`)}</div>
+        <div class="member-name">${e(m.fullName)}</div>
+        <div class="member-meta">
+          ${m.email ? `✉️ ${e(m.email)}` : ""}
+          ${m.phone ? `&nbsp;&nbsp;•&nbsp;&nbsp;📞 ${e(m.phone)}` : ""}
+          ${m.organization ? `&nbsp;&nbsp;•&nbsp;&nbsp;🏛️ ${e(m.organization)}` : ""}
+        </div>
+      </div>
+    </div>
+  `).join("");
 
   return `<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="x-apple-disable-message-reformatting">
-  <meta name="color-scheme" content="dark">
-  <meta name="supported-color-schemes" content="dark">
-  <title>YODHA 2.0 — Registration Confirmed</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
 
-  <!--[if mso]>
-  <noscript>
-    <xml>
-      <o:OfficeDocumentSettings>
-        <o:AllowPNG/>
-        <o:PixelsPerInch>96</o:PixelsPerInch>
-      </o:OfficeDocumentSettings>
-    </xml>
-  </noscript>
-  <![style]>
-    td, th, div, p, a, h1, h2, h3 { font-family: Arial, sans-serif !important; }
-  <![endif]-->
+<title>YODHA 2.0 — Registration Confirmed</title>
 
-  <style>
-    /* RESET STYLES */
-    html, body {
-      margin: 0 !important;
-      padding: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      background-color: #030712 !important;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, Arial, sans-serif;
-      -webkit-text-size-adjust: 100%;
-      -ms-text-size-adjust: 100%;
-    }
+<style>
 
-    div[style*="margin: 16px 0"] { margin: 0 !important; }
-    table, td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; }
-    table { border-spacing: 0 !important; border-collapse: collapse !important; table-layout: fixed !important; margin: 0 auto !important; }
-    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; display: block; }
-    a { text-decoration: none; color: inherit; }
+* {
+  box-sizing: border-box;
+}
 
-    /* MOBILE & PC DUAL RESPONSIVE MEDIA QUERIES */
-    @media only screen and (max-width: 600px) {
-      .outer-container {
-        padding-left: 6px !important;
-        padding-right: 6px !important;
-        padding-top: 10px !important;
-        padding-bottom: 20px !important;
-      }
-      .email-card {
-        width: 100% !important;
-        max-width: 100% !important;
-        border-radius: 16px !important;
-      }
-      .content-padding {
-        padding-left: 16px !important;
-        padding-right: 16px !important;
-      }
-      .mobile-stack {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        padding-bottom: 10px !important;
-      }
-      .mobile-btn {
-        display: block !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        text-align: center !important;
-        padding: 14px 10px !important;
-        font-size: 13px !important;
-      }
-      .hero-heading {
-        font-size: 24px !important;
-        line-height: 1.25 !important;
-      }
-      .referral-code-text {
-        font-size: 22px !important;
-        letter-spacing: 2px !important;
-        word-break: break-all !important;
-      }
-      .share-col {
-        display: block !important;
-        width: 100% !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        padding-bottom: 8px !important;
-      }
-    }
-  </style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(
+      circle at 20% 0%,
+      rgba(14, 165, 233, 0.10),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 80% 100%,
+      rgba(168, 85, 247, 0.07),
+      transparent 30%
+    ),
+    #020617;
+
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  color: #e2e8f0;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+  width: 100%;
+  padding: 42px 18px 60px;
+}
+
+.email {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+
+  background:
+    linear-gradient(
+      180deg,
+      #07101e 0%,
+      #050b16 40%,
+      #030712 100%
+    );
+
+  border: 1px solid rgba(71, 85, 105, 0.35);
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.65),
+    0 0 100px rgba(14, 165, 233, 0.045);
+}
+
+/* =========================================================
+   TOP ENERGY LINE
+========================================================= */
+
+.energy-line {
+  height: 4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #22d3ee 0%,
+      #3b82f6 38%,
+      #8b5cf6 68%,
+      #f59e0b 100%
+    );
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  position: relative;
+
+  padding: 48px 46px 44px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 88% 12%,
+      rgba(56, 189, 248, 0.14),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 8% 96%,
+      rgba(99, 102, 241, 0.10),
+      transparent 28%
+    );
+}
+
+.hero::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0.17;
+
+  background-image:
+    linear-gradient(
+      rgba(56, 189, 248, 0.14) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(56, 189, 248, 0.14) 1px,
+      transparent 1px
+    );
+
+  background-size: 38px 38px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black,
+      transparent 90%
+    );
+}
+
+.hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 220px;
+  height: 220px;
+
+  right: -100px;
+  top: -100px;
+
+  border: 1px solid rgba(56, 189, 248, 0.12);
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 25px rgba(56, 189, 248, 0.025),
+    0 0 0 55px rgba(56, 189, 248, 0.015);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* badge */
+
+.confirmed {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 7px 12px;
+
+  border-radius: 999px;
+
+  background: rgba(5, 46, 37, 0.72);
+
+  border: 1px solid rgba(16, 185, 129, 0.6);
+
+  color: #6ee7b7;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+
+  text-transform: uppercase;
+}
+
+.confirmed-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #34d399;
+
+  box-shadow:
+    0 0 10px rgba(52, 211, 153, 0.8);
+}
+
+/* logo text */
+
+.brand {
+  margin-top: 26px;
+
+  font-size: 10px;
+
+  letter-spacing: 3.4px;
+
+  text-transform: uppercase;
+
+  font-weight: 900;
+
+  color: #67e8f9;
+}
+
+/* heading */
+
+.hero-title {
+  margin-top: 13px;
+
+  max-width: 580px;
+
+  font-size: 42px;
+
+  line-height: 1.08;
+
+  letter-spacing: -1.6px;
+
+  font-weight: 900;
+
+  color: #ffffff;
+}
+
+.hero-title span {
+  color: #38bdf8;
+}
+
+.hero-subtitle {
+  margin-top: 19px;
+
+  max-width: 555px;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+
+  color: #94a3b8;
+}
+
+.hero-subtitle strong {
+  color: #f8fafc;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+  padding: 0 46px 46px;
+}
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section {
+  margin-top: 38px;
+}
+
+.section-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 17px;
+}
+
+.section-index {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: rgba(56, 189, 248, 0.07);
+
+  border: 1px solid rgba(56, 189, 248, 0.16);
+
+  color: #38bdf8;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 9px;
+
+  font-weight: 900;
+}
+
+.section-title {
+  font-size: 10px;
+
+  letter-spacing: 2.2px;
+
+  font-weight: 900;
+
+  text-transform: uppercase;
+
+  color: #7dd3fc;
+}
+
+/* =========================================================
+   DOSSIER
+========================================================= */
+
+.dossier {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 11px;
+}
+
+.dossier-item {
+  position: relative;
+
+  min-height: 108px;
+
+  padding: 18px 18px 17px;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 28, 49, 0.96),
+      rgba(7, 15, 28, 0.96)
+    );
+
+  border: 1px solid rgba(51, 65, 85, 0.58);
+
+  overflow: hidden;
+}
+
+.dossier-item::after {
+  content: "";
+
+  position: absolute;
+
+  right: -26px;
+  bottom: -26px;
+
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(56, 189, 248, 0.07);
+}
+
+.dossier-label {
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.6px;
+
+  text-transform: uppercase;
+
+  color: #64748b;
+}
+
+.dossier-value {
+  margin-top: 8px;
+
+  font-size: 15px;
+
+  line-height: 1.4;
+
+  font-weight: 800;
+
+  color: #ffffff;
+
+  word-break: break-word;
+}
+
+.dossier-value.blue {
+  color: #67e8f9;
+}
+
+.dossier-meta {
+  margin-top: 6px;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+  color: #94a3b8;
+
+  word-break: break-word;
+}
+
+/* =========================================================
+   PROBLEM STATEMENT
+========================================================= */
+
+.problem {
+  margin-top: 11px;
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(37, 99, 235, 0.42);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(11, 31, 61, 0.72),
+      rgba(5, 16, 32, 0.98)
+    );
+}
+
+.problem-top {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.problem-label {
+  font-size: 9px;
+
+  letter-spacing: 1.6px;
+
+  text-transform: uppercase;
+
+  color: #38bdf8;
+
+  font-weight: 900;
+}
+
+.problem-number {
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 10px;
+
+  color: #64748b;
+}
+
+.problem-title {
+  margin-top: 8px;
+
+  font-size: 14px;
+
+  line-height: 1.65;
+
+  font-weight: 700;
+
+  color: #ffffff;
+}
+
+.problem-link {
+  display: inline-block;
+
+  margin-top: 15px;
+
+  padding: 9px 13px;
+
+  border-radius: 9px;
+
+  background: rgba(2, 132, 199, 0.14);
+
+  border: 1px solid rgba(56, 189, 248, 0.28);
+
+  color: #67e8f9;
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.7px;
+}
+
+/* =========================================================
+   REFERRAL — MAIN FEATURE
+========================================================= */
+
+.referral {
+  position: relative;
+
+  border-radius: 22px;
+
+  padding: 28px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(245, 158, 11, 0.48);
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(245, 158, 11, 0.14),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(180, 83, 9, 0.07),
+      transparent 38%
+    ),
+    #100c05;
+}
+
+.referral::before {
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  right: -155px;
+  top: -155px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(245, 158, 11, 0.12);
+
+  box-shadow:
+    0 0 0 30px rgba(245, 158, 11, 0.025),
+    0 0 0 70px rgba(245, 158, 11, 0.015);
+}
+
+.referral-content {
+  position: relative;
+  z-index: 2;
+}
+
+.referral-label {
+  font-size: 9px;
+
+  letter-spacing: 2px;
+
+  color: #f59e0b;
+
+  font-weight: 900;
+
+  text-transform: uppercase;
+}
+
+.referral-title {
+  margin-top: 8px;
+
+  font-size: 23px;
+
+  line-height: 1.25;
+
+  font-weight: 900;
+
+  color: #ffffff;
+
+  letter-spacing: -0.4px;
+}
+
+.referral-copy {
+  margin-top: 9px;
+
+  max-width: 520px;
+
+  font-size: 12px;
+
+  line-height: 1.7;
+
+  color: #c8c09e;
+}
+
+/* code */
+
+.code-box {
+  margin-top: 21px;
+
+  padding: 20px;
+
+  text-align: center;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #050505,
+      #020202
+    );
+
+  border: 1px dashed rgba(245, 158, 11, 0.75);
+
+  box-shadow:
+    inset 0 0 35px rgba(245, 158, 11, 0.025);
+}
+
+.code-label {
+  font-size: 8px;
+
+  letter-spacing: 2.4px;
+
+  color: #8f7740;
+
+  text-transform: uppercase;
+
+  font-weight: 900;
+}
+
+.code {
+  margin-top: 7px;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 32px;
+
+  line-height: 1.2;
+
+  font-weight: 900;
+
+  letter-spacing: 5px;
+
+  color: #fbbf24;
+
+  word-break: break-all;
+
+  text-shadow:
+    0 0 22px rgba(251, 191, 36, 0.12);
+}
+
+.code-hint {
+  margin-top: 8px;
+
+  font-size: 9px;
+
+  color: #776944;
+}
+
+/* share actions */
+
+.share-actions {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+
+  margin-top: 11px;
+}
+
+.share {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+
+  border-radius: 11px;
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.7px;
+
+  text-align: center;
+}
+
+.whatsapp {
+  background: rgba(5, 46, 22, 0.8);
+
+  border: 1px solid rgba(34, 197, 94, 0.48);
+
+  color: #86efac;
+}
+
+.email-share {
+  background: rgba(15, 23, 42, 0.9);
+
+  border: 1px solid rgba(100, 116, 139, 0.55);
+
+  color: #e2e8f0;
+}
+
+
+/* =========================================================
+   TEAM ROSTER
+========================================================= */
+
+.team-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.member {
+  display: flex;
+
+  align-items: center;
+
+  padding: 14px 15px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(51, 65, 85, 0.52);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(11, 22, 39, 0.92),
+      rgba(6, 14, 27, 0.92)
+    );
+}
+
+.member-number {
+  flex-shrink: 0;
+
+  width: 34px;
+  height: 34px;
+
+  margin-right: 13px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  border: 1px solid rgba(56, 189, 248, 0.16);
+
+  background: rgba(56, 189, 248, 0.06);
+
+  color: #38bdf8;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 9px;
+
+  font-weight: 900;
+}
+
+.member-role {
+  font-size: 8px;
+
+  letter-spacing: 1.5px;
+
+  text-transform: uppercase;
+
+  color: #38bdf8;
+
+  font-weight: 900;
+}
+
+.member-name {
+  margin-top: 3px;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+.member-meta {
+  margin-top: 4px;
+
+  font-size: 10px;
+
+  line-height: 1.45;
+
+  color: #94a3b8;
+
+  word-break: break-word;
+}
+
+/* =========================================================
+   ROADMAP
+========================================================= */
+
+.roadmap {
+  padding: 8px 19px;
+
+  border-radius: 17px;
+
+  border: 1px solid rgba(51, 65, 85, 0.5);
+
+  background: #070e1b;
+}
+
+.step {
+  display: flex;
+
+  gap: 13px;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid rgba(51, 65, 85, 0.35);
+}
+
+.step:last-child {
+  border-bottom: 0;
+}
+
+.step-number {
+  flex-shrink: 0;
+
+  width: 29px;
+  height: 29px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: rgba(56, 189, 248, 0.07);
+
+  border: 1px solid rgba(56, 189, 248, 0.15);
+
+  color: #38bdf8;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 8px;
+
+  font-weight: 900;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-size: 11px;
+
+  font-weight: 900;
+
+  color: #ffffff;
+}
+
+.step-description {
+  margin-top: 3px;
+
+  font-size: 11px;
+
+  line-height: 1.55;
+
+  color: #94a3b8;
+}
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta-section {
+  margin-top: 34px;
+
+  padding-top: 28px;
+
+  border-top: 1px solid rgba(51, 65, 85, 0.4);
+
+  text-align: center;
+}
+
+.cta-text {
+  margin-bottom: 13px;
+
+  font-size: 10px;
+
+  letter-spacing: 1.3px;
+
+  text-transform: uppercase;
+
+  color: #64748b;
+
+  font-weight: 800;
+}
+
+.cta {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 46px;
+
+  padding: 0 23px;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0ea5e9,
+      #2563eb
+    );
+
+  border: 1px solid rgba(125, 211, 252, 0.65);
+
+  color: #ffffff;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+
+  font-weight: 900;
+
+  box-shadow:
+    0 12px 30px rgba(14, 165, 233, 0.14);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  padding: 27px 42px 34px;
+
+  border-top: 1px solid rgba(51, 65, 85, 0.35);
+
+  background: #020617;
+
+  text-align: center;
+}
+
+.footer-title {
+  font-size: 12px;
+
+  color: #ffffff;
+
+  font-weight: 900;
+}
+
+.footer-brand {
+  margin-top: 4px;
+
+  font-size: 9px;
+
+  letter-spacing: 2px;
+
+  color: #38bdf8;
+
+  font-weight: 900;
+}
+
+.footer-links {
+  margin-top: 14px;
+
+  font-size: 10px;
+
+  line-height: 1.8;
+
+  color: #64748b;
+}
+
+.footer-links a {
+  color: #67e8f9;
+}
+
+.footer-note {
+  margin-top: 12px;
+
+  font-size: 9px;
+
+  line-height: 1.65;
+
+  color: #475569;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media only screen and (max-width: 620px) {
+
+  .page {
+    padding: 10px 6px 25px;
+  }
+
+  .email {
+    border-radius: 18px;
+  }
+
+  .hero {
+    padding: 32px 21px 31px;
+  }
+
+  .hero-title {
+    font-size: 29px;
+    letter-spacing: -0.9px;
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+  }
+
+  .content {
+    padding: 0 16px 30px;
+  }
+
+  .section {
+    margin-top: 31px;
+  }
+
+  .dossier {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .dossier-item {
+    min-height: auto;
+  }
+
+  .problem {
+    padding: 17px;
+  }
+
+  .problem-top {
+    align-items: flex-start;
+  }
+
+  .referral {
+    padding: 21px 16px;
+    border-radius: 18px;
+  }
+
+  .referral-title {
+    font-size: 20px;
+  }
+
+  .referral-copy {
+    font-size: 11px;
+  }
+
+  .code-box {
+    padding: 17px 10px;
+  }
+
+  .code {
+    font-size: 23px;
+    letter-spacing: 3px;
+  }
+
+  .share-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .share {
+    min-height: 44px;
+  }
+
+  .member {
+    align-items: flex-start;
+  }
+
+  .member-number {
+    margin-right: 11px;
+  }
+
+  .roadmap {
+    padding: 5px 15px;
+  }
+
+  .footer {
+    padding: 24px 17px 28px;
+  }
+
+  .cta {
+    width: 100%;
+  }
+}
+
+</style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #030712; word-spacing: normal;">
 
-  <!-- PREHEADER / HIDDEN EMAIL PREVIEW TEXT -->
-  <div style="display: none; max-height: 0px; overflow: hidden; opacity: 0; color: transparent; font-size: 1px; line-height: 1px; max-width: 0px;">
-    🚀 YODHA 2.0 Registration Confirmed for Team ${e(data.teamName)}! Your Warrior Code is ${safeReferralCode}.
-    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+
+<body>
+
+<div class="page">
+
+  <div class="email">
+
+    <!-- ==============================================
+         ENERGY BAR
+    =============================================== -->
+
+    <div class="energy-line"></div>
+
+
+    <!-- ==============================================
+         HERO
+    =============================================== -->
+
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <div class="confirmed">
+          <span class="confirmed-dot"></span>
+          Registration Confirmed
+        </div>
+
+
+        <div class="brand">
+          YODHA 2.0 · WARRIORS OF AI
+        </div>
+
+
+        <div class="hero-title">
+
+          Welcome to the
+          <br>
+
+          <span>YODHA Arena.</span>
+
+        </div>
+
+
+        <div class="hero-subtitle">
+
+          Hello <strong>${e(data.leaderName)}</strong>,
+
+          <br><br>
+
+          Your squad
+          <strong>${e(data.teamName)}</strong>
+          has officially secured its place in
+
+          <strong>YODHA 2.0 – Warriors of AI.</strong>
+
+          <br><br>
+
+          Your registration dossier is ready below.
+          Keep this email safe — your Warrior Referral
+          Code is also included.
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================================
+         MAIN CONTENT
+    =============================================== -->
+
+    <div class="content">
+
+
+      <!-- ============================================
+           01 — DOSSIER
+      ============================================= -->
+
+      <section class="section">
+
+        <div class="section-header">
+
+          <div class="section-index">
+            01
+          </div>
+
+          <div class="section-title">
+            Squad Dossier
+          </div>
+
+        </div>
+
+
+        <div class="dossier">
+
+
+          <!-- Captain -->
+
+          <div class="dossier-item">
+
+            <div class="dossier-label">
+              ${e(data.members?.[0]?.role || "Team Captain")}
+            </div>
+
+            <div class="dossier-value">
+              ${e(data.leaderName)}
+            </div>
+
+            <div class="dossier-meta">
+              ✉️ ${e(data.leaderEmail)}
+              <br>
+              📞 ${e(data.leaderPhone || "")}
+            </div>
+
+          </div>
+
+
+          <!-- Team -->
+
+          <div class="dossier-item">
+
+            <div class="dossier-label">
+              Team Name
+            </div>
+
+            <div class="dossier-value blue">
+              ${e(data.teamName)}
+            </div>
+
+            <div class="dossier-meta">
+              👥 ${e(data.teamSize)} Warriors
+            </div>
+
+          </div>
+
+
+          <!-- Track -->
+
+          <div class="dossier-item">
+
+            <div class="dossier-label">
+              Chosen Track
+            </div>
+
+            <div class="dossier-value">
+              ${e(data.track)}
+            </div>
+
+            <div class="dossier-meta">
+              ⚡ Innovation Track
+            </div>
+
+          </div>
+
+
+          <!-- Date -->
+
+          <div class="dossier-item">
+
+            <div class="dossier-label">
+              Registered On
+            </div>
+
+            <div class="dossier-value">
+              ${e(data.registrationDate)}
+            </div>
+
+            <div class="dossier-meta">
+              ✓ Registration secured
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Problem -->
+
+        <div class="problem">
+
+          <div class="problem-top">
+
+            <div class="problem-label">
+              Problem Statement
+            </div>
+
+            <div class="problem-number">
+              ID · 07
+            </div>
+
+          </div>
+
+          <div class="problem-title">
+
+            ${e(data.problemStatementTitle || "Your submitted problem statement")}
+
+          </div>
+
+          <a
+            class="problem-link"
+            href="${e(data.pptLink || "#")}"
+            target="_blank"
+          >
+            VIEW SUBMITTED PRESENTATION ↗
+          </a>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ============================================
+           02 — REFERRAL
+      ============================================= -->
+
+      <section class="section">
+
+        <div class="section-header">
+
+          <div class="section-index">
+            02
+          </div>
+
+          <div class="section-title">
+            Warrior Referral
+          </div>
+
+        </div>
+
+
+        <div class="referral">
+
+          <div class="referral-content">
+
+            <div class="referral-label">
+              Your Referral Advantage
+            </div>
+
+            <div class="referral-title">
+
+              Assemble your squad.
+              <br>
+              Expand the arena.
+
+            </div>
+
+            <div class="referral-copy">
+
+              Invite fellow innovators to YODHA 2.0 using
+              your unique Warrior Referral Code. Registrations
+              made through your referral will be linked to your
+              referral room automatically.
+
+            </div>
+
+
+            <!-- CODE -->
+
+            <div class="code-box">
+
+              <div class="code-label">
+                Your Unique Warrior Code
+              </div>
+
+              <div class="code">
+                ${safeReferralCode}
+              </div>
+
+              <div class="code-hint">
+                Keep this code with you when sharing YODHA.
+              </div>
+
+            </div>
+
+
+            <!-- SHARING -->
+
+            <div class="share-actions">
+
+              <a
+                class="share whatsapp"
+                target="_blank"
+                href="https://wa.me/?text=🚀%20Join%20YODHA%202.0%20%E2%80%93%20Warriors%20of%20AI!%0A%0AUse%20my%20Warrior%20Referral%20Code:%20${safeReferralCode}%0A%0ARegister%20here:%20https%3A%2F%2Fyodha.aidajecc.in%2Fregister%3Fref%3D${safeReferralCode}"
+              >
+                💬 SHARE ON WHATSAPP ↗
+              </a>
+
+
+              <a
+                class="share email-share"
+                href="mailto:?subject=Join%20YODHA%202.0%20%E2%80%93%20Warriors%20of%20AI&body=Hey%20Warrior%2C%0A%0AJoin%20YODHA%202.0%20%E2%80%93%20Warriors%20of%20AI.%0A%0AUse%20my%20Warrior%20Referral%20Code%3A%20${safeReferralCode}%0A%0ARegister%20here%3A%0Ahttps%3A%2F%2Fyodha.aidajecc.in%2Fregister%3Fref%3D${safeReferralCode}"
+              >
+                ✉️ SHARE VIA EMAIL ↗
+              </a>
+
+            </div>
+</div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ============================================
+           03 — ROSTER
+      ============================================= -->
+
+      <section class="section">
+
+        <div class="section-header">
+
+          <div class="section-index">
+            03
+          </div>
+
+          <div class="section-title">
+            Registered Squad
+          </div>
+
+        </div>
+
+
+        <div class="team-list">
+
+          ${membersHtml}
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ============================================
+           04 — ROADMAP
+      ============================================= -->
+
+      <section class="section">
+
+        <div class="section-header">
+
+          <div class="section-index">
+            04
+          </div>
+
+          <div class="section-title">
+            Mission Roadmap
+          </div>
+
+        </div>
+
+
+        <div class="roadmap">
+
+
+          <div class="step">
+
+            <div class="step-number">
+              01
+            </div>
+
+            <div class="step-content">
+
+              <div class="step-title">
+                Verification
+              </div>
+
+              <div class="step-description">
+                Your registration and submission materials
+                are reviewed by the organizing committee.
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-number">
+              02
+            </div>
+
+            <div class="step-content">
+
+              <div class="step-title">
+                Shortlisting
+              </div>
+
+              <div class="step-description">
+                Eligible teams move into technical evaluation
+                and shortlisting.
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-number">
+              03
+            </div>
+
+            <div class="step-content">
+
+              <div class="step-title">
+                Final Instructions
+              </div>
+
+              <div class="step-description">
+                Selected teams receive the official schedule,
+                guidelines and further instructions.
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-number">
+              04
+            </div>
+
+            <div class="step-content">
+
+              <div class="step-title">
+                Arena Day
+              </div>
+
+              <div class="step-description">
+                Bring your AI innovation to the arena and
+                compete for the top position.
+              </div>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ============================================
+           CTA
+      ============================================= -->
+
+      <div class="cta-section">
+
+        <div class="cta-text">
+          Ready for the next mission?
+        </div>
+
+        <a
+          class="cta"
+          href="https://yodha.aidajecc.in/"
+          target="_blank"
+        >
+          ENTER YODHA 2.0 PORTAL ↗
+        </a>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ==============================================
+         FOOTER
+    =============================================== -->
+
+    <footer class="footer">
+
+      <div class="footer-title">
+        YODHA HACKATHON TEAM
+      </div>
+
+      <div class="footer-brand">
+        WARRIORS OF AI
+      </div>
+
+
+      <div class="footer-links">
+
+        <a
+          href="https://yodha.aidajecc.in/"
+          target="_blank"
+        >
+          yodha.aidajecc.in
+        </a>
+
+        &nbsp;&nbsp;•&nbsp;&nbsp;
+
+        <a href="mailto:yodha@jecc.ac.in">
+          yodha@jecc.ac.in
+        </a>
+
+      </div>
+
+
+      <div class="footer-note">
+
+        This is an automated operational email generated
+        by the YODHA 2.0 Portal.
+
+        <br>
+
+        Please do not reply directly to this email.
+
+      </div>
+
+    </footer>
+
+
   </div>
 
-  <!-- OUTER WRAPPER -->
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #030712; width: 100%;">
-    <tr>
-      <td align="center" class="outer-container" style="padding: 24px 12px 40px 12px; background-color: #030712;">
-
-        <!-- MAIN CONTAINER EMAIL CARD -->
-        <table role="presentation" class="email-card" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 620px; background-color: #060b17; border: 1px solid #1e293b; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);">
-          
-          <!-- GRADIENT CYBER TOP ACCENT BAR -->
-          <tr>
-            <td height="5" style="height: 5px; background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #f59e0b 100%); font-size: 0; line-height: 0;">
-              &nbsp;
-            </td>
-          </tr>
-
-          <!-- BANNER IMAGE -->
-          <tr>
-            <td style="padding: 0; background-color: #030712;">
-              <a href="${safeWebsiteUrl}" target="_blank" style="text-decoration: none; display: block;">
-                <img src="${e(bannerUrl)}" alt="YODHA 2.0 Banner" width="620" style="width: 100%; max-width: 620px; height: auto; display: block; border: 0;" />
-              </a>
-            </td>
-          </tr>
-
-          <!-- HERO SECTION -->
-          <tr>
-            <td class="content-padding" style="padding: 28px 28px 12px 28px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td>
-                    <!-- STATUS BADGE -->
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 14px;">
-                      <tr>
-                        <td style="background-color: #052e25; border: 1px solid #10b981; border-radius: 999px; padding: 4px 12px;">
-                          <span style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 800; color: #34d399; letter-spacing: 1px; text-transform: uppercase;">
-                            ● REGISTRATION CONFIRMED
-                          </span>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #38bdf8;">
-                      YODHA 2.0 &nbsp;•&nbsp; WARRIORS OF AI
-                    </div>
-                    <div class="hero-heading" style="padding-top: 6px; font-family: Arial, sans-serif; font-size: 28px; line-height: 1.2; font-weight: 900; color: #ffffff; letter-spacing: -0.5px;">
-                      Welcome to the Arena, <span style="color: #38bdf8;">${e(data.leaderName)}</span>!
-                    </div>
-                    <div style="padding-top: 12px; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.65; color: #94a3b8;">
-                      Your squad <strong style="color: #ffffff;">${e(data.teamName)}</strong> has been successfully verified and registered for <strong style="color: #ffffff;">YODHA 2.0</strong>. Review your registration dossier below.
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- SECTION 01: DOSSIER -->
-          <tr>
-            <td class="content-padding" style="padding: 16px 28px 8px 28px;">
-              <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #7dd3fc; padding-bottom: 12px;">
-                01 // SQUAD DOSSIER
-              </div>
-
-              <!-- DUAL COLUMN CARDS TABLE -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <!-- ROW 1: LEADER & TEAM NAME -->
-                <tr>
-                  <td class="mobile-stack" width="50%" valign="top" style="padding-right: 6px; padding-bottom: 12px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
-                      <tr>
-                        <td style="padding: 14px 16px;">
-                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
-                            TEAM CAPTAIN
-                          </div>
-                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 15px; font-weight: 800; color: #ffffff; word-break: break-word;">
-                            ${e(data.leaderName)}
-                          </div>
-                          ${data.leaderEmail ? `<div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 11px; color: #94a3b8; word-break: break-word;">✉️ ${e(data.leaderEmail)}</div>` : ""}
-                          ${data.leaderPhone ? `<div style="padding-top: 2px; font-family: Arial, sans-serif; font-size: 11px; color: #94a3b8;">📞 ${e(data.leaderPhone)}</div>` : ""}
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-
-                  <td class="mobile-stack" width="50%" valign="top" style="padding-left: 6px; padding-bottom: 12px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
-                      <tr>
-                        <td style="padding: 14px 16px;">
-                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
-                            TEAM NAME
-                          </div>
-                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 15px; font-weight: 800; color: #38bdf8; word-break: break-word;">
-                            ${e(data.teamName)}
-                          </div>
-                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 11px; color: #94a3b8;">
-                            👥 Size: <strong style="color: #ffffff;">${e(data.teamSize)} Member(s)</strong>
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-
-                <!-- ROW 2: TRACK & DATE -->
-                <tr>
-                  <td class="mobile-stack" width="50%" valign="top" style="padding-right: 6px; padding-bottom: 12px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
-                      <tr>
-                        <td style="padding: 14px 16px;">
-                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
-                            CHOSEN TRACK
-                          </div>
-                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 14px; font-weight: 800; color: #ffffff; word-break: break-word;">
-                            ⚡ ${e(data.track)}
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-
-                  <td class="mobile-stack" width="50%" valign="top" style="padding-left: 6px; padding-bottom: 12px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
-                      <tr>
-                        <td style="padding: 14px 16px;">
-                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
-                            REGISTRATION DATE
-                          </div>
-                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #cbd5e1;">
-                            📅 ${e(data.registrationDate)}
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-
-                <!-- ROW 3: PROBLEM STATEMENT & PPT LINK IF PRESENT -->
-                ${
-                  data.problemStatementTitle || data.pptLink
-                    ? `
-                <tr>
-                  <td colspan="2" class="mobile-stack" style="padding-bottom: 12px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #0b172a; border: 1px solid #1e3a8a; border-radius: 14px;">
-                      <tr>
-                        <td style="padding: 16px;">
-                          ${
-                            data.problemStatementTitle
-                              ? `
-                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #38bdf8;">
-                            PROBLEM STATEMENT ${data.problemStatementId ? `#${e(data.problemStatementId)}` : ""}
-                          </div>
-                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 13px; line-weight: 1.5; font-weight: 700; color: #ffffff;">
-                            ${e(data.problemStatementTitle)}
-                          </div>
-                          `
-                              : ""
-                          }
-                          ${
-                            data.pptLink
-                              ? `
-                          <div style="padding-top: 10px;">
-                            <a href="${e(data.pptLink)}" target="_blank" style="display: inline-block; padding: 10px 16px; background-color: #0284c7; border-radius: 8px; color: #ffffff; font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; text-decoration: none;">
-                              📄 View Presentation Deck PPT ↗
-                            </a>
-                          </div>
-                          `
-                              : ""
-                          }
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                `
-                    : ""
-                }
-              </table>
-            </td>
-          </tr>
-
-          <!-- SECTION 02: WARRIOR REFERRAL HQ -->
-          <tr>
-            <td class="content-padding" style="padding: 16px 28px 12px 28px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #120e06; border: 1px dashed #f59e0b; border-radius: 18px;">
-                <tr>
-                  <td style="padding: 22px 20px;">
-                    <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #f59e0b;">
-                      02 // WARRIOR REFERRAL HQ
-                    </div>
-                    <div style="padding-top: 6px; font-family: Arial, sans-serif; font-size: 20px; font-weight: 900; color: #ffffff; line-height: 1.3;">
-                      Rally Your Network. Claim Supreme Glory.
-                    </div>
-                    <div style="padding-top: 6px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.6; color: #d1d5db;">
-                      Share your unique referral code with fellow teams. Every team registering with your code will be logged directly under your referral room.
-                    </div>
-
-                    <!-- REFERRAL CODE DISPLAY BOX -->
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 16px; background-color: #000000; border: 1px solid #78350f; border-radius: 12px;">
-                      <tr>
-                        <td align="center" style="padding: 16px 12px;">
-                          <div style="font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #92400e; font-weight: 800;">
-                            YOUR UNIQUE REFERRAL CODE
-                          </div>
-                          <div class="referral-code-text" style="padding-top: 6px; font-family: 'Courier New', Courier, monospace; font-size: 28px; font-weight: 900; letter-spacing: 3px; color: #fbbf24;">
-                            ${safeReferralCode}
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <!-- QUICK ACTION SHARE BUTTONS -->
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 14px;">
-                      <tr>
-                        <td class="share-col" width="50%" valign="top" style="padding-right: 4px;">
-                          <a href="${e(whatsappShareUrl)}" target="_blank" class="mobile-btn" style="display: block; text-align: center; padding: 12px 10px; background-color: #064e3b; border: 1px solid #10b981; border-radius: 10px; color: #6ee7b7; font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; text-decoration: none;">
-                            💬 Share via WhatsApp ↗
-                          </a>
-                        </td>
-                        <td class="share-col" width="50%" valign="top" style="padding-left: 4px;">
-                          <a href="${e(emailShareUrl)}" target="_blank" class="mobile-btn" style="display: block; text-align: center; padding: 12px 10px; background-color: #1e293b; border: 1px solid #475569; border-radius: 10px; color: #e2e8f0; font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; text-decoration: none;">
-                            ✉️ Share via Email ↗
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <div style="padding-top: 12px; text-align: center; font-family: Arial, sans-serif; font-size: 11px; color: #9ca3af; word-break: break-all;">
-                      Direct Link: <a href="${e(referralTarget)}" target="_blank" style="color: #f59e0b; text-decoration: underline;">${e(referralTarget)}</a>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- SECTION 03: SQUAD ROSTER -->
-          ${
-            data.members && data.members.length > 0
-              ? `
-          <tr>
-            <td class="content-padding" style="padding: 16px 28px 12px 28px;">
-              <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #7dd3fc; padding-bottom: 12px;">
-                03 // REGISTERED SQUAD ROSTER (${data.members.length})
-              </div>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                ${membersHtml}
-              </table>
-            </td>
-          </tr>
-          `
-              : ""
-          }
-
-          <!-- SECTION 04: MISSION ROADMAP -->
-          <tr>
-            <td class="content-padding" style="padding: 16px 28px 16px 28px;">
-              <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #7dd3fc; padding-bottom: 12px;">
-                04 // NEXT STEPS & MISSION ROADMAP
-              </div>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #080f1e; border: 1px solid #1e293b; border-radius: 16px;">
-                <tr>
-                  <td style="padding: 18px 18px 10px 18px;">
-                    <!-- STEP 1 -->
-                    <div style="padding-bottom: 10px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
-                      <strong style="color: #38bdf8;">01. Verification:</strong> Registration details & submission material review by the organizing committee.
-                    </div>
-                    <!-- STEP 2 -->
-                    <div style="padding-bottom: 10px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
-                      <strong style="color: #38bdf8;">02. Shortlisting:</strong> Technical round evaluation & problem statement shortlisting.
-                    </div>
-                    <!-- STEP 3 -->
-                    <div style="padding-bottom: 10px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
-                      <strong style="color: #38bdf8;">03. Instructions:</strong> Final hackathon guidelines, schedule & portal access dispatched to Team Captain.
-                    </div>
-                    <!-- STEP 4 -->
-                    <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
-                      <strong style="color: #38bdf8;">04. Arena Day:</strong> Showcase your AI innovations and compete for top prizes!
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- PRIMARY WEBSITE CTA BUTTON -->
-          <tr>
-            <td align="center" class="content-padding" style="padding: 12px 28px 24px 28px;">
-              <a href="${safeWebsiteUrl}" target="_blank" class="mobile-btn" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 1px solid #38bdf8; border-radius: 12px; color: #ffffff; font-family: Arial, sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 1px; text-decoration: none; text-transform: uppercase;">
-                EXPLORE YODHA 2.0 PORTAL ↗
-              </a>
-            </td>
-          </tr>
-
-          <!-- FOOTER -->
-          <tr>
-            <td class="content-padding" style="padding: 20px 28px 30px 28px; background-color: #030712; border-top: 1px solid #1e293b;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td align="center" style="font-family: Arial, sans-serif; font-size: 12px; line-height: 1.75; color: #64748b;">
-                    <strong style="color: #ffffff; font-size: 13px;">YODHA HACKATHON TEAM</strong><br>
-                    <span style="color: #38bdf8; font-weight: 800;">WARRIORS OF AI</span><br><br>
-                    Website: <a href="${safeWebsiteUrl}" target="_blank" style="color: #38bdf8; text-decoration: none;">${safeWebsiteUrl}</a><br>
-                    Contact: <a href="mailto:${safeContactEmail}" style="color: #38bdf8; text-decoration: none;">${safeContactEmail}</a><br><br>
-                    <span style="font-size: 11px; color: #475569;">
-                      This is an automated operational email generated by the YODHA 2.0 Portal.<br>
-                      Please do not reply directly to this email.
-                    </span>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-        </table>
-
-      </td>
-    </tr>
-  </table>
+</div>
 
 </body>
 </html>`;

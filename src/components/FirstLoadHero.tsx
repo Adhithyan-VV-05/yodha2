@@ -17,23 +17,23 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     seconds: 40,
   });
 
-  // Mobile 1.5s cycling phrase state (stacked words)
-  const mobilePhrases = [
-    { word1: "RISE", word2: "AS", word3: "WARRIORS," },
-    { word1: "THINK", word2: "AS", word3: "INNOVATORS," },
-    { word1: "BUILD", word2: "FOR", word3: "HUMANITY." },
+  // 2.5s phrase dataset for both PC and Mobile
+  const phrases = [
+    {
+      mobile: { word1: "RISE", word2: "AS", word3: "WARRIORS," },
+      pc: { prefix: "RISE AS ", keyword: "WARRIORS," }
+    },
+    {
+      mobile: { word1: "THINK", word2: "AS", word3: "INNOVATORS," },
+      pc: { prefix: "THINK AS ", keyword: "INNOVATORS," }
+    },
+    {
+      mobile: { word1: "BUILD", word2: "FOR", word3: "HUMANITY." },
+      pc: { prefix: "BUILD FOR ", keyword: "HUMANITY." }
+    },
   ];
-  const [mobileIndex, setMobileIndex] = useState(0);
 
-  // PC Typewriter animation state (displays ONE sentence at a time)
-  const pcSentences = [
-    { text: "RISE AS ", keyword: "WARRIORS," },
-    { text: "THINK AS ", keyword: "INNOVATORS," },
-    { text: "BUILD FOR ", keyword: "HUMANITY." },
-  ];
-  const [pcIndex, setPcIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Timer Countdown Effect
   useEffect(() => {
@@ -59,70 +59,15 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     return () => clearInterval(timer);
   }, []);
 
-  // Mobile sentence cycle interval (1.5 seconds per sentence)
+  // Shared 2.5 second cycling interval for both PC and Mobile
   useEffect(() => {
-    const mobileTimer = setInterval(() => {
-      setMobileIndex((prev) => (prev + 1) % mobilePhrases.length);
-    }, 1500);
-    return () => clearInterval(mobileTimer);
-  }, [mobilePhrases.length]);
+    const cycleTimer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % phrases.length);
+    }, 2500);
+    return () => clearInterval(cycleTimer);
+  }, [phrases.length]);
 
-  // PC Typewriter effect
-  useEffect(() => {
-    const currentItem = pcSentences[pcIndex];
-    const fullText = currentItem.text + currentItem.keyword;
-    let timer: NodeJS.Timeout;
-
-    if (!isDeleting) {
-      if (charIndex < fullText.length) {
-        timer = setTimeout(() => {
-          setCharIndex((prev) => prev + 1);
-        }, 60);
-      } else {
-        // Pause for 1.5 seconds when full sentence is typed
-        timer = setTimeout(() => {
-          setIsDeleting(true);
-        }, 1500);
-      }
-    } else {
-      if (charIndex > 0) {
-        timer = setTimeout(() => {
-          setCharIndex((prev) => prev - 1);
-        }, 35);
-      } else {
-        setIsDeleting(false);
-        setPcIndex((prev) => (prev + 1) % pcSentences.length);
-      }
-    }
-
-    return () => clearTimeout(timer);
-  }, [charIndex, isDeleting, pcIndex, pcSentences]);
-
-  // Helper to render PC typewriter sentence with blue keyword styling
-  const renderPcTypewriterSentence = () => {
-    const currentItem = pcSentences[pcIndex];
-    const prefixLen = currentItem.text.length;
-
-    if (charIndex <= prefixLen) {
-      return (
-        <span className="text-slate-950 font-black">
-          {currentItem.text.slice(0, charIndex)}
-        </span>
-      );
-    } else {
-      const keywordChars = currentItem.keyword.slice(0, charIndex - prefixLen);
-      return (
-        <span>
-          <span className="text-slate-950 font-black">{currentItem.text}</span>
-          <span className="text-blue-600 font-serif font-black drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
-            {keywordChars}
-          </span>
-        </span>
-      );
-    }
-  };
-
-  const activeMobilePhrase = mobilePhrases[mobileIndex];
+  const activePhrase = phrases[currentIndex];
 
   return (
     <section className="relative w-full min-h-screen pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
@@ -130,12 +75,23 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
       {/* DESKTOP (PC) VIEW LAYOUT (POSITIONED AT 30VH BELOW TOP, SLIGHTLY ALIGNED LEFT) */}
       <div className="hidden sm:block relative z-20 max-w-2xl pt-[28vh] space-y-4">
         
-        {/* TYPEWRITER PC HEADLINE - ONE SENTENCE AT A TIME */}
-        <div className="h-20 flex items-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.08] font-sans">
-            {renderPcTypewriterSentence()}
-            <span className="inline-block w-1.5 h-10 bg-blue-600 ml-1 animate-pulse" />
-          </h1>
+        {/* ONE SENTENCE AT A TIME CYCLING EVERY 2.5 SECONDS (NO TYPING ANIMATION) */}
+        <div className="h-20 flex items-center overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={currentIndex}
+              initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.08] font-sans"
+            >
+              <span className="text-slate-950 font-black">{activePhrase.pc.prefix}</span>
+              <span className="text-blue-600 font-serif font-black drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+                {activePhrase.pc.keyword}
+              </span>
+            </motion.h1>
+          </AnimatePresence>
         </div>
 
         {/* BLUE GRADIENT ACCENT BAR */}
@@ -242,35 +198,35 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
         </div>
       </div>
 
-      {/* MOBILE VIEW LAYOUT (STACKED WORDS CYCLING 1.5s + CONTENT PLACED BELOW 60VH) */}
-      <div className="block sm:hidden relative z-20 w-full pt-16">
+      {/* MOBILE VIEW LAYOUT (STACKED WORDS CYCLING 2.5s + BIG FONT + ALIGNED ~25VW FROM LEFT + CENTERED VENUE) */}
+      <div className="block sm:hidden relative z-20 w-full pt-12">
         
-        {/* CYCLING STACKED PHRASE ANIMATION (TOP SECTION) */}
-        <div className="h-32 flex flex-col justify-center">
+        {/* CYCLING STACKED PHRASE ANIMATION (TOP SECTION) - BIG & ALIGNED TO 25VW FROM LEFT MARGIN */}
+        <div className="h-40 flex flex-col justify-center pl-[25vw]">
           <AnimatePresence mode="wait">
             <motion.div
-              key={mobileIndex}
+              key={currentIndex}
               initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
               className="flex flex-col text-left space-y-0.5"
             >
-              <span className="text-2xl font-black text-slate-950 uppercase font-sans tracking-tight">
-                {activeMobilePhrase.word1}
+              <span className="text-3xl min-[400px]:text-4xl font-black text-slate-950 uppercase font-sans tracking-tight leading-none">
+                {activePhrase.mobile.word1}
               </span>
-              <span className="text-2xl font-black text-slate-950 uppercase font-sans tracking-tight">
-                {activeMobilePhrase.word2}
+              <span className="text-3xl min-[400px]:text-4xl font-black text-slate-950 uppercase font-sans tracking-tight leading-none">
+                {activePhrase.mobile.word2}
               </span>
-              <span className="text-2xl font-black text-blue-600 font-serif tracking-tight">
-                {activeMobilePhrase.word3}
+              <span className="text-3xl min-[400px]:text-4xl font-black text-blue-600 font-serif tracking-tight leading-none drop-shadow-[0_0_12px_rgba(59,130,246,0.3)]">
+                {activePhrase.mobile.word3}
               </span>
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* SUBHEADLINE & ALL SUBSEQUENT CONTENTS PLACED BELOW 60VH ON MOBILE */}
-        <div className="pt-[22vh] space-y-4">
+        <div className="pt-[18vh] space-y-4">
           <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full" />
 
           {/* SUBHEADLINE BRIEF BELOW 60VH */}
@@ -353,10 +309,10 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             </button>
           </div>
 
-          {/* JYOTHY LOCATION BELOW 60VH */}
-          <div className="flex items-center gap-2 text-left pt-1">
+          {/* JYOTHY LOCATION BELOW 60VH - HORIZONTALLY CENTERED ON MOBILE */}
+          <div className="flex items-center justify-center text-center gap-2 pt-2 w-full mx-auto">
             <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
-            <div className="flex flex-col text-[10px] font-mono text-slate-900 leading-tight">
+            <div className="flex flex-col text-[10px] font-mono text-slate-900 leading-tight text-center">
               <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
               <span className="text-[8px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
             </div>
