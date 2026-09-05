@@ -32,7 +32,7 @@
 //     data.websiteUrl ||
 //     (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WEBSITE_URL) ||
 //     (typeof process !== "undefined" && process.env?.VITE_WEBSITE_URL) ||
-//     "https://yodha-hackathon.netlify.app/";
+//     "https://yodha.aidajecc.in/";
 
 //   const contactEmail =
 //     data.contactEmail ||
@@ -384,11 +384,8 @@ export interface RegistrationEmailPayload {
 }
 
 /**
- * Generate a premium, futuristic HTML email template matching YODHA branding.
- *
- * IMPORTANT:
- * Email clients generally block JavaScript, so the referral actions below use
- * normal share links rather than browser-only Clipboard/Web Share APIs.
+ * Generate a premium, high-impact HTML email template matching YODHA 2.0 theme.
+ * Dual PC and Mobile responsive design with zero line breakages or layout overflows.
  */
 export function generateEmailTemplate(
   data: RegistrationEmailPayload
@@ -398,7 +395,7 @@ export function generateEmailTemplate(
     (typeof process !== "undefined" &&
       process.env?.NEXT_PUBLIC_WEBSITE_URL) ||
     (typeof process !== "undefined" && process.env?.VITE_WEBSITE_URL) ||
-    "https://yodha-hackathon.netlify.app/";
+    "https://yodha.aidajecc.in/";
 
   const contactEmail =
     data.contactEmail ||
@@ -433,41 +430,35 @@ export function generateEmailTemplate(
 
   /**
    * Referral URL.
-   *
-   * Example:
-   * https://yodha-hackathon.netlify.app/register?ref=YODHA123
    */
-  const referralTarget =
-    `${websiteUrl.replace(/\/+$/, "")}/register?ref=${encodeURIComponent(
-      data.referralCode
-    )}`;
+  const referralTarget = `${websiteUrl.replace(/\/+$/, "")}/register?ref=${encodeURIComponent(
+    data.referralCode
+  )}`;
 
   /**
    * WhatsApp share URL.
    */
-  const whatsappShareUrl =
-    `https://wa.me/?text=${encodeURIComponent(
-      `Join YODHA 2 – Warriors of AI!\n\nUse my Warrior Referral Code: ${data.referralCode}\n\nRegister here: ${referralTarget}`
-    )}`;
+  const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(
+    `🚀 Join YODHA 2.0 – Warriors of AI!\n\nUse my Warrior Referral Code: ${data.referralCode}\n\nRegister your team here: ${referralTarget}`
+  )}`;
 
   /**
    * Email share URL.
    */
-  const emailShareUrl =
-    `mailto:?subject=${encodeURIComponent(
-      "Join me at YODHA 2 – Warriors of AI"
-    )}&body=${encodeURIComponent(
-      `Hey!\n\nJoin YODHA 2 – Warriors of AI.\n\nUse my Warrior Referral Code: ${data.referralCode}\n\nRegister here:\n${referralTarget}\n\nSee you at YODHA 2!`
-    )}`;
+  const emailShareUrl = `mailto:?subject=${encodeURIComponent(
+    "Invitation: Join YODHA 2.0 – Warriors of AI"
+  )}&body=${encodeURIComponent(
+    `Hey Cyber Warrior,\n\nWe are building the future at YODHA 2.0 – Warriors of AI Hackathon.\n\nUse my official Warrior Referral Code: ${data.referralCode}\n\nRegister your team here:\n${referralTarget}\n\nSee you on the leaderboard!`
+  )}`;
 
   /**
-   * Team members.
+   * Team members roster HTML generator.
    */
   const membersHtml = (data.members || [])
     .map(
       (member, index) => `
         <tr>
-          <td style="padding:0 0 10px 0;">
+          <td style="padding: 0 0 10px 0;">
             <table
               role="presentation"
               width="100%"
@@ -475,65 +466,31 @@ export function generateEmailTemplate(
               cellspacing="0"
               border="0"
               style="
-                background:#0d1324;
-                border:1px solid #202a42;
-                border-radius:14px;
+                background: #091224;
+                border: 1px solid #1e2e4a;
+                border-radius: 12px;
+                width: 100%;
               "
             >
               <tr>
-                <td style="padding:14px 16px;">
-
-                  <div
-                    style="
-                      font-family:Arial,Helvetica,sans-serif;
-                      font-size:10px;
-                      line-height:1.2;
-                      letter-spacing:1.7px;
-                      text-transform:uppercase;
-                      font-weight:800;
-                      color:#7dd3fc;
-                    "
-                  >
-                    ${e(member.role || `Member ${index + 1}`)}
-                  </div>
-
-                  <div
-                    style="
-                      padding-top:4px;
-                      font-family:Arial,Helvetica,sans-serif;
-                      font-size:15px;
-                      line-height:1.35;
-                      font-weight:800;
-                      color:#ffffff;
-                    "
-                  >
-                    ${e(member.fullName)}
-                  </div>
-
-                  <div
-                    style="
-                      padding-top:6px;
-                      font-family:Arial,Helvetica,sans-serif;
-                      font-size:12px;
-                      line-height:1.5;
-                      color:#94a3b8;
-                    "
-                  >
-                    ${member.email ? `✉️ ${e(member.email)}` : ""}
-                    ${
-                      member.phone
-                        ? `&nbsp;&nbsp;•&nbsp;&nbsp;📞 ${e(member.phone)}`
-                        : ""
-                    }
-                    ${
-                      member.organization
-                        ? `&nbsp;&nbsp;•&nbsp;&nbsp;🏛️ ${e(
-                            member.organization
-                          )}`
-                        : ""
-                    }
-                  </div>
-
+                <td style="padding: 14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td style="font-family: Arial, Helvetica, sans-serif;">
+                        <div style="font-size: 10px; line-height: 1.2; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 800; color: #38bdf8;">
+                          ${e(member.role || `WARRIOR ${index + 1}`)}
+                        </div>
+                        <div style="padding-top: 4px; font-size: 15px; line-height: 1.35; font-weight: 800; color: #ffffff;">
+                          ${e(member.fullName)}
+                        </div>
+                        <div style="padding-top: 6px; font-size: 12px; line-height: 1.5; color: #94a3b8; word-break: break-word;">
+                          ${member.email ? `<span style="color: #cbd5e1;">✉️ ${e(member.email)}</span>` : ""}
+                          ${member.phone ? `<span style="display: inline-block; margin-left: 8px; color: #cbd5e1;">📞 ${e(member.phone)}</span>` : ""}
+                          ${member.organization ? `<div style="padding-top: 4px; color: #94a3b8;">🏛️ ${e(member.organization)}</div>` : ""}
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
             </table>
@@ -543,1554 +500,429 @@ export function generateEmailTemplate(
     )
     .join("");
 
-  return `
-<!DOCTYPE html>
-<html lang="en">
-
+  return `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
   <meta name="color-scheme" content="dark">
   <meta name="supported-color-schemes" content="dark">
+  <title>YODHA 2.0 — Registration Confirmed</title>
 
-  <title>YODHA 2 — Registration Confirmed</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![style]>
+    td, th, div, p, a, h1, h2, h3 { font-family: Arial, sans-serif !important; }
+  <![endif]-->
 
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #030712;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #e5e7eb;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
+    /* RESET STYLES */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      background-color: #030712 !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, Arial, sans-serif;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
     }
 
-    table {
-      border-spacing: 0;
-      border-collapse: collapse;
-    }
+    div[style*="margin: 16px 0"] { margin: 0 !important; }
+    table, td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; }
+    table { border-spacing: 0 !important; border-collapse: collapse !important; table-layout: fixed !important; margin: 0 auto !important; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; display: block; }
+    a { text-decoration: none; color: inherit; }
 
-    td {
-      padding: 0;
-    }
-
-    img {
-      border: 0;
-      outline: none;
-      text-decoration: none;
-      -ms-interpolation-mode: bicubic;
-    }
-
-    a {
-      text-decoration: none;
-    }
-
-    .wrapper {
-      width: 100%;
-      background: #030712;
-    }
-
-    .main {
-      width: 100%;
-      max-width: 620px;
-      background: #080d19;
-      border: 1px solid #1d2940;
-      border-radius: 22px;
-      overflow: hidden;
-    }
-
-    .content {
-      padding-left: 32px;
-      padding-right: 32px;
-    }
-
-    @media only screen and (max-width: 640px) {
-
-      .outer-padding {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
+    /* MOBILE & PC DUAL RESPONSIVE MEDIA QUERIES */
+    @media only screen and (max-width: 600px) {
+      .outer-container {
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+        padding-top: 10px !important;
+        padding-bottom: 20px !important;
       }
-
-      .content {
-        padding-left: 20px !important;
-        padding-right: 20px !important;
+      .email-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 16px !important;
       }
-
-      .hero-title {
-        font-size: 26px !important;
+      .content-padding {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
       }
-
-      .referral-code {
-        font-size: 23px !important;
-        letter-spacing: 2px !important;
-      }
-
       .mobile-stack {
         display: block !important;
         width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 10px !important;
       }
-
-      .mobile-stack td {
+      .mobile-btn {
         display: block !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        text-align: center !important;
+        padding: 14px 10px !important;
+        font-size: 13px !important;
       }
-
-      .mobile-spacing {
-        padding: 6px 0 !important;
+      .hero-heading {
+        font-size: 24px !important;
+        line-height: 1.25 !important;
+      }
+      .referral-code-text {
+        font-size: 22px !important;
+        letter-spacing: 2px !important;
+        word-break: break-all !important;
+      }
+      .share-col {
+        display: block !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 8px !important;
       }
     }
   </style>
 </head>
+<body style="margin: 0; padding: 0; background-color: #030712; word-spacing: normal;">
 
-<body>
-
-  <!-- PREHEADER -->
-  <div
-    style="
-      display:none;
-      max-height:0;
-      overflow:hidden;
-      opacity:0;
-      color:transparent;
-      font-size:1px;
-      line-height:1px;
-    "
-  >
-    Your YODHA 2 registration is confirmed.
-    Your Warrior Referral Code is ${safeReferralCode}.
+  <!-- PREHEADER / HIDDEN EMAIL PREVIEW TEXT -->
+  <div style="display: none; max-height: 0px; overflow: hidden; opacity: 0; color: transparent; font-size: 1px; line-height: 1px; max-width: 0px;">
+    🚀 YODHA 2.0 Registration Confirmed for Team ${e(data.teamName)}! Your Warrior Code is ${safeReferralCode}.
+    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
   </div>
 
-  <center
-    class="wrapper"
-    style="
-      width:100%;
-      background:#030712;
-    "
-  >
-
-    <table
-      role="presentation"
-      width="100%"
-      cellpadding="0"
-      cellspacing="0"
-      border="0"
-    >
-
-      <tr>
-
-        <td
-          align="center"
-          class="outer-padding"
-          style="
-            padding:24px 12px 40px;
-          "
-        >
-
-          <!-- ================================================= -->
-          <!-- MAIN EMAIL CONTAINER -->
-          <!-- ================================================= -->
-
-          <table
-            role="presentation"
-            class="main"
-            cellpadding="0"
-            cellspacing="0"
-            border="0"
-          >
-
-            <!-- TOP ACCENT -->
-            <tr>
-
-              <td
-                height="4"
-                style="
-                  height:4px;
-                  background:#38bdf8;
-                  font-size:0;
-                  line-height:0;
-                "
-              >
-                &nbsp;
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- HERO BANNER -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td>
-
-                <a
-                  href="${safeWebsiteUrl}"
-                  target="_blank"
-                  style="text-decoration:none;"
-                >
-
-                  <img
-                    src="${e(bannerUrl)}"
-                    alt="YODHA 2 — Warriors of AI"
-                    width="620"
-                    style="
-                      display:block;
-                      width:100%;
-                      height:auto;
-                    "
-                  >
-
-                </a>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- INTRO -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:34px;
-                  padding-bottom:8px;
-                "
-              >
-
-                <div
-                  style="
-                    font-size:10px;
-                    line-height:1.2;
-                    letter-spacing:2.6px;
-                    text-transform:uppercase;
-                    font-weight:800;
-                    color:#7dd3fc;
-                  "
-                >
-                  YODHA 2.0
-                  &nbsp;&nbsp;•&nbsp;&nbsp;
-                  WARRIORS OF AI
-                </div>
-
-                <div
-                  class="hero-title"
-                  style="
-                    padding-top:9px;
-                    font-size:30px;
-                    line-height:1.16;
-                    font-weight:900;
-                    letter-spacing:-0.7px;
-                    color:#ffffff;
-                  "
-                >
-                  Registration
-                  <br>
-                  Confirmed
-                  <span style="color:#38bdf8;">✓</span>
-                </div>
-
-                <div
-                  style="
-                    padding-top:14px;
-                    font-size:14px;
-                    line-height:1.75;
-                    color:#aeb9cb;
-                  "
-                >
-                  Hello
-                  <strong style="color:#ffffff;">
-                    ${e(data.leaderName)}
-                  </strong>,
-
-                  <br>
-                  <br>
-
-                  Your team is officially registered for
-                  <strong style="color:#ffffff;">
-                    YODHA 2 – Warriors of AI
-                  </strong>.
-
-                  <br>
-
-                  Your journey starts here.
-                </div>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- CONFIRMED STATUS -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:18px;
-                  padding-bottom:10px;
-                "
-              >
-
-                <table
-                  role="presentation"
-                  width="100%"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                  style="
-                    background:#0b1721;
-                    border:1px solid #164e63;
-                    border-radius:14px;
-                  "
-                >
-
-                  <tr>
-
-                    <td
-                      style="
-                        padding:14px 16px;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                      >
-
-                        <tr>
-
-                          <td
-                            style="
-                              font-size:11px;
-                              letter-spacing:1.3px;
-                              text-transform:uppercase;
-                              font-weight:800;
-                              color:#67e8f9;
-                            "
-                          >
-                            REGISTRATION STATUS
-                          </td>
-
-                          <td
-                            align="right"
-                          >
-
-                            <span
-                              style="
-                                display:inline-block;
-                                padding:6px 11px;
-                                border:1px solid #10b981;
-                                border-radius:999px;
-                                background:#052e25;
-                                color:#6ee7b7;
-                                font-size:11px;
-                                font-weight:800;
-                              "
-                            >
-                              ● CONFIRMED
-                            </span>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                    </td>
-
-                  </tr>
-
-                </table>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- SECTION 01 -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:20px;
-                  padding-bottom:4px;
-                "
-              >
-
-                <div
-                  style="
-                    font-size:11px;
-                    line-height:1.2;
-                    letter-spacing:2px;
-                    text-transform:uppercase;
-                    font-weight:900;
-                    color:#7dd3fc;
-                  "
-                >
-                  01 / REGISTRATION SUMMARY
-                </div>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- DETAILS -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:12px;
-                  padding-bottom:8px;
-                "
-              >
-
-                <table
-                  role="presentation"
-                  width="100%"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                >
-
-                  <!-- TEAM LEADER -->
-                  <tr>
-
-                    <td
-                      class="mobile-stack"
-                      width="48%"
-                      style="
-                        width:48%;
-                        padding:0 4px 8px 0;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="
-                          background:#0d1324;
-                          border:1px solid #1b263d;
-                          border-radius:13px;
-                        "
-                      >
-
-                        <tr>
-
-                          <td style="padding:14px 16px;">
-
-                            <div
-                              style="
-                                font-size:10px;
-                                color:#7f8ea8;
-                                text-transform:uppercase;
-                                letter-spacing:1.2px;
-                                font-weight:700;
-                              "
-                            >
-                              TEAM LEADER
-                            </div>
-
-                            <div
-                              style="
-                                padding-top:5px;
-                                font-size:14px;
-                                line-height:1.4;
-                                color:#ffffff;
-                                font-weight:800;
-                              "
-                            >
-                              ${e(data.leaderName)}
-                            </div>
-
-                            ${
-                              data.leaderEmail
-                                ? `
-                                  <div
-                                    style="
-                                      padding-top:4px;
-                                      font-size:11px;
-                                      color:#8190a8;
-                                      word-break:break-word;
-                                    "
-                                  >
-                                    ${e(data.leaderEmail)}
-                                  </div>
-                                `
-                                : ""
-                            }
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                    </td>
-
-                    <!-- TEAM NAME -->
-
-                    <td
-                      class="mobile-stack"
-                      width="52%"
-                      style="
-                        width:52%;
-                        padding:0 0 8px 4px;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="
-                          background:#0a1020;
-                          border:1px solid #1b263d;
-                          border-radius:13px;
-                        "
-                      >
-
-                        <tr>
-
-                          <td style="padding:14px 16px;">
-
-                            <div
-                              style="
-                                font-size:10px;
-                                color:#7f8ea8;
-                                text-transform:uppercase;
-                                letter-spacing:1.2px;
-                                font-weight:700;
-                              "
-                            >
-                              TEAM NAME
-                            </div>
-
-                            <div
-                              style="
-                                padding-top:5px;
-                                font-size:14px;
-                                line-height:1.4;
-                                color:#ffffff;
-                                font-weight:800;
-                              "
-                            >
-                              ${e(data.teamName)}
-                            </div>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                    </td>
-
-                  </tr>
-
-                  <!-- TRACK -->
-
-                  <tr>
-
-                    <td
-                      class="mobile-stack"
-                      width="48%"
-                      style="
-                        width:48%;
-                        padding:0 4px 8px 0;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="
-                          background:#0d1324;
-                          border:1px solid #1b263d;
-                          border-radius:13px;
-                        "
-                      >
-
-                        <tr>
-
-                          <td style="padding:14px 16px;">
-
-                            <div
-                              style="
-                                font-size:10px;
-                                color:#7f8ea8;
-                                text-transform:uppercase;
-                                letter-spacing:1.2px;
-                                font-weight:700;
-                              "
-                            >
-                              TRACK
-                            </div>
-
-                            <div
-                              style="
-                                padding-top:5px;
-                                font-size:13px;
-                                line-height:1.45;
-                                color:#67e8f9;
-                                font-weight:800;
-                              "
-                            >
-                              ${e(data.track)}
-                            </div>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                    </td>
-
-                    <!-- TEAM SIZE -->
-
-                    <td
-                      class="mobile-stack"
-                      width="52%"
-                      style="
-                        width:52%;
-                        padding:0 0 8px 4px;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="
-                          background:#0a1020;
-                          border:1px solid #1b263d;
-                          border-radius:13px;
-                        "
-                      >
-
-                        <tr>
-
-                          <td style="padding:14px 16px;">
-
-                            <div
-                              style="
-                                font-size:10px;
-                                color:#7f8ea8;
-                                text-transform:uppercase;
-                                letter-spacing:1.2px;
-                                font-weight:700;
-                              "
-                            >
-                              TEAM SIZE
-                            </div>
-
-                            <div
-                              style="
-                                padding-top:5px;
-                                font-size:14px;
-                                line-height:1.4;
-                                color:#ffffff;
-                                font-weight:800;
-                              "
-                            >
-                              ${e(data.teamSize)} Member(s)
-                            </div>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                    </td>
-
-                  </tr>
-
-                  <!-- DATE -->
-
-                  <tr>
-
-                    <td
-                      class="mobile-stack"
-                      width="48%"
-                      style="
-                        width:48%;
-                        padding:0 4px 8px 0;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="
-                          background:#0d1324;
-                          border:1px solid #1b263d;
-                          border-radius:13px;
-                        "
-                      >
-
-                        <tr>
-
-                          <td style="padding:14px 16px;">
-
-                            <div
-                              style="
-                                font-size:10px;
-                                color:#7f8ea8;
-                                text-transform:uppercase;
-                                letter-spacing:1.2px;
-                                font-weight:700;
-                              "
-                            >
-                              REGISTRATION DATE
-                            </div>
-
-                            <div
-                              style="
-                                padding-top:5px;
-                                font-size:13px;
-                                line-height:1.4;
-                                color:#ffffff;
-                                font-weight:800;
-                              "
-                            >
-                              ${e(data.registrationDate)}
-                            </div>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                    </td>
-
-                    <!-- REFERRAL CODE MINI -->
-
-                    <td
-                      class="mobile-stack"
-                      width="52%"
-                      style="
-                        width:52%;
-                        padding:0 0 8px 4px;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="
-                          background:#11100a;
-                          border:1px solid #6b4f0a;
-                          border-radius:13px;
-                        "
-                      >
-
-                        <tr>
-
-                          <td style="padding:14px 16px;">
-
-                            <div
-                              style="
-                                font-size:10px;
-                                color:#a38e4c;
-                                text-transform:uppercase;
-                                letter-spacing:1.2px;
-                                font-weight:700;
-                              "
-                            >
-                              WARRIOR CODE
-                            </div>
-
-                            <div
-                              style="
-                                padding-top:5px;
-                                font-family:'Courier New',monospace;
-                                font-size:14px;
-                                line-height:1.4;
-                                color:#fbbf24;
-                                font-weight:900;
-                                letter-spacing:1px;
-                                word-break:break-word;
-                              "
-                            >
-                              ${safeReferralCode}
-                            </div>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                    </td>
-
-                  </tr>
-
-                  ${
-                    data.pptLink
-                      ? `
-                        <!-- PPT LINK -->
-
-                        <tr>
-
-                          <td colspan="2">
-
-                            <table
-                              role="presentation"
-                              width="100%"
-                              cellpadding="0"
-                              cellspacing="0"
-                              border="0"
-                              style="
-                                background:#0d1324;
-                                border:1px solid #1b263d;
-                                border-radius:13px;
-                              "
-                            >
-
-                              <tr>
-
-                                <td style="padding:14px 16px;">
-
-                                  <div
-                                    style="
-                                      font-size:10px;
-                                      color:#7f8ea8;
-                                      text-transform:uppercase;
-                                      letter-spacing:1.2px;
-                                      font-weight:700;
-                                    "
-                                  >
-                                    PRESENTATION
-                                  </div>
-
-                                  <div
-                                    style="
-                                      padding-top:6px;
-                                      font-size:12px;
-                                      line-height:1.5;
-                                    "
-                                  >
-
-                                    <a
-                                      href="${e(data.pptLink)}"
-                                      target="_blank"
-                                      style="
-                                        color:#67e8f9;
-                                        text-decoration:none;
-                                        font-weight:800;
-                                      "
-                                    >
-                                      Open submitted PPT ↗
-                                    </a>
-
-                                  </div>
-
-                                </td>
-
-                              </tr>
-
-                            </table>
-
-                          </td>
-
-                        </tr>
-                      `
-                      : ""
-                  }
-
-                </table>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- SECTION 02 : REFERRAL -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:28px;
-                  padding-bottom:10px;
-                "
-              >
-
-                <table
-                  role="presentation"
-                  width="100%"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                  style="
-                    background:#11100a;
-                    border:1px solid #6b4f0a;
-                    border-radius:18px;
-                  "
-                >
-
-                  <tr>
-
-                    <td style="padding:22px 20px 20px;">
-
-                      <div
-                        style="
-                          font-size:10px;
-                          line-height:1.2;
-                          letter-spacing:2px;
-                          text-transform:uppercase;
-                          font-weight:900;
-                          color:#fbbf24;
-                        "
-                      >
-                        02 / WARRIOR REFERRAL
-                      </div>
-
-                      <div
-                        style="
-                          padding-top:8px;
-                          font-size:21px;
-                          line-height:1.3;
-                          color:#ffffff;
-                          font-weight:900;
-                        "
-                      >
-                        Bring your squad.
-                        <br>
-                        Earn your edge.
-                      </div>
-
-                      <div
-                        style="
-                          padding-top:7px;
-                          font-size:12px;
-                          line-height:1.65;
-                          color:#c8c09e;
-                        "
-                      >
-                        Share your unique referral code with fellow
-                        innovators. When another team registers through
-                        your referral, they are linked to your referral room.
-                      </div>
-
-                      <!-- CODE -->
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="
-                          margin-top:16px;
-                          background:#06070b;
-                          border:1px dashed #fbbf24;
-                          border-radius:14px;
-                        "
-                      >
-
-                        <tr>
-
-                          <td
-                            align="center"
-                            style="padding:16px 12px;"
-                          >
-
-                            <div
-                              style="
-                                font-size:9px;
-                                letter-spacing:2px;
-                                text-transform:uppercase;
-                                color:#9b8d57;
-                                font-weight:800;
-                              "
-                            >
-                              YOUR CODE
-                            </div>
-
-                            <div
-                              class="referral-code"
-                              style="
-                                padding-top:6px;
-                                font-family:'Courier New',monospace;
-                                font-size:27px;
-                                line-height:1.2;
-                                letter-spacing:3px;
-                                color:#fbbf24;
-                                font-weight:900;
-                                word-break:break-word;
-                              "
-                            >
-                              ${safeReferralCode}
-                            </div>
-
-                            <div
-                              style="
-                                padding-top:8px;
-                                font-size:10px;
-                                color:#8d8258;
-                              "
-                            >
-                              Your personal Warrior Referral Code
-                            </div>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                      <!-- SHARE BUTTONS -->
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                        style="margin-top:12px;"
-                      >
-
-                        <tr>
-
-                          <!-- WHATSAPP -->
-
-                          <td
-                            width="50%"
-                            style="padding-right:4px;"
-                          >
-
-                            <a
-                              href="${e(whatsappShareUrl)}"
-                              target="_blank"
-                              style="
-                                display:block;
-                                text-align:center;
-                                padding:13px 7px;
-                                border:1px solid #15803d;
-                                border-radius:11px;
-                                background:#052e16;
-                                color:#86efac;
-                                text-decoration:none;
-                                font-size:11px;
-                                font-weight:900;
-                                letter-spacing:.3px;
-                              "
-                            >
-                              SHARE ON WHATSAPP ↗
+  <!-- OUTER WRAPPER -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #030712; width: 100%;">
+    <tr>
+      <td align="center" class="outer-container" style="padding: 24px 12px 40px 12px; background-color: #030712;">
+
+        <!-- MAIN CONTAINER EMAIL CARD -->
+        <table role="presentation" class="email-card" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 620px; background-color: #060b17; border: 1px solid #1e293b; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);">
+          
+          <!-- GRADIENT CYBER TOP ACCENT BAR -->
+          <tr>
+            <td height="5" style="height: 5px; background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #f59e0b 100%); font-size: 0; line-height: 0;">
+              &nbsp;
+            </td>
+          </tr>
+
+          <!-- BANNER IMAGE -->
+          <tr>
+            <td style="padding: 0; background-color: #030712;">
+              <a href="${safeWebsiteUrl}" target="_blank" style="text-decoration: none; display: block;">
+                <img src="${e(bannerUrl)}" alt="YODHA 2.0 Banner" width="620" style="width: 100%; max-width: 620px; height: auto; display: block; border: 0;" />
+              </a>
+            </td>
+          </tr>
+
+          <!-- HERO SECTION -->
+          <tr>
+            <td class="content-padding" style="padding: 28px 28px 12px 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <!-- STATUS BADGE -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 14px;">
+                      <tr>
+                        <td style="background-color: #052e25; border: 1px solid #10b981; border-radius: 999px; padding: 4px 12px;">
+                          <span style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 800; color: #34d399; letter-spacing: 1px; text-transform: uppercase;">
+                            ● REGISTRATION CONFIRMED
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #38bdf8;">
+                      YODHA 2.0 &nbsp;•&nbsp; WARRIORS OF AI
+                    </div>
+                    <div class="hero-heading" style="padding-top: 6px; font-family: Arial, sans-serif; font-size: 28px; line-height: 1.2; font-weight: 900; color: #ffffff; letter-spacing: -0.5px;">
+                      Welcome to the Arena, <span style="color: #38bdf8;">${e(data.leaderName)}</span>!
+                    </div>
+                    <div style="padding-top: 12px; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.65; color: #94a3b8;">
+                      Your squad <strong style="color: #ffffff;">${e(data.teamName)}</strong> has been successfully verified and registered for <strong style="color: #ffffff;">YODHA 2.0</strong>. Review your registration dossier below.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- SECTION 01: DOSSIER -->
+          <tr>
+            <td class="content-padding" style="padding: 16px 28px 8px 28px;">
+              <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #7dd3fc; padding-bottom: 12px;">
+                01 // SQUAD DOSSIER
+              </div>
+
+              <!-- DUAL COLUMN CARDS TABLE -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <!-- ROW 1: LEADER & TEAM NAME -->
+                <tr>
+                  <td class="mobile-stack" width="50%" valign="top" style="padding-right: 6px; padding-bottom: 12px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
+                      <tr>
+                        <td style="padding: 14px 16px;">
+                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
+                            TEAM CAPTAIN
+                          </div>
+                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 15px; font-weight: 800; color: #ffffff; word-break: break-word;">
+                            ${e(data.leaderName)}
+                          </div>
+                          ${data.leaderEmail ? `<div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 11px; color: #94a3b8; word-break: break-word;">✉️ ${e(data.leaderEmail)}</div>` : ""}
+                          ${data.leaderPhone ? `<div style="padding-top: 2px; font-family: Arial, sans-serif; font-size: 11px; color: #94a3b8;">📞 ${e(data.leaderPhone)}</div>` : ""}
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td class="mobile-stack" width="50%" valign="top" style="padding-left: 6px; padding-bottom: 12px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
+                      <tr>
+                        <td style="padding: 14px 16px;">
+                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
+                            TEAM NAME
+                          </div>
+                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 15px; font-weight: 800; color: #38bdf8; word-break: break-word;">
+                            ${e(data.teamName)}
+                          </div>
+                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 11px; color: #94a3b8;">
+                            👥 Size: <strong style="color: #ffffff;">${e(data.teamSize)} Member(s)</strong>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- ROW 2: TRACK & DATE -->
+                <tr>
+                  <td class="mobile-stack" width="50%" valign="top" style="padding-right: 6px; padding-bottom: 12px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
+                      <tr>
+                        <td style="padding: 14px 16px;">
+                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
+                            CHOSEN TRACK
+                          </div>
+                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 14px; font-weight: 800; color: #ffffff; word-break: break-word;">
+                            ⚡ ${e(data.track)}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td class="mobile-stack" width="50%" valign="top" style="padding-left: 6px; padding-bottom: 12px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #091224; border: 1px solid #1e2e4a; border-radius: 14px;">
+                      <tr>
+                        <td style="padding: 14px 16px;">
+                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #64748b;">
+                            REGISTRATION DATE
+                          </div>
+                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #cbd5e1;">
+                            📅 ${e(data.registrationDate)}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- ROW 3: PROBLEM STATEMENT & PPT LINK IF PRESENT -->
+                ${
+                  data.problemStatementTitle || data.pptLink
+                    ? `
+                <tr>
+                  <td colspan="2" class="mobile-stack" style="padding-bottom: 12px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #0b172a; border: 1px solid #1e3a8a; border-radius: 14px;">
+                      <tr>
+                        <td style="padding: 16px;">
+                          ${
+                            data.problemStatementTitle
+                              ? `
+                          <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #38bdf8;">
+                            PROBLEM STATEMENT ${data.problemStatementId ? `#${e(data.problemStatementId)}` : ""}
+                          </div>
+                          <div style="padding-top: 4px; font-family: Arial, sans-serif; font-size: 13px; line-weight: 1.5; font-weight: 700; color: #ffffff;">
+                            ${e(data.problemStatementTitle)}
+                          </div>
+                          `
+                              : ""
+                          }
+                          ${
+                            data.pptLink
+                              ? `
+                          <div style="padding-top: 10px;">
+                            <a href="${e(data.pptLink)}" target="_blank" style="display: inline-block; padding: 10px 16px; background-color: #0284c7; border-radius: 8px; color: #ffffff; font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; text-decoration: none;">
+                              📄 View Presentation Deck PPT ↗
                             </a>
-
-                          </td>
-
-                          <!-- EMAIL -->
-
-                          <td
-                            width="50%"
-                            style="padding-left:4px;"
-                          >
-
-                            <a
-                              href="${e(emailShareUrl)}"
-                              style="
-                                display:block;
-                                text-align:center;
-                                padding:13px 7px;
-                                border:1px solid #334155;
-                                border-radius:11px;
-                                background:#111827;
-                                color:#e2e8f0;
-                                text-decoration:none;
-                                font-size:11px;
-                                font-weight:900;
-                                letter-spacing:.3px;
-                              "
-                            >
-                              SHARE VIA EMAIL ↗
-                            </a>
-
-                          </td>
-
-                        </tr>
-
-                      </table>
-
-                      <!-- DIRECT REFERRAL LINK -->
-
-                      <div
-                        style="
-                          padding-top:15px;
-                          text-align:center;
-                        "
-                      >
-
-                        <a
-                          href="${e(referralTarget)}"
-                          target="_blank"
-                          style="
-                            color:#fbbf24;
-                            font-size:11px;
-                            line-height:1.5;
-                            text-decoration:underline;
-                          "
-                        >
-                          Open your referral registration link ↗
-                        </a>
-
-                      </div>
-
-                    </td>
-
-                  </tr>
-
-                </table>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- TEAM ROSTER -->
-            <!-- ================================================= -->
-
-            ${
-              data.members && data.members.length > 0
-                ? `
-                  <tr>
-
-                    <td
-                      class="content"
-                      style="
-                        padding-top:26px;
-                        padding-bottom:6px;
-                      "
-                    >
-
-                      <div
-                        style="
-                          font-size:11px;
-                          line-height:1.2;
-                          letter-spacing:2px;
-                          text-transform:uppercase;
-                          font-weight:900;
-                          color:#7dd3fc;
-                        "
-                      >
-                        03 / TEAM ROSTER
-                      </div>
-
-                    </td>
-
-                  </tr>
-
-                  <tr>
-
-                    <td
-                      class="content"
-                      style="
-                        padding-top:10px;
-                        padding-bottom:4px;
-                      "
-                    >
-
-                      <table
-                        role="presentation"
-                        width="100%"
-                        cellpadding="0"
-                        cellspacing="0"
-                        border="0"
-                      >
-
-                        ${membersHtml}
-
-                      </table>
-
-                    </td>
-
-                  </tr>
+                          </div>
+                          `
+                              : ""
+                          }
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
                 `
-                : ""
-            }
-
-            <!-- ================================================= -->
-            <!-- WHAT HAPPENS NEXT -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:26px;
-                  padding-bottom:6px;
-                "
-              >
-
-                <div
-                  style="
-                    font-size:11px;
-                    line-height:1.2;
-                    letter-spacing:2px;
-                    text-transform:uppercase;
-                    font-weight:900;
-                    color:#7dd3fc;
-                  "
-                >
-                  04 / WHAT HAPPENS NEXT
-                </div>
-
-              </td>
-
-            </tr>
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:10px;
-                  padding-bottom:6px;
-                "
-              >
-
-                <table
-                  role="presentation"
-                  width="100%"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                  style="
-                    background:#0b1020;
-                    border:1px solid #1d2940;
-                    border-radius:16px;
-                  "
-                >
-
-                  <tr>
-
-                    <td style="padding:18px 18px 10px;">
-
-                      <!-- STEP 1 -->
-
-                      <div
-                        style="
-                          padding-bottom:11px;
-                          font-size:13px;
-                          line-height:1.55;
-                          color:#cbd5e1;
-                        "
-                      >
-                        <span
-                          style="
-                            color:#38bdf8;
-                            font-weight:900;
-                          "
-                        >
-                          01
-                        </span>
-
-                        &nbsp;&nbsp;
-
-                        Registration review by the organizing committee.
-                      </div>
-
-                      <!-- STEP 2 -->
-
-                      <div
-                        style="
-                          padding-bottom:11px;
-                          font-size:13px;
-                          line-height:1.55;
-                          color:#cbd5e1;
-                        "
-                      >
-                        <span
-                          style="
-                            color:#38bdf8;
-                            font-weight:900;
-                          "
-                        >
-                          02
-                        </span>
-
-                        &nbsp;&nbsp;
-
-                        Shortlisting and evaluation will begin shortly.
-                      </div>
-
-                      <!-- STEP 3 -->
-
-                      <div
-                        style="
-                          padding-bottom:11px;
-                          font-size:13px;
-                          line-height:1.55;
-                          color:#cbd5e1;
-                        "
-                      >
-                        <span
-                          style="
-                            color:#38bdf8;
-                            font-weight:900;
-                          "
-                        >
-                          03
-                        </span>
-
-                        &nbsp;&nbsp;
-
-                        Selected teams will receive further instructions by email.
-                      </div>
-
-                      <!-- STEP 4 -->
-
-                      <div
-                        style="
-                          padding-bottom:11px;
-                          font-size:13px;
-                          line-height:1.55;
-                          color:#cbd5e1;
-                        "
-                      >
-                        <span
-                          style="
-                            color:#38bdf8;
-                            font-weight:900;
-                          "
-                        >
-                          04
-                        </span>
-
-                        &nbsp;&nbsp;
-
-                        Keep checking your inbox for important announcements.
-                      </div>
-
-                      <!-- STEP 5 -->
-
-                      <div
-                        style="
-                          font-size:13px;
-                          line-height:1.55;
-                          color:#cbd5e1;
-                        "
-                      >
-                        <span
-                          style="
-                            color:#38bdf8;
-                            font-weight:900;
-                          "
-                        >
-                          05
-                        </span>
-
-                        &nbsp;&nbsp;
-
-                        Stay patient while the evaluation process is completed.
-                      </div>
-
-                    </td>
-
-                  </tr>
-
-                </table>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- CTA -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                align="center"
-                class="content"
-                style="
-                  padding-top:28px;
-                  padding-bottom:18px;
-                "
-              >
-
-                <a
-                  href="${safeWebsiteUrl}"
-                  target="_blank"
-                  style="
-                    display:inline-block;
-                    padding:13px 23px;
-                    border-radius:12px;
-                    background:#38bdf8;
-                    color:#03111a;
-                    text-decoration:none;
-                    font-size:12px;
-                    letter-spacing:.8px;
-                    font-weight:900;
-                  "
-                >
-                  VISIT YODHA 2 ↗
-                </a>
-
-              </td>
-
-            </tr>
-
-            <!-- ================================================= -->
-            <!-- FOOTER -->
-            <!-- ================================================= -->
-
-            <tr>
-
-              <td
-                class="content"
-                style="
-                  padding-top:16px;
-                  padding-bottom:30px;
-                "
-              >
-
-                <div
-                  style="
-                    height:1px;
-                    background:#1d2940;
-                    font-size:0;
-                    line-height:0;
-                  "
-                >
-                  &nbsp;
-                </div>
-
-                <div
-                  style="
-                    padding-top:22px;
-                    text-align:center;
-                    font-size:11px;
-                    line-height:1.75;
-                    color:#65738a;
-                  "
-                >
-
-                  <strong
-                    style="
-                      display:block;
-                      color:#ffffff;
-                      font-size:12px;
-                    "
-                  >
-                    YODHA HACKATHON TEAM
-                  </strong>
-
-                  <span
-                    style="
-                      color:#67e8f9;
-                      font-weight:800;
-                    "
-                  >
-                    WARRIORS OF AI
-                  </span>
-
-                  <br>
-                  <br>
-
-                  <a
-                    href="${safeWebsiteUrl}"
-                    target="_blank"
-                    style="
-                      color:#67e8f9;
-                      text-decoration:none;
-                    "
-                  >
-                    ${safeWebsiteUrl}
-                  </a>
-
-                  <br>
-
-                  <a
-                    href="mailto:${safeContactEmail}"
-                    style="
-                      color:#67e8f9;
-                      text-decoration:none;
-                    "
-                  >
-                    ${safeContactEmail}
-                  </a>
-
-                  <br>
-                  <br>
-
-                  <span
-                    style="
-                      font-size:10px;
-                      color:#46536a;
-                    "
-                  >
-                    This is an automated email generated by
-                    the YODHA Hackathon Registration System.
-
-                    <br>
-
-                    Please do not reply to this email.
-                  </span>
-
-                </div>
-
-              </td>
-
-            </tr>
-
-          </table>
-
-        </td>
-
-      </tr>
-
-    </table>
-
-  </center>
+                    : ""
+                }
+              </table>
+            </td>
+          </tr>
+
+          <!-- SECTION 02: WARRIOR REFERRAL HQ -->
+          <tr>
+            <td class="content-padding" style="padding: 16px 28px 12px 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #120e06; border: 1px dashed #f59e0b; border-radius: 18px;">
+                <tr>
+                  <td style="padding: 22px 20px;">
+                    <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #f59e0b;">
+                      02 // WARRIOR REFERRAL HQ
+                    </div>
+                    <div style="padding-top: 6px; font-family: Arial, sans-serif; font-size: 20px; font-weight: 900; color: #ffffff; line-height: 1.3;">
+                      Rally Your Network. Claim Supreme Glory.
+                    </div>
+                    <div style="padding-top: 6px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.6; color: #d1d5db;">
+                      Share your unique referral code with fellow teams. Every team registering with your code will be logged directly under your referral room.
+                    </div>
+
+                    <!-- REFERRAL CODE DISPLAY BOX -->
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 16px; background-color: #000000; border: 1px solid #78350f; border-radius: 12px;">
+                      <tr>
+                        <td align="center" style="padding: 16px 12px;">
+                          <div style="font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #92400e; font-weight: 800;">
+                            YOUR UNIQUE REFERRAL CODE
+                          </div>
+                          <div class="referral-code-text" style="padding-top: 6px; font-family: 'Courier New', Courier, monospace; font-size: 28px; font-weight: 900; letter-spacing: 3px; color: #fbbf24;">
+                            ${safeReferralCode}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- QUICK ACTION SHARE BUTTONS -->
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 14px;">
+                      <tr>
+                        <td class="share-col" width="50%" valign="top" style="padding-right: 4px;">
+                          <a href="${e(whatsappShareUrl)}" target="_blank" class="mobile-btn" style="display: block; text-align: center; padding: 12px 10px; background-color: #064e3b; border: 1px solid #10b981; border-radius: 10px; color: #6ee7b7; font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; text-decoration: none;">
+                            💬 Share via WhatsApp ↗
+                          </a>
+                        </td>
+                        <td class="share-col" width="50%" valign="top" style="padding-left: 4px;">
+                          <a href="${e(emailShareUrl)}" target="_blank" class="mobile-btn" style="display: block; text-align: center; padding: 12px 10px; background-color: #1e293b; border: 1px solid #475569; border-radius: 10px; color: #e2e8f0; font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; text-decoration: none;">
+                            ✉️ Share via Email ↗
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <div style="padding-top: 12px; text-align: center; font-family: Arial, sans-serif; font-size: 11px; color: #9ca3af; word-break: break-all;">
+                      Direct Link: <a href="${e(referralTarget)}" target="_blank" style="color: #f59e0b; text-decoration: underline;">${e(referralTarget)}</a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- SECTION 03: SQUAD ROSTER -->
+          ${
+            data.members && data.members.length > 0
+              ? `
+          <tr>
+            <td class="content-padding" style="padding: 16px 28px 12px 28px;">
+              <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #7dd3fc; padding-bottom: 12px;">
+                03 // REGISTERED SQUAD ROSTER (${data.members.length})
+              </div>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                ${membersHtml}
+              </table>
+            </td>
+          </tr>
+          `
+              : ""
+          }
+
+          <!-- SECTION 04: MISSION ROADMAP -->
+          <tr>
+            <td class="content-padding" style="padding: 16px 28px 16px 28px;">
+              <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #7dd3fc; padding-bottom: 12px;">
+                04 // NEXT STEPS & MISSION ROADMAP
+              </div>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #080f1e; border: 1px solid #1e293b; border-radius: 16px;">
+                <tr>
+                  <td style="padding: 18px 18px 10px 18px;">
+                    <!-- STEP 1 -->
+                    <div style="padding-bottom: 10px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+                      <strong style="color: #38bdf8;">01. Verification:</strong> Registration details & submission material review by the organizing committee.
+                    </div>
+                    <!-- STEP 2 -->
+                    <div style="padding-bottom: 10px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+                      <strong style="color: #38bdf8;">02. Shortlisting:</strong> Technical round evaluation & problem statement shortlisting.
+                    </div>
+                    <!-- STEP 3 -->
+                    <div style="padding-bottom: 10px; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+                      <strong style="color: #38bdf8;">03. Instructions:</strong> Final hackathon guidelines, schedule & portal access dispatched to Team Captain.
+                    </div>
+                    <!-- STEP 4 -->
+                    <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+                      <strong style="color: #38bdf8;">04. Arena Day:</strong> Showcase your AI innovations and compete for top prizes!
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- PRIMARY WEBSITE CTA BUTTON -->
+          <tr>
+            <td align="center" class="content-padding" style="padding: 12px 28px 24px 28px;">
+              <a href="${safeWebsiteUrl}" target="_blank" class="mobile-btn" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 1px solid #38bdf8; border-radius: 12px; color: #ffffff; font-family: Arial, sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 1px; text-decoration: none; text-transform: uppercase;">
+                EXPLORE YODHA 2.0 PORTAL ↗
+              </a>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td class="content-padding" style="padding: 20px 28px 30px 28px; background-color: #030712; border-top: 1px solid #1e293b;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="font-family: Arial, sans-serif; font-size: 12px; line-height: 1.75; color: #64748b;">
+                    <strong style="color: #ffffff; font-size: 13px;">YODHA HACKATHON TEAM</strong><br>
+                    <span style="color: #38bdf8; font-weight: 800;">WARRIORS OF AI</span><br><br>
+                    Website: <a href="${safeWebsiteUrl}" target="_blank" style="color: #38bdf8; text-decoration: none;">${safeWebsiteUrl}</a><br>
+                    Contact: <a href="mailto:${safeContactEmail}" style="color: #38bdf8; text-decoration: none;">${safeContactEmail}</a><br><br>
+                    <span style="font-size: 11px; color: #475569;">
+                      This is an automated operational email generated by the YODHA 2.0 Portal.<br>
+                      Please do not reply directly to this email.
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
 
 </body>
-</html>
-  `;
+</html>`;
 }
