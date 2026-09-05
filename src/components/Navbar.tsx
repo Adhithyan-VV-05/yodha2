@@ -23,8 +23,9 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Navbar appears when user scroll reaches the About section on all devices
+    let ticking = false;
+
+    const updateNavbarVisibility = () => {
       const aboutElem = document.getElementById("about");
       if (aboutElem) {
         const rect = aboutElem.getBoundingClientRect();
@@ -32,10 +33,18 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
       } else {
         setShowNavbar(window.scrollY > window.innerHeight * 0.85);
       }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateNavbarVisibility);
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    updateNavbarVisibility();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

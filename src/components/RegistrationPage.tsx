@@ -10,7 +10,7 @@ interface RegistrationPageProps {
 
 export function RegistrationPage({ onBack, selectedTrack }: RegistrationPageProps) {
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   return (

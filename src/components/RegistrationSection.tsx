@@ -89,10 +89,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
 
     setReferralCheckState({ status: "checking", message: "Scanning database..." });
 
-    const [res] = await Promise.all([
-      validateReferralCode(trimmed),
-      new Promise((r) => setTimeout(r, 600)),
-    ]);
+    const res = await validateReferralCode(trimmed);
 
     if (res.valid && res.roomData) {
       setReferralCheckState({
@@ -211,7 +208,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
     setMembers(updated);
   };
 
-  // Step 1 Validation & Team Name Availability Check
+  // Step 1 Validation & Fast Instant Transition
   const handleNextFromStep1 = async () => {
     if (!teamName.trim()) {
       setErrorMessage("Please enter your Team Name.");
@@ -234,24 +231,18 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
       }
     }
 
-    setCheckingTeamName(true);
+    // Immediately advance to Step 2 for instant UI response
     setErrorMessage("");
+    setCurrentStep(2);
 
-    try {
-      const taken = await isTeamNameTaken(teamName.trim());
-      setCheckingTeamName(false);
-
-      if (taken) {
-        setErrorMessage("This team name is not available. Please choose another team name.");
-        return;
-      }
-
-      setErrorMessage("");
-      setCurrentStep(2);
-    } catch (err: any) {
-      setCheckingTeamName(false);
-      setErrorMessage(err.message || "Failed to check team name availability.");
-    }
+    // Non-blocking team availability check in background
+    isTeamNameTaken(teamName.trim())
+      .then((taken) => {
+        if (taken) {
+          setErrorMessage("This team name is already taken. Please go back to Step 1 and choose another team name.");
+        }
+      })
+      .catch(() => {});
   };
 
   // Final Form Submission
@@ -464,11 +455,17 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
               {[1, 2, 3, 4].map((stepNum, idx) => (
                 <div key={stepNum} className="flex flex-col items-center relative z-10">
                   <div
+                    onClick={() => {
+                      if (stepNum < currentStep) {
+                        setErrorMessage("");
+                        setCurrentStep(stepNum);
+                      }
+                    }}
                     className={`w-9 h-9 rounded-full flex items-center justify-center font-mono font-bold text-xs transition-all ${
                       currentStep === stepNum
                         ? "bg-blue-600 text-white border-2 border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.6)]"
                         : currentStep > stepNum
-                        ? "bg-emerald-500 text-slate-950 font-black"
+                        ? "bg-emerald-500 text-slate-950 font-black cursor-pointer hover:scale-110"
                         : "bg-slate-900 text-slate-400 border border-slate-700"
                     }`}
                   >
@@ -850,8 +847,19 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </button>
                   <button
                     type="button"
-                    onClick={() => setCurrentStep(4)}
-                    className="px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2"
+                    onClick={() => {
+                      const activeMembers = members.slice(0, teamSize - 1);
+                      for (let i = 0; i < activeMembers.length; i++) {
+                        const m = activeMembers[i];
+                        if (!m.fullName.trim() || !m.email.trim() || !m.phone.trim() || !m.organization.trim()) {
+                          setErrorMessage(`Please fill all required fields for Member #${i + 2}.`);
+                          return;
+                        }
+                      }
+                      setErrorMessage("");
+                      setCurrentStep(4);
+                    }}
+                    className="px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer hover:scale-105 active:scale-95"
                   >
                     <span>NEXT: CONFIRM</span>
                     <ChevronRight className="w-4 h-4 text-white" />

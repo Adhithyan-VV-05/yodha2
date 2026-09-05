@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
@@ -25,20 +25,43 @@ export default function Home() {
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
   const [activePage, setActivePage] = useState<"home" | "healthcare" | "register">("home");
 
+  // Preserve home page scroll position when opening dedicated sub-pages
+  const homeScrollPosRef = useRef<number>(0);
+
   const handleOpenRegisterWithTrack = (trackName?: string) => {
+    if (activePage === "home") {
+      homeScrollPosRef.current = window.scrollY;
+    }
     if (trackName) setSelectedTrack(trackName);
     setActivePage("register");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
     window.history.pushState({ activePage: "register" }, "");
   };
 
   const handleSelectPage = (page: "home" | "healthcare" | "register") => {
+    if (page === activePage) return;
+
+    if (activePage === "home") {
+      homeScrollPosRef.current = window.scrollY;
+    }
+
     setActivePage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
     if (page !== "home") {
+      window.scrollTo({ top: 0, behavior: "instant" });
       window.history.pushState({ activePage: page }, "");
     }
   };
+
+  // Restore saved scroll position when returning to the home page
+  useEffect(() => {
+    if (activePage === "home" && homeScrollPosRef.current > 0) {
+      const savedPos = homeScrollPosRef.current;
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: savedPos, behavior: "instant" });
+      });
+    }
+  }, [activePage]);
 
   useEffect(() => {
     const handlePopState = (e: PopStateEvent) => {

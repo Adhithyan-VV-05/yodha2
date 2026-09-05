@@ -6,13 +6,13 @@ export function ScrollBackgroundManager() {
   const [secondHalfOpacity, setSecondHalfOpacity] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateScroll = () => {
       const scrollY = window.scrollY;
       const h = window.innerHeight;
 
       // 1. HERO BACKGROUND OPACITY:
-      // Completely visible (100%) from 0 to 40vh scroll.
-      // Begins fading after 40vh scroll (from 40vh to 90vh).
       const fadeStart = h * 0.4;
       const fadeEnd = h * 0.9;
 
@@ -26,9 +26,7 @@ export function ScrollBackgroundManager() {
       }
       setHeroOpacity(currentHeroOpacity);
 
-      // 2. 1ST HALF VS 2ND HALF THEME SPLIT (DYNAMICALLY LOCATES 2ND HALF SECTIONS ON MOBILE & PC)
-      // 1st Half: Hero, About, Tracks, SDG -> Light Theme
-      // 2nd Half: Prizes, Timeline, CTA, Carousel, Footer -> Dark Theme
+      // 2. 1ST HALF VS 2ND HALF THEME SPLIT
       const targetSection = document.getElementById("prizes");
       let splitPoint = h * 2.8;
       if (targetSection) {
@@ -41,10 +39,19 @@ export function ScrollBackgroundManager() {
       } else {
         setSecondHalfOpacity(0);
       }
+
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScroll);
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    updateScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
