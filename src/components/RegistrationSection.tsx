@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info, ChevronDown, ChevronUp, ExternalLink, User, Sparkles, FileText } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info, ChevronDown, ChevronUp, ExternalLink, User, FileText } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
@@ -424,7 +424,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                 className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-blue-600/30 via-blue-500/20 to-sky-600/30 hover:from-blue-600/40 hover:to-sky-600/40 border border-blue-400/40 text-blue-200 font-mono text-xs font-black uppercase tracking-wider flex items-center justify-between transition-all cursor-pointer shadow-lg group active:scale-[0.99]"
               >
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-blue-400 group-hover:rotate-12 transition-transform" />
                   <span>{showFullDetails ? "HIDE FULL REGISTRATION DETAILS" : "VIEW FULL SUBMISSION DETAILS & ROSTER"}</span>
                 </div>
                 {showFullDetails ? (
