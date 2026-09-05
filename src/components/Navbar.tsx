@@ -67,16 +67,14 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
     >
       {/* DESKTOP NAVBAR (RESTORED TO ORIGINAL FULL HORIZONTAL BAR ON PC SCREENS) */}
       <div className="hidden lg:block max-w-6xl w-[94%] pt-0">
-        <div className="w-full px-6 py-3.5 rounded-b-3xl bg-[#060817]/90 border-b border-x border-blue-500/40 dark:border-blue-500/50 backdrop-blur-3xl shadow-[0_15px_35px_rgba(0,0,0,0.5)] flex items-center justify-between">
+        <div className="w-full px-5 py-2 rounded-b-2xl bg-[#060817]/90 border-b border-x border-blue-500/40 dark:border-blue-500/50 backdrop-blur-3xl shadow-[0_15px_35px_rgba(0,0,0,0.5)] flex items-center justify-between">
           {/* BRAND LOGO */}
           <a href="#" className="flex items-center gap-3 group shrink-0">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border border-blue-500/60 shadow-[0_0_20px_rgba(59,130,246,0.5)] shrink-0 bg-slate-950 flex items-center justify-center p-0.5">
-              <img
-                src="/logo.webp"
-                alt="YODHA Logo"
-                className="w-full h-full object-contain scale-110"
-              />
-            </div>
+            <img
+              src="/logo.webp"
+              alt="YODHA Logo"
+              className="h-11 sm:h-13 w-auto object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] transition-transform group-hover:scale-105"
+            />
             <div className="flex items-baseline">
               <span className="font-heading font-black text-2xl sm:text-3xl text-slate-950 dark:text-white tracking-tight">
                 YODHA
@@ -114,7 +112,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
       </div>
 
       {/* MOBILE & TABLET NAVBAR (FLOATING PILL & CINEMATIC EXPANDED MENU BELOW LG SCREENS) */}
-      <div className="block lg:hidden max-w-sm sm:max-w-md w-[92%] pt-3">
+      <div className="block lg:hidden max-w-sm sm:max-w-md w-[92%] pt-2">
         <div className="relative w-full">
           <AnimatePresence mode="wait">
             {!menuOpen ? (
@@ -125,20 +123,18 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-[#060817]/95 border border-blue-500/40 backdrop-blur-2xl shadow-[0_10px_35px_rgba(0,0,0,0.5)] flex items-center justify-between"
+                className="w-full px-4 py-2 sm:py-2.5 rounded-full bg-[#060817]/95 border border-blue-500/40 backdrop-blur-2xl shadow-[0_10px_35px_rgba(0,0,0,0.5)] flex items-center justify-between"
               >
                 <a
                   href="#"
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-2.5 group shrink-0"
                 >
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.4)] shrink-0 flex items-center justify-center bg-slate-950 p-0.5">
-                    <img
-                      src="/logo.webp"
-                      alt="YODHA Logo"
-                      className="w-full h-full object-contain scale-105"
-                    />
-                  </div>
+                  <img
+                    src="/logo.webp"
+                    alt="YODHA Logo"
+                    className="h-9 sm:h-11 w-auto object-contain drop-shadow-[0_0_12px_rgba(59,130,246,0.5)]"
+                  />
                   <div className="flex items-baseline gap-1">
                     <span className="font-serif font-medium text-xl text-white tracking-wide">
                       YODHA
@@ -166,7 +162,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full p-5 sm:p-6 rounded-3xl bg-[#060817]/95 border border-blue-500/50 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] flex flex-col space-y-4"
+                className="w-full p-4 sm:p-5 rounded-3xl bg-[#060817]/95 border border-blue-500/50 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] flex flex-col space-y-4"
               >
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800/70">
                   <a
@@ -174,13 +170,11 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2.5 group shrink-0"
                   >
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.4)] shrink-0 flex items-center justify-center bg-slate-950 p-0.5">
-                      <img
-                        src="/logo.webp"
-                        alt="YODHA Logo"
-                        className="w-full h-full object-contain scale-105"
-                      />
-                    </div>
+                    <img
+                      src="/logo.webp"
+                      alt="YODHA Logo"
+                      className="h-9 sm:h-11 w-auto object-contain drop-shadow-[0_0_12px_rgba(59,130,246,0.5)]"
+                    />
                     <div className="flex items-baseline gap-1">
                       <span className="font-serif font-medium text-xl text-white tracking-wide">
                         YODHA

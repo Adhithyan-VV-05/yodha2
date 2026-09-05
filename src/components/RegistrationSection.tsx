@@ -466,20 +466,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                 </div>
               </div>
             )}
-
-            <button
-              onClick={() => {
-                setCurrentStep(1);
-                setStatus("idle");
-                setTeamName("");
-                setSelectedPS(null);
-                setUsedReferralCode("");
-                setReferralCheckState({ status: "idle" });
-              }}
-              className="mt-8 px-8 py-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-lg"
-            >
-              REGISTER ANOTHER TEAM
-            </button>
           </div>
         ) : (
           <div>
