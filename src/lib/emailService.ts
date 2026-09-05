@@ -15,6 +15,9 @@ export interface EmailParticipant {
 export interface TeamEmailPayload {
   teamName: string;
   track: string;
+  problemStatementId?: number;
+  problemStatementTitle?: string;
+  pptLink?: string;
   participants: EmailParticipant[];
   warriorReferralCode?: string;
 }
@@ -90,13 +93,15 @@ export async function sendTeamWelcomeEmails(
     organization: leader?.organization,
     teamName: payload.teamName,
     track: payload.track,
+    problemStatementId: payload.problemStatementId,
+    problemStatementTitle: payload.problemStatementTitle,
+    pptLink: payload.pptLink,
     teamSize: payload.participants.length,
     referralCode: payload.warriorReferralCode || "WARRIOR-2026",
     registrationDate: nowStr,
     members: memberRoster,
     websiteUrl: (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WEBSITE_URL) || (typeof process !== "undefined" && process.env?.VITE_WEBSITE_URL) || "https://yodha-hackathon.netlify.app/",
     contactEmail: (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_CONTACT_EMAIL) || (typeof process !== "undefined" && process.env?.VITE_CONTACT_EMAIL) || "yodha@jecc.ac.in",
-
   };
 
   const result = await sendRegistrationEmail(registrationData);

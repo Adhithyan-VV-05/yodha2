@@ -13,6 +13,9 @@ export interface RegistrationEmailPayload {
   organization?: string;
   teamName: string;
   track: string;
+  problemStatementId?: number;
+  problemStatementTitle?: string;
+  pptLink?: string;
   teamSize: number;
   referralCode: string;
   registrationDate: string;
@@ -41,7 +44,6 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
     (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_BANNER_URL) ||
     (typeof process !== "undefined" && process.env?.VITE_BANNER_URL) ||
     "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.webp";
-
 
   const membersHtml = (data.members || []).map((m, idx) => `
     <div style="background-color: #0d1222; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
@@ -257,7 +259,7 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
             <div class="detail-row">
               <div class="detail-label">👤 Team Leader</div>
               <div class="detail-value">${data.leaderName}</div>
-              ${data.leaderEmail ? `<div style="font-size: 12px; color: #94a3b8; font-family: monospace;">✉️ ${data.leaderEmail} ${data.leaderPhone ? `• 📞 ${data.leaderPhone}` : ""}</div>` : ""}
+              ${data.leaderEmail ? `<div style="font-size: 12px; color: #94a3b8; font-family: monospace;">✉️ ${data.leaderEmail} ${data.leaderPhone ? `• 📞 ${data.leaderPhone}` : ""} ${data.organization ? `• 🏛️ ${data.organization}` : ""}</div>` : ""}
             </div>
 
             <div class="detail-row">
@@ -269,6 +271,15 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
               <div class="detail-label">🏆 Track / Problem Statement</div>
               <div class="detail-value" style="color: #38bdf8;">${data.track}</div>
             </div>
+
+            ${data.pptLink ? `
+            <div class="detail-row">
+              <div class="detail-label">📁 Google Drive PPT Presentation Link</div>
+              <div class="detail-value">
+                <a href="${data.pptLink}" target="_blank" style="color: #38bdf8; text-decoration: underline; font-family: monospace;">${data.pptLink}</a>
+              </div>
+            </div>
+            ` : ""}
 
             <div class="detail-row">
               <div class="detail-label">👨‍💻 Total Team Size</div>

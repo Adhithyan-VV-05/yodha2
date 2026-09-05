@@ -29,6 +29,8 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
   const [teamSize, setTeamSize] = useState<number>(2);
   const [track] = useState(selectedTrack);
   const [selectedPS, setSelectedPS] = useState<ProblemStatement | null>(null);
+  const [pptLink, setPptLink] = useState("");
+  const [showPptInfo, setShowPptInfo] = useState(false);
 
   // PS Inline Search & Filter State
   const [psSearchQuery, setPsSearchQuery] = useState("");
@@ -220,6 +222,16 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
       return;
     }
 
+    if (!pptLink.trim()) {
+      setErrorMessage("Please enter your Google Drive PPT Presentation Link.");
+      return;
+    }
+
+    if (!pptLink.toLowerCase().includes("drive.google.com") && !pptLink.toLowerCase().includes("docs.google.com")) {
+      setErrorMessage("Please provide a valid Google Drive link (e.g. https://drive.google.com/...)");
+      return;
+    }
+
     if (usedReferralCode.trim()) {
       if (referralCheckState.status === "checking") {
         setErrorMessage("Validating Warrior Referral Code, please wait...");
@@ -271,6 +283,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
       track: fullTrackName,
       problemStatementId: selectedPS?.id,
       problemStatementTitle: selectedPS?.title,
+      pptLink: pptLink.trim(),
       leader,
       members: activeMembers,
       usedReferralCode: usedReferralCode.trim().toUpperCase() || undefined,
@@ -294,6 +307,9 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
       const emailResult = await sendTeamWelcomeEmails({
         teamName,
         track: fullTrackName,
+        problemStatementId: selectedPS?.id,
+        problemStatementTitle: selectedPS?.title,
+        pptLink: pptLink.trim(),
         participants: allParticipants,
         warriorReferralCode: saveRes.warriorReferralCode,
       });
@@ -524,6 +540,65 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </div>
                 </div>
 
+                {/* GOOGLE DRIVE PPT PRESENTATION LINK FIELD WITH (i) INFO BUTTON */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
+                      <span>Google Drive PPT Presentation Link *</span>
+                    </label>
+
+                    {/* CIRCULAR (i) INFO BUTTON */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPptInfo(!showPptInfo)}
+                      className="p-1 px-2 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center gap-1 text-[11px] font-mono cursor-pointer"
+                      title="Google Drive PPT Upload Guidelines"
+                    >
+                      <Info className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="text-[10px] font-bold">PPT Public Access Info</span>
+                    </button>
+                  </div>
+
+                  {/* EXPANDABLE GOOGLE DRIVE PPT BRIEF */}
+                  {showPptInfo && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mb-3 p-3.5 rounded-2xl bg-blue-950/80 border border-blue-400/40 text-xs font-mono text-blue-200 space-y-1.5 leading-relaxed shadow-lg"
+                    >
+                      <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                        <Info className="w-4 h-4 text-sky-400" />
+                        <span>How to share your Google Drive PPT Presentation link:</span>
+                      </div>
+                      <p className="text-[11px] text-slate-200">
+                        • <strong>1. Upload Slides:</strong> Upload your presentation (PPT / PDF) to your personal Google Drive.
+                      </p>
+                      <p className="text-[11px] text-slate-200">
+                        • <strong>2. Set Public View Access:</strong> Right-click the file → <em>Share</em> → Change General Access to <strong>"Anyone with the link can view"</strong>.
+                      </p>
+                      <p className="text-[11px] text-slate-200">
+                        • <strong>3. Copy Link:</strong> Paste the public share link here so mentors and evaluators can view your deck!
+                      </p>
+                      <p className="text-[10px] text-sky-300 font-mono pt-1">
+                        Example: <code>https://drive.google.com/file/d/1A2B3C4D.../view?usp=sharing</code>
+                      </p>
+                    </motion.div>
+                  )}
+
+                  <input
+                    type="url"
+                    required
+                    value={pptLink}
+                    onChange={(e) => {
+                      setPptLink(e.target.value);
+                      if (errorMessage) setErrorMessage("");
+                    }}
+                    placeholder="https://drive.google.com/file/d/.../view?usp=sharing"
+                    className="w-full px-4 py-3 bg-slate-900/90 border border-blue-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-blue-400 font-mono"
+                  />
+                </div>
+
                 {/* WARRIOR REFERRAL CODE FIELD WITH (i) INFO BUTTON */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
@@ -721,16 +796,20 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Mobile Number *</label>
+                    <label className="block text-xs font-mono text-slate-300 mb-1">Mobile Number (10 Digits) *</label>
                     <input
                       type="tel"
                       name="phone"
                       required
+                      maxLength={10}
                       value={leader.phone}
-                      onChange={handleLeaderChange}
+                      onChange={(e) => {
+                        const cleaned = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        setLeader({ ...leader, phone: cleaned });
+                      }}
                       onBlur={(e) => validateFieldInFormAndDB("leader_phone", e.target.value, "phone", "Leader")}
-                      placeholder="+91 98765 43210"
-                      className="w-full px-4 py-3 bg-slate-900 border border-blue-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-blue-400"
+                      placeholder="9876543210"
+                      className="w-full px-4 py-3 bg-slate-900 border border-blue-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-blue-400 font-mono"
                     />
                     {fieldErrors["leader_phone"] && (
                       <span className="text-[11px] font-mono text-rose-400 mt-1 block">{fieldErrors["leader_phone"]}</span>
@@ -764,6 +843,10 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                     onClick={() => {
                       if (!leader.fullName || !leader.email || !leader.phone || !leader.organization) {
                         setErrorMessage("Please fill all required Leader fields.");
+                        return;
+                      }
+                      if (!/^\d{10}$/.test(leader.phone.trim())) {
+                        setErrorMessage("Leader mobile number must be exactly 10 numeric digits.");
                         return;
                       }
                       setErrorMessage("");
@@ -815,11 +898,16 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                         <input
                           type="tel"
                           name="phone"
-                          placeholder="Mobile Number *"
+                          placeholder="Mobile Number (10 Digits) *"
+                          required
+                          maxLength={10}
                           value={members[index]?.phone || ""}
-                          onChange={(e) => handleMemberChange(index, e)}
+                          onChange={(e) => {
+                            const cleaned = e.target.value.replace(/\D/g, "").slice(0, 10);
+                            handleMemberChange(index, { target: { name: "phone", value: cleaned } } as any);
+                          }}
                           onBlur={(e) => validateFieldInFormAndDB(`member_${index}_phone`, e.target.value, "phone", `Member #${index + 2}`)}
-                          className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white"
+                          className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-mono"
                         />
                         {fieldErrors[`member_${index}_phone`] && (
                           <span className="text-[10px] font-mono text-rose-400 mt-0.5 block">{fieldErrors[`member_${index}_phone`]}</span>
@@ -853,6 +941,10 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                         const m = activeMembers[i];
                         if (!m.fullName.trim() || !m.email.trim() || !m.phone.trim() || !m.organization.trim()) {
                           setErrorMessage(`Please fill all required fields for Member #${i + 2}.`);
+                          return;
+                        }
+                        if (!/^\d{10}$/.test(m.phone.trim())) {
+                          setErrorMessage(`Member #${i + 2} mobile number must be exactly 10 numeric digits.`);
                           return;
                         }
                       }

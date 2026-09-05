@@ -79,6 +79,7 @@ export interface TeamRegistrationData {
   track: string;
   problemStatementId?: number;
   problemStatementTitle?: string;
+  pptLink?: string;
   leader: TeamMember;
   members: TeamMember[];
   submittedAt?: string;
