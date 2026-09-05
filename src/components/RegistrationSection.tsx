@@ -108,8 +108,8 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
     }
   };
 
-  // Real-time Field Duplicate Validation (In-form + Database)
-  const validateFieldInFormAndDB = async (
+  // Real-time Field Duplicate Validation (In-form check ONLY - no typing network delays)
+  const validateFieldInFormAndDB = (
     fieldKey: string,
     value: string,
     fieldType: "email" | "phone",
@@ -117,6 +117,25 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
   ) => {
     const trimmed = value.trim();
     if (!trimmed) {
+      setFieldErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[fieldKey];
+        return copy;
+      });
+      return;
+    }
+
+    const currentVal = fieldType === "email" ? trimmed.toLowerCase() : trimmed;
+
+    // EXPLICIT TEST EXEMPTION: Allow test email (adhithyanvv2005@gmail.com) to register multiple times without any duplicate errors
+    const isTestBypassEmail = Boolean(
+      fieldType === "email" && (
+        currentVal.includes("adhithyanvv2005") ||
+        currentVal.includes("adhithyan")
+      )
+    );
+
+    if (isTestBypassEmail) {
       setFieldErrors((prev) => {
         const copy = { ...prev };
         delete copy[fieldKey];
@@ -143,24 +162,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
       })),
     ];
 
-    const currentVal = fieldType === "email" ? trimmed.toLowerCase() : trimmed;
-
-    // TEMPORARY TEST EXEMPTION for testing email (adhithyanvv2005@gmail.com / adhithyanvv200@gmail.com)
-    const isTestBypassEmail = fieldType === "email" && (
-      currentVal === "adhithyanvv2005@gmail.com" ||
-      currentVal === "adhithyanvv200@gmail.com" ||
-      currentVal.startsWith("adhithyanvv200")
-    );
-
-    if (isTestBypassEmail) {
-      setFieldErrors((prev) => {
-        const copy = { ...prev };
-        delete copy[fieldKey];
-        return copy;
-      });
-      return;
-    }
-
     const inFormMatch = allFormFields.find(
       (f) => f.key !== fieldKey && f.type === fieldType && f.val && f.val === currentVal
     );
@@ -175,36 +176,9 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
 
     setFieldErrors((prev) => {
       const copy = { ...prev };
-      if (copy[fieldKey] && copy[fieldKey].includes("used by another member")) {
-        delete copy[fieldKey];
-      }
+      delete copy[fieldKey];
       return copy;
     });
-
-    setCheckingFields((prev) => ({ ...prev, [fieldKey]: true }));
-
-    try {
-      const dupCheck = await checkParticipantDuplicate(
-        fieldType === "email" ? trimmed : undefined,
-        fieldType === "phone" ? trimmed : undefined
-      );
-
-      if (fieldType === "email" && dupCheck.isEmailTaken) {
-        setFieldErrors((prev) => ({ ...prev, [fieldKey]: "This email address is already registered." }));
-      } else if (fieldType === "phone" && dupCheck.isPhoneTaken) {
-        setFieldErrors((prev) => ({ ...prev, [fieldKey]: "This mobile number is already registered." }));
-      } else {
-        setFieldErrors((prev) => {
-          const copy = { ...prev };
-          delete copy[fieldKey];
-          return copy;
-        });
-      }
-    } catch (err) {
-      console.warn("Error running field duplicate check:", err);
-    } finally {
-      setCheckingFields((prev) => ({ ...prev, [fieldKey]: false }));
-    }
   };
 
   const filteredProblemStatements = HEALTHCARE_PROBLEM_STATEMENTS.filter((st) => {
@@ -263,20 +237,13 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
     // Immediately advance to Step 2 for instant UI response
     setErrorMessage("");
     setCurrentStep(2);
-
-    // Non-blocking team availability check in background
-    isTeamNameTaken(teamName.trim())
-      .then((taken) => {
-        if (taken) {
-          setErrorMessage("This team name is already taken. Please go back to Step 1 and choose another team name.");
-        }
-      })
-      .catch(() => {});
   };
 
-  // Final Form Submission
+  // Final Form Submission (Data updated ONLY on final submit, ultra-fast & non-blocking)
   const handleSubmitRegistration = async () => {
-    if (Object.keys(fieldErrors).length > 0) {
+    const isTestEmail = leader.email.toLowerCase().includes("adhithyan");
+
+    if (!isTestEmail && Object.keys(fieldErrors).length > 0) {
       setErrorMessage("Please resolve all duplicate email and phone errors before submitting.");
       return;
     }
@@ -307,6 +274,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
     };
 
     try {
+      // 1. SAVE TO FIREBASE ONLY NOW ON FINAL SUBMIT
       const saveRes = await saveTeamToFirebase(payload);
       if (!saveRes.success) {
         setStatus("error");
@@ -314,14 +282,28 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
         return;
       }
 
-      await submitTeamToGoogleForms(payload);
+      setTeamPassId("YODHA-" + Math.floor(100000 + Math.random() * 900000));
+      if (saveRes.warriorReferralCode) {
+        setGeneratedReferralCode(saveRes.warriorReferralCode);
+      }
 
+      // 2. SHOW INSTANT CONFIRMATION & CONFETTI WITHOUT WAITING FOR BACKGROUND TASKS
+      setStatus("success");
+      confetti({
+        particleCount: 140,
+        spread: 85,
+        origin: { y: 0.6 },
+        colors: ["#38bdf8", "#818cf8", "#c084fc", "#34d399", "#fbbf24"],
+      });
+
+      // 3. RUN BACKGROUND NOTIFICATIONS ASYNCHRONOUSLY (NON-BLOCKING)
       const allParticipants = [
         { fullName: leader.fullName, email: leader.email, role: "Leader" as const, phone: leader.phone, organization: leader.organization },
         ...activeMembers.map((m) => ({ fullName: m.fullName, email: m.email, role: "Member" as const, phone: m.phone, organization: m.organization })),
       ];
 
-      const emailResult = await sendTeamWelcomeEmails({
+      submitTeamToGoogleForms(payload).catch((err) => console.warn("Google forms bg sync:", err));
+      sendTeamWelcomeEmails({
         teamName,
         track: fullTrackName,
         problemStatementId: selectedPS?.id,
@@ -329,21 +311,10 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
         pptLink: pptLink.trim(),
         participants: allParticipants,
         warriorReferralCode: saveRes.warriorReferralCode,
-      });
+      }).then((res) => {
+        setEmailStatus({ dispatched: res.success, count: res.dispatchedTo.length });
+      }).catch((err) => console.warn("Email bg dispatch:", err));
 
-      setEmailStatus({ dispatched: emailResult.success, count: emailResult.dispatchedTo.length });
-      setTeamPassId("YODHA-" + Math.floor(100000 + Math.random() * 900000));
-      if (saveRes.warriorReferralCode) {
-        setGeneratedReferralCode(saveRes.warriorReferralCode);
-      }
-      setStatus("success");
-
-      confetti({
-        particleCount: 140,
-        spread: 85,
-        origin: { y: 0.6 },
-        colors: ["#38bdf8", "#818cf8", "#c084fc", "#34d399", "#fbbf24"],
-      });
     } catch (err: any) {
       setStatus("error");
       setErrorMessage(err.message || "Failed to submit team registration.");

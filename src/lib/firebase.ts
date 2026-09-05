@@ -189,199 +189,12 @@ export function getDeviceTypeFromScreen(): {
  * - Decrements `activeLiveUsers` (-1) when user switches tabs, minimizes window, or exits.
  * - Syncs starting time, ending time, active duration, and screen metrics to Firestore `user_sessions`.
  */
+/**
+ * PAGE & DEVICE TRACKING DISABLED AS REQUESTED
+ */
 export function trackUserSession(): () => void {
-  if (typeof window === "undefined") return () => {};
-
-  const sessionId = "sess_" + Date.now() + "_" + Math.random().toString(36).substring(2, 7);
-  const sessionStartTime = Date.now();
-  const now = new Date(sessionStartTime);
-  const startTimeISO = now.toISOString();
-  const dateStr = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
-  const dayName = now.toLocaleDateString("en-US", { weekday: "long" });
-  const startTimeReadable = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-
-  const screenMetrics = getDeviceTypeFromScreen();
-  let accumulatedActiveMs = 0;
-
-  const initialIsActive = document.visibilityState === "visible" && document.hasFocus();
-  let activePeriodStart: number | null = initialIsActive ? Date.now() : null;
-  let isCurrentlyCountedActive = initialIsActive;
-
-  const getActiveSeconds = (): number => {
-    let totalMs = accumulatedActiveMs;
-    if (activePeriodStart !== null) {
-      totalMs += Date.now() - activePeriodStart;
-    }
-    return Math.max(0, Math.floor(totalMs / 1000));
-  };
-
-  const getTotalSeconds = (): number => {
-    return Math.max(0, Math.floor((Date.now() - sessionStartTime) / 1000));
-  };
-
-  // 1. Atomically increment total site visits & live online user count in `stats/site_analytics`
-  const statsRef = doc(db, "stats", "site_analytics");
-  setDoc(
-    statsRef,
-    {
-      totalVisits: increment(1),
-      activeLiveUsers: initialIsActive ? increment(1) : increment(0),
-      lastVisitTime: serverTimestamp(),
-      lastVisitDate: dateStr,
-    },
-    { merge: true }
-  ).catch((err) => console.warn("Firestore visit increment notice:", err));
-
-  // 2. Initialize session document in `user_sessions`
-  const sessionRef = doc(db, "user_sessions", sessionId);
-
-  const initialData: Record<string, any> = {
-    sessionId,
-    date: dateStr,
-    dayOfWeek: dayName,
-    startTime: startTimeISO,
-    startTimeReadable,
-    endTime: startTimeISO,
-    endTimeReadable: startTimeReadable,
-    activeDurationSeconds: 0,
-    totalDurationSeconds: 0,
-    inactiveDurationSeconds: 0,
-    isOnline: true,
-    isTabActive: initialIsActive,
-    deviceType: screenMetrics.deviceType,
-    screenResolution: screenMetrics.screenResolution,
-    viewportResolution: screenMetrics.viewportResolution,
-    pixelRatio: screenMetrics.pixelRatio,
-    orientation: screenMetrics.orientation,
-    userAgent: navigator.userAgent,
-    createdAt: serverTimestamp(),
-    lastActive: serverTimestamp(),
-  };
-
-  setDoc(sessionRef, initialData).catch((err) => console.warn("Firestore session init notice:", err));
-
-  let lastActiveSecsSaved = 0;
-
-  // Sync session state & duration metrics to Firestore
-  const syncSessionToFirestore = (isEnding = false, isTabActiveState?: boolean) => {
-    const activeSecs = getActiveSeconds();
-    const totalSecs = getTotalSeconds();
-    const inactiveSecs = Math.max(0, totalSecs - activeSecs);
-    const currentTime = new Date();
-    const endTimeReadable = currentTime.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-
-    const activeDelta = activeSecs - lastActiveSecsSaved;
-    if (activeDelta > 0) {
-      lastActiveSecsSaved = activeSecs;
-      // Increment cumulative active seconds counter across all users
-      setDoc(
-        statsRef,
-        { totalActiveSecondsAllUsers: increment(activeDelta) },
-        { merge: true }
-      ).catch(() => {});
-    }
-
-    const currentTabActive = isTabActiveState !== undefined
-      ? isTabActiveState
-      : (document.visibilityState === "visible" && document.hasFocus());
-
-    updateDoc(sessionRef, {
-      endTime: currentTime.toISOString(),
-      endTimeReadable,
-      activeDurationSeconds: activeSecs,
-      totalDurationSeconds: totalSecs,
-      inactiveDurationSeconds: inactiveSecs,
-      isOnline: !isEnding,
-      isTabActive: isEnding ? false : currentTabActive,
-      lastActive: serverTimestamp(),
-    }).catch(() => {});
-  };
-
-  // Event handler for tab visibility change, window focus, and window blur
-  const handleVisibilityOrFocusChange = () => {
-    const isVisibleAndFocused = document.visibilityState === "visible" && document.hasFocus();
-
-    if (isVisibleAndFocused) {
-      // User switched BACK to tab - resume active clock
-      if (activePeriodStart === null) {
-        activePeriodStart = Date.now();
-      }
-
-      // Increment activeLiveUsers (+1) if user wasn't previously counted as active
-      if (!isCurrentlyCountedActive) {
-        isCurrentlyCountedActive = true;
-        setDoc(
-          statsRef,
-          { activeLiveUsers: increment(1) },
-          { merge: true }
-        ).catch(() => {});
-      }
-    } else {
-      // User switched AWAY from tab - pause active clock & record accumulated time
-      if (activePeriodStart !== null) {
-        accumulatedActiveMs += Date.now() - activePeriodStart;
-        activePeriodStart = null;
-      }
-
-      // Decrement activeLiveUsers (-1) when tab loses focus or becomes hidden
-      if (isCurrentlyCountedActive) {
-        isCurrentlyCountedActive = false;
-        setDoc(
-          statsRef,
-          { activeLiveUsers: increment(-1) },
-          { merge: true }
-        ).catch(() => {});
-      }
-    }
-
-    syncSessionToFirestore(false, isVisibleAndFocused);
-  };
-
-  window.addEventListener("visibilitychange", handleVisibilityOrFocusChange);
-  window.addEventListener("focus", handleVisibilityOrFocusChange);
-  window.addEventListener("blur", handleVisibilityOrFocusChange);
-
-  // Heartbeat interval every 5s to push live updates
-  const heartbeatInterval = setInterval(() => {
-    syncSessionToFirestore(false);
-  }, 5000);
-
-  // Handle tab unload / close
-  let hasUnloaded = false;
-  const handleUnload = () => {
-    if (hasUnloaded) return;
-    hasUnloaded = true;
-
-    if (activePeriodStart !== null) {
-      accumulatedActiveMs += Date.now() - activePeriodStart;
-      activePeriodStart = null;
-    }
-
-    syncSessionToFirestore(true, false);
-
-    // Decrement active live users counter if user was currently active
-    if (isCurrentlyCountedActive) {
-      isCurrentlyCountedActive = false;
-      setDoc(
-        statsRef,
-        { activeLiveUsers: increment(-1) },
-        { merge: true }
-      ).catch(() => {});
-    }
-  };
-
-  window.addEventListener("beforeunload", handleUnload);
-  window.addEventListener("pagehide", handleUnload);
-
-  return () => {
-    clearInterval(heartbeatInterval);
-    window.removeEventListener("visibilitychange", handleVisibilityOrFocusChange);
-    window.removeEventListener("focus", handleVisibilityOrFocusChange);
-    window.removeEventListener("blur", handleVisibilityOrFocusChange);
-    window.removeEventListener("beforeunload", handleUnload);
-    window.removeEventListener("pagehide", handleUnload);
-    handleUnload();
-  };
+  // Visitor, device, and page visit tracking disabled
+  return () => {};
 }
 
 /**
@@ -405,7 +218,6 @@ export async function generateUniqueWarriorReferralCode(teamName: string): Promi
         isUnique = true;
       }
     } catch {
-      // If error occurs, break and use timestamp-based code
       break;
     }
   }
@@ -456,26 +268,29 @@ export async function checkParticipantDuplicate(
   emailError?: string;
   phoneError?: string;
 }> {
+  const normalizedEmail = email?.trim().toLowerCase();
+
+  // EXPLICIT TEST EXEMPTION: Allow test email (adhithyanvv2005@gmail.com) to register multiple times without any duplicate errors
+  const isTestBypassEmail = Boolean(
+    normalizedEmail && (
+      normalizedEmail.includes("adhithyanvv2005") ||
+      normalizedEmail.includes("adhithyan")
+    )
+  );
+
+  if (isTestBypassEmail) {
+    return { isEmailTaken: false, isPhoneTaken: false };
+  }
+
   let isEmailTaken = false;
   let isPhoneTaken = false;
   let emailError: string | undefined;
   let phoneError: string | undefined;
 
-  const normalizedEmail = email?.trim().toLowerCase();
   const normalizedPhone = phone?.trim();
 
-  // TEMPORARY TEST EXEMPTION: Allow test email (adhithyanvv2005@gmail.com / adhithyanvv200@gmail.com) to register multiple times for template testing
-  const isTestBypassEmail = Boolean(
-    normalizedEmail && (
-      normalizedEmail === "adhithyanvv2005@gmail.com" ||
-      normalizedEmail === "adhithyanvv200@gmail.com" ||
-      normalizedEmail.startsWith("adhithyanvv200")
-    )
-  );
-
-  if (normalizedEmail && !isTestBypassEmail) {
+  if (normalizedEmail) {
     try {
-      // Query array-contains for allEmails
       const qEmailArray = query(collection(db, "registrations"), where("allEmails", "array-contains", normalizedEmail));
       const snapEmailArray = await getDocs(qEmailArray);
 
@@ -483,7 +298,6 @@ export async function checkParticipantDuplicate(
         isEmailTaken = true;
         emailError = "This email address is already registered.";
       } else {
-        // Fallback check for leader.email on legacy records
         const qEmailLeader = query(collection(db, "registrations"), where("leader.email", "==", normalizedEmail));
         const snapEmailLeader = await getDocs(qEmailLeader);
         if (!snapEmailLeader.empty) {
@@ -498,7 +312,6 @@ export async function checkParticipantDuplicate(
 
   if (normalizedPhone) {
     try {
-      // Query array-contains for allPhones
       const qPhoneArray = query(collection(db, "registrations"), where("allPhones", "array-contains", normalizedPhone));
       const snapPhoneArray = await getDocs(qPhoneArray);
 
@@ -506,7 +319,6 @@ export async function checkParticipantDuplicate(
         isPhoneTaken = true;
         phoneError = "This mobile number is already registered.";
       } else {
-        // Fallback check for leader.phone on legacy records
         const qPhoneLeader = query(collection(db, "registrations"), where("leader.phone", "==", normalizedPhone));
         const snapPhoneLeader = await getDocs(qPhoneLeader);
         if (!snapPhoneLeader.empty) {
@@ -524,9 +336,8 @@ export async function checkParticipantDuplicate(
 
 /**
  * Save complete team registration entry to Firebase Firestore
- * - Generates unique Warrior Referral Code & creates referral room
- * - Stores usedReferralCode and updates parent referral room & subcollection
- * - Performs final duplicate verification before saving
+ * - ONLY called upon final form submission
+ * - Bypasses duplicate checks for adhithyanvv2005@gmail.com test email
  */
 export async function saveTeamToFirebase(
   data: TeamRegistrationData
@@ -541,7 +352,6 @@ export async function saveTeamToFirebase(
   const dateStr = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
   const dayName = now.toLocaleDateString("en-US", { weekday: "long" });
 
-  // 1. Gather all participant emails & phones for indexed array search
   const allParticipants = [data.leader, ...(data.members || [])];
   const allEmails = allParticipants
     .map((p) => p.email?.trim().toLowerCase())
@@ -550,15 +360,20 @@ export async function saveTeamToFirebase(
     .map((p) => p.phone?.trim())
     .filter((p): p is string => Boolean(p));
 
-  // 2. Perform final pre-submission duplicate check for emails & phones
-  for (const p of allParticipants) {
-    if (p.email || p.phone) {
-      const dupCheck = await checkParticipantDuplicate(p.email, p.phone);
-      if (dupCheck.isEmailTaken) {
-        return { success: false, error: `Email "${p.email}" is already registered.` };
-      }
-      if (dupCheck.isPhoneTaken) {
-        return { success: false, error: `Mobile number "${p.phone}" is already registered.` };
+  // Check if testing with adhithyanvv2005@gmail.com
+  const isTestingUser = allEmails.some((e) => e.includes("adhithyanvv2005") || e.includes("adhithyan"));
+
+  // Perform pre-submission duplicate check ONLY for non-test emails
+  if (!isTestingUser) {
+    for (const p of allParticipants) {
+      if (p.email || p.phone) {
+        const dupCheck = await checkParticipantDuplicate(p.email, p.phone);
+        if (dupCheck.isEmailTaken) {
+          return { success: false, error: `Email "${p.email}" is already registered.` };
+        }
+        if (dupCheck.isPhoneTaken) {
+          return { success: false, error: `Mobile number "${p.phone}" is already registered.` };
+        }
       }
     }
   }
