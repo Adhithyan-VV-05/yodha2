@@ -46,29 +46,16 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
       {/* MAIN IMPACT HEADLINE & BRIEF - CONSTRAINED MAX WIDTH TO KEEP ROCK PILLAR FULLY VISIBLE ON THE RIGHT */}
       <div className="relative z-20 max-w-xl lg:max-w-xl max-sm:my-0 max-sm:pt-1 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
         
-        {/* PC & MOBILE RESPONSIVE HEADLINE MATCHING REFERENCE IMAGES 1 & 2 */}
+        {/* HEADLINE WITH LINE BREAKS ONLY AT COMMAS */}
         <motion.h1
           initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 uppercase leading-[1.08] font-sans"
+          className="text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 uppercase leading-[1.08] font-sans"
         >
-          {/* DESKTOP (PC) HEADLINE - 3 LINES (IMAGE 1) */}
-          <span className="hidden sm:inline">
-            RISE AS <span className="text-blue-600 font-serif font-black">WARRIORS</span>, <br />
-            THINK AS <span className="text-blue-600 font-serif font-black">INNOVATORS</span>, <br />
-            BUILD FOR <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
-          </span>
-
-          {/* MOBILE HEADLINE - 6 LINES (IMAGE 2) */}
-          <span className="sm:hidden">
-            RISE AS <br />
-            <span className="text-blue-600 font-serif font-black">WARRIORS</span>, <br />
-            THINK AS <br />
-            <span className="text-blue-600 font-serif font-black">INNOVATORS</span>, <br />
-            BUILD FOR <br />
-            <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
-          </span>
+          RISE AS <span className="text-blue-600 font-serif font-black">WARRIORS</span>, <br />
+          THINK AS <span className="text-blue-600 font-serif font-black">INNOVATORS</span>, <br />
+          BUILD FOR <span className="text-blue-600 font-serif font-black">HUMANITY</span>.
         </motion.h1>
 
         {/* BLUE GRADIENT ACCENT BAR */}
@@ -79,7 +66,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full origin-left shadow-[0_0_10px_rgba(59,130,246,0.6)]"
         />
 
-        {/* SUBHEADLINE BRIEF */}
+        {/* SUBHEADLINE BRIEF - BREAKING ONLY AT COMMAS */}
         <div>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -87,19 +74,8 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             transition={{ duration: 0.55, delay: 0.5 }}
             className="text-xs sm:text-sm lg:text-base text-slate-900 font-semibold max-w-lg leading-relaxed font-sans"
           >
-            {/* PC VIEW: EXACT 2 SENTENCES MATCHING PC REFERENCE IMAGE 1 */}
-            <span className="hidden sm:inline">
-              A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>, where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong>.<br />
-              And <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
-            </span>
-
-            {/* MOBILE VIEW: EXACT 3-LINE WRAPPING MATCHING MOBILE REFERENCE IMAGE 2 */}
-            <span className="sm:hidden">
-              A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br />
-              where technology meets<br />
-              <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong><br />
-              leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
-            </span>
+            A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br />
+            where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong> and <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
           </motion.p>
         </div>
 
