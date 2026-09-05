@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info, ChevronDown, ChevronUp, ExternalLink, User, Sparkles, FileText } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
@@ -75,8 +75,9 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
   const [generatedReferralCode, setGeneratedReferralCode] = useState("");
   const [copiedReferralCode, setCopiedReferralCode] = useState(false);
 
-  // Referral Info Toggle State
+  // Referral Info & Full Details Toggle State
   const [showReferralInfo, setShowReferralInfo] = useState(false);
+  const [showFullDetails, setShowFullDetails] = useState(false);
 
   // Validate Entered Warrior Referral Code on Click of Verify Logo/Button
   const handleVerifyReferralCode = async (codeVal: string) => {
@@ -358,41 +359,193 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
               </div>
             </div>
 
-            {/* DIGITAL HACKER PASS */}
-            <div className="mt-8 w-full bg-gradient-to-br from-slate-950 via-slate-900 to-black border-2 border-blue-500/50 rounded-2xl p-6 text-left shadow-2xl relative overflow-hidden">
-              <div className="flex justify-between items-start mb-6">
+            {/* DIGITAL HACKER PASS WITH EXPANDABLE DETAILED ROSTER */}
+            <div className="mt-8 w-full bg-gradient-to-br from-[#070c22] via-[#040716] to-[#07112e] border-2 border-blue-500/50 rounded-3xl p-5 sm:p-7 text-left shadow-[0_0_50px_rgba(59,130,246,0.3)] relative overflow-hidden backdrop-blur-2xl">
+              
+              {/* CORNER GLOW BADGES */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+
+              {/* PASS HEADER */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-blue-500/20">
                 <div>
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">
-                    OFFICIAL HACKER PASS
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-blue-400 font-extrabold uppercase tracking-[0.2em] bg-blue-950/90 px-2.5 py-0.5 rounded border border-blue-500/40">
+                      OFFICIAL HACKER PASS
+                    </span>
+                    <span className="text-[9px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">
+                      VERIFIED ENTRY
+                    </span>
+                  </div>
+                  <h5 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">{teamName}</h5>
+                </div>
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <span className="font-mono text-xs sm:text-sm font-black text-blue-300 bg-blue-950/90 px-3.5 py-1.5 rounded-xl border border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.4)] tracking-wider">
+                    {teamPassId}
                   </span>
-                  <h5 className="text-xl font-bold text-white mt-0.5">{teamName}</h5>
                 </div>
-                <span className="font-mono text-xs font-bold text-blue-300 bg-blue-950/80 px-3 py-1 rounded border border-blue-500/40">
-                  {teamPassId}
+              </div>
+
+              {/* PRIMARY 4-GRID QUICK SUMMARY */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono mb-5">
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                  <span className="text-slate-400 block mb-1 text-[10px] uppercase font-bold tracking-wider">TEAM LEADER (CAPTAIN)</span>
+                  <span className="text-white font-black text-sm block">{leader.fullName}</span>
+                  <span className="text-blue-300/80 text-[11px] block mt-0.5">{leader.email}</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                  <span className="text-slate-400 block mb-1 text-[10px] uppercase font-bold tracking-wider">PROBLEM STATEMENT</span>
+                  <span className="text-blue-300 font-bold text-xs block leading-snug">
+                    {selectedPS ? `[ID #${selectedPS.id}] ${selectedPS.title}` : track}
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                  <span className="text-slate-400 block mb-1 text-[10px] uppercase font-bold tracking-wider">ROSTER SIZE</span>
+                  <span className="text-white font-bold text-xs flex items-center gap-1.5">
+                    <span>{teamSize} Participants</span>
+                    <span className="text-[10px] text-sky-400 font-mono bg-sky-950/80 px-2 py-0.5 rounded border border-sky-500/30">
+                      {teamSize === 2 ? "DUO" : teamSize === 3 ? "TRIO" : "SQUAD"}
+                    </span>
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                  <span className="text-slate-400 block mb-1 text-[10px] uppercase font-bold tracking-wider">COLLEGE / INSTITUTION</span>
+                  <span className="text-slate-200 font-bold text-xs block truncate">{leader.organization}</span>
+                </div>
+              </div>
+
+              {/* TOGGLE EXPAND / COLLAPSE BUTTON FOR FULL DETAILS */}
+              <button
+                type="button"
+                onClick={() => setShowFullDetails(!showFullDetails)}
+                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-blue-600/30 via-blue-500/20 to-sky-600/30 hover:from-blue-600/40 hover:to-sky-600/40 border border-blue-400/40 text-blue-200 font-mono text-xs font-black uppercase tracking-wider flex items-center justify-between transition-all cursor-pointer shadow-lg group active:scale-[0.99]"
+              >
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue-400 group-hover:rotate-12 transition-transform" />
+                  <span>{showFullDetails ? "HIDE FULL REGISTRATION DETAILS" : "VIEW FULL SUBMISSION DETAILS & ROSTER"}</span>
+                </div>
+                {showFullDetails ? (
+                  <ChevronUp className="w-4.5 h-4.5 text-blue-400" />
+                ) : (
+                  <ChevronDown className="w-4.5 h-4.5 text-blue-400 group-hover:translate-y-0.5 transition-transform" />
+                )}
+              </button>
+
+              {/* EXPANDABLE COMPLETE DETAILS ACCORDION */}
+              <AnimatePresence>
+                {showFullDetails && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-6 mt-4 border-t border-blue-500/30 space-y-6 text-xs font-mono">
+                      
+                      {/* SUBMISSION ASSETS */}
+                      <div className="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30">
+                        <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider block mb-2 flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5 text-blue-400" />
+                          <span>PPT PRESENTATION & ASSETS</span>
+                        </span>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-black/60 p-3 rounded-xl border border-slate-800">
+                          <span className="text-slate-300 text-xs font-sans font-medium truncate max-w-full sm:max-w-md">
+                            {pptLink}
+                          </span>
+                          <a
+                            href={pptLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-mono text-[11px] font-bold rounded-lg flex items-center gap-1.5 shrink-0 transition-all shadow-md"
+                          >
+                            <span>Open Drive Link</span>
+                            <ExternalLink className="w-3.5 h-3.5 text-white" />
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* LEADER COMPLETE PROFILE */}
+                      <div className="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30">
+                        <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider block mb-3 flex items-center gap-1.5">
+                          <User className="w-3.5 h-3.5 text-blue-400" />
+                          <span>TEAM LEADER COMPLETE PROFILE</span>
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                          <div>
+                            <span className="text-slate-500 text-[10px] block">FULL NAME</span>
+                            <span className="text-white font-bold">{leader.fullName}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 text-[10px] block">EMAIL ADDRESS</span>
+                            <span className="text-slate-200">{leader.email}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 text-[10px] block">MOBILE NUMBER</span>
+                            <span className="text-slate-200">{leader.phone}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 text-[10px] block">COLLEGE / INSTITUTION</span>
+                            <span className="text-slate-200">{leader.organization}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 text-[10px] block">GENDER & YEAR</span>
+                            <span className="text-slate-200">{leader.gender} • {leader.yearOfStudy}</span>
+                          </div>
+                          {leader.githubUrl && (
+                            <div>
+                              <span className="text-slate-500 text-[10px] block">GITHUB PROFILE</span>
+                              <a href={leader.githubUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline truncate block">
+                                {leader.githubUrl}
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* TEAM MEMBERS ROSTER */}
+                      {members.slice(0, teamSize - 1).length > 0 && (
+                        <div className="p-4 rounded-2xl bg-slate-950/80 border border-blue-500/30">
+                          <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider block mb-3 flex items-center gap-1.5">
+                            <User className="w-3.5 h-3.5 text-blue-400" />
+                            <span>TEAM MEMBERS ROSTER ({members.slice(0, teamSize - 1).length} MEMBERS)</span>
+                          </span>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {members.slice(0, teamSize - 1).map((m, idx) => (
+                              <div key={idx} className="p-3 rounded-xl bg-black/60 border border-slate-800 space-y-1">
+                                <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                                  <span className="font-bold text-white text-xs">{m.fullName || `Member #${idx + 2}`}</span>
+                                  <span className="text-[9px] font-mono text-sky-400 bg-sky-950 px-2 py-0.5 rounded border border-sky-800">
+                                    MEMBER #{idx + 2}
+                                  </span>
+                                </div>
+                                <div className="text-[11px] text-slate-300 pt-1 space-y-0.5">
+                                  <div><span className="text-slate-500">Email:</span> {m.email || "N/A"}</div>
+                                  <div><span className="text-slate-500">Phone:</span> {m.phone || "N/A"}</div>
+                                  <div><span className="text-slate-500">College:</span> {m.organization || leader.organization}</div>
+                                  <div><span className="text-slate-500">Details:</span> {m.gender} • {m.yearOfStudy}</div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* FOOTER BADGE */}
+              <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>Official YODHA 2.0 Registration Complete</span>
                 </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-xs font-mono mb-6">
-                <div>
-                  <span className="text-slate-500 block mb-0.5">TEAM LEADER</span>
-                  <span className="text-white font-bold">{leader.fullName}</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block mb-0.5">PROBLEM STATEMENT</span>
-                  <span className="text-blue-300 font-semibold">{selectedPS ? `[ID #${selectedPS.id}] ${selectedPS.title}` : track}</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block mb-0.5">TEAM SIZE</span>
-                  <span className="text-slate-200">{teamSize} Participants</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block mb-0.5">ORGANIZATION</span>
-                  <span className="text-slate-200">{leader.organization}</span>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                <span className="text-emerald-400 font-semibold">✓ Official YODHA 2.0 Registration</span>
                 <Mail className="w-4 h-4 text-blue-400" />
               </div>
             </div>
