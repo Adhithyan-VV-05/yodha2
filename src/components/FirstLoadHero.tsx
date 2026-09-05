@@ -43,17 +43,17 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
   return (
     <section className="relative w-full min-h-screen pt-10 sm:pt-20 lg:pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between select-none z-10">
       
-      {/* MAIN IMPACT HEADLINE & BRIEF */}
-      <div className="relative z-20 max-w-3xl max-sm:my-0 max-sm:pt-1 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
+      {/* MAIN IMPACT HEADLINE & BRIEF - CONSTRAINED MAX WIDTH TO KEEP ROCK PILLAR FULLY VISIBLE ON THE RIGHT */}
+      <div className="relative z-20 max-w-xl lg:max-w-xl max-sm:my-0 max-sm:pt-1 my-auto space-y-3 sm:space-y-4 py-2 sm:py-4">
         <motion.h1
           initial={{ opacity: 0, y: 35, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-[1.05] font-heading"
+          className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 max-sm:text-white uppercase leading-[1.05] font-heading"
         >
-          RISE AS <span className="text-blue-600 font-black">WARRIORS</span>, <br />
-          THINK AS <span className="text-blue-600 font-black">INNOVATORS</span>, <br />
-          BUILD FOR <span className="text-blue-600 font-black">HUMANITY</span>.
+          RISE AS <span className="text-blue-600 max-sm:text-sky-400 font-black">WARRIORS</span>, <br />
+          THINK AS <span className="text-blue-600 max-sm:text-sky-400 font-black">INNOVATORS</span>, <br />
+          BUILD FOR <span className="text-blue-600 max-sm:text-sky-400 font-black">HUMANITY</span>.
         </motion.h1>
 
         <motion.div
@@ -63,16 +63,15 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           className="w-12 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full origin-left shadow-[0_0_10px_rgba(59,130,246,0.6)]"
         />
 
-        <div className="border-l-2 border-blue-500 pl-3 sm:border-l-0 sm:pl-0">
+        <div className="max-sm:border-l-2 max-sm:border-blue-400 max-sm:pl-3 border-l-2 border-blue-500/80 sm:border-l-0 sm:pl-0">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.5 }}
-            className="text-xs sm:text-sm lg:text-base text-slate-950 font-semibold max-w-xl leading-relaxed font-sans"
+            className="text-xs sm:text-sm lg:text-base text-slate-950 max-sm:text-slate-100 font-semibold max-w-lg leading-relaxed font-sans"
           >
-            A battlefield for <strong className="text-blue-600 font-extrabold">bold ideas</strong>,<br className="hidden sm:inline" />{" "}
-            where technology meets <strong className="text-blue-600 font-extrabold">purpose</strong><br />
-            and <strong className="text-blue-600 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 font-extrabold">impact</strong>.
+            A battlefield for <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">bold ideas</strong>, where technology meets <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">purpose</strong>.<br />
+            And <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">innovation</strong> leaves an <strong className="text-blue-600 max-sm:text-sky-400 font-extrabold">impact</strong>.
           </motion.p>
         </div>
 
@@ -81,7 +80,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.6 }}
-          className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-xl pt-2"
+          className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-lg pt-2"
         >
           {/* CARD 1 */}
           <div className="p-2 sm:p-2.5 rounded-xl bg-white/90 max-sm:bg-blue-950/80 border border-blue-200 max-sm:border-blue-500/40 backdrop-blur-md flex items-center gap-2 shadow-sm">
