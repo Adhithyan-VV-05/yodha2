@@ -28,13 +28,13 @@ const getEnvVar = (key: string): string => {
 };
 
 const firebaseConfig = {
-  apiKey: getEnvVar("NEXT_PUBLIC_FIREBASE_API_KEY") || getEnvVar("VITE_FIREBASE_API_KEY") || "",
-  authDomain: getEnvVar("NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN") || getEnvVar("VITE_FIREBASE_AUTH_DOMAIN") || "",
-  projectId: getEnvVar("NEXT_PUBLIC_FIREBASE_PROJECT_ID") || getEnvVar("VITE_FIREBASE_PROJECT_ID") || "",
-  storageBucket: getEnvVar("NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET") || getEnvVar("VITE_FIREBASE_STORAGE_BUCKET") || "",
-  messagingSenderId: getEnvVar("NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID") || getEnvVar("VITE_FIREBASE_MESSAGING_SENDER_ID") || "",
-  appId: getEnvVar("NEXT_PUBLIC_FIREBASE_APP_ID") || getEnvVar("VITE_FIREBASE_APP_ID") || "",
-  measurementId: getEnvVar("NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID") || getEnvVar("VITE_FIREBASE_MEASUREMENT_ID") || "",
+  apiKey: getEnvVar("NEXT_PUBLIC_FIREBASE_API_KEY") || getEnvVar("VITE_FIREBASE_API_KEY") || "AIzaSyCb1foYyZbBV_SC7f4U_NTNFjPqBLQ9stA",
+  authDomain: getEnvVar("NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN") || getEnvVar("VITE_FIREBASE_AUTH_DOMAIN") || "yodha-2.firebaseapp.com",
+  projectId: getEnvVar("NEXT_PUBLIC_FIREBASE_PROJECT_ID") || getEnvVar("VITE_FIREBASE_PROJECT_ID") || "yodha-2",
+  storageBucket: getEnvVar("NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET") || getEnvVar("VITE_FIREBASE_STORAGE_BUCKET") || "yodha-2.firebasestorage.app",
+  messagingSenderId: getEnvVar("NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID") || getEnvVar("VITE_FIREBASE_MESSAGING_SENDER_ID") || "56808818692",
+  appId: getEnvVar("NEXT_PUBLIC_FIREBASE_APP_ID") || getEnvVar("VITE_FIREBASE_APP_ID") || "1:56808818692:web:203e9ad64f08a5106e0d51",
+  measurementId: getEnvVar("NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID") || getEnvVar("VITE_FIREBASE_MEASUREMENT_ID") || "G-D0Q9RB7WVE",
 };
 
 
@@ -42,11 +42,19 @@ const firebaseConfig = {
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 if (typeof window !== "undefined") {
-  isSupported().then((supported) => {
-    if (supported) {
-      getAnalytics(app);
-    }
-  });
+  if (firebaseConfig.projectId && firebaseConfig.appId) {
+    isSupported().then((supported) => {
+      if (supported) {
+        try {
+          getAnalytics(app);
+        } catch (err) {
+          console.warn("Firebase Analytics could not be initialized:", err);
+        }
+      }
+    }).catch((err) => {
+      console.warn("Firebase Analytics support check failed:", err);
+    });
+  }
 }
 
 export const db = getFirestore(app);
