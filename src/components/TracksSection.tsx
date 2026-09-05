@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { Cpu, ArrowRight, ShieldCheck, HeartPulse, Stethoscope, Activity, FileText } from "lucide-react";
 

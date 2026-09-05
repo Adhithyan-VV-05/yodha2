@@ -1,3 +1,4 @@
+"use client";
 interface HeroRoboVisualProps {
   onOpenRegister?: (trackName?: string) => void;
 }

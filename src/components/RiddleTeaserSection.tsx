@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
 import { CARD_BACKGROUNDS } from "../data/cardBackgrounds";

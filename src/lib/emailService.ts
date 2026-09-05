@@ -94,8 +94,9 @@ export async function sendTeamWelcomeEmails(
     referralCode: payload.warriorReferralCode || "WARRIOR-2026",
     registrationDate: nowStr,
     members: memberRoster,
-    websiteUrl: import.meta.env.VITE_WEBSITE_URL || "https://yodha-hackathon.netlify.app/",
-    contactEmail: import.meta.env.VITE_CONTACT_EMAIL || "your-contact-email@example.com",
+    websiteUrl: (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WEBSITE_URL) || (typeof process !== "undefined" && process.env?.VITE_WEBSITE_URL) || "https://yodha-hackathon.netlify.app/",
+    contactEmail: (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_CONTACT_EMAIL) || (typeof process !== "undefined" && process.env?.VITE_CONTACT_EMAIL) || "yodha@jecc.ac.in",
+
   };
 
   const result = await sendRegistrationEmail(registrationData);

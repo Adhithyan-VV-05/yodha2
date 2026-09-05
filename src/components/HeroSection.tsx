@@ -1,3 +1,4 @@
+"use client";
 import { FirstLoadHero } from "./FirstLoadHero";
 
 interface HeroSectionProps {

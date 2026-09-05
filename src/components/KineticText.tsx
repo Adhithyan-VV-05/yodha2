@@ -1,3 +1,4 @@
+"use client";
 interface KineticTextProps {
   words?: string[];
   className?: string;

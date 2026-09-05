@@ -1,3 +1,4 @@
+"use client";
 interface YodhaTitleBannerProps {
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;

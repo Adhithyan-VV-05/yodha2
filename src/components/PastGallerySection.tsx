@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { Camera } from "lucide-react";
 import { YodhaImage } from "./YodhaImage";
@@ -80,7 +81,7 @@ export function PastGallerySection() {
               className="relative w-64 sm:w-80 h-44 sm:h-56 rounded-2xl sm:rounded-3xl overflow-hidden border border-blue-500/30 bg-slate-950/90 shrink-0 shadow-xl"
             >
               <YodhaImage
-                src={src}
+                src={(src as any)?.src || src}
                 alt={`Past Hackathon Photo ${idx + 1}`}
                 className="w-full h-full object-cover object-center filter brightness-95 contrast-105"
                 loading="lazy"

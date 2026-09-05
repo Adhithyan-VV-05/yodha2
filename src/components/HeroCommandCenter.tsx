@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -161,7 +162,7 @@ export function HeroCommandCenter({ onOpenRegister }: HeroCommandCenterProps) {
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500/20 to-sky-500/20 border border-blue-500/30 flex items-center justify-center p-1 shadow-inner">
-              <img src={logo} alt="YODHA Logo" className="w-7 h-7 object-contain" />
+              <img src={(logo as any)?.src || logo} alt="YODHA Logo" className="w-7 h-7 object-contain" />
             </div>
             <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse" />
           </div>

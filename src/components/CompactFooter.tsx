@@ -1,3 +1,4 @@
+"use client";
 import { ArrowUp } from "lucide-react";
 import logo from "../assets/logo.webp";
 
@@ -30,7 +31,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
         
         {/* BRAND MINIMAL HEADER */}
         <div className="flex items-center gap-3">
-          <img src={logo} alt="Yodha Spartan Logo" className="w-9 h-9 object-contain shrink-0" />
+          <img src={(logo as any)?.src || logo} alt="Yodha Spartan Logo" className="w-9 h-9 object-contain shrink-0" />
           <div>
             <h4 className="text-lg font-black font-heading tracking-tight text-white flex items-center justify-center md:justify-start gap-1">
               <span>YODHA</span>

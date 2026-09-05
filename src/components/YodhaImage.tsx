@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef, useEffect, type ImgHTMLAttributes } from "react";
 import logo from "../assets/logo.webp";
 
@@ -56,7 +57,7 @@ export function YodhaImage({
               </>
             )}
             <img
-              src={logo}
+              src={(logo as any)?.src || logo}
               alt="YODHA Logo Placeholder"
               className={`w-5 h-5 sm:w-7 sm:h-7 object-contain animate-pulse ${logoClassName}`}
             />
@@ -67,7 +68,7 @@ export function YodhaImage({
       {/* Target Image */}
       <img
         ref={imgRef}
-        src={src}
+        src={(src as any)?.src || src}
         alt={alt}
         onLoad={handleImageLoad}
         onError={handleImageError}

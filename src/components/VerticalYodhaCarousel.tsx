@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 
 // Import all 20 past hackathon images from src/assets/carousel/
@@ -94,7 +95,7 @@ export function VerticalYodhaCarousel() {
                   {/* PHOTO CONTAINER */}
                   <div className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative bg-slate-950">
                     <img
-                      src={imgSrc}
+                      src={(imgSrc as any)?.src || imgSrc}
                       alt={`YODHA Hackathon Highlight ${idx + 1}`}
                       className="w-full h-full object-cover"
                       loading="lazy"

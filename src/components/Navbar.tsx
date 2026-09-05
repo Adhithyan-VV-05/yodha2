@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -62,7 +63,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
           <a href="#" className="flex items-center gap-2.5 group shrink-0">
             <div className="w-9 h-9 rounded-full overflow-hidden border border-blue-500/60 shadow-[0_0_15px_rgba(59,130,246,0.4)] shrink-0">
               <img
-                src={logo}
+                src={(logo as any)?.src || logo}
                 alt="YODHA Logo"
                 className="w-full h-full object-cover scale-110"
               />
@@ -124,7 +125,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                 >
                   <div className="w-8 h-8 rounded-full overflow-hidden border border-blue-400/50 shadow-[0_0_12px_rgba(59,130,246,0.4)] shrink-0 flex items-center justify-center bg-slate-950">
                     <img
-                      src={logo}
+                      src={(logo as any)?.src || logo}
                       alt="YODHA Logo"
                       className="w-full h-full object-cover scale-105"
                     />
@@ -166,7 +167,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                   >
                     <div className="w-9 h-9 rounded-full overflow-hidden border border-blue-400/50 shadow-[0_0_12px_rgba(59,130,246,0.4)] shrink-0 flex items-center justify-center bg-slate-950">
                       <img
-                        src={logo}
+                        src={(logo as any)?.src || logo}
                         alt="YODHA Logo"
                         className="w-full h-full object-cover scale-105"
                       />

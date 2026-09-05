@@ -1,3 +1,4 @@
+"use client";
 import { Component, type ReactNode, useState, useEffect } from 'react';
 import Spline from '@splinetool/react-spline';
 import logo from '../../assets/logo.webp';
@@ -117,7 +118,7 @@ export function SplineScene({ scene, className, showChestLogo = true }: SplineSc
             <div className="relative flex items-center justify-center">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-sky-400/30 bg-sky-500/10 shadow-md" />
               <img
-                src={logo}
+                src={(logo as any)?.src || logo}
                 alt="YODHA Chest Emblem"
                 className="absolute w-6 h-6 sm:w-8 sm:h-8 object-contain filter brightness-110"
               />

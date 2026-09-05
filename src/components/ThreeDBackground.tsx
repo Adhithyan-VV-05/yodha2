@@ -1,3 +1,4 @@
+"use client";
 export function ThreeDBackground() {
   return null;
 }

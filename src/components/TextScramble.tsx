@@ -1,3 +1,4 @@
+"use client";
 interface TextScrambleProps {
   text: string;
   className?: string;

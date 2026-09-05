@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { RegistrationSection } from "./RegistrationSection";

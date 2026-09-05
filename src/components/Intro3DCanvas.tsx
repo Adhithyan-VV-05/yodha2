@@ -1,3 +1,4 @@
+"use client";
 interface Intro3DCanvasProps {
   progress?: number;
   isEnding?: boolean;

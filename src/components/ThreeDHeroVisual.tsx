@@ -1,3 +1,4 @@
+"use client";
 import logo from "../assets/logo.webp";
 
 interface ThreeDHeroVisualProps {
@@ -15,7 +16,7 @@ export function ThreeDHeroVisual({ isLoader = false }: ThreeDHeroVisualProps) {
       } flex items-center justify-center select-none overflow-hidden`}
     >
       <img
-        src={logo}
+        src={(logo as any)?.src || logo}
         alt="Yodha Logo"
         className="w-44 h-44 sm:w-60 sm:h-60 object-contain p-2 rounded-full bg-black/50"
       />

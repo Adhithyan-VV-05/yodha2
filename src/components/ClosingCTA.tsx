@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield } from "lucide-react";
 import { YodhaTitleBanner } from "./YodhaTitleBanner";

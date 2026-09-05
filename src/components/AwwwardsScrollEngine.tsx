@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useState, useEffect, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ChevronLeft, ChevronRight, Compass } from "lucide-react";

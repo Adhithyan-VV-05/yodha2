@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { Camera, Award, Users } from "lucide-react";
 
@@ -105,7 +106,7 @@ export function YodhaImageStreamSection() {
                   className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-blue-500/40 bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.6)] group transition-transform duration-300 hover:scale-105"
                 >
                   <img
-                    src={imgSrc}
+                    src={(imgSrc as any)?.src || imgSrc}
                     alt={`YODHA Highlight ${idx + 1}`}
                     className="w-full h-full object-cover filter contrast-[1.05] brightness-95 group-hover:brightness-110 transition-all duration-300"
                     loading="lazy"
@@ -139,7 +140,7 @@ export function YodhaImageStreamSection() {
                   className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-blue-500/40 bg-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.6)] group transition-transform duration-300 hover:scale-105"
                 >
                   <img
-                    src={imgSrc}
+                    src={(imgSrc as any)?.src || imgSrc}
                     alt={`YODHA Highlight ${idx + 1}`}
                     className="w-full h-full object-cover filter contrast-[1.05] brightness-95 group-hover:brightness-110 transition-all duration-300"
                     loading="lazy"

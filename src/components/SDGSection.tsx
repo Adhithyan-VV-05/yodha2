@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SDG_ITEMS, getNextSdgId, type SDGItem } from "../data/sdgData";

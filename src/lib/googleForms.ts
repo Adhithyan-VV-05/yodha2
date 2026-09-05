@@ -1,6 +1,18 @@
 import type { TeamRegistrationData } from "./firebase";
 
-const GOOGLE_FORM_URL = import.meta.env.VITE_GOOGLE_FORM_URL || "";
+const getEnvVar = (key: string): string => {
+  if (typeof process !== "undefined" && process.env && process.env[key]) {
+    return process.env[key] || "";
+  }
+  try {
+    return (import.meta as any).env?.[key] || "";
+  } catch {
+    return "";
+  }
+};
+
+const GOOGLE_FORM_URL = getEnvVar("NEXT_PUBLIC_GOOGLE_FORM_URL") || getEnvVar("VITE_GOOGLE_FORM_URL") || "";
+
 
 export const isGoogleFormConfigured = (): boolean => {
   return Boolean(
