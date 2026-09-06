@@ -210,7 +210,6 @@ export function ReferralDashboardModal({ isOpen, onClose, referralCode }: Referr
                   <Users className="w-4 h-4 text-blue-400" />
                   <span>REFERRED TEAMS ({referrals.length})</span>
                 </span>
-                <span className="text-[10px] text-slate-500">PRIVACY PROTECTED (NAMES & TIMESTAMP ONLY)</span>
               </div>
 
               {loading ? (
@@ -232,14 +231,9 @@ export function ReferralDashboardModal({ isOpen, onClose, referralCode }: Referr
                       key={item.teamId || idx}
                       className="p-4 rounded-xl bg-slate-900/80 border border-blue-500/20 flex items-center justify-between gap-4 text-xs font-mono hover:border-blue-400/50 transition-colors"
                     >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="w-7 h-7 rounded-lg bg-blue-950 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 shrink-0 text-xs">
-                          #{idx + 1}
-                        </span>
-                        <div className="flex flex-col min-w-0">
-                          <span className="font-extrabold text-white text-sm truncate">{item.teamName}</span>
-                          <span className="text-slate-400 text-xs truncate">Team Captain: <strong className="text-slate-200">{item.leaderName}</strong></span>
-                        </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-extrabold text-white text-sm truncate">{item.teamName}</span>
+                        <span className="text-slate-400 text-xs truncate">Team Captain: <strong className="text-slate-200">{item.leaderName}</strong></span>
                       </div>
 
                       <div className="flex items-center gap-1.5 text-slate-400 text-[11px] shrink-0">
@@ -251,6 +245,7 @@ export function ReferralDashboardModal({ isOpen, onClose, referralCode }: Referr
                 </div>
               )}
             </div>
+
 
           </div>
 
