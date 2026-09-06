@@ -490,10 +490,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                             <span className="text-slate-500 text-[10px] block">COLLEGE / INSTITUTION</span>
                             <span className="text-slate-200">{leader.organization}</span>
                           </div>
-                          <div>
-                            <span className="text-slate-500 text-[10px] block">GENDER & YEAR</span>
-                            <span className="text-slate-200">{leader.gender} • {leader.yearOfStudy}</span>
-                          </div>
                           {leader.githubUrl && (
                             <div>
                               <span className="text-slate-500 text-[10px] block">GITHUB PROFILE</span>
@@ -526,7 +522,6 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                                   <div><span className="text-slate-500">Email:</span> {m.email || "N/A"}</div>
                                   <div><span className="text-slate-500">Phone:</span> {m.phone || "N/A"}</div>
                                   <div><span className="text-slate-500">College:</span> {m.organization || leader.organization}</div>
-                                  <div><span className="text-slate-500">Details:</span> {m.gender} • {m.yearOfStudy}</div>
                                 </div>
                               </div>
                             ))}
