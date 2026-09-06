@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy, Loader2 } from "lucide-react";
+import { Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy } from "lucide-react";
+import { getCachedVideoBlobUrl, downloadMultithreadedVideo } from "../lib/videoCache";
+
 
 interface FirstLoadHeroProps {
   onOpenRegister: (trackName?: string) => void;
@@ -22,49 +24,67 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     seconds: 40,
   });
 
+  // Background Preloading of Trailer Video after Site Content is Loaded
+
+  useEffect(() => {
+    let isMounted = true;
+    const TRAILER_FILE = "/main trailer.mp4";
+    const CACHE_KEY = "yodha_main_trailer_v2";
+
+    const initPreload = async () => {
+      try {
+        // 1. Check IndexedDB cache first
+        const cachedUrl = await getCachedVideoBlobUrl(CACHE_KEY);
+        if (cachedUrl && isMounted) {
+          setVideoBlobUrl(cachedUrl);
+          setTrailerProgress(100);
+          setTrailerState("ready");
+          return;
+        }
+
+        // 2. Start multithreaded parallel background download after content load
+        if (isMounted) {
+          setTrailerState("loading");
+          setTrailerProgress(0);
+        }
+
+        const url = await downloadMultithreadedVideo(TRAILER_FILE, CACHE_KEY, (pct) => {
+          if (isMounted) {
+            setTrailerProgress(pct);
+          }
+        });
+
+        if (isMounted) {
+          setVideoBlobUrl(url);
+          setTrailerProgress(100);
+          setTrailerState("ready");
+        }
+      } catch (err) {
+        console.warn("Background trailer download issue:", err);
+        if (isMounted) {
+          setTrailerState("ready");
+        }
+      }
+    };
+
+    // Delay start until site main content is mounted
+    const timer = setTimeout(() => {
+      initPreload();
+    }, 200);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
+  }, []);
+
   const handleTrailerClick = () => {
-    if (videoBlobUrl || trailerState === "ready") {
-      if (onOpenTrailer) onOpenTrailer(videoBlobUrl || "/trailer.mp4");
-      return;
+    const targetUrl = videoBlobUrl || "/main trailer.mp4";
+    if (onOpenTrailer) {
+      onOpenTrailer(targetUrl);
     }
-
-    if (trailerState === "loading") return;
-
-    setTrailerState("loading");
-    setTrailerProgress(0);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/trailer.mp4", true);
-    xhr.responseType = "blob";
-
-    xhr.onprogress = (e) => {
-      if (e.lengthComputable && e.total > 0) {
-        const pct = Math.min(99, Math.round((e.loaded / e.total) * 100));
-        setTrailerProgress(pct);
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status === 200 || xhr.status === 304) {
-        const blob = xhr.response;
-        const blobUrl = URL.createObjectURL(blob);
-        setVideoBlobUrl(blobUrl);
-        setTrailerProgress(100);
-        setTrailerState("ready");
-        if (onOpenTrailer) onOpenTrailer(blobUrl);
-      } else {
-        setTrailerState("ready");
-        if (onOpenTrailer) onOpenTrailer("/trailer.mp4");
-      }
-    };
-
-    xhr.onerror = () => {
-      setTrailerState("ready");
-      if (onOpenTrailer) onOpenTrailer("/trailer.mp4");
-    };
-
-    xhr.send();
   };
+
 
   // 2.5s phrase dataset for both PC and Mobile (NO COMMAS)
   const phrases = [
@@ -230,22 +250,48 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             {/* TRAILER BUTTON */}
             <button
               onClick={handleTrailerClick}
-              disabled={trailerState === "loading"}
-              className="flex items-center gap-2 group cursor-pointer shrink-0 transition-all"
+              title={trailerState === "ready" ? "Click to Launch Trailer" : `Buffering Trailer (${trailerProgress}%)`}
+              className="flex items-center gap-2.5 group cursor-pointer shrink-0 transition-all active:scale-95"
             >
-              <div className={`w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md group-hover:scale-105 transition-all ${trailerState === "loading" ? "animate-pulse ring-2 ring-blue-400" : ""}`}>
-                {trailerState === "loading" ? (
-                  <Loader2 className="w-4 h-4 text-white animate-spin" />
-                ) : (
-                  <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+              {trailerState === "ready" ? (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-sky-500 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.6)] group-hover:scale-110 transition-transform">
+                  <Play className="w-4.5 h-4.5 text-white fill-white ml-0.5" />
+                </div>
+              ) : (
+                <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="14" stroke="currentColor" strokeWidth="3" className="text-blue-950" fill="none" />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      className="text-blue-500 transition-all duration-200"
+                      fill="none"
+                      strokeDasharray={87.96}
+                      strokeDashoffset={87.96 - (87.96 * trailerProgress) / 100}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="absolute font-mono text-[9px] font-black text-slate-950">
+                    {trailerProgress}%
+                  </span>
+                </div>
+              )}
+
+              <div className="flex flex-col text-left">
+                <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider group-hover:text-blue-600 transition-colors">
+                  {trailerState === "ready" ? "LAUNCH TRAILER" : "WILL BE PLAYED SOON"}
+                </span>
+                {trailerState === "loading" && (
+                  <span className="text-[9px] font-mono text-blue-600 font-black uppercase">
+                    BUFFERING {trailerProgress}%
+                  </span>
                 )}
               </div>
-              <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider group-hover:text-blue-600 transition-colors">
-                {trailerState === "loading"
-                  ? `WILL BE PLAYED SOON (${trailerProgress}%)`
-                  : "TRAILER"}
-              </span>
             </button>
+
 
             {/* JYOTHY LOCATION WITH BLUE MAP PIN (NO N BADGE) IN SAME ROW */}
             <div className="flex items-center gap-2 text-left shrink-0">
@@ -369,22 +415,48 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
             <button
               onClick={handleTrailerClick}
-              disabled={trailerState === "loading"}
-              className="flex items-center gap-2 group cursor-pointer"
+              title={trailerState === "ready" ? "Click to Launch Trailer" : `Buffering Trailer (${trailerProgress}%)`}
+              className="flex items-center gap-2 group cursor-pointer active:scale-95 transition-all"
             >
-              <div className={`w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md ${trailerState === "loading" ? "animate-pulse ring-2 ring-blue-400" : ""}`}>
-                {trailerState === "loading" ? (
-                  <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
-                ) : (
+              {trailerState === "ready" ? (
+                <div className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-500 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.6)]">
                   <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+                </div>
+              ) : (
+                <div className="relative w-9 h-9 flex items-center justify-center shrink-0">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="14" stroke="currentColor" strokeWidth="3" className="text-slate-900" fill="none" />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      className="text-blue-400 transition-all duration-200"
+                      fill="none"
+                      strokeDasharray={87.96}
+                      strokeDashoffset={87.96 - (87.96 * trailerProgress) / 100}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="absolute font-mono text-[8px] font-black text-white">
+                    {trailerProgress}%
+                  </span>
+                </div>
+              )}
+
+              <div className="flex flex-col text-left">
+                <span className="text-xs font-mono font-black text-white uppercase tracking-wider">
+                  {trailerState === "ready" ? "LAUNCH" : "WILL BE PLAYED SOON"}
+                </span>
+                {trailerState === "loading" && (
+                  <span className="text-[9px] font-mono text-sky-400 font-black uppercase">
+                    BUFFERING {trailerProgress}%
+                  </span>
                 )}
               </div>
-              <span className="text-xs font-mono font-black text-white uppercase tracking-wider">
-                {trailerState === "loading"
-                  ? `WILL BE PLAYED SOON (${trailerProgress}%)`
-                  : "TRAILER"}
-              </span>
             </button>
+
           </div>
 
           {/* JYOTHY LOCATION BELOW 20VH - HORIZONTALLY CENTERED ON MOBILE WITH WHITE TEXT */}

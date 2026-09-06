@@ -8,7 +8,8 @@ interface TrailerModalProps {
   videoUrl?: string;
 }
 
-export function TrailerModal({ isOpen, onClose, videoUrl = "/trailer.mp4" }: TrailerModalProps) {
+export function TrailerModal({ isOpen, onClose, videoUrl = "/main trailer.mp4" }: TrailerModalProps) {
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
   const [opacity, setOpacity] = useState<number>(1);
