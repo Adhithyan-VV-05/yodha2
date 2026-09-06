@@ -64,9 +64,9 @@ export function ScrollBackgroundManager() {
         style={{ opacity: heroOpacity }}
       >
         <picture className="w-full h-full">
-          <source media="(min-width: 640px)" srcSet="/yodha-hero-bg2-pc.png" />
+          <source media="(min-width: 640px)" srcSet="/yodha-hero-bg2-pc.webp" />
           <img
-            src="/yodha-hero--bg2-mob.png"
+            src="/yodha-hero--bg2-mob.webp"
             alt="Yodha Hero Background"
             className="w-full h-full object-cover object-center"
           />

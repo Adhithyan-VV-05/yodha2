@@ -16,7 +16,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
     let timerId: number | null = null;
 
     const runRealPreloader = async () => {
-      const imagesToPreload = ["/logo.webp", "/yodha-hero-bg2-pc.png"];
+      const imagesToPreload = ["/logo.webp", "/yodha-hero-bg2-pc.webp"];
       let loadedCount = 0;
       const totalAssets = imagesToPreload.length;
 
