@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info, ChevronDown, ChevronUp, ExternalLink, User, FileText } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info, ChevronDown, ChevronUp, ExternalLink, User, FileText, BarChart3 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { saveTeamToFirebase, isTeamNameTaken, validateReferralCode, checkParticipantDuplicate } from "../lib/firebase";
 import type { TeamRegistrationData, TeamMember } from "../lib/firebase";
@@ -19,9 +19,10 @@ interface RegistrationSectionProps {
   isOpen?: boolean;
   onClose?: () => void;
   selectedTrack?: string;
+  onOpenReferralDashboard?: (code: string) => void;
 }
 
-export function RegistrationSection({ selectedTrack = "Healthcare AI" }: RegistrationSectionProps) {
+export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenReferralDashboard }: RegistrationSectionProps) {
   const [currentStep, setCurrentStep] = useState(1);
 
   // Form State
@@ -78,6 +79,20 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
   // Referral Info & Full Details Toggle State
   const [showReferralInfo, setShowReferralInfo] = useState(false);
   const [showFullDetails, setShowFullDetails] = useState(false);
+
+  // Auto-detect referral code from localStorage on mount and auto-verify
+  useEffect(() => {
+    try {
+      const savedCode = localStorage.getItem("yodha_referral_code");
+      if (savedCode && savedCode.trim()) {
+        const clean = savedCode.trim().toUpperCase();
+        setUsedReferralCode(clean);
+        handleVerifyReferralCode(clean);
+      }
+    } catch (err) {
+      console.warn("Error reading referral code from localStorage:", err);
+    }
+  }, []);
 
   // Validate Entered Warrior Referral Code on Click of Verify Logo/Button
   const handleVerifyReferralCode = async (codeVal: string) => {
@@ -546,8 +561,8 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
 
             {/* WARRIOR REFERRAL CODE CARD ON SUCCESS */}
             {generatedReferralCode && (
-              <div className="mt-6 w-full p-4.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-blue-500/10 to-blue-600/10 border border-amber-400/50 text-left relative overflow-hidden shadow-xl">
-                <div className="flex items-center justify-between mb-2">
+              <div className="mt-6 w-full p-4.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-blue-500/10 to-blue-600/10 border border-amber-400/50 text-left relative overflow-hidden shadow-xl space-y-3">
+                <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-mono font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
                     <Gift className="w-4 h-4 text-amber-400 animate-bounce" />
                     <span>YOUR WARRIOR REFERRAL CODE</span>
@@ -561,26 +576,38 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI" }: Registr
                   <span className="font-mono text-xl sm:text-2xl font-black text-amber-300 tracking-wider">
                     {generatedReferralCode}
                   </span>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(generatedReferralCode);
-                      setCopiedReferralCode(true);
-                      setTimeout(() => setCopiedReferralCode(false), 2500);
-                    }}
-                    className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-black font-black text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-md shrink-0"
-                  >
-                    {copiedReferralCode ? (
-                      <>
-                        <Check className="w-4 h-4 text-black" />
-                        <span>Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4 text-black" />
-                        <span>Copy Code</span>
-                      </>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(generatedReferralCode);
+                        setCopiedReferralCode(true);
+                        setTimeout(() => setCopiedReferralCode(false), 2500);
+                      }}
+                      className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-black font-black text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-md shrink-0"
+                    >
+                      {copiedReferralCode ? (
+                        <>
+                          <Check className="w-4 h-4 text-black" />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4 text-black" />
+                          <span>Copy Code</span>
+                        </>
+                      )}
+                    </button>
+
+                    {onOpenReferralDashboard && (
+                      <button
+                        onClick={() => onOpenReferralDashboard(generatedReferralCode)}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-md shrink-0"
+                      >
+                        <BarChart3 className="w-4 h-4 text-white" />
+                        <span>View Dashboard</span>
+                      </button>
                     )}
-                  </button>
+                  </div>
                 </div>
               </div>
             )}

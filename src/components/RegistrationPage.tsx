@@ -6,9 +6,10 @@ import { RegistrationSection } from "./RegistrationSection";
 interface RegistrationPageProps {
   onBack: () => void;
   selectedTrack?: string;
+  onOpenReferralDashboard?: (code: string) => void;
 }
 
-export function RegistrationPage({ onBack, selectedTrack }: RegistrationPageProps) {
+export function RegistrationPage({ onBack, selectedTrack, onOpenReferralDashboard }: RegistrationPageProps) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
@@ -39,10 +40,14 @@ export function RegistrationPage({ onBack, selectedTrack }: RegistrationPageProp
 
       {/* NORMAL SITE VIEW REGISTRATION CONTENT */}
       <main className="relative z-10 w-full flex-1 max-w-5xl mx-auto px-4 py-6 sm:py-10">
-        <RegistrationSection selectedTrack={selectedTrack} />
+        <RegistrationSection
+          selectedTrack={selectedTrack}
+          onOpenReferralDashboard={onOpenReferralDashboard}
+        />
       </main>
     </div>
   );
 }
 
 export default RegistrationPage;
+

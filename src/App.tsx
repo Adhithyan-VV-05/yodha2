@@ -5,6 +5,7 @@ import { HeroSection } from "./components/HeroSection";
 import { CompactFooter } from "./components/CompactFooter";
 import { ScrollBackgroundManager } from "./components/ScrollBackgroundManager";
 import { IntroLoader } from "./components/IntroLoader";
+import { ReferralDashboardModal } from "./components/ReferralDashboardModal";
 
 // Lazy load non-hero sections below the fold for optimal initial load speed
 const AboutSection = lazy(() => import("./components/AboutSection").then((m) => ({ default: m.AboutSection })));
@@ -24,6 +25,10 @@ function App() {
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
   const [activePage, setActivePage] = useState<"home" | "healthcare" | "register">("home");
 
+  // Referral Dashboard Modal State
+  const [referralDashboardCode, setReferralDashboardCode] = useState<string>("");
+  const [isReferralDashboardOpen, setIsReferralDashboardOpen] = useState<boolean>(false);
+
   // Preserve home page scroll position when opening dedicated sub-pages
   const homeScrollPosRef = useRef<number>(0);
 
@@ -35,6 +40,13 @@ function App() {
     setActivePage("register");
     window.scrollTo({ top: 0, behavior: "instant" });
     window.history.pushState({ activePage: "register" }, "");
+  };
+
+  const handleOpenReferralDashboard = (code: string) => {
+    if (code && code.trim()) {
+      setReferralDashboardCode(code.trim().toUpperCase());
+      setIsReferralDashboardOpen(true);
+    }
   };
 
   const handleSelectPage = (page: "home" | "healthcare" | "register") => {
@@ -51,6 +63,32 @@ function App() {
       window.history.pushState({ activePage: page }, "");
     }
   };
+
+  // Extract referral codes from URL parameters on initial load
+  useEffect(() => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get("ref") || urlParams.get("referral") || urlParams.get("r");
+      const viewRefCode = urlParams.get("view_ref") || urlParams.get("dashboard_ref");
+      const isRegisterPath = window.location.pathname.toLowerCase().includes("register");
+
+      if (refCode && refCode.trim()) {
+        const cleanRef = refCode.trim().toUpperCase();
+        localStorage.setItem("yodha_referral_code", cleanRef);
+        setActivePage("register");
+      } else if (isRegisterPath) {
+        setActivePage("register");
+      }
+
+      if (viewRefCode && viewRefCode.trim()) {
+        const cleanViewRef = viewRefCode.trim().toUpperCase();
+        setReferralDashboardCode(cleanViewRef);
+        setIsReferralDashboardOpen(true);
+      }
+    } catch (err) {
+      console.warn("Error parsing URL referral params:", err);
+    }
+  }, []);
 
   // Restore saved scroll position when returning to the home page
   useEffect(() => {
@@ -96,6 +134,7 @@ function App() {
           <RegistrationPage
             onBack={() => handleSelectPage("home")}
             selectedTrack={selectedTrack}
+            onOpenReferralDashboard={handleOpenReferralDashboard}
           />
         ) : activePage === "healthcare" ? (
           <div className="min-h-screen w-full relative z-20">
@@ -150,8 +189,16 @@ function App() {
           </div>
         )}
       </Suspense>
+
+      {/* REFERRAL DASHBOARD MODAL */}
+      <ReferralDashboardModal
+        isOpen={isReferralDashboardOpen}
+        onClose={() => setIsReferralDashboardOpen(false)}
+        referralCode={referralDashboardCode}
+      />
     </div>
   );
 }
 
 export default App;
+
