@@ -85,10 +85,10 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
-                className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.08] font-sans whitespace-nowrap"
+                className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.08] font-heading whitespace-nowrap"
               >
-                <span className="text-slate-950 font-black">{activePhrase.pc.prefix}</span>
-                <span className="text-blue-600 font-serif font-black drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+                <span className="text-slate-950 font-black font-heading">{activePhrase.pc.prefix}</span>
+                <span className="text-blue-600 font-heading font-black drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
                   {activePhrase.pc.keyword}
                 </span>
               </motion.h1>
@@ -218,13 +218,13 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
                 transition={{ duration: 0.4, ease: "easeInOut" }}
                 className="flex flex-col text-left space-y-0.5"
               >
-                <span className="text-3xl min-[400px]:text-4xl font-black text-slate-950 uppercase font-sans tracking-tight leading-none">
+                <span className="text-3xl min-[400px]:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight leading-none">
                   {activePhrase.mobile.word1}
                 </span>
-                <span className="text-3xl min-[400px]:text-4xl font-black text-slate-950 uppercase font-sans tracking-tight leading-none">
+                <span className="text-3xl min-[400px]:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight leading-none">
                   {activePhrase.mobile.word2}
                 </span>
-                <span className="text-3xl min-[400px]:text-4xl font-black text-blue-600 font-serif tracking-tight leading-none drop-shadow-[0_0_12px_rgba(59,130,246,0.3)]">
+                <span className="text-3xl min-[400px]:text-4xl font-black text-blue-600 font-heading tracking-tight leading-none drop-shadow-[0_0_12px_rgba(59,130,246,0.3)]">
                   {activePhrase.mobile.word3}
                 </span>
               </motion.div>

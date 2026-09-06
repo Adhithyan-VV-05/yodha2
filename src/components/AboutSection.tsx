@@ -68,65 +68,96 @@ export function AboutSection() {
 
       </div>
 
-      {/* PANEL 2: INSTITUTION & DEPT OF AI & DS (ORGANIZING BODY) */}
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch pt-8 border-t border-slate-300">
+      {/* PANEL 2: INSTITUTION & DEPT OF AI & DS (CREATIVE OPEN ARCHITECTURE - NO CARDS) */}
+      <div className="relative w-full max-w-6xl mx-auto pt-12 mt-8 border-t border-slate-200/80">
         
-        {/* AIDA DEPT CARD WITH DEDICATED VISIT BUTTON */}
-        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200 shadow-xl flex flex-col justify-between space-y-6 text-left">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Globe className="w-4 h-4 text-blue-600" />
-              <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">ORGANIZING BODY</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-slate-950 font-heading">
-              Department of AI & Data Science (AIDA)
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
-              The Department of Artificial Intelligence and Data Science (AIDA) at Jyothi Engineering College is dedicated to pioneering innovation, nurturing technical talent, and bridging academic excellence with real-world industry impact.
-            </p>
-          </div>
-
-          <div className="pt-2">
-            <a
-              href="https://aidajecc.in/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              <span>VISIT AIDA WEBSITE</span>
-              <ExternalLink className="w-4 h-4 text-white" />
-            </a>
-          </div>
+        {/* SECTION CATEGORY HEADER */}
+        <div className="flex items-center justify-center gap-3 mb-10 text-center">
+          <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-blue-500" />
+          <span className="text-xs font-mono font-extrabold text-blue-600 uppercase tracking-[0.25em]">
+            ORGANIZERS & HOST VENUE
+          </span>
+          <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-blue-500" />
         </div>
 
-        {/* HOST CAMPUS CARD WITH DEDICATED VISIT BUTTON */}
-        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-slate-200 shadow-xl flex flex-col justify-between space-y-6 text-left">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Landmark className="w-4 h-4 text-blue-600" />
-              <span className="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">HOST CAMPUS</span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start relative">
+          
+          {/* LEFT: ORGANIZING BODY (AIDA DEPT) - OPEN CREATIVE DISPLAY */}
+          <div className="lg:col-span-6 relative group flex flex-col justify-between space-y-6 text-left p-2">
+            
+            {/* WATERMARK BACKGROUND ACCENT */}
+            <span className="absolute -top-6 -left-2 text-7xl font-black font-heading text-blue-900/[0.04] pointer-events-none select-none">
+              AIDA
+            </span>
+
+            <div className="space-y-4 relative z-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-[10px] font-mono font-bold uppercase tracking-widest">
+                <Globe className="w-3.5 h-3.5 text-blue-600" />
+                <span>ORGANIZING BODY</span>
+              </div>
+
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-950 font-heading leading-tight group-hover:text-blue-600 transition-colors">
+                Department of AI & Data Science <span className="text-blue-600 font-heading">(AIDA)</span>
+              </h3>
+
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans max-w-xl">
+                The Department of Artificial Intelligence and Data Science at Jyothi Engineering College is dedicated to pioneering innovation, nurturing technical talent, and bridging academic excellence with real-world industry impact.
+              </p>
             </div>
-            <h4 className="text-xl sm:text-2xl font-bold text-slate-950 font-heading">
-              Jyothi Engineering College (Autonomous)
-            </h4>
-            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-              Cheruthuruthy, Thrissur, Kerala — A premier NAAC accredited engineering campus equipped with state-of-the-art AI labs, high-performance computing clusters, and modern innovation spaces.
-            </p>
+
+            <div className="pt-2 relative z-10">
+              <a
+                href="https://aidajecc.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-[1.03] active:scale-95 cursor-pointer group/btn"
+              >
+                <span>EXPLORE AIDA DEPARTMENT</span>
+                <ExternalLink className="w-4 h-4 text-white group-hover/btn:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
           </div>
 
-          <div className="pt-2">
-            <a
-              href="https://www.jecc.ac.in/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-950 hover:bg-slate-900 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer border border-slate-800"
-            >
-              <span>VISIT JECC WEBSITE</span>
-              <ExternalLink className="w-4 h-4 text-sky-400" />
-            </a>
+          {/* VERTICAL DIVIDER ON DESKTOP */}
+          <div className="hidden lg:block absolute left-1/2 top-4 bottom-4 w-[1px] -translate-x-1/2 bg-gradient-to-b from-transparent via-slate-300 to-transparent pointer-events-none" />
+
+          {/* RIGHT: HOST CAMPUS (JYOTHY ENGINEERING COLLEGE) - OPEN CREATIVE DISPLAY */}
+          <div className="lg:col-span-6 relative group flex flex-col justify-between space-y-6 text-left p-2">
+            
+            {/* WATERMARK BACKGROUND ACCENT */}
+            <span className="absolute -top-6 -left-2 text-7xl font-black font-heading text-slate-900/[0.04] pointer-events-none select-none">
+              JECC
+            </span>
+
+            <div className="space-y-4 relative z-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200/80 border border-slate-300 text-slate-800 text-[10px] font-mono font-bold uppercase tracking-widest">
+                <Landmark className="w-3.5 h-3.5 text-blue-600" />
+                <span>HOST CAMPUS</span>
+              </div>
+
+              <h4 className="text-xl sm:text-2xl font-black text-slate-950 font-heading leading-tight group-hover:text-blue-600 transition-colors">
+                Jyothi Engineering College <span className="text-slate-600 text-base font-normal font-sans">(Autonomous)</span>
+              </h4>
+
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-xl">
+                Cheruthuruthy, Thrissur, Kerala — A premier NAAC accredited engineering campus equipped with state-of-the-art AI labs, high-performance computing clusters, and modern innovation spaces.
+              </p>
+            </div>
+
+            <div className="pt-2 relative z-10">
+              <a
+                href="https://www.jecc.ac.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-950 hover:bg-slate-900 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-[1.03] active:scale-95 cursor-pointer border border-slate-800 group/btn"
+              >
+                <span>VISIT JECC CAMPUS</span>
+                <ExternalLink className="w-4 h-4 text-sky-400 group-hover/btn:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
           </div>
+
         </div>
-
       </div>
 
     </section>
