@@ -282,7 +282,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
               <div className="flex flex-col text-left">
                 <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider group-hover:text-blue-600 transition-colors">
-                  {trailerState === "ready" ? "LAUNCH TRAILER" : "WILL BE PLAYED SOON"}
+                  {trailerState === "ready" ? "LAUNCH TRAILER" : "TRAILER LOADING"}
                 </span>
                 {trailerState === "loading" && (
                   <span className="text-[9px] font-mono text-blue-600 font-black uppercase">
@@ -291,6 +291,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
                 )}
               </div>
             </button>
+
 
 
             {/* JYOTHY LOCATION WITH BLUE MAP PIN (NO N BADGE) IN SAME ROW */}
@@ -447,7 +448,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
               <div className="flex flex-col text-left">
                 <span className="text-xs font-mono font-black text-white uppercase tracking-wider">
-                  {trailerState === "ready" ? "LAUNCH" : "WILL BE PLAYED SOON"}
+                  {trailerState === "ready" ? "LAUNCH" : "TRAILER LOADING"}
                 </span>
                 {trailerState === "loading" && (
                   <span className="text-[9px] font-mono text-sky-400 font-black uppercase">
@@ -456,6 +457,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
                 )}
               </div>
             </button>
+
 
           </div>
 
