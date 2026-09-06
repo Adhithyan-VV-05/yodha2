@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Users, Share2, Copy, Check, Calendar, ExternalLink, RefreshCw } from "lucide-react";
 import { validateReferralCode, getReferralsForRoom, ReferralEntryData } from "../lib/firebase";
+import { CompactFooter } from "./CompactFooter";
+
 
 interface ReferralRoomPageProps {
   onBack: () => void;
@@ -257,12 +259,11 @@ export function ReferralRoomPage({ onBack, referralCode }: ReferralRoomPageProps
         </motion.div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="relative z-10 max-w-5xl mx-auto w-full px-4 py-8 text-center text-xs font-mono text-slate-500 border-t border-slate-900 mt-12">
-        YODHA 2.0 • WARRIORS OF AI • OFFICIAL REFERRAL PORTAL
-      </footer>
+      {/* MINIMAL STANDARDIZED FOOTER */}
+      <CompactFooter />
     </div>
   );
 }
+
 
 export default ReferralRoomPage;
