@@ -11,6 +11,8 @@ import { TimelineSection } from "@/components/TimelineSection";
 import { FAQSection } from "@/components/FAQSection";
 import { GuidelinesSection } from "@/components/GuidelinesSection";
 import { RegistrationPage } from "@/components/RegistrationPage";
+import { ReferralRoomPage } from "@/components/ReferralRoomPage";
+import { ReferralDashboardModal } from "@/components/ReferralDashboardModal";
 import { CompactFooter } from "@/components/CompactFooter";
 import { VerticalYodhaCarousel } from "@/components/VerticalYodhaCarousel";
 import { TrackPage } from "@/components/TrackPage";
@@ -22,8 +24,13 @@ import { trackUserSession } from "@/lib/firebase";
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [trailerModalOpen, setTrailerModalOpen] = useState(false);
+  const [trailerVideoUrl, setTrailerVideoUrl] = useState<string | undefined>(undefined);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
-  const [activePage, setActivePage] = useState<"home" | "healthcare" | "register">("home");
+  const [activePage, setActivePage] = useState<"home" | "healthcare" | "register" | "referral-room">("home");
+
+  // Referral Dashboard & Room State
+  const [referralDashboardCode, setReferralDashboardCode] = useState<string>("");
+  const [isReferralDashboardOpen, setIsReferralDashboardOpen] = useState<boolean>(false);
 
   // Preserve home page scroll position when opening dedicated sub-pages
   const homeScrollPosRef = useRef<number>(0);
@@ -38,7 +45,19 @@ export default function Home() {
     window.history.pushState({ activePage: "register" }, "");
   };
 
-  const handleSelectPage = (page: "home" | "healthcare" | "register") => {
+  const handleOpenTrailer = (videoUrl?: string) => {
+    if (videoUrl) setTrailerVideoUrl(videoUrl);
+    setTrailerModalOpen(true);
+  };
+
+  const handleOpenReferralDashboard = (code: string) => {
+    if (code && code.trim()) {
+      setReferralDashboardCode(code.trim().toUpperCase());
+      setIsReferralDashboardOpen(true);
+    }
+  };
+
+  const handleSelectPage = (page: "home" | "healthcare" | "register" | "referral-room") => {
     if (page === activePage) return;
 
     if (activePage === "home") {
@@ -52,6 +71,35 @@ export default function Home() {
       window.history.pushState({ activePage: page }, "");
     }
   };
+
+  // Extract referral codes from URL parameters on initial load
+  useEffect(() => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get("ref") || urlParams.get("referral") || urlParams.get("r");
+      const viewRefCode = urlParams.get("view_ref") || urlParams.get("dashboard_ref") || urlParams.get("code") || urlParams.get("ref_room");
+      const pathname = window.location.pathname.toLowerCase();
+      const isRegisterPath = pathname.includes("register");
+      const isReferralRoomPath = pathname.includes("referral") || pathname.includes("room");
+
+      if (viewRefCode && viewRefCode.trim()) {
+        const cleanViewRef = viewRefCode.trim().toUpperCase();
+        setReferralDashboardCode(cleanViewRef);
+        setActivePage("referral-room");
+      } else if (isReferralRoomPath && refCode) {
+        setReferralDashboardCode(refCode.trim().toUpperCase());
+        setActivePage("referral-room");
+      } else if (refCode && refCode.trim()) {
+        const cleanRef = refCode.trim().toUpperCase();
+        localStorage.setItem("yodha_referral_code", cleanRef);
+        setActivePage("register");
+      } else if (isRegisterPath) {
+        setActivePage("register");
+      }
+    } catch (err) {
+      console.warn("Error parsing URL referral params:", err);
+    }
+  }, []);
 
   // Restore saved scroll position when returning to the home page
   useEffect(() => {
@@ -93,10 +141,16 @@ export default function Home() {
       {activePage === "home" && <ScrollBackgroundManager />}
 
       {/* DEDICATED FULL PAGE VIEWS */}
-      {activePage === "register" ? (
+      {activePage === "referral-room" ? (
+        <ReferralRoomPage
+          onBack={() => handleSelectPage("home")}
+          referralCode={referralDashboardCode}
+        />
+      ) : activePage === "register" ? (
         <RegistrationPage
           onBack={() => handleSelectPage("home")}
           selectedTrack={selectedTrack}
+          onOpenReferralDashboard={handleOpenReferralDashboard}
         />
       ) : activePage === "healthcare" ? (
         <div className="min-h-screen w-full relative z-20">
@@ -114,7 +168,7 @@ export default function Home() {
           {/* 1. Hero Section */}
           <HeroSection
             onOpenRegister={handleOpenRegisterWithTrack}
-            onOpenTrailer={() => setTrailerModalOpen(true)}
+            onOpenTrailer={handleOpenTrailer}
           />
 
           {/* 2. About YODHA 2.0 */}
@@ -147,9 +201,18 @@ export default function Home() {
           <TrailerModal
             isOpen={trailerModalOpen}
             onClose={() => setTrailerModalOpen(false)}
+            videoUrl={trailerVideoUrl}
           />
         </div>
       )}
+
+      {/* REFERRAL DASHBOARD MODAL */}
+      <ReferralDashboardModal
+        isOpen={isReferralDashboardOpen}
+        onClose={() => setIsReferralDashboardOpen(false)}
+        referralCode={referralDashboardCode}
+      />
     </div>
   );
 }
+
