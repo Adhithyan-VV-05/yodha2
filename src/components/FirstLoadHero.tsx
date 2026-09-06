@@ -24,7 +24,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
   const handleTrailerClick = () => {
     if (videoBlobUrl || trailerState === "ready") {
-      if (onOpenTrailer) onOpenTrailer(videoBlobUrl || "/trailer compressed.webm");
+      if (onOpenTrailer) onOpenTrailer(videoBlobUrl || "/trailer.mp4");
       return;
     }
 
@@ -34,7 +34,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     setTrailerProgress(0);
 
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/trailer compressed.webm", true);
+    xhr.open("GET", "/trailer.mp4", true);
     xhr.responseType = "blob";
 
     xhr.onprogress = (e) => {
@@ -54,13 +54,13 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
         if (onOpenTrailer) onOpenTrailer(blobUrl);
       } else {
         setTrailerState("ready");
-        if (onOpenTrailer) onOpenTrailer("/trailer compressed.webm");
+        if (onOpenTrailer) onOpenTrailer("/trailer.mp4");
       }
     };
 
     xhr.onerror = () => {
       setTrailerState("ready");
-      if (onOpenTrailer) onOpenTrailer("/trailer compressed.webm");
+      if (onOpenTrailer) onOpenTrailer("/trailer.mp4");
     };
 
     xhr.send();

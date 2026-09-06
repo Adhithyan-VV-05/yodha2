@@ -8,7 +8,7 @@ interface TrailerModalProps {
   videoUrl?: string;
 }
 
-export function TrailerModal({ isOpen, onClose, videoUrl = "/trailer compressed.webm" }: TrailerModalProps) {
+export function TrailerModal({ isOpen, onClose, videoUrl = "/trailer.mp4" }: TrailerModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
   const [opacity, setOpacity] = useState<number>(1);
@@ -73,7 +73,7 @@ export function TrailerModal({ isOpen, onClose, videoUrl = "/trailer compressed.
       {/* FULLSCREEN VIDEO PLAYER ON PC */}
       <video
         ref={videoRef}
-        src={videoUrl || "/trailer compressed.webm"}
+        src={videoUrl || "/trailer.mp4"}
         autoPlay
         playsInline
         preload="auto"
@@ -85,7 +85,7 @@ export function TrailerModal({ isOpen, onClose, videoUrl = "/trailer compressed.
       {/* FULLWIDTH VIDEO PLAYER ON MOBILE */}
       <video
         ref={mobileVideoRef}
-        src={videoUrl || "/trailer compressed.webm"}
+        src={videoUrl || "/trailer.mp4"}
         autoPlay
         playsInline
         preload="auto"
