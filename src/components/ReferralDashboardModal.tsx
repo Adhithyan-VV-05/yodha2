@@ -25,11 +25,11 @@ export function ReferralDashboardModal({ isOpen, onClose, referralCode }: Referr
     setLoading(true);
     try {
       const roomRes = await validateReferralCode(cleanCode);
-      if (roomRes.valid) {
+      if (roomRes.valid && roomRes.roomData) {
         setRoomInfo({
-          teamName: roomRes.teamName,
-          leaderName: roomRes.leaderName,
-          totalReferrals: roomRes.totalReferrals || 0,
+          teamName: roomRes.roomData.teamName,
+          leaderName: roomRes.roomData.leaderName,
+          totalReferrals: roomRes.roomData.totalReferrals || 0,
         });
       }
       const list = await getReferralsForRoom(cleanCode);
