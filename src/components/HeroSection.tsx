@@ -3,7 +3,7 @@ import { FirstLoadHero } from "./FirstLoadHero";
 
 interface HeroSectionProps {
   onOpenRegister: (trackName?: string) => void;
-  onOpenTrailer?: () => void;
+  onOpenTrailer?: (videoUrl?: string) => void;
 }
 
 export function HeroSection({ onOpenRegister, onOpenTrailer }: HeroSectionProps) {
@@ -11,3 +11,4 @@ export function HeroSection({ onOpenRegister, onOpenTrailer }: HeroSectionProps)
 }
 
 export default HeroSection;
+

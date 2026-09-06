@@ -1,14 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy } from "lucide-react";
+import { Clock, Code, Target, Play, MapPin, Users, Lightbulb, Globe, Trophy, Loader2 } from "lucide-react";
 
 interface FirstLoadHeroProps {
   onOpenRegister: (trackName?: string) => void;
-  onOpenTrailer?: () => void;
+  onOpenTrailer?: (videoUrl?: string) => void;
 }
 
 export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHeroProps) {
+  // Trailer Download & Live Progress State
+  const [trailerState, setTrailerState] = useState<"idle" | "loading" | "ready">("idle");
+  const [trailerProgress, setTrailerProgress] = useState<number>(0);
+  const [videoBlobUrl, setVideoBlobUrl] = useState<string | null>(null);
+
   // Live countdown timer targeting 1 October 2026
   const [timeLeft, setTimeLeft] = useState({
     days: 28,
@@ -16,6 +21,50 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
     minutes: 15,
     seconds: 40,
   });
+
+  const handleTrailerClick = () => {
+    if (videoBlobUrl || trailerState === "ready") {
+      if (onOpenTrailer) onOpenTrailer(videoBlobUrl || "/trailer.webm");
+      return;
+    }
+
+    if (trailerState === "loading") return;
+
+    setTrailerState("loading");
+    setTrailerProgress(0);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/trailer.webm", true);
+    xhr.responseType = "blob";
+
+    xhr.onprogress = (e) => {
+      if (e.lengthComputable && e.total > 0) {
+        const pct = Math.min(99, Math.round((e.loaded / e.total) * 100));
+        setTrailerProgress(pct);
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status === 200 || xhr.status === 304) {
+        const blob = xhr.response;
+        const blobUrl = URL.createObjectURL(blob);
+        setVideoBlobUrl(blobUrl);
+        setTrailerProgress(100);
+        setTrailerState("ready");
+        if (onOpenTrailer) onOpenTrailer(blobUrl);
+      } else {
+        setTrailerState("ready");
+        if (onOpenTrailer) onOpenTrailer("/trailer.webm");
+      }
+    };
+
+    xhr.onerror = () => {
+      setTrailerState("ready");
+      if (onOpenTrailer) onOpenTrailer("/trailer.webm");
+    };
+
+    xhr.send();
+  };
 
   // 2.5s phrase dataset for both PC and Mobile (NO COMMAS)
   const phrases = [
@@ -180,14 +229,21 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
             {/* TRAILER BUTTON */}
             <button
-              onClick={() => onOpenTrailer && onOpenTrailer()}
-              className="flex items-center gap-2 group cursor-pointer shrink-0"
+              onClick={handleTrailerClick}
+              disabled={trailerState === "loading"}
+              className="flex items-center gap-2 group cursor-pointer shrink-0 transition-all"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md group-hover:scale-105 transition-all">
-                <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+              <div className={`w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md group-hover:scale-105 transition-all ${trailerState === "loading" ? "animate-pulse ring-2 ring-blue-400" : ""}`}>
+                {trailerState === "loading" ? (
+                  <Loader2 className="w-4 h-4 text-white animate-spin" />
+                ) : (
+                  <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+                )}
               </div>
               <span className="text-xs font-mono font-black text-slate-950 uppercase tracking-wider group-hover:text-blue-600 transition-colors">
-                TRAILER
+                {trailerState === "loading"
+                  ? `WILL BE PLAYED SOON (${trailerProgress}%)`
+                  : "TRAILER"}
               </span>
             </button>
 
@@ -312,14 +368,21 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
             </div>
 
             <button
-              onClick={() => onOpenTrailer && onOpenTrailer()}
+              onClick={handleTrailerClick}
+              disabled={trailerState === "loading"}
               className="flex items-center gap-2 group cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md">
-                <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+              <div className={`w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 flex items-center justify-center shadow-md ${trailerState === "loading" ? "animate-pulse ring-2 ring-blue-400" : ""}`}>
+                {trailerState === "loading" ? (
+                  <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
+                ) : (
+                  <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+                )}
               </div>
               <span className="text-xs font-mono font-black text-white uppercase tracking-wider">
-                TRAILER
+                {trailerState === "loading"
+                  ? `WILL BE PLAYED SOON (${trailerProgress}%)`
+                  : "TRAILER"}
               </span>
             </button>
           </div>

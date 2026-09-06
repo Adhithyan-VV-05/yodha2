@@ -22,6 +22,7 @@ const TrailerModal = lazy(() => import("./components/TrailerModal").then((m) => 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [trailerModalOpen, setTrailerModalOpen] = useState(false);
+  const [trailerVideoUrl, setTrailerVideoUrl] = useState<string | undefined>(undefined);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
   const [activePage, setActivePage] = useState<"home" | "healthcare" | "register">("home");
 
@@ -40,6 +41,11 @@ function App() {
     setActivePage("register");
     window.scrollTo({ top: 0, behavior: "instant" });
     window.history.pushState({ activePage: "register" }, "");
+  };
+
+  const handleOpenTrailer = (videoUrl?: string) => {
+    if (videoUrl) setTrailerVideoUrl(videoUrl);
+    setTrailerModalOpen(true);
   };
 
   const handleOpenReferralDashboard = (code: string) => {
@@ -152,7 +158,7 @@ function App() {
             {/* 1. Hero Section (Loaded Immediately) */}
             <HeroSection
               onOpenRegister={handleOpenRegisterWithTrack}
-              onOpenTrailer={() => setTrailerModalOpen(true)}
+              onOpenTrailer={handleOpenTrailer}
             />
 
             {/* 2. About YODHA 2.0 */}
@@ -185,6 +191,7 @@ function App() {
             <TrailerModal
               isOpen={trailerModalOpen}
               onClose={() => setTrailerModalOpen(false)}
+              videoUrl={trailerVideoUrl}
             />
           </div>
         )}
