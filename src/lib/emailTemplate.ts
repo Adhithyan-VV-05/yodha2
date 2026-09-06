@@ -29,11 +29,7 @@ export interface RegistrationEmailPayload {
  * Uses inline styles & bulletproof table layouts for 100% compatibility across Gmail, Outlook, Apple Mail, and Mobile.
  */
 export function generateEmailTemplate(data: RegistrationEmailPayload): string {
-  const websiteUrl =
-    data.websiteUrl ||
-    (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WEBSITE_URL) ||
-    (typeof process !== "undefined" && process.env?.VITE_WEBSITE_URL) ||
-    "https://yodha.aidajecc.in/";
+  const websiteUrl = "https://yodha.aidajecc.in";
 
   const contactEmail =
     data.contactEmail ||

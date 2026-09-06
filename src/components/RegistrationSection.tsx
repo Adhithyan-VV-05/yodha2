@@ -598,15 +598,18 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                       )}
                     </button>
 
-                    {onOpenReferralDashboard && (
-                      <button
-                        onClick={() => onOpenReferralDashboard(generatedReferralCode)}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-md shrink-0"
-                      >
-                        <BarChart3 className="w-4 h-4 text-white" />
-                        <span>View Dashboard</span>
-                      </button>
-                    )}
+                    <a
+                      href={`https://wa.me/?text=${encodeURIComponent(
+                        `🚀 Join YODHA 2.0 – Warriors of AI Hackathon!\n\nUse my Warrior Referral Code: ${generatedReferralCode}\n\nRegister your team here:\nhttps://yodha.aidajecc.in/register?ref=${generatedReferralCode}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(34,197,94,0.4)] shrink-0"
+                    >
+                      <ExternalLink className="w-4 h-4 text-white" />
+                      <span>Share via WhatsApp</span>
+                    </a>
+
                   </div>
                 </div>
               </div>

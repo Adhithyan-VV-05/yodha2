@@ -18,8 +18,7 @@ export function ReferralDashboardModal({ isOpen, onClose, referralCode }: Referr
   const [copiedCode, setCopiedCode] = useState(false);
 
   const cleanCode = (referralCode || "").trim().toUpperCase();
-  const originUrl = typeof window !== "undefined" ? window.location.origin : "https://yodha.aidajecc.in";
-  const referralLink = `${originUrl}/register?ref=${encodeURIComponent(cleanCode)}`;
+  const referralLink = `https://yodha.aidajecc.in/register?ref=${encodeURIComponent(cleanCode)}`;
 
   const fetchData = async () => {
     if (!cleanCode) return;
