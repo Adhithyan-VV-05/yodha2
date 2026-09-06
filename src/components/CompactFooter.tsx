@@ -1,5 +1,6 @@
 "use client";
-import { ArrowUp, ExternalLink, Mail, Instagram, Globe } from "lucide-react";
+import { ArrowUp, ExternalLink, Mail, Globe } from "lucide-react";
+
 import logo from "../assets/logo.webp";
 
 interface CompactFooterProps {
@@ -92,7 +93,12 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
             title="Instagram Official"
             className="w-9 h-9 rounded-full bg-slate-950/80 border border-blue-500/30 hover:border-blue-400 flex items-center justify-center text-slate-300 hover:text-blue-400 transition-all cursor-pointer shadow-md"
           >
-            <Instagram className="w-4 h-4 text-blue-400" />
+            <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+            </svg>
+
           </a>
 
           <a
