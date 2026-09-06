@@ -79,23 +79,13 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
       initial={{ opacity: 1 }}
       exit={{
         opacity: 0,
-        filter: "blur(12px)",
+        filter: "blur(16px)",
         transition: { duration: 0.45, ease: "easeInOut" },
       }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center text-white overflow-hidden select-none px-4"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center text-white overflow-hidden select-none px-4 bg-[#020512]/95 backdrop-blur-[45px]"
     >
-      {/* SMOOTH BLUR PULSE BACKGROUND (GETTING BLURRIER & LESS BLURRY IN A SMOOTH WAY) */}
-      <motion.div
-        animate={{
-          backdropFilter: [
-            "blur(25px) brightness(0.7)",
-            "blur(6px) brightness(0.95)",
-            "blur(25px) brightness(0.7)",
-          ],
-        }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute inset-0 bg-[#020512]/60 z-0 pointer-events-none"
-      />
+      {/* HEAVY HIGH-INTENSITY BLUR OVERLAY (NO BACKGROUND SEEN ON ANY DEVICE) */}
+      <div className="absolute inset-0 bg-[#020512]/92 backdrop-blur-[50px] z-0 pointer-events-none" />
 
       {/* LASER SCANNING BAR STARTING FROM THE ABSOLUTE TOP (0vh to 100vh) */}
       <motion.div

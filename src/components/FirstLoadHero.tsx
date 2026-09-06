@@ -235,12 +235,19 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
           <div className="w-14 h-1 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
         </div>
 
-        {/* SUBHEADLINE & ALL SUBSEQUENT CONTENTS PLACED 20VH BELOW ON MOBILE */}
-        <div className="pt-[20vh] space-y-4">
-          {/* SUBHEADLINE BRIEF BELOW 20VH - WHITE TEXT FOR MOBILE NO-BACKGROUND PORTION */}
-          <p className="text-xs text-white font-semibold leading-relaxed font-sans">
-            A battlefield for <strong className="text-blue-400 font-extrabold">bold ideas</strong>,<br />
-            where technology meets <strong className="text-blue-400 font-extrabold">purpose</strong> and <strong className="text-blue-400 font-extrabold">innovation</strong> leaves an <strong className="text-blue-400 font-extrabold">impact</strong>.
+        {/* SUBHEADLINE & ALL SUBSEQUENT CONTENTS PLACED BELOW ON MOBILE */}
+        <div className="pt-[30vh] space-y-4">
+          {/* SUBHEADLINE BRIEF (MOBILE ONLY) - BLACK TEXT EXCEPT "and" & "leaves" (WHITE) AND BLUE KEYWORDS */}
+          <p className="text-xs font-semibold leading-relaxed font-sans">
+            <span className="text-slate-950">A battlefield for </span>
+            <strong className="text-blue-600 font-extrabold">bold ideas</strong>
+            <span className="text-slate-950">,<br />where technology meets </span>
+            <strong className="text-blue-600 font-extrabold">purpose </strong>
+            <span className="text-white">and </span>
+            <strong className="text-blue-600 font-extrabold">innovation </strong>
+            <span className="text-white">leaves </span>
+            <span className="text-slate-950">an </span>
+            <strong className="text-blue-600 font-extrabold">impact</strong>.
           </p>
 
           {/* 3 STAT CARDS BELOW 20VH */}
