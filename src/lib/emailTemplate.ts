@@ -283,10 +283,13 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
                 </div>
 
                 <!-- LIVE REFERRAL DASHBOARD LINK BUTTON (PRIMARY ACTION FOR REFERRER) -->
-                <div style="margin-bottom: 14px;">
+                <div style="margin-bottom: 14px; text-align: center;">
                   <a href="${dashboardTarget}" target="_blank" style="display: block; width: 100%; box-sizing: border-box; padding: 14px; background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%); border: 1px solid #60a5fa; border-radius: 12px; font-family: monospace; font-size: 12px; font-weight: 900; color: #ffffff; text-align: center; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);">
-                    📊 VIEW MY REFERRAL DASHBOARD (SEE REFERRED TEAMS) ↗
+                    📊 VIEW MY REFERRAL ROOM (SEE REFERRED TEAMS) ↗
                   </a>
+                  <div style="margin-top: 8px; font-family: monospace; font-size: 11px; color: #60a5fa; word-break: break-all;">
+                    Direct Room Link: <a href="${dashboardTarget}" target="_blank" style="color: #93c5fd; text-decoration: underline;">${dashboardTarget}</a>
+                  </div>
                 </div>
 
                 <!-- SHARE BUTTONS GRID -->

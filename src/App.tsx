@@ -15,6 +15,7 @@ const TimelineSection = lazy(() => import("./components/TimelineSection").then((
 const FAQSection = lazy(() => import("./components/FAQSection").then((m) => ({ default: m.FAQSection })));
 const GuidelinesSection = lazy(() => import("./components/GuidelinesSection").then((m) => ({ default: m.GuidelinesSection })));
 const RegistrationPage = lazy(() => import("./components/RegistrationPage").then((m) => ({ default: m.RegistrationPage })));
+const ReferralRoomPage = lazy(() => import("./components/ReferralRoomPage").then((m) => ({ default: m.ReferralRoomPage })));
 const VerticalYodhaCarousel = lazy(() => import("./components/VerticalYodhaCarousel").then((m) => ({ default: m.VerticalYodhaCarousel })));
 const TrackPage = lazy(() => import("./components/TrackPage").then((m) => ({ default: m.TrackPage })));
 const TrailerModal = lazy(() => import("./components/TrailerModal").then((m) => ({ default: m.TrailerModal })));
@@ -24,9 +25,9 @@ function App() {
   const [trailerModalOpen, setTrailerModalOpen] = useState(false);
   const [trailerVideoUrl, setTrailerVideoUrl] = useState<string | undefined>(undefined);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
-  const [activePage, setActivePage] = useState<"home" | "healthcare" | "register">("home");
+  const [activePage, setActivePage] = useState<"home" | "healthcare" | "register" | "referral-room">("home");
 
-  // Referral Dashboard Modal State
+  // Referral Dashboard & Room State
   const [referralDashboardCode, setReferralDashboardCode] = useState<string>("");
   const [isReferralDashboardOpen, setIsReferralDashboardOpen] = useState<boolean>(false);
 
@@ -55,7 +56,7 @@ function App() {
     }
   };
 
-  const handleSelectPage = (page: "home" | "healthcare" | "register") => {
+  const handleSelectPage = (page: "home" | "healthcare" | "register" | "referral-room") => {
     if (page === activePage) return;
 
     if (activePage === "home") {
@@ -75,21 +76,23 @@ function App() {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const refCode = urlParams.get("ref") || urlParams.get("referral") || urlParams.get("r");
-      const viewRefCode = urlParams.get("view_ref") || urlParams.get("dashboard_ref");
+      const viewRefCode = urlParams.get("view_ref") || urlParams.get("dashboard_ref") || urlParams.get("code") || urlParams.get("ref_room");
       const isRegisterPath = window.location.pathname.toLowerCase().includes("register");
+      const isReferralRoomPath = window.location.pathname.toLowerCase().includes("referral") || window.location.pathname.toLowerCase().includes("room");
 
-      if (refCode && refCode.trim()) {
+      if (viewRefCode && viewRefCode.trim()) {
+        const cleanViewRef = viewRefCode.trim().toUpperCase();
+        setReferralDashboardCode(cleanViewRef);
+        setActivePage("referral-room");
+      } else if (isReferralRoomPath && refCode) {
+        setReferralDashboardCode(refCode.trim().toUpperCase());
+        setActivePage("referral-room");
+      } else if (refCode && refCode.trim()) {
         const cleanRef = refCode.trim().toUpperCase();
         localStorage.setItem("yodha_referral_code", cleanRef);
         setActivePage("register");
       } else if (isRegisterPath) {
         setActivePage("register");
-      }
-
-      if (viewRefCode && viewRefCode.trim()) {
-        const cleanViewRef = viewRefCode.trim().toUpperCase();
-        setReferralDashboardCode(cleanViewRef);
-        setIsReferralDashboardOpen(true);
       }
     } catch (err) {
       console.warn("Error parsing URL referral params:", err);
@@ -136,7 +139,12 @@ function App() {
 
       {/* DEDICATED FULL PAGE VIEWS */}
       <Suspense fallback={<div className="min-h-screen bg-[#03060d]" />}>
-        {activePage === "register" ? (
+        {activePage === "referral-room" ? (
+          <ReferralRoomPage
+            onBack={() => handleSelectPage("home")}
+            referralCode={referralDashboardCode}
+          />
+        ) : activePage === "register" ? (
           <RegistrationPage
             onBack={() => handleSelectPage("home")}
             selectedTrack={selectedTrack}
