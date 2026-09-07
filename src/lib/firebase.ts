@@ -540,16 +540,86 @@ export async function getAllReferralRooms(): Promise<ReferralRoomData[]> {
   }
 }
 
+}
+
 /**
- * Fetch referred teams in a specific Referral Room's `referrals` subcollection
+ * Interface for Selected Teams & Payment collection (`selected_teams`)
  */
-export async function getReferralsForRoom(referralCode: string): Promise<ReferralEntryData[]> {
+export interface SelectedTeamData {
+  id?: string;
+  uniqueTeamId: string;
+  teamId?: string;
+  teamName: string;
+  leaderName: string;
+  leaderEmail: string;
+  leaderPhone: string;
+  college?: string;
+  track?: string;
+  teamSize?: number;
+  amountToPay: string | number;
+  paymentTime: string;
+  paymentStatus: "Pending" | "Completed" | "Failed";
+  paymentTxnId?: string;
+  paymentNotes?: string;
+  createdAt?: any;
+  updatedAt?: any;
+}
+
+/**
+ * Fetch a selected team document by uniqueTeamId or doc ID from `selected_teams`
+ */
+export async function getSelectedTeamByUniqueId(uniqueId: string): Promise<SelectedTeamData | null> {
+  const cleanId = uniqueId.trim();
+  if (!cleanId) return null;
+
   try {
-    const q = query(collection(db, "referral_rooms", referralCode, "referrals"), orderBy("registeredAt", "desc"));
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() } as unknown as ReferralEntryData));
+    // 1. Direct doc ID check
+    const docRef = doc(db, "selected_teams", cleanId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() } as SelectedTeamData;
+    }
+
+    // 2. Query by uniqueTeamId field
+    const q1 = query(collection(db, "selected_teams"), where("uniqueTeamId", "==", cleanId));
+    const snap1 = await getDocs(q1);
+    if (!snap1.empty) {
+      const d = snap1.docs[0];
+      return { id: d.id, ...d.data() } as SelectedTeamData;
+    }
+
+    // 3. Query case-insensitive fallback or teamId
+    const q2 = query(collection(db, "selected_teams"), where("teamId", "==", cleanId));
+    const snap2 = await getDocs(q2);
+    if (!snap2.empty) {
+      const d = snap2.docs[0];
+      return { id: d.id, ...d.data() } as SelectedTeamData;
+    }
   } catch (err) {
-    console.warn("Error fetching referrals for room:", err);
-    return [];
+    console.warn("Error fetching selected team from Firestore:", err);
+  }
+  return null;
+}
+
+/**
+ * Update payment status for a selected team in `selected_teams`
+ */
+export async function updateSelectedTeamPayment(
+  uniqueId: string,
+  status: "Pending" | "Completed" | "Failed",
+  txnId?: string
+): Promise<boolean> {
+  try {
+    const docRef = doc(db, "selected_teams", uniqueId);
+    await setDoc(docRef, {
+      paymentStatus: status,
+      paymentTxnId: txnId || `TXN-${Date.now()}`,
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+    return true;
+  } catch (err) {
+    console.warn("Error updating selected team payment:", err);
+    return false;
   }
 }
+

@@ -19,16 +19,17 @@ import { TrackPage } from "@/components/TrackPage";
 import { ScrollBackgroundManager } from "@/components/ScrollBackgroundManager";
 import { TrailerModal } from "@/components/TrailerModal";
 import { IntroLoader } from "@/components/IntroLoader";
-import { LaunchGate } from "@/components/LaunchGate";
+import { PaymentPortalPage } from "@/components/PaymentPortalPage";
 import { trackUserSession } from "@/lib/firebase";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isHeroRevealed, setIsHeroRevealed] = useState(false);
+  const [isHeroRevealed, setIsHeroRevealed] = useState(true);
   const [trailerModalOpen, setTrailerModalOpen] = useState(false);
   const [trailerVideoUrl, setTrailerVideoUrl] = useState<string | undefined>(undefined);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
-  const [activePage, setActivePage] = useState<"home" | "healthcare" | "register" | "referral-room">("home");
+  const [activePage, setActivePage] = useState<"home" | "healthcare" | "register" | "referral-room" | "payment">("home");
+  const [paymentTeamId, setPaymentTeamId] = useState<string>("");
 
   // Referral Dashboard & Room State
   const [referralDashboardCode, setReferralDashboardCode] = useState<string>("");
@@ -53,10 +54,6 @@ export default function Home() {
     setTrailerModalOpen(true);
   };
 
-  const handleLaunchTrailerFromGate = (videoUrl?: string) => {
-    handleOpenTrailer(videoUrl || "/final trailer.MP4");
-  };
-
   const handleCloseTrailer = () => {
     setIsHeroRevealed(true);
     setTrailerModalOpen(false);
@@ -69,7 +66,7 @@ export default function Home() {
     }
   };
 
-  const handleSelectPage = (page: "home" | "healthcare" | "register" | "referral-room") => {
+  const handleSelectPage = (page: "home" | "healthcare" | "register" | "referral-room" | "payment") => {
     if (page === activePage) return;
 
     if (activePage === "home") {
@@ -85,17 +82,23 @@ export default function Home() {
     }
   };
 
-  // Extract referral codes from URL parameters on initial load
+  // Extract referral and payment team ID parameters from URL on initial load
   useEffect(() => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const refCode = urlParams.get("ref") || urlParams.get("referral") || urlParams.get("r");
       const viewRefCode = urlParams.get("view_ref") || urlParams.get("dashboard_ref") || urlParams.get("code") || urlParams.get("ref_room");
+      const payTeamId = urlParams.get("teamId") || urlParams.get("payId") || urlParams.get("pay_id") || urlParams.get("id");
       const pathname = window.location.pathname.toLowerCase();
       const isRegisterPath = pathname.includes("register");
       const isReferralRoomPath = pathname.includes("referral") || pathname.includes("room");
+      const isPayPath = pathname.includes("pay") || pathname.includes("payment");
 
-      if (viewRefCode && viewRefCode.trim()) {
+      if (payTeamId || isPayPath) {
+        if (payTeamId) setPaymentTeamId(payTeamId.trim());
+        setIsHeroRevealed(true);
+        setActivePage("payment");
+      } else if (viewRefCode && viewRefCode.trim()) {
         const cleanViewRef = viewRefCode.trim().toUpperCase();
         setReferralDashboardCode(cleanViewRef);
         setIsHeroRevealed(true);
@@ -114,7 +117,7 @@ export default function Home() {
         setActivePage("register");
       }
     } catch (err) {
-      console.warn("Error parsing URL referral params:", err);
+      console.warn("Error parsing URL params:", err);
     }
   }, []);
 
@@ -149,23 +152,28 @@ export default function Home() {
   return (
     <div className="w-full min-h-screen bg-[#03060d] text-white selection:bg-blue-600 selection:text-white font-sans relative overflow-x-hidden">
       
-      {/* INITIAL PRELOADER: GATES SITE UNTIL HERO & BACKGROUND IMAGES ARE LOADED */}
+      {/* INITIAL PRELOADER: GATES SITE UNTIL CORE ASSETS ARE LOADED */}
       <AnimatePresence>
-        {isLoading && <IntroLoader onComplete={() => setIsLoading(false)} />}
+        {isLoading && (
+          <IntroLoader
+            onComplete={() => {
+              setIsLoading(false);
+              setIsHeroRevealed(true);
+            }}
+          />
+        )}
       </AnimatePresence>
 
       {/* Dynamic Scroll-Driven Fixed Background (Night/Day Hills) for All Non-Hero Sections */}
       {activePage === "home" && <ScrollBackgroundManager />}
 
-      {/* LAUNCH GATE: SHOWN SOON AFTER LOADING BEFORE HERO SECTION IS REVEALED */}
-      <AnimatePresence>
-        {!isLoading && !isHeroRevealed && activePage === "home" && (
-          <LaunchGate onLaunch={handleLaunchTrailerFromGate} />
-        )}
-      </AnimatePresence>
-
       {/* DEDICATED FULL PAGE VIEWS */}
-      {activePage === "referral-room" ? (
+      {activePage === "payment" ? (
+        <PaymentPortalPage
+          onBack={() => handleSelectPage("home")}
+          initialTeamId={paymentTeamId}
+        />
+      ) : activePage === "referral-room" ? (
         <ReferralRoomPage
           onBack={() => handleSelectPage("home")}
           referralCode={referralDashboardCode}
