@@ -540,6 +540,18 @@ export async function getAllReferralRooms(): Promise<ReferralRoomData[]> {
   }
 }
 
+/**
+ * Fetch referred teams in a specific Referral Room's `referrals` subcollection
+ */
+export async function getReferralsForRoom(referralCode: string): Promise<ReferralEntryData[]> {
+  try {
+    const q = query(collection(db, "referral_rooms", referralCode, "referrals"), orderBy("registeredAt", "desc"));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() } as unknown as ReferralEntryData));
+  } catch (err) {
+    console.warn("Error fetching referrals for room:", err);
+    return [];
+  }
 }
 
 /**
