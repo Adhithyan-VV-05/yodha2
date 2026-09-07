@@ -92,15 +92,15 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         WebkitBackdropFilter: "blur(40px) saturate(180%)",
       }}
     >
-      {/* SLEEK, CRISP SCENIC SCANNER LASER LINE (NO SHADED TRAIL BLOCK) */}
+      {/* SLEEK, CRISP SCENIC SCANNER LASER LINE (BEHIND CONTENT, ABOVE BACKGROUND) */}
       <motion.div
         animate={{ y: ["0vh", "100vh", "0vh"] }}
         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_25px_#22d3ee,0_0_10px_#38bdf8] opacity-95 pointer-events-none z-20"
+        className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_25px_#22d3ee,0_0_10px_#38bdf8] opacity-95 pointer-events-none z-5"
       />
 
       {/* CENTER BRANDING LOGO & TITLE */}
-      <div className="flex flex-col items-center justify-center text-center relative z-10">
+      <div className="flex flex-col items-center justify-center text-center relative z-20">
         <div className="relative flex items-center justify-center mb-6">
           <motion.img
             animate={{ scale: [1, 1.03, 1] }}
@@ -118,7 +118,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
       </div>
 
       {/* CYBER PROGRESS BAR */}
-      <div className="w-full max-w-xs sm:max-w-sm relative z-10">
+      <div className="w-full max-w-xs sm:max-w-sm relative z-20">
         <div className="flex items-center justify-between text-xs font-mono text-slate-200 mb-2">
           <span className="tracking-widest uppercase text-[10px] text-cyan-400 font-bold truncate max-w-[220px]">
             {statusText}
