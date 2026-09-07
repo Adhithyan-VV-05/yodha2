@@ -3,9 +3,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "YODHA 2.0 — WARRIORS OF AI",
-  description: "RISE AS WARRIORS, THINK AS INNOVATORS, BUILD FOR HUMANITY. The premier AI Hackathon organized by AIDA & JECC.",
-  keywords: ["YODHA", "YODHA 2.0", "AI Hackathon", "AIDA", "JECC", "Warriors of AI", "Healthcare AI", "Hackathon 2026"],
-  authors: [{ name: "AIDA JECC", url: "https://aidajecc.in/" }],
+  description: "RISE AS WARRIORS, THINK AS INNOVATORS, BUILD FOR HUMANITY. The premier AI Hackathon organized by AI & DS & JECC.",
+  keywords: ["YODHA", "YODHA 2.0", "AI Hackathon", "AI & DS", "JECC", "Warriors of AI", "Healthcare AI", "Hackathon 2026"],
+  authors: [{ name: "AI & DS JECC", url: "https://aidajecc.in/" }],
   openGraph: {
     title: "YODHA 2.0 — WARRIORS OF AI",
     description: "RISE AS WARRIORS, THINK AS INNOVATORS, BUILD FOR HUMANITY.",

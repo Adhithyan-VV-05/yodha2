@@ -426,7 +426,7 @@ export function HeroCommandCenter({ onOpenRegister }: HeroCommandCenterProps) {
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  ₹1 Lakh Prize Pool & Trophies
+                  ₹1 Lakh Worth Prizes & Trophies
                 </span>
                 <span className="text-[10px] font-mono font-extrabold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">
                   Cash Rewards

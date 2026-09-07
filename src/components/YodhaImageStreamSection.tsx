@@ -162,7 +162,7 @@ export function YodhaImageStreamSection() {
           <span className="w-1 h-1 rounded-full bg-blue-500" />
           <div className="flex items-center gap-2">
             <Award className="w-3.5 h-3.5 text-blue-400" />
-            <span>₹1 LAKH PRIZE POOL</span>
+            <span>₹1 LAKH WORTH PRIZES</span>
           </div>
           <span className="w-1 h-1 rounded-full bg-blue-500 hidden sm:inline-block" />
           <div className="hidden sm:flex items-center gap-2">

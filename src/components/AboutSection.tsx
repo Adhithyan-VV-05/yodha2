@@ -57,8 +57,8 @@ export function AboutSection() {
             <span className="text-base font-bold text-slate-950">Offline Campus Sprint</span>
           </div>
           <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
-            <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">PRIZE POOL</span>
-            <span className="text-base font-bold text-slate-950">₹1 Lakh INR Pool</span>
+            <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">WORTH PRIZES</span>
+            <span className="text-base font-bold text-slate-950">₹1 Lakh Worth Prizes</span>
           </div>
           <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
             <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">CERTIFICATION</span>
@@ -82,12 +82,12 @@ export function AboutSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start relative">
           
-          {/* LEFT: ORGANIZING BODY (AIDA DEPT) - OPEN CREATIVE DISPLAY */}
+          {/* LEFT: ORGANIZING BODY (AI & DS DEPT) - OPEN CREATIVE DISPLAY */}
           <div className="lg:col-span-6 relative group flex flex-col justify-between space-y-6 text-left p-2">
             
             {/* WATERMARK BACKGROUND ACCENT */}
             <span className="absolute -top-6 -left-2 text-7xl font-black font-heading text-blue-900/[0.04] pointer-events-none select-none">
-              AIDA
+              AI & DS
             </span>
 
             <div className="space-y-4 relative z-10">
@@ -97,7 +97,7 @@ export function AboutSection() {
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-black text-slate-950 font-heading leading-tight group-hover:text-blue-600 transition-colors">
-                Department of AI & Data Science <span className="text-blue-600 font-heading">(AIDA)</span>
+                Department of AI & Data Science <span className="text-blue-600 font-heading">(AI & DS)</span>
               </h3>
 
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans max-w-xl">
@@ -112,7 +112,7 @@ export function AboutSection() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-[1.03] active:scale-95 cursor-pointer group/btn"
               >
-                <span>EXPLORE AIDA DEPARTMENT</span>
+                <span>EXPLORE AI & DS DEPARTMENT</span>
                 <ExternalLink className="w-4 h-4 text-white group-hover/btn:translate-x-0.5 transition-transform" />
               </a>
             </div>

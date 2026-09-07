@@ -41,7 +41,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
                 <span className="text-blue-400 font-extrabold">2.0</span>
               </h4>
               <p className="text-[9px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-widest leading-none">
-                WARRIORS OF AI • AIDA & JECC
+                WARRIORS OF AI • AI & DS & JECC
               </p>
             </div>
           </div>
@@ -52,7 +52,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
               href="https://aidajecc.in/"
               target="_blank"
               rel="noopener noreferrer"
-              title="AIDA Site"
+              title="AI & DS Site"
               className="w-8 h-8 rounded-full bg-slate-950/80 border border-blue-500/30 flex items-center justify-center text-slate-300 hover:text-blue-400 transition-all shadow-md"
             >
               <Globe className="w-3.5 h-3.5 text-blue-400" />
@@ -129,7 +129,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
             href="https://aidajecc.in/"
             target="_blank"
             rel="noopener noreferrer"
-            title="AIDA Official Site"
+            title="AI & DS Official Site"
             className="w-9 h-9 rounded-full bg-slate-950/80 border border-blue-500/30 hover:border-blue-400 flex items-center justify-center text-slate-300 hover:text-blue-400 transition-all cursor-pointer shadow-md"
           >
             <Globe className="w-4 h-4 text-blue-400" />
@@ -171,7 +171,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
       {/* MINIMAL BOTTOM COPYRIGHT LINE */}
       <div className="max-w-6xl mx-auto mt-6 sm:mt-8 pt-4 border-t border-slate-900/80 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500 gap-1 text-center sm:text-left">
         <span>© 2026 YODHA 2.0 • All Rights Reserved.</span>
-        <span>Dept. of AIDA • Jyothi Engineering College (Autonomous)</span>
+        <span>Dept. of AI & DS • Jyothi Engineering College (Autonomous)</span>
       </div>
     </footer>
   );
