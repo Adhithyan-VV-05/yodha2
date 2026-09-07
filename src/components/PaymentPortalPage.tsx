@@ -146,10 +146,12 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
           className="space-y-10"
         >
           {/* BRANDED HEADER WITH LOGO & TITLE BANNER */}
-          <div className="flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-blue-400/60 bg-[#020510] p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_35px_rgba(59,130,246,0.5)]">
-              <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-contain" />
-            </div>
+          <div className="flex flex-col items-center justify-center text-center space-y-3">
+            <img
+              src="/logo.webp"
+              alt="YODHA Logo"
+              className="h-16 sm:h-20 w-auto object-contain drop-shadow-[0_0_30px_rgba(59,130,246,0.7)]"
+            />
 
             <div className="my-1">
               <YodhaTitleBanner size="sm" align="center" />

@@ -22,9 +22,7 @@ export function ClosingCTA({ onOpenRegister }: ClosingCTAProps) {
             viewport={{ once: true }}
             className="mb-4 relative z-20"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-blue-400/60 bg-[#020510] p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(59,130,246,0.5)]">
-              <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-contain" />
-            </div>
+            <img src="/logo.webp" alt="YODHA Logo" className="h-16 sm:h-20 w-auto object-contain drop-shadow-[0_0_25px_rgba(59,130,246,0.7)]" />
           </motion.div>
 
           {/* Official Animated Y-O-D-H-A Title Banner */}
