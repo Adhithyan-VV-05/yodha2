@@ -183,17 +183,23 @@ export function getDeviceTypeFromScreen(): {
 }
 
 /**
- * AUTOMATIC REALTIME SITE VISIT & ACTIVE TIME TRACKER
- * - Tracks exact ACTIVE focus time spent on website.
- * - Increments `activeLiveUsers` (+1) when user is actively viewing/focused on tab.
- * - Decrements `activeLiveUsers` (-1) when user switches tabs, minimizes window, or exits.
- * - Syncs starting time, ending time, active duration, and screen metrics to Firestore `user_sessions`.
- */
-/**
- * PAGE & DEVICE TRACKING DISABLED AS REQUESTED
+ * AUTOMATIC SITE VISIT TRACKER
+ * Increments `totalVisits` in `stats/site_analytics` document each time the site is loaded.
  */
 export function trackUserSession(): () => void {
-  // Visitor, device, and page visit tracking disabled
+  if (typeof window === "undefined") return () => {};
+  
+  try {
+    const hasVisitedSession = sessionStorage.getItem("yodha_visited_session");
+    if (!hasVisitedSession) {
+      sessionStorage.setItem("yodha_visited_session", "true");
+      const statsRef = doc(db, "stats", "site_analytics");
+      setDoc(statsRef, { totalVisits: increment(1) }, { merge: true }).catch(() => {});
+    }
+  } catch (err) {
+    console.warn("Failed to increment totalVisits:", err);
+  }
+
   return () => {};
 }
 
@@ -585,14 +591,14 @@ export async function getSelectedTeamByUniqueId(uniqueId: string): Promise<Selec
   if (!cleanId) return null;
 
   try {
-    // 1. Direct doc ID check
+    // 1. Direct doc ID check in selected_teams
     const docRef = doc(db, "selected_teams", cleanId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() } as SelectedTeamData;
     }
 
-    // 2. Query by uniqueTeamId field
+    // 2. Query by uniqueTeamId field in selected_teams
     const q1 = query(collection(db, "selected_teams"), where("uniqueTeamId", "==", cleanId));
     const snap1 = await getDocs(q1);
     if (!snap1.empty) {
@@ -600,12 +606,58 @@ export async function getSelectedTeamByUniqueId(uniqueId: string): Promise<Selec
       return { id: d.id, ...d.data() } as SelectedTeamData;
     }
 
-    // 3. Query case-insensitive fallback or teamId
+    // 3. Query by teamId field in selected_teams
     const q2 = query(collection(db, "selected_teams"), where("teamId", "==", cleanId));
     const snap2 = await getDocs(q2);
     if (!snap2.empty) {
       const d = snap2.docs[0];
       return { id: d.id, ...d.data() } as SelectedTeamData;
+    }
+
+    // 4. Secondary fallback: check registrations collection directly
+    const regRef = doc(db, "registrations", cleanId);
+    const regSnap = await getDoc(regRef);
+    if (regSnap.exists()) {
+      const rd = regSnap.data() as any;
+      const leader = rd.leader || {};
+      return {
+        id: regSnap.id,
+        uniqueTeamId: cleanId,
+        teamId: regSnap.id,
+        teamName: rd.teamName || rd.name || "Registered Team",
+        leaderName: leader.fullName || leader.name || rd.leaderName || "Team Leader",
+        leaderEmail: leader.email || rd.leaderEmail || "",
+        leaderPhone: leader.phone || rd.leaderPhone || "",
+        college: leader.organization || rd.college || "Jyothi Engineering College (Autonomous)",
+        track: rd.track || "Healthcare AI",
+        teamSize: rd.teamSize || (rd.members ? rd.members.length + 1 : 4),
+        amountToPay: "500",
+        paymentTime: "Within 48 Hours",
+        paymentStatus: "Pending",
+      };
+    }
+
+    // 5. Query registrations by warriorReferralCode
+    const qRegCode = query(collection(db, "registrations"), where("warriorReferralCode", "==", cleanId.toUpperCase()));
+    const snapRegCode = await getDocs(qRegCode);
+    if (!snapRegCode.empty) {
+      const rd = snapRegCode.docs[0].data() as any;
+      const leader = rd.leader || {};
+      return {
+        id: snapRegCode.docs[0].id,
+        uniqueTeamId: cleanId,
+        teamId: snapRegCode.docs[0].id,
+        teamName: rd.teamName || rd.name || "Registered Team",
+        leaderName: leader.fullName || leader.name || rd.leaderName || "Team Leader",
+        leaderEmail: leader.email || rd.leaderEmail || "",
+        leaderPhone: leader.phone || rd.leaderPhone || "",
+        college: leader.organization || rd.college || "Jyothi Engineering College (Autonomous)",
+        track: rd.track || "Healthcare AI",
+        teamSize: rd.teamSize || (rd.members ? rd.members.length + 1 : 4),
+        amountToPay: "500",
+        paymentTime: "Within 48 Hours",
+        paymentStatus: "Pending",
+      };
     }
   } catch (err) {
     console.warn("Error fetching selected team from Firestore:", err);

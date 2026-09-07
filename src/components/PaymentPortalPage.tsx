@@ -62,28 +62,12 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
         setTeamData(res);
         setActiveTeamId(res.uniqueTeamId || cleanId);
       } else {
-        // Mock fallback if offline or testing
-        const mockFallback: SelectedTeamData = {
-          uniqueTeamId: cleanId,
-          teamName: "Team " + cleanId,
-          leaderName: "Team Leader",
-          leaderEmail: "leader@example.com",
-          leaderPhone: "+91 9876543210",
-          college: "Jyothi Engineering College (Autonomous)",
-          track: "Healthcare AI",
-          teamSize: 4,
-          amountToPay: "500",
-          paymentTime: new Date(Date.now() + 86400000 * 3).toLocaleString("en-US", {
-            dateStyle: "medium",
-            timeStyle: "short",
-          }),
-          paymentStatus: "Pending",
-        };
-        setTeamData(mockFallback);
-        setActiveTeamId(cleanId);
+        setTeamData(null);
+        setErrorMsg(`Invalid Team ID ("${cleanId}"). No shortlisted team record was found matching this ID. Please verify your Unique Team ID or contact support.`);
       }
     } catch (err) {
       console.warn("Payment team fetch error:", err);
+      setTeamData(null);
       setErrorMsg("Unable to retrieve team payment record. Please verify your Unique Team ID.");
     } finally {
       setIsLoading(false);

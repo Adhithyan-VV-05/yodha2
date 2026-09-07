@@ -16,13 +16,20 @@ export function ReferralRoomPage({ onBack, referralCode }: ReferralRoomPageProps
   const [roomInfo, setRoomInfo] = useState<{ teamName?: string; leaderName?: string; totalReferrals?: number } | null>(null);
   const [referrals, setReferrals] = useState<ReferralEntryData[]>([]);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const cleanCode = (referralCode || "").trim().toUpperCase();
   const shareRegistrationLink = `https://yodha.aidajecc.in/register?ref=${encodeURIComponent(cleanCode)}`;
 
   const fetchData = async () => {
-    if (!cleanCode) return;
+    if (!cleanCode) {
+      setErrorMsg("No referral code specified in the link.");
+      setLoading(false);
+      return;
+    }
     setLoading(true);
+    setErrorMsg(null);
+
     try {
       const roomRes = await validateReferralCode(cleanCode);
       if (roomRes.valid && roomRes.roomData) {
@@ -31,11 +38,14 @@ export function ReferralRoomPage({ onBack, referralCode }: ReferralRoomPageProps
           leaderName: roomRes.roomData.leaderName,
           totalReferrals: roomRes.roomData.totalReferrals || 0,
         });
+        const list = await getReferralsForRoom(cleanCode);
+        setReferrals(list);
+      } else {
+        setErrorMsg(roomRes.error || `Invalid Referral Code "${cleanCode}". No active room found for this code.`);
       }
-      const list = await getReferralsForRoom(cleanCode);
-      setReferrals(list);
     } catch (err) {
       console.warn("Error fetching referral room data:", err);
+      setErrorMsg("Unable to load referral room data. Please verify your code.");
     } finally {
       setLoading(false);
     }
@@ -125,8 +135,15 @@ export function ReferralRoomPage({ onBack, referralCode }: ReferralRoomPageProps
           {/* TOP SECTION: TITLE & ROOM DETAILS */}
           <div className="text-center sm:text-left space-y-4">
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading text-white tracking-tight uppercase">
-              REFERRAL ROOM <span className="text-blue-400 font-mono drop-shadow-[0_0_25px_rgba(59,130,246,0.6)]">{cleanCode}</span>
+              REFERRAL ROOM <span className="text-blue-400 font-mono drop-shadow-[0_0_25px_rgba(59,130,246,0.6)]">{cleanCode || "DASHBOARD"}</span>
             </h1>
+
+            {errorMsg && (
+              <div className="p-4 rounded-2xl bg-rose-950/70 border border-rose-500/40 text-rose-300 font-mono text-xs flex items-center gap-3 shadow-lg">
+                <span className="font-bold">⚠️ NOTICE:</span>
+                <span>{errorMsg}</span>
+              </div>
+            )}
 
             {roomInfo && (
               <p className="text-sm sm:text-base text-slate-300 font-sans leading-relaxed">
