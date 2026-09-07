@@ -79,7 +79,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                   2ND PRIZE
                 </span>
                 <div className="font-serif text-3xl lg:text-4xl text-slate-200 font-normal tracking-tight group-hover:text-white transition-colors">
-                  ₹30,000
+                  ₹20,000
                 </div>
               </div>
             </motion.div>
@@ -110,7 +110,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                   1ST PRIZE
                 </span>
                 <div className="font-serif text-4xl lg:text-5xl text-amber-200 font-normal tracking-tight group-hover:text-amber-100 transition-colors">
-                  ₹50,000
+                  ₹30,000
                 </div>
               </div>
             </motion.div>
@@ -141,7 +141,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                   3RD PRIZE
                 </span>
                 <div className="font-serif text-3xl lg:text-4xl text-amber-400/90 font-normal tracking-tight group-hover:text-amber-300 transition-colors">
-                  ₹20,000
+                  ₹15,000
                 </div>
               </div>
             </motion.div>
@@ -172,7 +172,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                 1ST PRIZE
               </span>
               <div className="font-serif text-4xl text-amber-200 font-normal tracking-tight mt-1">
-                ₹50,000
+                ₹30,000
               </div>
             </motion.div>
 
@@ -199,7 +199,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                 2ND PRIZE
               </span>
               <div className="font-serif text-3xl text-slate-200 font-normal tracking-tight mt-1">
-                ₹30,000
+                ₹20,000
               </div>
             </motion.div>
 
@@ -226,7 +226,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
                 3RD PRIZE
               </span>
               <div className="font-serif text-3xl text-amber-400/90 font-normal tracking-tight mt-1">
-                ₹20,000
+                ₹15,000
               </div>
             </motion.div>
           </div>
@@ -248,7 +248,7 @@ export function PrizesSection({ onOpenRegister }: PrizesSectionProps) {
             </div>
 
             <div className="font-mono text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-white to-sky-300 tracking-wider uppercase pt-1">
-              EXCITING REWARDS & GOODIES
+              EXCITING REWARDS & GIFT HAMPERS
             </div>
           </motion.div>
         </div>

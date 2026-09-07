@@ -438,7 +438,7 @@ export function HeroCommandCenter({ onOpenRegister }: HeroCommandCenterProps) {
                   <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest block mb-1">
                     1st Prize Winner
                   </span>
-                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹50,000</div>
+                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹30,000</div>
                   <p className="text-[11px] text-slate-400 mt-1 font-mono">Winner Trophy + Cash Bounty</p>
                 </div>
 
@@ -446,7 +446,7 @@ export function HeroCommandCenter({ onOpenRegister }: HeroCommandCenterProps) {
                   <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-1">
                     2nd Prize Winner
                   </span>
-                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹30,000</div>
+                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹20,000</div>
                   <p className="text-[11px] text-slate-400 mt-1 font-mono">Runner-Up Trophy + Cash Bounty</p>
                 </div>
               </div>
