@@ -150,7 +150,7 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
             <img
               src="/logo.webp"
               alt="YODHA Logo"
-              className="h-16 sm:h-20 w-auto object-contain drop-shadow-[0_0_30px_rgba(59,130,246,0.7)]"
+              className="h-24 sm:h-32 md:h-40 w-auto object-contain drop-shadow-[0_0_40px_rgba(59,130,246,0.8)] transition-transform hover:scale-105"
             />
 
             <div className="my-1">

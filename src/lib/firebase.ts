@@ -631,7 +631,7 @@ export async function getSelectedTeamByUniqueId(uniqueId: string): Promise<Selec
         college: leader.organization || rd.college || "Jyothi Engineering College (Autonomous)",
         track: rd.track || "Healthcare AI",
         teamSize: rd.teamSize || (rd.members ? rd.members.length + 1 : 4),
-        amountToPay: "500",
+        amountToPay: "700",
         paymentTime: "Within 48 Hours",
         paymentStatus: "Pending",
       };
@@ -654,7 +654,7 @@ export async function getSelectedTeamByUniqueId(uniqueId: string): Promise<Selec
         college: leader.organization || rd.college || "Jyothi Engineering College (Autonomous)",
         track: rd.track || "Healthcare AI",
         teamSize: rd.teamSize || (rd.members ? rd.members.length + 1 : 4),
-        amountToPay: "500",
+        amountToPay: "700",
         paymentTime: "Within 48 Hours",
         paymentStatus: "Pending",
       };
