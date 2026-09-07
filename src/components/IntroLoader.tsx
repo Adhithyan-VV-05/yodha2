@@ -92,18 +92,11 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         WebkitBackdropFilter: "blur(40px) saturate(180%)",
       }}
     >
-      {/* SMOOTH, COOL SCENIC SCANNER LASER BEAM (2.2s SLOW SWEEP) */}
+      {/* SLEEK, CRISP SCENIC SCANNER LASER LINE (NO SHADED TRAIL BLOCK) */}
       <motion.div
         animate={{ y: ["0vh", "100vh", "0vh"] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_30px_#22d3ee,0_0_12px_#38bdf8] opacity-90 pointer-events-none z-20"
-      />
-
-      {/* ELEGANT SCANNING TRAIL SHROUD */}
-      <motion.div
-        animate={{ y: ["-15vh", "85vh", "-15vh"] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-cyan-500/10 via-blue-500/5 to-transparent pointer-events-none z-10"
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_25px_#22d3ee,0_0_10px_#38bdf8] opacity-95 pointer-events-none z-20"
       />
 
       {/* CENTER BRANDING LOGO & TITLE */}
