@@ -19,10 +19,12 @@ import { TrackPage } from "@/components/TrackPage";
 import { ScrollBackgroundManager } from "@/components/ScrollBackgroundManager";
 import { TrailerModal } from "@/components/TrailerModal";
 import { IntroLoader } from "@/components/IntroLoader";
+import { LaunchGate } from "@/components/LaunchGate";
 import { trackUserSession } from "@/lib/firebase";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isHeroRevealed, setIsHeroRevealed] = useState(false);
   const [trailerModalOpen, setTrailerModalOpen] = useState(false);
   const [trailerVideoUrl, setTrailerVideoUrl] = useState<string | undefined>(undefined);
   const [selectedTrack, setSelectedTrack] = useState("Healthcare AI");
@@ -40,6 +42,7 @@ export default function Home() {
       homeScrollPosRef.current = window.scrollY;
     }
     if (trackName) setSelectedTrack(trackName);
+    setIsHeroRevealed(true);
     setActivePage("register");
     window.scrollTo({ top: 0, behavior: "instant" });
     window.history.pushState({ activePage: "register" }, "");
@@ -48,6 +51,15 @@ export default function Home() {
   const handleOpenTrailer = (videoUrl?: string) => {
     if (videoUrl) setTrailerVideoUrl(videoUrl);
     setTrailerModalOpen(true);
+  };
+
+  const handleLaunchTrailerFromGate = () => {
+    handleOpenTrailer("/final trailer.MP4");
+  };
+
+  const handleCloseTrailer = () => {
+    setIsHeroRevealed(true);
+    setTrailerModalOpen(false);
   };
 
   const handleOpenReferralDashboard = (code: string) => {
@@ -64,6 +76,7 @@ export default function Home() {
       homeScrollPosRef.current = window.scrollY;
     }
 
+    setIsHeroRevealed(true);
     setActivePage(page);
 
     if (page !== "home") {
@@ -85,15 +98,19 @@ export default function Home() {
       if (viewRefCode && viewRefCode.trim()) {
         const cleanViewRef = viewRefCode.trim().toUpperCase();
         setReferralDashboardCode(cleanViewRef);
+        setIsHeroRevealed(true);
         setActivePage("referral-room");
       } else if (isReferralRoomPath && refCode) {
         setReferralDashboardCode(refCode.trim().toUpperCase());
+        setIsHeroRevealed(true);
         setActivePage("referral-room");
       } else if (refCode && refCode.trim()) {
         const cleanRef = refCode.trim().toUpperCase();
         localStorage.setItem("yodha_referral_code", cleanRef);
+        setIsHeroRevealed(true);
         setActivePage("register");
       } else if (isRegisterPath) {
+        setIsHeroRevealed(true);
         setActivePage("register");
       }
     } catch (err) {
@@ -140,6 +157,13 @@ export default function Home() {
       {/* Dynamic Scroll-Driven Fixed Background (Night/Day Hills) for All Non-Hero Sections */}
       {activePage === "home" && <ScrollBackgroundManager />}
 
+      {/* LAUNCH GATE: SHOWN SOON AFTER LOADING BEFORE HERO SECTION IS REVEALED */}
+      <AnimatePresence>
+        {!isLoading && !isHeroRevealed && activePage === "home" && (
+          <LaunchGate onLaunch={handleLaunchTrailerFromGate} />
+        )}
+      </AnimatePresence>
+
       {/* DEDICATED FULL PAGE VIEWS */}
       {activePage === "referral-room" ? (
         <ReferralRoomPage
@@ -161,7 +185,11 @@ export default function Home() {
           />
         </div>
       ) : (
-        <div className="relative z-10 w-full min-h-screen block">
+        <div
+          className={`relative z-10 w-full min-h-screen block transition-opacity duration-700 ${
+            isHeroRevealed ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+        >
           {/* Top Navbar Header */}
           <Navbar onOpenRegister={handleOpenRegisterWithTrack} />
 
@@ -197,14 +225,16 @@ export default function Home() {
           {/* 10. Glassmorphism Footer */}
           <CompactFooter />
 
-          {/* Trailer Video Modal Popup */}
-          <TrailerModal
-            isOpen={trailerModalOpen}
-            onClose={() => setTrailerModalOpen(false)}
-            videoUrl={trailerVideoUrl}
-          />
         </div>
       )}
+
+      {/* Trailer Video Modal Popup */}
+      <TrailerModal
+        isOpen={trailerModalOpen}
+        onClose={handleCloseTrailer}
+        videoUrl={trailerVideoUrl}
+        onNearEnd={() => setIsHeroRevealed(true)}
+      />
 
       {/* REFERRAL DASHBOARD MODAL */}
       <ReferralDashboardModal

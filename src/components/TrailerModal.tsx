@@ -6,17 +6,20 @@ interface TrailerModalProps {
   isOpen: boolean;
   onClose: () => void;
   videoUrl?: string;
+  onNearEnd?: () => void;
 }
 
-export function TrailerModal({ isOpen, onClose, videoUrl = "/final trailer.MP4" }: TrailerModalProps) {
+export function TrailerModal({ isOpen, onClose, videoUrl = "/final trailer.MP4", onNearEnd }: TrailerModalProps) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
   const [opacity, setOpacity] = useState<number>(1);
+  const hasTriggeredNearEndRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (isOpen) {
       setOpacity(1);
+      hasTriggeredNearEndRef.current = false;
       const playVideo = (v: HTMLVideoElement | null) => {
         if (!v) return;
         v.currentTime = 0;
@@ -36,6 +39,10 @@ export function TrailerModal({ isOpen, onClose, videoUrl = "/final trailer.MP4" 
     const video = e.currentTarget;
     if (video.duration && video.currentTime) {
       const remaining = video.duration - video.currentTime;
+      if (remaining <= 4 && !hasTriggeredNearEndRef.current && onNearEnd) {
+        hasTriggeredNearEndRef.current = true;
+        onNearEnd();
+      }
       if (remaining <= 2 && remaining > 0) {
         // Linearly fade opacity from 1 down to 0 over the last 2 seconds
         const currentOpacity = Math.max(0, Math.min(1, remaining / 2));
