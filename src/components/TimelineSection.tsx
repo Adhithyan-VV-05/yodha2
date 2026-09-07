@@ -281,7 +281,7 @@ export function TimelineSection() {
                       transition={{ duration: 0.3 }}
                       className="flex flex-col items-center justify-center max-w-[270px] space-y-2 relative z-10"
                     >
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-400/60 text-blue-300 font-mono text-[11px] font-bold">
+                      <div className="inline-flex items-center gap-1.5 text-blue-300 font-mono text-[11px] font-bold">
                         <Clock className="w-3.5 h-3.5 text-blue-400" />
                         <span>{selectedActivity.time}</span>
                       </div>
@@ -367,7 +367,7 @@ export function TimelineSection() {
                     transition={{ duration: 0.3 }}
                     className="flex flex-col items-center justify-center max-w-[155px] sm:max-w-[180px] space-y-1 relative z-10"
                   >
-                    <span className="px-2 py-0.5 rounded-full bg-blue-950/80 text-blue-300 font-mono text-[8px] sm:text-[9px] font-bold flex items-center gap-1 border border-blue-500/40">
+                    <span className="text-blue-300 font-mono text-[8px] sm:text-[9px] font-bold flex items-center gap-1">
                       <Clock className="w-2.5 h-2.5 text-blue-400" />
                       <span>{selectedActivity.time}</span>
                     </span>

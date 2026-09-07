@@ -1,6 +1,6 @@
 /**
  * Utility for multithreaded parallel video downloading and IndexedDB persistence.
- * Prevents re-downloading large videos (like main trailer.mp4) on subsequent visits.
+ * Prevents re-downloading large videos (like final trailer.MP4) on subsequent visits.
  */
 
 const DB_NAME = "YodhaMediaCacheDB";

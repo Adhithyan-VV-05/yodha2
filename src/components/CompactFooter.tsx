@@ -171,7 +171,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
       {/* MINIMAL BOTTOM COPYRIGHT LINE */}
       <div className="max-w-6xl mx-auto mt-6 sm:mt-8 pt-4 border-t border-slate-900/80 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500 gap-1 text-center sm:text-left">
         <span>© 2026 YODHA 2.0 • All Rights Reserved.</span>
-        <span>Dept. of AIDA • Jyothi Engineering College</span>
+        <span>Dept. of AIDA • Jyothi Engineering College (Autonomous)</span>
       </div>
     </footer>
   );

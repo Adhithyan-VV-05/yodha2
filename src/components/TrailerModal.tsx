@@ -8,7 +8,7 @@ interface TrailerModalProps {
   videoUrl?: string;
 }
 
-export function TrailerModal({ isOpen, onClose, videoUrl = "/main trailer.mp4" }: TrailerModalProps) {
+export function TrailerModal({ isOpen, onClose, videoUrl = "/final trailer.MP4" }: TrailerModalProps) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
@@ -74,7 +74,7 @@ export function TrailerModal({ isOpen, onClose, videoUrl = "/main trailer.mp4" }
       {/* FULLSCREEN VIDEO PLAYER ON PC */}
       <video
         ref={videoRef}
-        src={videoUrl || "/trailer.mp4"}
+        src={videoUrl || "/final trailer.MP4"}
         autoPlay
         playsInline
         preload="auto"
@@ -86,7 +86,7 @@ export function TrailerModal({ isOpen, onClose, videoUrl = "/main trailer.mp4" }
       {/* FULLWIDTH VIDEO PLAYER ON MOBILE */}
       <video
         ref={mobileVideoRef}
-        src={videoUrl || "/trailer.mp4"}
+        src={videoUrl || "/final trailer.MP4"}
         autoPlay
         playsInline
         preload="auto"

@@ -702,11 +702,11 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                     <button
                       type="button"
                       onClick={() => setShowPptInfo(!showPptInfo)}
-                      className="p-1 px-2 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center gap-1 text-[11px] font-mono cursor-pointer"
+                      className="w-6 h-6 sm:w-auto sm:h-auto p-0 sm:px-2 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center justify-center gap-1 text-[11px] font-mono cursor-pointer"
                       title="Google Drive PPT Upload Guidelines"
                     >
                       <Info className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-[10px] font-bold">PPT Public Access Info</span>
+                      <span className="hidden sm:inline text-[10px] font-bold">PPT Public Access Info</span>
                     </button>
                   </div>
 
@@ -762,11 +762,11 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                     <button
                       type="button"
                       onClick={() => setShowReferralInfo(!showReferralInfo)}
-                      className="p-1 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center gap-1 text-[11px] font-mono cursor-pointer"
+                      className="w-6 h-6 sm:w-auto sm:h-auto p-0 sm:px-2 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center justify-center gap-1 text-[11px] font-mono cursor-pointer"
                       title="Why use a referral code?"
                     >
                       <Info className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-[10px] font-bold">Why refer?</span>
+                      <span className="hidden sm:inline text-[10px] font-bold">Why refer?</span>
                     </button>
                   </div>
 
