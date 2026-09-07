@@ -58,7 +58,7 @@ export function AboutSection() {
           </div>
           <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
             <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">PRIZE POOL</span>
-            <span className="text-base font-bold text-slate-950">₹70,000 INR Pool</span>
+            <span className="text-base font-bold text-slate-950">₹1 Lakh INR Pool</span>
           </div>
           <div className="p-4 rounded-2xl bg-white/90 border border-blue-200 backdrop-blur-xl shadow-md">
             <span className="text-[10px] font-mono text-blue-700 block font-bold uppercase tracking-wider">CERTIFICATION</span>

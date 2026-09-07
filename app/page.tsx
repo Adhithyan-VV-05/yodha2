@@ -53,8 +53,8 @@ export default function Home() {
     setTrailerModalOpen(true);
   };
 
-  const handleLaunchTrailerFromGate = () => {
-    handleOpenTrailer("/final trailer.MP4");
+  const handleLaunchTrailerFromGate = (videoUrl?: string) => {
+    handleOpenTrailer(videoUrl || "/final trailer.MP4");
   };
 
   const handleCloseTrailer = () => {

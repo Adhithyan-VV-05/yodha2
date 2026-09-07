@@ -294,11 +294,11 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
 
 
-            {/* JYOTHY LOCATION WITH BLUE MAP PIN (NO N BADGE) IN SAME ROW */}
+            {/* JYOTHI LOCATION WITH BLUE MAP PIN (NO N BADGE) IN SAME ROW */}
             <div className="flex items-center gap-2 text-left shrink-0">
               <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
               <div className="flex flex-col text-[10px] lg:text-[11px] font-mono text-slate-900 leading-tight">
-                <span className="font-black text-slate-950 uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
+                <span className="font-black text-slate-950 uppercase">JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)</span>
                 <span className="text-[8px] lg:text-[9px] text-slate-600 font-bold uppercase">DEPT. OF AI & DS</span>
               </div>
             </div>
@@ -461,11 +461,11 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
           </div>
 
-          {/* JYOTHY LOCATION BELOW 20VH - HORIZONTALLY CENTERED ON MOBILE WITH WHITE TEXT */}
+          {/* JYOTHI LOCATION BELOW 20VH - HORIZONTALLY CENTERED ON MOBILE WITH WHITE TEXT */}
           <div className="flex items-center justify-center text-center gap-2 pt-2 w-full mx-auto">
             <MapPin className="w-5 h-5 text-blue-400 shrink-0" />
             <div className="flex flex-col text-[10px] font-mono leading-tight text-center">
-              <span className="font-black text-white uppercase">JYOTHY ENGINEERING COLLEGE (AUTONOMOUS)</span>
+              <span className="font-black text-white uppercase">JYOTHI ENGINEERING COLLEGE (AUTONOMOUS)</span>
               <span className="text-[8px] text-slate-300 font-bold uppercase">DEPT. OF AI & DS</span>
             </div>
           </div>

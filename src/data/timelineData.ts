@@ -174,7 +174,7 @@ export const TIMELINE_DAYS: DayItem[] = [
         time: "03:30 PM",
         title: "Prize Distribution & Closing Ceremony",
         description:
-          "The grand finale! Announcement of the ultimate winners, distribution of the ₹70,000 prize pool, and the official closing of Yodha 2.0.",
+          "The grand finale! Announcement of the ultimate winners, distribution of the ₹1 Lakh prize pool, and the official closing of Yodha 2.0.",
       },
     ],
   },

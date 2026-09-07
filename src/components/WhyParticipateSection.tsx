@@ -20,21 +20,21 @@ export function WhyParticipateSection() {
     {
       id: "prizes",
       num: "01",
-      title: "₹70,000 Cash Pool & Trophies",
+      title: "₹1 Lakh Prize Pool & Trophies",
       subtitle: "Compete for top national cash rewards, official trophies, plaques, & cloud infrastructure credits.",
       icon: <Trophy className="w-6 h-6 text-amber-400" />,
       badge: "NATIONAL REWARDS",
-      stat: "₹70,000 Pool",
-      highlight: "1st Prize: ₹35,000 + Trophy",
+      stat: "₹1 Lakh Pool",
+      highlight: "1st Prize: ₹50,000 + Trophy",
       color: "from-amber-500/20 via-amber-500/10 to-transparent",
       accentColor: "text-amber-400",
       borderColor: "border-amber-500/40",
       glowColor: "shadow-[0_0_30px_rgba(245,158,11,0.25)]",
       points: [
-        "1st Prize: ₹35,000 Cash + National Winner Trophy",
-        "2nd Prize: ₹20,000 Cash + Runner-Up Trophy",
-        "3rd Prize: ₹10,000 Cash + Excellence Plaque",
-        "Special Innovation Track Award: ₹5,000 Cash",
+        "1st Prize: ₹50,000 Cash + National Winner Trophy",
+        "2nd Prize: ₹30,000 Cash + Runner-Up Trophy",
+        "3rd Prize: ₹20,000 Cash + Excellence Plaque",
+        "Special Innovation Track & Swag Kits",
       ],
     },
     {
@@ -339,7 +339,7 @@ export function WhyParticipateSection() {
           className="mt-10 sm:mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 select-none"
         >
           {[
-            { label: "Total Cash Pool", val: "₹70,000", sub: "Trophies + Cash Awards" },
+            { label: "Total Cash Pool", val: "₹1 Lakh", sub: "Trophies + Cash Awards" },
             { label: "Offline Sprint", val: "48 Hours", sub: "Non-stop AI Building" },
             { label: "National Reach", val: "100+ Builders", sub: "Cross-Institutional" },
             { label: "KTU Eligible", val: "Activity Points", sub: "National Certification" },

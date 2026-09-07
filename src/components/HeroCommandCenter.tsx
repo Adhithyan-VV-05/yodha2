@@ -426,7 +426,7 @@ export function HeroCommandCenter({ onOpenRegister }: HeroCommandCenterProps) {
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  ₹70,000 Cash Bounties & Trophies
+                  ₹1 Lakh Prize Pool & Trophies
                 </span>
                 <span className="text-[10px] font-mono font-extrabold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">
                   Cash Rewards
@@ -436,18 +436,18 @@ export function HeroCommandCenter({ onOpenRegister }: HeroCommandCenterProps) {
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-4 rounded-2xl bg-gradient-to-b from-blue-950/60 to-slate-900 border border-blue-500/30 relative overflow-hidden">
                   <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest block mb-1">
-                    Healthcare Track Winner
+                    1st Prize Winner
                   </span>
-                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹35,000</div>
+                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹50,000</div>
                   <p className="text-[11px] text-slate-400 mt-1 font-mono">Winner Trophy + Cash Bounty</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-gradient-to-b from-emerald-950/60 to-slate-900 border border-emerald-500/30 relative overflow-hidden">
                   <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-1">
-                    Environment Track Winner
+                    2nd Prize Winner
                   </span>
-                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹35,000</div>
-                  <p className="text-[11px] text-slate-400 mt-1 font-mono">Winner Trophy + Cash Bounty</p>
+                  <div className="text-2xl sm:text-3xl font-black text-white font-mono">₹30,000</div>
+                  <p className="text-[11px] text-slate-400 mt-1 font-mono">Runner-Up Trophy + Cash Bounty</p>
                 </div>
               </div>
 
