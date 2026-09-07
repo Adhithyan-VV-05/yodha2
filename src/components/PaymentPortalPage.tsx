@@ -19,8 +19,7 @@ import {
   AlertCircle,
   ExternalLink,
   Lock,
-  Shield,
-  RefreshCw
+  Shield
 } from "lucide-react";
 import { getSelectedTeamByUniqueId, updateSelectedTeamPayment, SelectedTeamData } from "../lib/firebase";
 import { YodhaTitleBanner } from "./YodhaTitleBanner";
@@ -110,7 +109,7 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
 
   return (
     <div className="w-full min-h-screen bg-[#03060d] text-white font-sans relative overflow-x-hidden flex flex-col justify-between select-none">
-      {/* AMBIENT BACKGROUND HILLS & RADIAL GLOW (EXACT SITE THEME) */}
+      {/* AMBIENT BACKGROUND HILLS & RADIAL GLOW (OPEN SITE THEME) */}
       <div className="fixed inset-0 w-screen h-screen pointer-events-none z-0 overflow-hidden">
         <img
           src="/bg-hills-night-pc.webp"
@@ -138,8 +137,8 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
         </span>
       </header>
 
-      {/* MAIN DEDICATED PAYMENT CONTENT */}
-      <main className="relative z-10 w-full flex-1 max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+      {/* MAIN OPEN PAYMENT CONTENT (NO CARDS, PURE FLOATING HUD THEME) */}
+      <main className="relative z-10 w-full flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,7 +147,7 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
         >
           {/* BRANDED HEADER WITH LOGO & TITLE BANNER */}
           <div className="flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-blue-400/60 bg-[#020510] p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(59,130,246,0.5)]">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-blue-400/60 bg-[#020510] p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_35px_rgba(59,130,246,0.5)]">
               <img src="/logo.webp" alt="YODHA Logo" className="w-full h-full object-contain" />
             </div>
 
@@ -166,7 +165,7 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
           </div>
 
           {/* SEARCH / INPUT UNIQUE TEAM ID BAR */}
-          <div className="p-5 sm:p-7 rounded-3xl bg-slate-950/95 border-2 border-blue-500/40 backdrop-blur-2xl shadow-[0_0_50px_rgba(59,130,246,0.25)] max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto">
             <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row items-center gap-3">
               <div className="relative flex-1 w-full">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-blue-400" />
@@ -175,13 +174,13 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
                   value={searchTeamId}
                   onChange={(e) => setSearchTeamId(e.target.value)}
                   placeholder="Enter Unique Team ID (e.g. Y26-SEL-9482)"
-                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[#060c1d] border border-blue-500/30 text-white font-mono text-xs sm:text-sm focus:outline-none focus:border-blue-400 transition-colors uppercase tracking-wider placeholder:text-slate-500 placeholder:normal-case placeholder:tracking-normal"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-950/60 border border-blue-500/30 text-white font-mono text-xs sm:text-sm focus:outline-none focus:border-blue-400 transition-colors uppercase tracking-wider placeholder:text-slate-500 placeholder:normal-case placeholder:tracking-normal shadow-[0_0_20px_rgba(59,130,246,0.15)] backdrop-blur-xl"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-mono text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(59,130,246,0.5)] active:scale-95 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2 shrink-0"
+                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_25px_rgba(59,130,246,0.5)] hover:shadow-[0_0_40px_rgba(59,130,246,0.7)] active:scale-95 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2 shrink-0"
               >
                 {isLoading ? (
                   <>
@@ -200,39 +199,42 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
 
           {/* ERROR NOTIFICATION */}
           {errorMsg && (
-            <div className="p-5 rounded-2xl bg-rose-950/80 border border-rose-500/50 text-rose-200 text-xs font-mono flex items-center gap-3 max-w-2xl mx-auto shadow-xl backdrop-blur-2xl">
+            <div className="p-5 rounded-2xl bg-rose-950/60 border border-rose-500/30 text-rose-200 text-xs font-mono flex items-center gap-3 max-w-2xl mx-auto shadow-lg backdrop-blur-xl">
               <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
-          {/* TEAM PAYMENT CARD (HIGH-TECH CYBER GLASSMORPHISM MATCHING SITE THEME) */}
+          {/* OPEN HUD DETAILS (NO BACKGROUND CARDS OR BOX CONTAINER) */}
           {teamData && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="p-6 sm:p-10 rounded-3xl bg-slate-950/95 border-2 border-blue-500/40 backdrop-blur-2xl shadow-[0_0_60px_rgba(59,130,246,0.3)] space-y-8 relative overflow-hidden"
+              className="pt-2 space-y-10"
             >
-              {/* TOP HEADER DETAILS */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-blue-900/60">
-                <div className="space-y-1.5">
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-950/90 border border-blue-500/40 text-[10px] font-mono font-bold text-blue-300 uppercase tracking-widest">
-                    <Shield className="w-3.5 h-3.5 text-blue-400" />
-                    <span>SHORTLISTED WARRIOR TEAM</span>
+              {/* GRADIENT HAIRLINE TOP DIVIDER */}
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+
+              {/* TEAM HEADER & STATUS BADGE */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                <div className="space-y-2 text-left">
+                  <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-blue-400 uppercase tracking-widest">
+                    <Shield className="w-4 h-4 text-blue-400" />
+                    <span>SHORTLISTED TEAM CONFIRMATION</span>
                   </div>
-                  <h2 className="text-3xl sm:text-4xl font-black font-heading text-white tracking-tight">
+                  <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading text-white tracking-tight">
                     {teamData.teamName}
                   </h2>
-                  <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
+                  <div className="flex items-center gap-2 text-xs font-mono text-slate-300 pt-1">
                     <span>Unique Team ID:</span>
-                    <span className="font-bold text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-lg border border-cyan-500/40 shadow-inner">
+                    <span className="font-bold text-cyan-300 font-mono tracking-wider">
                       {teamData.uniqueTeamId}
                     </span>
                     <button
                       onClick={handleCopyLink}
                       title="Copy Payment Portal Link"
-                      className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer ml-1"
+                      className="p-1 text-slate-400 hover:text-white transition-colors cursor-pointer ml-1"
                     >
                       {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
@@ -240,17 +242,14 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
                 </div>
 
                 {/* PAYMENT STATUS BADGE */}
-                <div className="flex flex-col items-start sm:items-end gap-1.5">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-bold">
-                    PAYMENT STATUS
-                  </span>
+                <div className="shrink-0">
                   {teamData.paymentStatus === "Completed" ? (
-                    <span className="px-5 py-2 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-mono text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                    <span className="px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 font-mono text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.25)] backdrop-blur-md">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                       PAYMENT COMPLETED
                     </span>
                   ) : (
-                    <span className="px-5 py-2 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 font-mono text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.4)] animate-pulse">
+                    <span className="px-5 py-2.5 rounded-full bg-amber-500/10 border border-amber-500/40 text-amber-300 font-mono text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_25px_rgba(245,158,11,0.25)] backdrop-blur-md animate-pulse">
                       <Clock className="w-4 h-4 text-amber-400" />
                       PENDING PAYMENT
                     </span>
@@ -258,83 +257,117 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
                 </div>
               </div>
 
-              {/* DETAILS GRID */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {/* LEADER INFO */}
-                <div className="p-5 rounded-2xl bg-[#060d1f] border border-blue-500/30 space-y-3 shadow-inner">
-                  <span className="text-[10px] font-mono font-black text-blue-400 uppercase tracking-widest block border-b border-blue-900/40 pb-2">
-                    TEAM LEADER INFORMATION
-                  </span>
-                  <div className="space-y-2 text-xs text-slate-200 font-mono">
-                    <div className="flex items-center gap-2.5">
-                      <User className="w-4 h-4 text-blue-400 shrink-0" />
-                      <span className="font-bold text-white text-sm">{teamData.leaderName}</span>
+              {/* TWO COLUMN OPEN FLOATING HUD (NO CARD CONTAINER CARDS) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 pt-2">
+                {/* LEFT: TEAM LEADER DETAILS */}
+                <div className="space-y-5 text-left">
+                  <div className="flex items-center gap-2 text-xs font-mono font-bold text-blue-400 uppercase tracking-widest border-b border-blue-500/30 pb-3">
+                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+                    <span>TEAM LEADER DETAILS</span>
+                  </div>
+
+                  <div className="space-y-4 font-mono text-xs text-slate-300">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center shrink-0 text-blue-400">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-400 block uppercase">Team Leader / Captain</span>
+                        <span className="font-bold text-white text-base">{teamData.leaderName}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2.5 text-slate-300">
-                      <Mail className="w-4 h-4 text-blue-400 shrink-0" />
-                      <span className="truncate">{teamData.leaderEmail}</span>
+
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center shrink-0 text-blue-400">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-400 block uppercase">Email Address</span>
+                        <span className="text-slate-200 font-sans">{teamData.leaderEmail}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2.5 text-slate-300">
-                      <Phone className="w-4 h-4 text-blue-400 shrink-0" />
-                      <span>{teamData.leaderPhone}</span>
+
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center shrink-0 text-blue-400">
+                        <Phone className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-400 block uppercase">Contact Phone</span>
+                        <span className="text-slate-200">{teamData.leaderPhone}</span>
+                      </div>
                     </div>
+
                     {teamData.college && (
-                      <div className="flex items-center gap-2.5 text-slate-400 pt-1 border-t border-slate-800/80">
-                        <Building className="w-4 h-4 text-blue-400 shrink-0" />
-                        <span className="truncate">{teamData.college}</span>
+                      <div className="flex items-center gap-3.5 pt-2 border-t border-slate-800/80">
+                        <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center shrink-0 text-blue-400">
+                          <Building className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-slate-400 block uppercase">Institution / College</span>
+                          <span className="text-slate-300 font-sans">{teamData.college}</span>
+                        </div>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* PAYMENT & DEADLINE DETAILS */}
-                <div className="p-5 rounded-2xl bg-[#060d1f] border border-blue-500/30 space-y-3 shadow-inner">
-                  <span className="text-[10px] font-mono font-black text-blue-400 uppercase tracking-widest block border-b border-blue-900/40 pb-2">
-                    REGISTRATION FEE & DEADLINE
-                  </span>
-                  <div className="space-y-2.5 font-mono">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400 uppercase tracking-wider">AMOUNT REQUIRED:</span>
-                      <span className="text-2xl font-black text-amber-300 font-serif">
+                {/* RIGHT: REGISTRATION FEE & PAYMENT INFO */}
+                <div className="space-y-5 text-left">
+                  <div className="flex items-center gap-2 text-xs font-mono font-bold text-blue-400 uppercase tracking-widest border-b border-blue-500/30 pb-3">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                    <span>REGISTRATION FEE & DEADLINE</span>
+                  </div>
+
+                  <div className="space-y-4 font-mono">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs text-slate-400 uppercase tracking-wider">Registration Fee:</span>
+                      <span className="text-4xl sm:text-5xl font-black text-amber-300 font-heading drop-shadow-[0_0_20px_rgba(245,158,11,0.4)]">
                         ₹{teamData.amountToPay}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400 uppercase tracking-wider">DEADLINE:</span>
-                      <span className="font-bold text-sky-300">{teamData.paymentTime || "Within 48 Hours"}</span>
+
+                    <div className="flex items-center justify-between border-t border-slate-800/60 pt-3">
+                      <span className="text-xs text-slate-400 uppercase tracking-wider">Payment Window:</span>
+                      <span className="text-xs font-bold text-sky-300">{teamData.paymentTime || "Within 48 Hours"}</span>
                     </div>
+
                     {teamData.paymentTxnId && (
-                      <div className="flex items-center justify-between text-[11px] pt-2 border-t border-slate-800">
-                        <span className="text-slate-400">TRANSACTION ID:</span>
+                      <div className="flex items-center justify-between border-t border-slate-800/60 pt-3 text-xs">
+                        <span className="text-slate-400 uppercase tracking-wider">Transaction Reference:</span>
                         <span className="text-emerald-400 font-bold">{teamData.paymentTxnId}</span>
                       </div>
                     )}
+
+                    <p className="pt-2 text-[11px] text-slate-400 leading-relaxed font-sans border-t border-slate-800/60">
+                      Payment confirms team slot allocation and grants full access to mentored prototype building sessions during YODHA 2.0.
+                    </p>
                   </div>
                 </div>
               </div>
 
-              {/* ACTION SECTION */}
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-5 border-t border-blue-900/60">
+              {/* BOTTOM GRADIENT LINE DIVIDER */}
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+
+              {/* ACTION BAR */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="text-xs font-mono text-slate-400 text-center sm:text-left">
-                  <span>Support Contact: </span>
+                  <span>Official Support Email: </span>
                   <a href="mailto:yodha@jecc.ac.in" className="text-blue-400 underline hover:text-blue-300 font-bold">
                     yodha@jecc.ac.in
                   </a>
                 </div>
 
                 {teamData.paymentStatus === "Completed" ? (
-                  <div className="flex items-center gap-3">
-                    <span className="px-6 py-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-mono text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-lg">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                      WARRIOR SLOT CONFIRMED
-                    </span>
-                  </div>
+                  <span className="px-8 py-4 rounded-full bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 font-mono text-xs font-black uppercase tracking-widest flex items-center gap-2.5 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                    SLOT CONFIRMED
+                  </span>
                 ) : (
                   <button
                     onClick={() => setIsPaymentModalOpen(true)}
-                    className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-mono text-sm font-black tracking-widest uppercase cursor-pointer shadow-[0_0_35px_rgba(16,185,129,0.6)] hover:shadow-[0_0_50px_rgba(16,185,129,0.9)] transition-all duration-300 flex items-center justify-center gap-3 active:scale-95"
+                    className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-sm font-black tracking-widest uppercase cursor-pointer shadow-[0_0_35px_rgba(59,130,246,0.6)] hover:shadow-[0_0_55px_rgba(59,130,246,0.8)] transition-all duration-300 flex items-center justify-center gap-3 active:scale-95 hover:scale-[1.02]"
                   >
-                    <CreditCard className="w-5 h-5 text-slate-950" />
+                    <CreditCard className="w-5 h-5 text-white" />
                     <span>PROCEED TO PAYMENT (₹{teamData.amountToPay})</span>
                   </button>
                 )}
@@ -395,16 +428,16 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
                 <button
                   onClick={handleSimulatePayment}
                   disabled={isProcessingPayment || paymentSuccess}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-mono text-xs font-black tracking-widest uppercase cursor-pointer shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-black tracking-widest uppercase cursor-pointer shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isProcessingPayment ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>PROCESSING PAYMENT...</span>
                     </>
                   ) : paymentSuccess ? (
                     <>
-                      <CheckCircle2 className="w-4 h-4 text-slate-950" />
+                      <CheckCircle2 className="w-4 h-4 text-white" />
                       <span>PAYMENT SUCCESSFUL!</span>
                     </>
                   ) : (
