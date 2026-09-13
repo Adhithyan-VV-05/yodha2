@@ -270,12 +270,22 @@ export function ReferralGift() {
 
             {/* MODAL CONTENT */}
             <div className="relative max-w-3xl w-full mt-4 flex flex-col items-center text-slate-900" style={{ zIndex: 10 }}>
-              <div className="flex flex-col items-center mb-6 w-full">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center justify-center space-y-2 text-center mb-6 w-full"
+              >
                 <h2 className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-tight text-center uppercase drop-shadow-sm">
                   Referral Rewards
                 </h2>
-                <div className="w-32 h-1.5 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full mt-4"></div>
-              </div>
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="h-1 w-24 bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-600 rounded-full"
+                />
+              </motion.div>
 
               <div className="w-full text-center font-bold font-sans mb-10 text-amber-700 h-14 sm:h-10">
                 <TypewriterText text="You are going to get super cool rewards! 🎁 Keep referring and unlock massive surprises." speed={2} delay={300} className="text-lg sm:text-xl block" />
@@ -301,20 +311,22 @@ export function ReferralGift() {
                 />
 
                 <motion.div 
-                  initial={{ opacity: 0, y: 10 }} 
-                  animate={{ opacity: 1, y: 0 }} 
-                  transition={{ delay: 2.5, duration: 0.8 }}
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  transition={{ delay: 2.5, duration: 0.5 }}
                   className="mt-8 pt-8 text-center flex flex-col items-center"
                 >
                   <p className="font-bold text-slate-700 text-base sm:text-lg mb-6 max-w-2xl">
                     In order to refer your friends and earn rewards, you must first register your team to receive your unique referral code.
                   </p>
-                  <button
+                  <motion.button
                     onClick={handleRegister}
-                    className="px-12 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-base font-black tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                    className="px-12 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-base font-black tracking-widest uppercase cursor-pointer"
                   >
                     REGISTER NOW
-                  </button>
+                  </motion.button>
                 </motion.div>
               </div>
             </div>
