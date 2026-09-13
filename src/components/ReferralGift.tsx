@@ -104,6 +104,8 @@ export function ReferralGift() {
         } else {
           setIsVisible(false);
         }
+      } else {
+        setIsVisible(false);
       }
     };
 
@@ -268,14 +270,15 @@ export function ReferralGift() {
 
             {/* MODAL CONTENT */}
             <div className="relative max-w-3xl w-full mt-4 flex flex-col items-center text-slate-900" style={{ zIndex: 10 }}>
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex flex-col items-center mb-6 w-full">
                 <h2 className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-tight text-center uppercase drop-shadow-sm">
                   Referral Rewards
                 </h2>
+                <div className="w-32 h-1.5 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full mt-4"></div>
               </div>
 
               <div className="w-full text-center font-bold font-sans mb-10 text-amber-700 h-14 sm:h-10">
-                <TypewriterText text="You are going to get super cool rewards! 🎁 Keep referring and unlock massive surprises." speed={30} delay={600} className="text-lg sm:text-xl block" />
+                <TypewriterText text="You are going to get super cool rewards! 🎁 Keep referring and unlock massive surprises." speed={2} delay={300} className="text-lg sm:text-xl block" />
               </div>
 
               <div className="w-full text-slate-800 text-sm sm:text-base font-sans leading-relaxed space-y-5">
@@ -293,14 +296,14 @@ export function ReferralGift() {
                     "Fake, duplicate, spam, or otherwise invalid registrations will not be counted toward a team's referral total.",
                     "The organizers reserve the right to verify referral registrations before declaring the winner."
                   ]}
-                  delay={2500} 
-                  speed={12}
+                  delay={1000} 
+                  speed={2}
                 />
 
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  transition={{ delay: 8.5, duration: 0.8 }}
+                  transition={{ delay: 2.5, duration: 0.8 }}
                   className="mt-8 pt-8 text-center flex flex-col items-center"
                 >
                   <p className="font-bold text-slate-700 text-base sm:text-lg mb-6 max-w-2xl">
@@ -308,9 +311,9 @@ export function ReferralGift() {
                   </p>
                   <button
                     onClick={handleRegister}
-                    className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-sm font-black tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+                    className="px-12 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-base font-black tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
                   >
-                    REGISTER NOW TO GET REFERRAL LINK
+                    REGISTER NOW
                   </button>
                 </motion.div>
               </div>
