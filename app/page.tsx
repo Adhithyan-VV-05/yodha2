@@ -23,6 +23,8 @@ import { IntroLoader } from "@/components/IntroLoader";
 import { PaymentPortalPage } from "@/components/PaymentPortalPage";
 import { trackUserSession } from "@/lib/firebase";
 
+import { ReferralGift } from "@/components/ReferralGift";
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isHeroRevealed, setIsHeroRevealed] = useState(true);
@@ -151,6 +153,7 @@ export default function Home() {
   }, []);
 
   return (
+    <>
     <div className="w-full min-h-screen bg-[#03060d] text-white selection:bg-blue-600 selection:text-white font-sans relative overflow-x-hidden">
       
       {/* INITIAL PRELOADER: GATES SITE UNTIL CORE ASSETS ARE LOADED */}
@@ -255,6 +258,10 @@ export default function Home() {
         referralCode={referralDashboardCode}
       />
     </div>
+
+    {/* FLOATING REFERRAL GIFT */}
+    <ReferralGift />
+    </>
   );
 }
 
