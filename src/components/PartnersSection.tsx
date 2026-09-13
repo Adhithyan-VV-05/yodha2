@@ -152,7 +152,7 @@ export function PartnersSection() {
               </div>
             </motion.div>
 
-            {/* CARD 3: µLEARN JEC */}
+            {/* CARD 3: MULEARN JEC */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -162,12 +162,12 @@ export function PartnersSection() {
             >
               <img
                 src="/sponsors and others/mulearn-campus-logo.png"
-                alt="µLearn JEC"
+                alt="Mulearn JEC"
                 className="w-20 sm:w-24 object-contain shrink-0 drop-shadow-md"
               />
               <div className="space-y-1 min-w-0">
                 <h4 className="font-sans font-black text-xs sm:text-sm text-slate-100 group-hover:text-white transition-colors leading-tight uppercase">
-                  µLEARN JEC
+                  MULEARN JEC
                 </h4>
               </div>
             </motion.div>
