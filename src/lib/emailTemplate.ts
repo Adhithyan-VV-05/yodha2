@@ -292,7 +292,7 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td class="grid-col" width="50%" style="padding-right: 4px; padding-bottom: 6px;">
-                      <a href="${whatsappShareUrl}" target="_blank" style="display: block; padding: 12px 10px; background-color: #052e16; border: 1px solid #22c55e; border-radius: 10px; font-family: monospace; font-size: 11px; font-weight: 800; color: #86efac; text-align: center; text-transform: uppercase;">
+                      <a href="${whatsappShareUrl}" target="_blank" style="display: block; padding: 12px 10px; background-color: #0f172a; border: 1px solid #3b82f6; border-radius: 10px; font-family: monospace; font-size: 11px; font-weight: 800; color: #60a5fa; text-align: center; text-transform: uppercase;">
                         💬 SHARE ON WHATSAPP ↗
                       </a>
                     </td>
