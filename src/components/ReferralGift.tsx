@@ -4,6 +4,80 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trophy, Info } from "lucide-react";
 
+function useTypewriter(text: string, speed = 30, delay = 0) {
+  const [displayedText, setDisplayedText] = useState("");
+  useEffect(() => {
+    setDisplayedText("");
+    const timer = setTimeout(() => {
+      let i = 0;
+      const interval = setInterval(() => {
+        setDisplayedText(text.slice(0, i + 1));
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, speed);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [text, speed, delay]);
+  return displayedText;
+}
+
+function TypewriterText({ text, speed = 30, delay = 0, className = "" }: { text: string; speed?: number; delay?: number; className?: string }) {
+  const displayed = useTypewriter(text, speed, delay);
+  return <span className={className}>{displayed}</span>;
+}
+
+function TypewriterList({ items, speed = 20, delay = 0 }: { items: string[]; speed?: number; delay?: number }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+  const [displayedItems, setDisplayedItems] = useState<string[]>([]);
+  
+  useEffect(() => {
+    if (currentIndex >= items.length) return;
+    
+    let timer: NodeJS.Timeout;
+    
+    if (currentIndex === 0 && !isTyping) {
+      timer = setTimeout(() => {
+        setIsTyping(true);
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+    
+    if (isTyping) {
+      const currentText = items[currentIndex];
+      let charIndex = 0;
+      
+      timer = setInterval(() => {
+        const partial = currentText.slice(0, charIndex + 1);
+        setDisplayedItems(prev => {
+          const newArr = [...prev];
+          newArr[currentIndex] = partial;
+          return newArr;
+        });
+        charIndex++;
+        
+        if (charIndex >= currentText.length) {
+          clearInterval(timer);
+          setCurrentIndex(prev => prev + 1);
+        }
+      }, speed);
+    }
+    
+    return () => clearInterval(timer);
+  }, [currentIndex, isTyping, items, speed, delay]);
+
+  return (
+    <ol className="list-decimal pl-5 space-y-4 font-medium text-slate-800">
+      {items.map((item, i) => (
+        i <= currentIndex ? (
+          <li key={i}>{displayedItems[i] || ""}</li>
+        ) : null
+      ))}
+    </ol>
+  );
+}
+
 export function ReferralGift() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -128,14 +202,14 @@ export function ReferralGift() {
             animate={{ opacity: 1, clipPath: "circle(150% at 95% 95%)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 95% 95%)" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ position: "fixed", inset: 0, zIndex: 99999, background: "#03060d", overflowY: "auto" }}
-            className="flex flex-col items-center py-12 px-4 sm:px-8 text-white selection:bg-blue-600 selection:text-white"
+            style={{ position: "fixed", inset: 0, zIndex: 99999, background: "white", overflowY: "auto" }}
+            className="flex flex-col items-center py-12 px-4 sm:px-8 text-slate-900"
           >
             {/* CLOSE BUTTON */}
             <button
               onClick={handleClose}
               style={{ position: "absolute", top: 24, right: 24, zIndex: 100000 }}
-              className="w-12 h-12 bg-slate-900 border border-slate-800 hover:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 transition-colors shadow-lg cursor-pointer"
+              className="w-12 h-12 bg-slate-100 border border-slate-200 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-900 transition-colors shadow-lg cursor-pointer"
             >
               <X className="w-6 h-6 stroke-[3]" />
             </button>
@@ -159,10 +233,10 @@ export function ReferralGift() {
                     position: "absolute",
                     left: `${10 + i * 15}%`,
                     top: "-20%",
-                    opacity: 0.04,
+                    opacity: 0.08,
                   }}
                 >
-                  <Trophy className="w-28 h-28 text-blue-500" />
+                  <Trophy className="w-28 h-28 text-amber-500" />
                 </motion.div>
               ))}
               {["GIFTS", "REWARDS", "WIN", "REFER", "PRIZES", "GIFTS", "SHARE", "WIN"].map((word, i) => (
@@ -179,10 +253,10 @@ export function ReferralGift() {
                     position: "absolute",
                     left: `${5 + i * 12}%`,
                     bottom: "-20%",
-                    opacity: 0.02,
+                    opacity: 0.04,
                     fontSize: "3rem",
                     fontWeight: 900,
-                    color: "#3b82f6",
+                    color: "#92400e",
                     letterSpacing: "0.15em",
                     textTransform: "uppercase",
                   }}
@@ -193,56 +267,52 @@ export function ReferralGift() {
             </div>
 
             {/* MODAL CONTENT */}
-            <div className="relative max-w-3xl w-full mt-4 flex flex-col items-center" style={{ zIndex: 10 }}>
+            <div className="relative max-w-3xl w-full mt-4 flex flex-col items-center text-slate-900" style={{ zIndex: 10 }}>
               <div className="flex items-center gap-3 mb-6">
-                <h2 className="text-4xl sm:text-5xl font-black font-heading text-white tracking-tight text-center uppercase drop-shadow-md">
+                <h2 className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-tight text-center uppercase drop-shadow-sm">
                   Referral Rewards
                 </h2>
               </div>
 
-              <div className="bg-gradient-to-r from-blue-900/40 to-indigo-900/40 border border-blue-500/30 text-blue-100 px-6 py-4 rounded-2xl shadow-[0_0_30px_rgba(59,130,246,0.15)] backdrop-blur-md mb-10 text-center font-bold font-sans w-full">
-                <span className="text-lg sm:text-xl block text-white drop-shadow">You are going to get super cool rewards! 🎁</span>
-                <span className="text-sm text-blue-300 mt-1 block">Keep referring and unlock massive surprises.</span>
+              <div className="w-full text-center font-bold font-sans mb-10 text-amber-700 h-14 sm:h-10">
+                <TypewriterText text="You are going to get super cool rewards! 🎁 Keep referring and unlock massive surprises." speed={30} delay={600} className="text-lg sm:text-xl block" />
               </div>
 
-              <div className="w-full bg-[#060c1d] border border-blue-500/20 rounded-3xl p-6 sm:p-10 shadow-2xl text-slate-300 text-sm sm:text-base font-sans leading-relaxed space-y-5">
-                <h3 className="text-2xl font-black text-white uppercase border-b-2 border-slate-800 pb-3 mb-6 flex items-center gap-2">
-                  <Trophy className="w-6 h-6 text-amber-400" /> Referral Gift Rules
+              <div className="w-full text-slate-800 text-sm sm:text-base font-sans leading-relaxed space-y-5">
+                <h3 className="text-2xl font-black text-slate-900 uppercase border-b-2 border-slate-200 pb-3 mb-6 flex items-center gap-2">
+                  <Trophy className="w-6 h-6 text-amber-500" /> Referral Gift Rules
                 </h3>
-                <ol className="list-decimal pl-5 space-y-4 font-medium text-slate-300">
-                  <li>Each team receives a unique referral code.</li>
-                  <li>Other participants can register for the hackathon using a team's referral code.</li>
-                  <li>The team with the highest number of valid referrals is eligible to receive the referral gift.</li>
-                  <li>Only shortlisted teams are eligible for the gift.</li>
-                  <li>If a non-shortlisted team has the highest referral count, they will not be eligible for the gift. The gift will instead go to the highest-referring shortlisted team.</li>
-                  <li>Fake, duplicate, spam, or otherwise invalid registrations will not be counted toward a team's referral total.</li>
-                  <li>The organizers reserve the right to verify referral registrations before declaring the winner.</li>
-                </ol>
+                
+                <TypewriterList 
+                  items={[
+                    "Each team receives a unique referral code.",
+                    "Other participants can register for the hackathon using a team's referral code.",
+                    "The team with the highest number of valid referrals is eligible to receive the referral gift.",
+                    "Only shortlisted teams are eligible for the gift.",
+                    "If a non-shortlisted team has the highest referral count, they will not be eligible for the gift. The gift will instead go to the highest-referring shortlisted team.",
+                    "Fake, duplicate, spam, or otherwise invalid registrations will not be counted toward a team's referral total.",
+                    "The organizers reserve the right to verify referral registrations before declaring the winner."
+                  ]}
+                  delay={2500} 
+                  speed={12}
+                />
 
-                <div className="mt-8 bg-[#0a1226] border border-slate-800 p-6 rounded-2xl shadow-inner">
-                  <h4 className="font-bold text-white uppercase mb-4 text-lg flex items-center gap-2">
-                    <Info className="w-5 h-5 text-blue-400" /> Example
-                  </h4>
-                  <ul className="space-y-3 font-mono text-sm bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-                    <li><span className="font-bold text-blue-400">Team A</span> — 50 valid referrals — shortlisted ✅</li>
-                    <li><span className="font-bold text-slate-400">Team B</span> — 70 valid referrals — not shortlisted ❌</li>
-                  </ul>
-                  <p className="mt-4 font-black text-emerald-400 bg-emerald-950/40 px-4 py-3 rounded-lg border border-emerald-900/60 inline-block">
-                    Winner: Team A, because Team B is not shortlisted.
-                  </p>
-                </div>
-
-                <div className="mt-8 pt-8 border-t border-slate-800 text-center flex flex-col items-center">
-                  <p className="font-bold text-slate-300 text-base mb-6">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  transition={{ delay: 8.5, duration: 0.8 }}
+                  className="mt-8 pt-8 text-center flex flex-col items-center"
+                >
+                  <p className="font-bold text-slate-700 text-base sm:text-lg mb-6 max-w-2xl">
                     In order to refer your friends and earn rewards, you must first register your team to receive your unique referral code.
                   </p>
                   <button
                     onClick={handleRegister}
-                    className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-sm font-black tracking-widest uppercase transition-all shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_50px_rgba(59,130,246,0.6)] hover:scale-105 active:scale-95 cursor-pointer"
+                    className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-sm font-black tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     REGISTER NOW TO GET REFERRAL LINK
                   </button>
-                </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
