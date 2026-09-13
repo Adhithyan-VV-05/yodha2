@@ -78,7 +78,7 @@ function TypewriterList({ items, speed = 20, delay = 0 }: { items: string[]; spe
   );
 }
 
-export function ReferralGift() {
+export function ReferralGift({ onOpenRegister }: { onOpenRegister?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -137,9 +137,13 @@ export function ReferralGift() {
   };
 
   const handleRegister = () => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-    window.history.pushState({ activePage: "register" }, "");
-    window.dispatchEvent(new PopStateEvent("popstate", { state: { activePage: "register" } }));
+    if (onOpenRegister) {
+      onOpenRegister();
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" });
+      window.history.pushState({ activePage: "register" }, "");
+      window.dispatchEvent(new PopStateEvent("popstate", { state: { activePage: "register" } }));
+    }
     setIsOpen(false);
   };
 
@@ -320,6 +324,7 @@ export function ReferralGift() {
                     In order to refer your friends and earn rewards, you must first register your team to receive your unique referral code.
                   </p>
                   <motion.button
+                    type="button"
                     onClick={handleRegister}
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}

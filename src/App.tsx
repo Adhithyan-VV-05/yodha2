@@ -220,7 +220,7 @@ function App() {
     </div>
 
     {/* FLOATING REFERRAL GIFT (OUTSIDE OVERFLOW HIDDEN) */}
-    <ReferralGift />
+    <ReferralGift onOpenRegister={handleOpenRegisterWithTrack} />
     </>
   );
 }
