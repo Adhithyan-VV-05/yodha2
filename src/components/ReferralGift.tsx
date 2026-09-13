@@ -38,9 +38,7 @@ export function ReferralGift() {
     setIsOpen(false);
   };
 
-  if (!mounted) return null;
-
-  return createPortal(
+  return (
     <>
       {/* FLOATING GIFT BOX — always rendered, position fixed via inline style to escape any overflow clipping */}
       {!isOpen && (
@@ -231,8 +229,7 @@ export function ReferralGift() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>,
-    document.body
+    </>
   );
 }
 

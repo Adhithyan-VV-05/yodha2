@@ -129,6 +129,7 @@ function App() {
   }, []);
 
   return (
+    <>
     <div className="w-full min-h-screen bg-[#03060d] text-white selection:bg-blue-600 selection:text-white font-sans relative overflow-x-hidden">
       
       {/* INITIAL PRELOADER */}
@@ -216,10 +217,11 @@ function App() {
         onClose={() => setIsReferralDashboardOpen(false)}
         referralCode={referralDashboardCode}
       />
-
-      {/* FLOATING REFERRAL GIFT */}
-      <ReferralGift />
     </div>
+
+    {/* FLOATING REFERRAL GIFT (OUTSIDE OVERFLOW HIDDEN) */}
+    <ReferralGift />
+    </>
   );
 }
 
