@@ -729,7 +729,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                         <span>Why enter a Warrior Referral Code?</span>
                       </div>
                       <p className="text-[11px] text-slate-200">
-                        • <strong>Fee Discount:</strong> Shortlisted teams using a valid Warrior Referral Code get an exclusive discount on their final registration fee upon selection.
+                        • <strong>Referral Gift:</strong> The shortlisted team with the highest number of valid referrals will receive a special gift.
                       </p>
                       <p className="text-[11px] text-slate-200">
                         • <strong>Bonus Swag & Rewards:</strong> Gives your team higher eligibility for special innovation gifts, mentor support packs, and ambassador perks!

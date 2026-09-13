@@ -20,11 +20,11 @@ export function WhyParticipateSection() {
     {
       id: "prizes",
       num: "01",
-      title: "₹1 Lakh Worth Prizes & Trophies",
+      title: "₹75K Worth Prizes & Trophies",
       subtitle: "Compete for top national cash rewards, official trophies, plaques, & cloud infrastructure credits.",
       icon: <Trophy className="w-6 h-6 text-amber-400" />,
       badge: "NATIONAL REWARDS",
-      stat: "₹1 Lakh Worth Prizes",
+      stat: "₹75K Worth Prizes",
       highlight: "1st Prize: ₹30,000 + Trophy",
       color: "from-amber-500/20 via-amber-500/10 to-transparent",
       accentColor: "text-amber-400",
@@ -339,7 +339,7 @@ export function WhyParticipateSection() {
           className="mt-10 sm:mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 select-none"
         >
           {[
-            { label: "Total Worth Prizes", val: "₹1 Lakh", sub: "Trophies + Cash Awards" },
+            { label: "Total Worth Prizes", val: "₹75K", sub: "Trophies + Cash Awards" },
             { label: "Offline Sprint", val: "48 Hours", sub: "Non-stop AI Building" },
             { label: "National Reach", val: "100+ Builders", sub: "Cross-Institutional" },
             { label: "KTU Eligible", val: "Activity Points", sub: "National Certification" },

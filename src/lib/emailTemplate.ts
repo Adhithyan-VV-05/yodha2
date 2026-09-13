@@ -40,7 +40,7 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
   const bannerUrl =
     (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_BANNER_URL) ||
     (typeof process !== "undefined" && process.env?.VITE_BANNER_URL) ||
-    "https://res.cloudinary.com/nitmjwdw/image/upload/v1785824597/banner_hbdreq.webp";
+    "https://res.cloudinary.com/dgtkvydpk/image/upload/v1789316647/poster_c8hecc.jpg";
 
   const escapeHtml = (value: unknown): string =>
     String(value ?? "")
@@ -262,7 +262,7 @@ export function generateEmailTemplate(data: RegistrationEmailPayload): string {
                         Refer Teams & View Live Referral Roster
                       </div>
                       <p style="font-size: 13px; color: #fef08a; line-height: 1.6; margin: 8px 0 16px;">
-                        Share your unique referral code with fellow innovators! Shortlisted teams registering with your code receive special fee discounts and ambassador perks.
+                        Share your unique referral code with fellow innovators! The shortlisted team with the highest number of valid referrals will receive a special gift.
                       </p>
                     </td>
                   </tr>
