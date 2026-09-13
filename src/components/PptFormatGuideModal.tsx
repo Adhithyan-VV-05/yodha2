@@ -10,7 +10,7 @@ import {
   Lightbulb,
   Cpu,
   Network,
-  Sparkles,
+  Zap,
   BarChart3,
   Users,
   TrendingUp,
@@ -125,7 +125,7 @@ export function PptFormatGuideModal({
     },
     {
       id: "06",
-      icon: Sparkles,
+      icon: Zap,
       title: "INNOVATION & UNIQUENESS",
       bullets: [
         "Unique Value Proposition",

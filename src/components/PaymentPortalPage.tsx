@@ -15,7 +15,6 @@ import {
   Phone,
   Copy,
   Check,
-  Sparkles,
   AlertCircle,
   ExternalLink,
   Lock,
@@ -404,7 +403,7 @@ export function PaymentPortalPage({ onBack, initialTeamId = "" }: PaymentPortalP
 
               <div className="space-y-4 text-center">
                 <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mx-auto text-blue-400">
-                  <Sparkles className="w-8 h-8 text-cyan-400 animate-pulse" />
+                  <ShieldCheck className="w-8 h-8 text-cyan-400 animate-pulse" />
                 </div>
 
                 <div className="space-y-1 font-mono">

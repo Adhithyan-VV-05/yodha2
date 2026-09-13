@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Trophy, Sparkles, Info } from "lucide-react";
+import { X, Trophy, Info } from "lucide-react";
 
 export function ReferralGift() {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,11 +81,11 @@ export function ReferralGift() {
             }
             style={{ position: "relative" }}
           >
-            {/* Golden glow halo */}
+            {/* Blue glow halo */}
             <div style={{
               position: "absolute",
               inset: 0,
-              background: "rgba(250,204,21,0.35)",
+              background: "rgba(59,130,246,0.35)",
               borderRadius: "50%",
               filter: "blur(18px)",
               transform: "scale(1.6)",
@@ -100,7 +100,7 @@ export function ReferralGift() {
                 objectFit: "contain",
                 position: "relative",
                 zIndex: 1,
-                filter: "drop-shadow(0 0 16px rgba(255,215,0,0.7))",
+                filter: "drop-shadow(0 0 16px rgba(59,130,246,0.7))",
               }}
             />
           </motion.div>
@@ -111,10 +111,10 @@ export function ReferralGift() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
+            initial={{ opacity: 0, clipPath: "circle(0% at 95% 95%)" }}
+            animate={{ opacity: 1, clipPath: "circle(150% at 95% 95%)" }}
+            exit={{ opacity: 0, clipPath: "circle(0% at 95% 95%)" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             style={{ position: "fixed", inset: 0, zIndex: 99999, background: "white", overflowY: "auto" }}
             className="flex flex-col items-center py-12 px-4 sm:px-8 text-slate-900"
           >
@@ -182,11 +182,9 @@ export function ReferralGift() {
             {/* MODAL CONTENT */}
             <div className="relative max-w-3xl w-full mt-4 flex flex-col items-center" style={{ zIndex: 10 }}>
               <div className="flex items-center gap-3 mb-6">
-                <Sparkles className="w-8 h-8 text-amber-500 animate-pulse" />
                 <h2 className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-tight text-center uppercase">
                   Referral Rewards
                 </h2>
-                <Sparkles className="w-8 h-8 text-amber-500 animate-pulse" />
               </div>
 
               <div className="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 text-amber-900 px-6 py-4 rounded-2xl shadow-xl mb-10 text-center font-bold font-sans w-full">
