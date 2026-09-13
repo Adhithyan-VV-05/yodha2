@@ -8,9 +8,36 @@ export function ReferralGift() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSupernova, setIsSupernova] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Scroll visibility logic
+  useEffect(() => {
+    const handleScroll = () => {
+      const aboutSec = document.getElementById("about");
+      const tracksSec = document.getElementById("tracks");
+      
+      if (aboutSec && tracksSec) {
+        // threshold to show gift when scrolling into about section
+        const aboutTop = aboutSec.offsetTop - (window.innerHeight * 0.7);
+        // threshold to hide gift after tracks section
+        const tracksBottom = tracksSec.offsetTop + tracksSec.offsetHeight - (window.innerHeight * 0.3);
+        
+        if (window.scrollY >= aboutTop && window.scrollY <= tracksBottom) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Auto-hide body scroll when modal is open
@@ -40,32 +67,34 @@ export function ReferralGift() {
 
   return (
     <>
-      {/* FLOATING GIFT BOX — always rendered, position fixed via inline style to escape any overflow clipping */}
-      {!isOpen && (
-        <motion.div
-          style={{ position: "fixed", bottom: "5%", right: "5%", zIndex: 99999 }}
-          className="cursor-pointer group"
-          onClick={handleOpen}
-          initial={{ opacity: 0, scale: 0, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5, type: "spring", stiffness: 180 }}
-          whileHover={{ scale: 1.12 }}
-        >
+      {/* FLOATING GIFT BOX */}
+      <AnimatePresence>
+        {!isOpen && isVisible && (
           <motion.div
-            animate={
-              isSupernova
-                ? {
-                    x: [-10, 10, -10, 10, -10, 10, -10, 10, 0],
-                    y: [-10, 10, -10, 10, -10, 10, -10, 10, 0],
-                    scale: [1, 1.2, 1.5, 2, 3, 5],
-                    filter: [
-                      "brightness(1)",
-                      "brightness(1.5) drop-shadow(0 0 20px #fff)",
-                      "brightness(2) drop-shadow(0 0 50px #fff)",
-                      "brightness(3) drop-shadow(0 0 100px #fff)",
-                    ],
-                    opacity: [1, 1, 1, 0.8, 0],
-                  }
+            style={{ position: "fixed", bottom: "5%", right: "5%", zIndex: 99999 }}
+            className="cursor-pointer group"
+            onClick={handleOpen}
+            initial={{ opacity: 0, scale: 0, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0, y: 40 }}
+            transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 180 }}
+            whileHover={{ scale: 1.12 }}
+          >
+            <motion.div
+              animate={
+                isSupernova
+                  ? {
+                      x: [-5, 5, -5, 5, -5, 5, 20, 50, 80],
+                      y: [-5, 5, -5, 5, -5, 5, 20, 50, 80],
+                      scale: [1, 1.1, 0.9, 1.1, 0.8, 0.5, 0.2, 0],
+                      filter: [
+                        "brightness(1)",
+                        "brightness(1.5)",
+                        "brightness(2) drop-shadow(0 0 20px #fff)",
+                        "brightness(3) drop-shadow(0 0 50px #fff)",
+                      ],
+                      opacity: [1, 1, 1, 1, 1, 0.8, 0.5, 0],
+                    }
                 : {
                     rotate: [-5, 5, -5, 5, 0],
                     y: [0, -6, 0],
@@ -105,7 +134,8 @@ export function ReferralGift() {
             />
           </motion.div>
         </motion.div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* FULL SCREEN WHITE MODAL */}
       <AnimatePresence>
