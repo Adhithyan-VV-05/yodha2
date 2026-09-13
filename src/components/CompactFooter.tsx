@@ -173,15 +173,18 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
       </div>
 
       {/* PARTNERS SECTION */}
-      <div className="max-w-6xl mx-auto mt-8 sm:mt-12 flex flex-col items-center gap-4">
+      <div className="max-w-6xl mx-auto mt-8 sm:mt-12 flex flex-col items-center gap-3">
         <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 tracking-[0.25em] uppercase">
           Our Partners
         </span>
-        <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 opacity-70 hover:opacity-100 transition-opacity duration-300">
-          <img src="/sponsors and others/IMG_9231.PNG" alt="Spin Theory" className="h-6 sm:h-8 object-contain" />
-          <img src="/sponsors and others/CSI logo.png" alt="CSI" className="h-8 sm:h-10 object-contain" />
-          <img src="/sponsors and others/IEST logo.png" alt="ISTE" className="h-8 sm:h-10 object-contain" />
-          <img src="/sponsors and others/mulearn-campus-logo.png" alt="Mulearn" className="h-6 sm:h-8 object-contain" />
+        <div className="flex flex-wrap justify-center items-center gap-x-4 sm:gap-x-6 gap-y-2 text-xs sm:text-sm font-mono text-slate-400 font-medium">
+          <span className="hover:text-blue-400 transition-colors cursor-default">Spin Theory</span>
+          <span className="text-slate-700">•</span>
+          <span className="hover:text-blue-400 transition-colors cursor-default">CSI</span>
+          <span className="text-slate-700">•</span>
+          <span className="hover:text-blue-400 transition-colors cursor-default">ISTE</span>
+          <span className="text-slate-700">•</span>
+          <span className="hover:text-blue-400 transition-colors cursor-default">Mulearn JEC</span>
         </div>
       </div>
 

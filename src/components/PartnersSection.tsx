@@ -107,8 +107,8 @@ export function PartnersSection() {
             <div className="flex-1 h-[1px] bg-slate-800 max-w-[3rem] sm:max-w-[6rem]" />
           </div>
 
-          {/* 3-COLUMN SPONSORS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          {/* 3-COLUMN SPONSORS GRID (Horizontal on mobile) */}
+          <div className="flex flex-row flex-wrap justify-center items-center gap-5 sm:gap-6">
             
             {/* CARD 1: COMPUTER SOCIETY OF INDIA */}
             <motion.div
@@ -177,8 +177,8 @@ export function PartnersSection() {
             <div className="flex-1 h-[1px] bg-slate-800 max-w-[3rem] sm:max-w-[6rem]" />
           </div>
 
-          {/* 2-COLUMN GLOBAL GOALS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 max-w-5xl mx-auto">
+          {/* 2-COLUMN GLOBAL GOALS GRID (Horizontal on mobile) */}
+          <div className="flex flex-row flex-wrap justify-center items-center gap-5 sm:gap-6 max-w-5xl mx-auto">
             
             {/* CARD 1: SDG 3 */}
             <motion.div

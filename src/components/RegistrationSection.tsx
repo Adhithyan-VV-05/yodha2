@@ -946,6 +946,23 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                       className="w-full px-4 py-3 bg-slate-900 border border-blue-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-blue-400"
                     />
                   </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-slate-300 mb-1">Gender *</label>
+                    <div className="relative">
+                      <select
+                        name="gender"
+                        value={leader.gender}
+                        onChange={handleLeaderChange}
+                        className="w-full px-4 py-3 bg-slate-900 border border-blue-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-blue-400 appearance-none"
+                      >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Others">Others</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="pt-4 flex justify-between">
@@ -1039,6 +1056,19 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                         onChange={(e) => handleMemberChange(index, e)}
                         className="px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white"
                       />
+                      <div className="relative w-full">
+                        <select
+                          name="gender"
+                          value={members[index]?.gender || "Male"}
+                          onChange={(e) => handleMemberChange(index, e as any)}
+                          className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white appearance-none"
+                        >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Others">Others</option>
+                        </select>
+                        <ChevronDown className="w-4 h-4 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      </div>
                     </div>
                   </div>
                 ))}

@@ -1,0 +1,239 @@
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Trophy, Sparkles, Info } from "lucide-react";
+
+export function ReferralGift() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSupernova, setIsSupernova] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Auto-hide body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const handleOpen = () => {
+    if (isOpen || isSupernova) return;
+    setIsSupernova(true);
+    setTimeout(() => {
+      setIsSupernova(false);
+      setIsOpen(true);
+    }, 2000);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <>
+      {/* FLOATING GIFT BOX — always rendered, position fixed via inline style to escape any overflow clipping */}
+      {!isOpen && (
+        <motion.div
+          style={{ position: "fixed", bottom: "5%", right: "5%", zIndex: 99999 }}
+          className="cursor-pointer group"
+          onClick={handleOpen}
+          initial={{ opacity: 0, scale: 0, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5, type: "spring", stiffness: 180 }}
+          whileHover={{ scale: 1.12 }}
+        >
+          <motion.div
+            animate={
+              isSupernova
+                ? {
+                    x: [-10, 10, -10, 10, -10, 10, -10, 10, 0],
+                    y: [-10, 10, -10, 10, -10, 10, -10, 10, 0],
+                    scale: [1, 1.2, 1.5, 2, 3, 5],
+                    filter: [
+                      "brightness(1)",
+                      "brightness(1.5) drop-shadow(0 0 20px #fff)",
+                      "brightness(2) drop-shadow(0 0 50px #fff)",
+                      "brightness(3) drop-shadow(0 0 100px #fff)",
+                    ],
+                    opacity: [1, 1, 1, 0.8, 0],
+                  }
+                : {
+                    rotate: [-5, 5, -5, 5, 0],
+                    y: [0, -6, 0],
+                  }
+            }
+            transition={
+              isSupernova
+                ? { duration: 2, ease: "easeInOut" }
+                : {
+                    rotate: { repeat: Infinity, duration: 0.45, repeatDelay: 2.5 },
+                    y: { repeat: Infinity, duration: 2.2, ease: "easeInOut" },
+                  }
+            }
+            style={{ position: "relative" }}
+          >
+            {/* Golden glow halo */}
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              background: "rgba(250,204,21,0.35)",
+              borderRadius: "50%",
+              filter: "blur(18px)",
+              transform: "scale(1.6)",
+              animation: "pulse 2s infinite",
+            }} />
+            <img
+              src="/gift.webp"
+              alt="Referral Gift"
+              style={{
+                width: 72,
+                height: 72,
+                objectFit: "contain",
+                position: "relative",
+                zIndex: 1,
+                filter: "drop-shadow(0 0 16px rgba(255,215,0,0.7))",
+              }}
+            />
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* FULL SCREEN WHITE MODAL */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            style={{ position: "fixed", inset: 0, zIndex: 99999, background: "white", overflowY: "auto" }}
+            className="flex flex-col items-center py-12 px-4 sm:px-8 text-slate-900"
+          >
+            {/* CLOSE BUTTON */}
+            <button
+              onClick={handleClose}
+              style={{ position: "absolute", top: 24, right: 24, zIndex: 100000 }}
+              className="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-900 transition-colors shadow-lg cursor-pointer"
+            >
+              <X className="w-6 h-6 stroke-[3]" />
+            </button>
+
+            {/* FLOATING BACKGROUND ELEMENTS */}
+            <div style={{ position: "fixed", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={`trophy-${i}`}
+                  animate={{
+                    y: ["-10vh", "110vh"],
+                    rotate: [0, 360],
+                  }}
+                  transition={{
+                    duration: 18 + i * 3,
+                    repeat: Infinity,
+                    ease: "linear",
+                    delay: i * 1.5,
+                  }}
+                  style={{
+                    position: "absolute",
+                    left: `${10 + i * 15}%`,
+                    top: "-20%",
+                    opacity: 0.08,
+                  }}
+                >
+                  <Trophy className="w-28 h-28 text-amber-500" />
+                </motion.div>
+              ))}
+              {["GIFTS", "REWARDS", "WIN", "REFER", "PRIZES", "GIFTS", "SHARE", "WIN"].map((word, i) => (
+                <motion.div
+                  key={`word-${i}`}
+                  animate={{ y: ["110vh", "-10vh"] }}
+                  transition={{
+                    duration: 22 + i * 2,
+                    repeat: Infinity,
+                    ease: "linear",
+                    delay: i * 2,
+                  }}
+                  style={{
+                    position: "absolute",
+                    left: `${5 + i * 12}%`,
+                    bottom: "-20%",
+                    opacity: 0.04,
+                    fontSize: "3rem",
+                    fontWeight: 900,
+                    color: "#92400e",
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {word}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* MODAL CONTENT */}
+            <div className="relative max-w-3xl w-full mt-4 flex flex-col items-center" style={{ zIndex: 10 }}>
+              <div className="flex items-center gap-3 mb-6">
+                <Sparkles className="w-8 h-8 text-amber-500 animate-pulse" />
+                <h2 className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-tight text-center uppercase">
+                  Referral Rewards
+                </h2>
+                <Sparkles className="w-8 h-8 text-amber-500 animate-pulse" />
+              </div>
+
+              <div className="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 text-amber-900 px-6 py-4 rounded-2xl shadow-xl mb-10 text-center font-bold font-sans w-full">
+                <span className="text-lg sm:text-xl block">You are going to get super cool rewards! 🎁</span>
+                <span className="text-sm opacity-80 mt-1 block">Keep referring and unlock massive surprises.</span>
+              </div>
+
+              <div className="w-full bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-2xl text-slate-700 text-sm sm:text-base font-sans leading-relaxed space-y-5">
+                <h3 className="text-2xl font-black text-slate-900 uppercase border-b-2 border-slate-200 pb-3 mb-6 flex items-center gap-2">
+                  <Trophy className="w-6 h-6 text-amber-500" /> Referral Gift Rules
+                </h3>
+                <ol className="list-decimal pl-5 space-y-4 font-medium">
+                  <li>Each team receives a unique referral code.</li>
+                  <li>Other participants can register for the hackathon using a team's referral code.</li>
+                  <li>The team with the highest number of valid referrals is eligible to receive the referral gift.</li>
+                  <li>Only shortlisted teams are eligible for the gift.</li>
+                  <li>If a non-shortlisted team has the highest referral count, they will not be eligible for the gift. The gift will instead go to the highest-referring shortlisted team.</li>
+                  <li>Fake, duplicate, spam, or otherwise invalid registrations will not be counted toward a team's referral total.</li>
+                  <li>The organizers reserve the right to verify referral registrations before declaring the winner.</li>
+                </ol>
+
+                <div className="mt-8 bg-white border border-slate-200 p-6 rounded-2xl shadow-inner">
+                  <h4 className="font-bold text-slate-900 uppercase mb-4 text-lg flex items-center gap-2">
+                    <Info className="w-5 h-5 text-blue-500" /> Example
+                  </h4>
+                  <ul className="space-y-3 font-mono text-sm bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <li><span className="font-bold text-slate-900">Team A</span> — 50 valid referrals — shortlisted ✅</li>
+                    <li><span className="font-bold text-slate-900">Team B</span> — 70 valid referrals — not shortlisted ❌</li>
+                  </ul>
+                  <p className="mt-4 font-black text-emerald-600 bg-emerald-50 px-4 py-3 rounded-lg border border-emerald-200 inline-block">
+                    Winner: Team A, because Team B is not shortlisted.
+                  </p>
+                </div>
+
+                <p className="mt-8 pt-6 border-t border-slate-200 text-center font-bold text-slate-800 text-lg">
+                  Each team gets a unique referral code. Participants can share their code to bring new registrations to the hackathon. The shortlisted team with the highest number of valid referrals will receive a special gift.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>,
+    document.body
+  );
+}
+
+export default ReferralGift;

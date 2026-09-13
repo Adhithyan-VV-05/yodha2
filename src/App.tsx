@@ -6,6 +6,7 @@ import { CompactFooter } from "./components/CompactFooter";
 import { ScrollBackgroundManager } from "./components/ScrollBackgroundManager";
 import { IntroLoader } from "./components/IntroLoader";
 import { ReferralDashboardModal } from "./components/ReferralDashboardModal";
+import { ReferralGift } from "./components/ReferralGift";
 
 // Lazy load non-hero sections below the fold for optimal initial load speed
 const AboutSection = lazy(() => import("./components/AboutSection").then((m) => ({ default: m.AboutSection })));
@@ -215,6 +216,9 @@ function App() {
         onClose={() => setIsReferralDashboardOpen(false)}
         referralCode={referralDashboardCode}
       />
+
+      {/* FLOATING REFERRAL GIFT */}
+      <ReferralGift />
     </div>
   );
 }
