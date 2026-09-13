@@ -14,6 +14,7 @@ const PrizesSection = lazy(() => import("./components/PrizesSection").then((m) =
 const TimelineSection = lazy(() => import("./components/TimelineSection").then((m) => ({ default: m.TimelineSection })));
 const FAQSection = lazy(() => import("./components/FAQSection").then((m) => ({ default: m.FAQSection })));
 const GuidelinesSection = lazy(() => import("./components/GuidelinesSection").then((m) => ({ default: m.GuidelinesSection })));
+const PartnersSection = lazy(() => import("./components/PartnersSection").then((m) => ({ default: m.PartnersSection })));
 const RegistrationPage = lazy(() => import("./components/RegistrationPage").then((m) => ({ default: m.RegistrationPage })));
 const ReferralRoomPage = lazy(() => import("./components/ReferralRoomPage").then((m) => ({ default: m.ReferralRoomPage })));
 const VerticalYodhaCarousel = lazy(() => import("./components/VerticalYodhaCarousel").then((m) => ({ default: m.VerticalYodhaCarousel })));
@@ -183,10 +184,13 @@ function App() {
             {/* 5. Prizes & Trophies */}
             <PrizesSection onOpenRegister={() => handleOpenRegisterWithTrack()} />
 
-            {/* 6. FAQ Section */}
+            {/* 6. Partners & Sponsors Section */}
+            <PartnersSection />
+
+            {/* 7. FAQ Section */}
             <FAQSection />
 
-            {/* 7. Guidelines Section */}
+            {/* 8. Guidelines Section */}
             <GuidelinesSection />
 
             {/* 9. Vertical YODHA Moving Carousel */}

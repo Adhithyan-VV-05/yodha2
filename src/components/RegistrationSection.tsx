@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Loader2, ShieldCheck, ArrowRight, Mail, ChevronRight, Search, Check, Copy, Gift, Info, ChevronDown, ChevronUp, ExternalLink, User, FileText, BarChart3 } from "lucide-react";
 import confetti from "canvas-confetti";
@@ -9,6 +9,7 @@ import { submitTeamToGoogleForms } from "../lib/googleForms";
 import { sendTeamWelcomeEmails } from "../lib/emailService";
 import { YodhaImage } from "./YodhaImage";
 import { CyberDropdown } from "./ui/CyberDropdown";
+import { PptFormatGuideModal } from "./PptFormatGuideModal";
 import {
   HEALTHCARE_PROBLEM_STATEMENTS,
   getPSImage,
@@ -31,7 +32,11 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
   const [track] = useState(selectedTrack);
   const [selectedPS, setSelectedPS] = useState<ProblemStatement | null>(null);
   const [pptLink, setPptLink] = useState("");
-  const [showPptInfo, setShowPptInfo] = useState(false);
+
+  // PPT Modal Format Guide State & Ref
+  const [isPptModalOpen, setIsPptModalOpen] = useState(false);
+  const [hasOpenedPptModal, setHasOpenedPptModal] = useState(false);
+  const pptInputRef = useRef<HTMLInputElement>(null);
 
   // PS Inline Search & Filter State
   const [psSearchQuery, setPsSearchQuery] = useState("");
@@ -559,61 +564,7 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
               </div>
             </div>
 
-            {/* WARRIOR REFERRAL CODE CARD ON SUCCESS */}
-            {generatedReferralCode && (
-              <div className="mt-6 w-full p-4.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-blue-500/10 to-blue-600/10 border border-amber-400/50 text-left relative overflow-hidden shadow-xl space-y-3">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-mono font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <Gift className="w-4 h-4 text-amber-400 animate-bounce" />
-                    <span>YOUR WARRIOR REFERRAL CODE</span>
-                  </span>
-                  <span className="text-[10px] font-mono bg-amber-400/20 px-2 py-0.5 rounded border border-amber-400/40 text-amber-300 font-bold">
-                    REFERRAL ROOM ACTIVE
-                  </span>
-                </div>
 
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-black/70 p-3 rounded-xl border border-amber-400/30">
-                  <span className="font-mono text-xl sm:text-2xl font-black text-amber-300 tracking-wider">
-                    {generatedReferralCode}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(generatedReferralCode);
-                        setCopiedReferralCode(true);
-                        setTimeout(() => setCopiedReferralCode(false), 2500);
-                      }}
-                      className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-black font-black text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-md shrink-0"
-                    >
-                      {copiedReferralCode ? (
-                        <>
-                          <Check className="w-4 h-4 text-black" />
-                          <span>Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4 text-black" />
-                          <span>Copy Code</span>
-                        </>
-                      )}
-                    </button>
-
-                    <a
-                      href={`https://wa.me/?text=${encodeURIComponent(
-                        `🚀 Join YODHA 2.0 – Warriors of AI Hackathon!\n\nUse my Warrior Referral Code: ${generatedReferralCode}\n\nRegister your team here:\nhttps://yodha.aidajecc.in/register?ref=${generatedReferralCode}`
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 uppercase font-mono tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(34,197,94,0.4)] shrink-0"
-                    >
-                      <ExternalLink className="w-4 h-4 text-white" />
-                      <span>Share via WhatsApp</span>
-                    </a>
-
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         ) : (
           <div>
@@ -691,159 +642,46 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                   </div>
                 </div>
 
-                {/* GOOGLE DRIVE PPT PRESENTATION LINK FIELD WITH (i) INFO BUTTON */}
+                {/* GOOGLE DRIVE PPT PRESENTATION LINK FIELD */}
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
+                  <div className="mb-1.5">
                     <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
                       <span>Google Drive PPT Presentation Link *</span>
                     </label>
-
-                    {/* CIRCULAR (i) INFO BUTTON */}
-                    <button
-                      type="button"
-                      onClick={() => setShowPptInfo(!showPptInfo)}
-                      className="w-6 h-6 sm:w-auto sm:h-auto p-0 sm:px-2 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center justify-center gap-1 text-[11px] font-mono cursor-pointer"
-                      title="Google Drive PPT Upload Guidelines"
-                    >
-                      <Info className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="hidden sm:inline text-[10px] font-bold">PPT Public Access Info</span>
-                    </button>
                   </div>
 
-                  {/* EXPANDABLE GOOGLE DRIVE PPT BRIEF */}
-                  {showPptInfo && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mb-3 p-3.5 rounded-2xl bg-blue-950/80 border border-blue-400/40 text-xs font-mono text-blue-200 space-y-1.5 leading-relaxed shadow-lg"
-                    >
-                      <div className="font-bold text-white text-xs flex items-center gap-1.5">
-                        <Info className="w-4 h-4 text-sky-400" />
-                        <span>How to share your Google Drive PPT Presentation link:</span>
-                      </div>
-                      <p className="text-[11px] text-slate-200">
-                        • <strong>1. Upload Slides:</strong> Upload your presentation (PPT / PDF) to your personal Google Drive.
-                      </p>
-                      <p className="text-[11px] text-slate-200">
-                        • <strong>2. Set Public View Access:</strong> Right-click the file → <em>Share</em> → Change General Access to <strong>"Anyone with the link can view"</strong>.
-                      </p>
-                      <p className="text-[11px] text-slate-200">
-                        • <strong>3. Copy Link:</strong> Paste the public share link here so mentors and evaluators can view your deck!
-                      </p>
-                      <p className="text-[10px] text-sky-300 font-mono pt-1">
-                        Example: <code>https://drive.google.com/file/d/1A2B3C4D.../view?usp=sharing</code>
-                      </p>
-                    </motion.div>
-                  )}
-
                   <input
+                    ref={pptInputRef}
                     type="url"
                     required
                     value={pptLink}
+                    onClick={() => {
+                      if (!hasOpenedPptModal) {
+                        setIsPptModalOpen(true);
+                        setHasOpenedPptModal(true);
+                      }
+                    }}
+                    onFocus={() => {
+                      if (!hasOpenedPptModal) {
+                        setIsPptModalOpen(true);
+                        setHasOpenedPptModal(true);
+                      }
+                    }}
                     onChange={(e) => {
                       setPptLink(e.target.value);
                       if (errorMessage) setErrorMessage("");
                     }}
                     placeholder="https://drive.google.com/file/d/.../view?usp=sharing"
-                    className="w-full px-4 py-3 bg-slate-900/90 border border-blue-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-blue-400 font-mono"
+                    className="w-full px-4 py-3 bg-slate-900/90 border border-blue-500/30 rounded-xl text-sm text-white focus:outline-none focus:border-blue-400 font-mono transition-colors"
                   />
+
+                  {/* HELPER SUBTEXT BELOW FIELD */}
+                  <p className="text-[11px] font-mono text-slate-400 mt-1.5">
+                    Upload your PPT to Google Drive and share it as <strong className="text-sky-300">‘Anyone with the link – Viewer’</strong>.
+                  </p>
                 </div>
 
-                {/* WARRIOR REFERRAL CODE FIELD WITH (i) INFO BUTTON */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
-                      <Gift className="w-3.5 h-3.5 text-blue-400" />
-                      <span>Warrior Referral Code (Optional)</span>
-                    </label>
 
-                    {/* CIRCULAR (i) INFO BUTTON */}
-                    <button
-                      type="button"
-                      onClick={() => setShowReferralInfo(!showReferralInfo)}
-                      className="w-6 h-6 sm:w-auto sm:h-auto p-0 sm:px-2 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center justify-center gap-1 text-[11px] font-mono cursor-pointer"
-                      title="Why use a referral code?"
-                    >
-                      <Info className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="hidden sm:inline text-[10px] font-bold">Why refer?</span>
-                    </button>
-                  </div>
-
-                  {/* EXPANDABLE REFERRAL BENEFIT BRIEF */}
-                  {showReferralInfo && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mb-3 p-3.5 rounded-2xl bg-blue-950/80 border border-blue-400/40 text-xs font-mono text-blue-200 space-y-1.5 leading-relaxed shadow-lg"
-                    >
-                      <div className="font-bold text-white text-xs flex items-center gap-1.5">
-                        <Gift className="w-4 h-4 text-amber-400" />
-                        <span>Why enter a Warrior Referral Code?</span>
-                      </div>
-                      <p className="text-[11px] text-slate-200">
-                        • <strong>Fee Discount:</strong> Shortlisted teams using a valid Warrior Referral Code get an exclusive discount on their final registration fee upon selection.
-                      </p>
-                      <p className="text-[11px] text-slate-200">
-                        • <strong>Bonus Swag & Rewards:</strong> Gives your team higher eligibility for special innovation gifts, mentor support packs, and ambassador perks!
-                      </p>
-                    </motion.div>
-                  )}
-
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-                    <div className="relative flex-1 w-full">
-                      <input
-                        type="text"
-                        value={usedReferralCode}
-                        onChange={(e) => {
-                          const val = e.target.value.toUpperCase();
-                          setUsedReferralCode(val);
-                          if (!val.trim()) setReferralCheckState({ status: "idle" });
-                        }}
-                        placeholder="e.g. WARR-X8K9"
-                        className={`w-full px-4 py-3 bg-slate-900 border rounded-2xl text-sm font-mono text-white uppercase focus:outline-none transition-all ${
-                          referralCheckState.status === "valid"
-                            ? "border-emerald-400 bg-emerald-950/20 text-emerald-300 pr-11 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
-                            : referralCheckState.status === "invalid"
-                            ? "border-rose-500 bg-rose-950/20 text-rose-300"
-                            : "border-blue-500/30 focus:border-blue-400"
-                        }`}
-                      />
-                      {referralCheckState.status === "valid" && (
-                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-slate-950 shadow-[0_0_10px_rgba(52,211,153,0.8)]">
-                          <Check className="w-4 h-4 stroke-[3]" />
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => handleVerifyReferralCode(usedReferralCode)}
-                      disabled={referralCheckState.status === "checking"}
-                      className={`w-full sm:w-auto px-6 py-3 font-mono text-xs font-bold uppercase rounded-2xl flex items-center justify-center gap-2 border cursor-pointer shrink-0 transition-all active:scale-95 ${
-                        referralCheckState.status === "valid"
-                          ? "bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.4)]"
-                          : "bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white border-blue-400/40 shadow-[0_0_15px_rgba(59,130,246,0.4)]"
-                      }`}
-                    >
-                      {referralCheckState.status === "checking" ? (
-                        <Loader2 className="w-4 h-4 animate-spin text-white" />
-                      ) : referralCheckState.status === "valid" ? (
-                        <CheckCircle2 className="w-4 h-4 text-white" />
-                      ) : (
-                        <ShieldCheck className="w-4 h-4 text-white" />
-                      )}
-                      <span>{referralCheckState.status === "valid" ? "VERIFIED ✓" : "VERIFY"}</span>
-                    </button>
-                  </div>
-                  {referralCheckState.message && (
-                    <p className={`text-xs font-mono mt-1.5 flex items-center gap-1.5 ${referralCheckState.status === "valid" ? "text-emerald-400 font-bold" : "text-rose-400"}`}>
-                      {referralCheckState.status === "valid" && <Check className="w-4 h-4 text-emerald-400" />}
-                      <span>{referralCheckState.message}</span>
-                    </p>
-                  )}
-                </div>
 
                 {/* INLINE PROBLEM STATEMENT SELECTOR (NO POPUPS) */}
                 <div className="pt-4 border-t border-blue-500/20">
@@ -1191,6 +1029,18 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
           </div>
         )}
       </motion.div>
+
+      {/* PPT FORMAT & PUBLIC ACCESS MODAL */}
+      <PptFormatGuideModal
+        isOpen={isPptModalOpen}
+        onClose={() => setIsPptModalOpen(false)}
+        onContinue={() => {
+          setIsPptModalOpen(false);
+          setTimeout(() => {
+            pptInputRef.current?.focus();
+          }, 150);
+        }}
+      />
     </section>
   );
 }

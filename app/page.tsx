@@ -10,6 +10,7 @@ import { PrizesSection } from "@/components/PrizesSection";
 import { TimelineSection } from "@/components/TimelineSection";
 import { FAQSection } from "@/components/FAQSection";
 import { GuidelinesSection } from "@/components/GuidelinesSection";
+import { PartnersSection } from "@/components/PartnersSection";
 import { RegistrationPage } from "@/components/RegistrationPage";
 import { ReferralRoomPage } from "@/components/ReferralRoomPage";
 import { ReferralDashboardModal } from "@/components/ReferralDashboardModal";
@@ -221,7 +222,10 @@ export default function Home() {
           {/* 5. Prizes & Trophies */}
           <PrizesSection onOpenRegister={() => handleOpenRegisterWithTrack()} />
 
-          {/* 6. FAQ Section (Cinematic Editorial Accordion) */}
+          {/* 6. Partners & Sponsors */}
+          <PartnersSection />
+
+          {/* 7. FAQ Section (Cinematic Editorial Accordion) */}
           <FAQSection />
 
           {/* 7. Guidelines Section */}

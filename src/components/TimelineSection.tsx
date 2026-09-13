@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Clock, ChevronRight } from "lucide-react";
+import { ArrowLeft, Clock, ChevronRight, MousePointerClick } from "lucide-react";
 import { TIMELINE_DAYS } from "../data/timelineData";
 import type { DayItem, ActivityItem } from "../data/timelineData";
 
@@ -60,9 +60,9 @@ export function TimelineSection() {
     setSelectedActivity(null);
   };
 
-  // Radial positioning metrics with generous PC clearance spacing
-  const desktopRx = childCount > 6 ? 485 : 435;
-  const desktopRy = childCount > 6 ? 310 : 270;
+  // Radial positioning metrics with generous clearance spacing
+  const desktopRx = childCount > 6 ? 490 : 445;
+  const desktopRy = childCount > 6 ? 320 : 280;
 
   return (
     <section
@@ -93,21 +93,24 @@ export function TimelineSection() {
             />
           </motion.div>
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-xs sm:text-base text-slate-700 font-mono font-semibold max-w-2xl mx-auto"
+            className="flex items-center justify-center max-w-2xl mx-auto pt-1"
           >
             {selectedDay ? (
-              <span className="flex items-center justify-center gap-2 text-blue-700 font-bold">
-                <span>{selectedDay.dayId}</span> • <span>{selectedDay.subtitle}</span>
-              </span>
+              <div className="inline-flex items-center gap-2 bg-blue-100 border border-blue-300 text-blue-800 px-4 py-1.5 rounded-full text-xs font-mono font-bold shadow-sm">
+                <span className="font-extrabold">{selectedDay.dayId}</span> • <span>Click an event time to see schedule details</span>
+              </div>
             ) : (
-              "3 Days • 48-Hour Hackathon Journey"
+              <div className="inline-flex items-center gap-2 bg-blue-600 text-white border border-blue-400 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-mono font-bold shadow-md animate-pulse">
+                <MousePointerClick className="w-4 h-4 text-white shrink-0" />
+                <span>Click the Day buttons to see schedule</span>
+              </div>
             )}
-          </motion.p>
+          </motion.div>
         </div>
 
         {/* ------------------------------------------------------------------ */}
@@ -204,15 +207,19 @@ export function TimelineSection() {
                     <button
                       type="button"
                       onClick={() => handleSelectDay(dayData)}
-                      className="w-72 rounded-3xl p-6 text-left transition-all duration-300 cursor-pointer backdrop-blur-2xl border bg-white/90 border-blue-200/90 shadow-[0_10px_35px_rgba(59,130,246,0.1)] hover:bg-white hover:border-blue-400 hover:shadow-[0_20px_45px_rgba(59,130,246,0.2)] hover:scale-105"
+                      className="w-72 rounded-3xl p-6 text-left transition-all duration-300 cursor-pointer backdrop-blur-2xl border bg-white/90 border-blue-200/90 shadow-[0_10px_35px_rgba(59,130,246,0.1)] hover:bg-white hover:border-blue-400 hover:shadow-[0_20px_45px_rgba(59,130,246,0.2)] hover:scale-105 group"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-mono font-black text-blue-600 uppercase tracking-widest">
                           {dayData.dayId}
                         </span>
-                        <div className="flex items-center text-blue-600 font-mono text-[11px] font-bold group-hover:translate-x-1 transition-transform">
-                          <ChevronRight className="w-5 h-5 text-blue-600 animate-pulse" />
-                        </div>
+                        <motion.div
+                          animate={{ opacity: [0.2, 1, 0.2], x: [0, 4, 0] }}
+                          transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                          className="flex items-center text-blue-600 font-mono text-[11px] font-bold"
+                        >
+                          <ChevronRight className="w-5 h-5 text-blue-600 stroke-[2.5]" />
+                        </motion.div>
                       </div>
                       <h4 className="text-base font-bold text-slate-950 font-heading leading-snug">
                         {dayData.subtitle}
@@ -351,12 +358,12 @@ export function TimelineSection() {
         {/* ------------------------------------------------------------------ */}
         {/* MOBILE PRESENTATION MODE (< 1024px): RADIAL SMALL CIRCLES RING IN SDG LIGHT THEME */}
         {/* ------------------------------------------------------------------ */}
-        <div className="flex lg:hidden flex-col items-center justify-center w-full min-h-[460px] relative py-4">
+        <div className="flex lg:hidden flex-col items-center justify-center w-full min-h-[480px] relative py-4">
           
-          <div className="relative w-[330px] h-[330px] sm:w-[370px] sm:h-[370px] flex items-center justify-center">
+          <div className="relative w-[340px] h-[340px] sm:w-[400px] sm:h-[400px] flex items-center justify-center">
 
             {/* MOBILE MAIN CENTER HUB DISC (HIGHER Z-INDEX z-40 + PURE GLASSMORPHISM WITHOUT SOLID BACKGROUND) */}
-            <div className="w-[180px] h-[180px] sm:w-[210px] sm:h-[210px] rounded-full bg-slate-950/40 backdrop-blur-2xl border-4 border-blue-500/80 shadow-[0_12px_40px_rgba(59,130,246,0.3)] flex flex-col items-center justify-center p-3.5 text-center z-40 relative overflow-hidden text-white">
+            <div className="w-[160px] h-[160px] sm:w-[190px] sm:h-[190px] rounded-full bg-slate-950/40 backdrop-blur-2xl border-4 border-blue-500/80 shadow-[0_12px_40px_rgba(59,130,246,0.3)] flex flex-col items-center justify-center p-3 text-center z-40 relative overflow-hidden text-white">
               <AnimatePresence mode="wait">
                 {selectedActivity ? (
                   <motion.div
@@ -365,20 +372,20 @@ export function TimelineSection() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.92 }}
                     transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center justify-center max-w-[155px] sm:max-w-[180px] space-y-1 relative z-10"
+                    className="flex flex-col items-center justify-center max-w-[140px] sm:max-w-[165px] space-y-1 relative z-10"
                   >
                     <span className="text-blue-300 font-mono text-[8px] sm:text-[9px] font-bold flex items-center gap-1">
                       <Clock className="w-2.5 h-2.5 text-blue-400" />
                       <span>{selectedActivity.time}</span>
                     </span>
 
-                    <h3 className="text-[11px] sm:text-xs font-black font-heading text-white uppercase leading-tight drop-shadow-md">
+                    <h3 className="text-[10.5px] sm:text-xs font-black font-heading text-white uppercase leading-tight drop-shadow-md">
                       {selectedActivity.title}
                     </h3>
 
                     <div className="w-8 h-[1px] bg-blue-400/60 my-0.5" />
 
-                    <p className="text-[9px] sm:text-[10px] text-slate-200 font-sans leading-tight font-normal max-w-[155px] sm:max-w-[180px] line-clamp-3">
+                    <p className="text-[8.5px] sm:text-[9.5px] text-slate-200 font-sans leading-tight font-normal max-w-[140px] sm:max-w-[165px] line-clamp-3">
                       {selectedActivity.description}
                     </p>
                   </motion.div>
@@ -389,13 +396,13 @@ export function TimelineSection() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.92 }}
                     transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center justify-center max-w-[150px] sm:max-w-[170px] space-y-1 relative z-10"
+                    className="flex flex-col items-center justify-center max-w-[140px] sm:max-w-[165px] space-y-1 relative z-10"
                   >
                     <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-blue-400 tracking-wider uppercase">
                       {selectedDay.kicker}
                     </span>
 
-                    <h3 className="text-xl sm:text-2xl font-black font-heading text-white">
+                    <h3 className="text-lg sm:text-xl font-black font-heading text-white">
                       {selectedDay.dayId}
                     </h3>
 
@@ -410,13 +417,13 @@ export function TimelineSection() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.92 }}
                     transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center justify-center max-w-[150px] sm:max-w-[170px] space-y-1 relative z-10"
+                    className="flex flex-col items-center justify-center max-w-[140px] sm:max-w-[165px] space-y-1 relative z-10"
                   >
                     <span className="text-[8px] sm:text-[9px] font-mono font-extrabold text-blue-400 tracking-wider uppercase">
                       YODHA 2.0
                     </span>
 
-                    <h3 className="text-sm sm:text-base font-black font-heading text-white">
+                    <h3 className="text-xs sm:text-sm font-black font-heading text-white">
                       THE JOURNEY
                     </h3>
 
@@ -432,7 +439,7 @@ export function TimelineSection() {
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10">
               {activeChildren.map((item, idx) => {
                 const mobAngle = (2 * Math.PI * idx) / childCount - Math.PI / 2;
-                const mobRadius = childCount > 6 ? 145 : 130;
+                const mobRadius = childCount > 6 ? 145 : 138;
                 const posX = Math.cos(mobAngle) * mobRadius;
                 const posY = Math.sin(mobAngle) * mobRadius;
 
@@ -473,7 +480,13 @@ export function TimelineSection() {
                         className="px-3.5 py-2 rounded-full bg-white/95 border-2 border-blue-500 text-blue-700 font-mono text-[11px] sm:text-xs font-black uppercase flex items-center justify-center gap-1 whitespace-nowrap shadow-[0_6px_20px_rgba(59,130,246,0.25)] hover:scale-110 active:scale-95 cursor-pointer relative"
                       >
                         <span>DAY {dayData.id}</span>
-                        <ChevronRight className="w-4 h-4 text-blue-600 animate-pulse shrink-0" />
+                        <motion.div
+                          animate={{ opacity: [0.2, 1, 0.2], x: [0, 3, 0] }}
+                          transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                          className="flex items-center shrink-0"
+                        >
+                          <ChevronRight className="w-4 h-4 text-blue-600 stroke-[2.5]" />
+                        </motion.div>
                       </button>
                     </motion.div>
                   );

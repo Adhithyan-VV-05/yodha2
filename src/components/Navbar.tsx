@@ -11,6 +11,7 @@ import {
   Trophy,
   HelpCircle,
   FileText,
+  Handshake,
 } from "lucide-react";
 import logo from "../assets/logo.webp";
 
@@ -53,6 +54,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
     { name: "PROBLEMS", href: "#tracks", icon: Lightbulb },
     { name: "JOURNEY", href: "#timeline", icon: Route },
     { name: "PRIZES", href: "#prizes", icon: Trophy },
+    { name: "PARTNERS", href: "#partners", icon: Handshake },
     { name: "FAQ", href: "#faq", icon: HelpCircle },
     { name: "GUIDELINES", href: "#guidelines", icon: FileText },
   ];
