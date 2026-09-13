@@ -273,6 +273,39 @@ export function ReferralRoomPage({ onBack, referralCode }: ReferralRoomPageProps
               </div>
             )}
           </div>
+
+          {/* REFERRAL GIFT RULES SECTION */}
+          <div className="w-full bg-slate-50/5 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-slate-300 text-sm sm:text-base font-sans leading-relaxed space-y-5 mt-8 backdrop-blur-sm">
+            <h3 className="text-xl sm:text-2xl font-black text-white uppercase border-b-2 border-slate-700/50 pb-3 mb-6 flex items-center gap-2">
+              <span className="text-amber-400">🎁</span> Referral Gift Rules
+            </h3>
+            <ol className="list-decimal pl-5 space-y-4 font-medium">
+              <li>Each team receives a unique referral code.</li>
+              <li>Other participants can register for the hackathon using a team's referral code.</li>
+              <li>The team with the highest number of valid referrals is eligible to receive the referral gift.</li>
+              <li>Only shortlisted teams are eligible for the gift.</li>
+              <li>If a non-shortlisted team has the highest referral count, they will not be eligible for the gift. The gift will instead go to the highest-referring shortlisted team.</li>
+              <li>Fake, duplicate, spam, or otherwise invalid registrations will not be counted toward a team's referral total.</li>
+              <li>The organizers reserve the right to verify referral registrations before declaring the winner.</li>
+            </ol>
+
+            <div className="mt-8 bg-slate-900/50 border border-slate-700 p-6 rounded-2xl shadow-inner">
+              <h4 className="font-bold text-white uppercase mb-4 text-lg flex items-center gap-2">
+                <span className="text-blue-400">ℹ️</span> Example
+              </h4>
+              <ul className="space-y-3 font-mono text-sm bg-slate-950 p-4 rounded-xl border border-slate-800 text-slate-300">
+                <li><span className="font-bold text-white">Team A</span> — 50 valid referrals — shortlisted ✅</li>
+                <li><span className="font-bold text-white">Team B</span> — 70 valid referrals — not shortlisted ❌</li>
+              </ul>
+              <p className="mt-4 font-black text-emerald-400 bg-emerald-950/30 px-4 py-3 rounded-lg border border-emerald-500/30 inline-block">
+                Winner: Team A, because Team B is not shortlisted.
+              </p>
+            </div>
+
+            <p className="mt-8 pt-6 border-t border-slate-700/50 text-center font-bold text-slate-200 text-lg">
+              Each team gets a unique referral code. Participants can share their code to bring new registrations to the hackathon. The shortlisted team with the highest number of valid referrals will receive a special gift.
+            </p>
+          </div>
         </motion.div>
       </main>
 
