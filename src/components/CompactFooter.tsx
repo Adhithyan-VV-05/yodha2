@@ -172,21 +172,7 @@ export function CompactFooter({ onOpenRegister }: CompactFooterProps) {
 
       </div>
 
-      {/* PARTNERS SECTION */}
-      <div className="max-w-6xl mx-auto mt-8 sm:mt-12 flex flex-col items-center gap-3">
-        <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 tracking-[0.25em] uppercase">
-          Our Partners
-        </span>
-        <div className="flex flex-wrap justify-center items-center gap-x-4 sm:gap-x-6 gap-y-2 text-xs sm:text-sm font-mono text-slate-400 font-medium">
-          <span className="hover:text-blue-400 transition-colors cursor-default">Spin Theory</span>
-          <span className="text-slate-700">•</span>
-          <span className="hover:text-blue-400 transition-colors cursor-default">CSI</span>
-          <span className="text-slate-700">•</span>
-          <span className="hover:text-blue-400 transition-colors cursor-default">ISTE</span>
-          <span className="text-slate-700">•</span>
-          <span className="hover:text-blue-400 transition-colors cursor-default">Mulearn JEC</span>
-        </div>
-      </div>
+
 
       {/* MINIMAL BOTTOM COPYRIGHT LINE */}
       <div className="max-w-6xl mx-auto mt-6 sm:mt-8 pt-4 border-t border-slate-900/80 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500 gap-1 text-center sm:text-left">

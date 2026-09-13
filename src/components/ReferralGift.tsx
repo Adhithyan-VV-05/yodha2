@@ -6,7 +6,6 @@ import { X, Trophy, Info } from "lucide-react";
 
 export function ReferralGift() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSupernova, setIsSupernova] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -53,15 +52,18 @@ export function ReferralGift() {
   }, [isOpen]);
 
   const handleOpen = () => {
-    if (isOpen || isSupernova) return;
-    setIsSupernova(true);
-    setTimeout(() => {
-      setIsSupernova(false);
-      setIsOpen(true);
-    }, 2000);
+    if (isOpen) return;
+    setIsOpen(true);
   };
 
   const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleRegister = () => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    window.history.pushState({ activePage: "register" }, "");
+    window.dispatchEvent(new PopStateEvent("popstate", { state: { activePage: "register" } }));
     setIsOpen(false);
   };
 
@@ -81,33 +83,14 @@ export function ReferralGift() {
             whileHover={{ scale: 1.12 }}
           >
             <motion.div
-              animate={
-                isSupernova
-                  ? {
-                      x: [-5, 5, -5, 5, -5, 5, 20, 50, 80],
-                      y: [-5, 5, -5, 5, -5, 5, 20, 50, 80],
-                      scale: [1, 1.1, 0.9, 1.1, 0.8, 0.5, 0.2, 0],
-                      filter: [
-                        "brightness(1)",
-                        "brightness(1.5)",
-                        "brightness(2) drop-shadow(0 0 20px #fff)",
-                        "brightness(3) drop-shadow(0 0 50px #fff)",
-                      ],
-                      opacity: [1, 1, 1, 1, 1, 0.8, 0.5, 0],
-                    }
-                : {
-                    rotate: [-5, 5, -5, 5, 0],
-                    y: [0, -6, 0],
-                  }
-            }
-            transition={
-              isSupernova
-                ? { duration: 2, ease: "easeInOut" }
-                : {
-                    rotate: { repeat: Infinity, duration: 0.45, repeatDelay: 2.5 },
-                    y: { repeat: Infinity, duration: 2.2, ease: "easeInOut" },
-                  }
-            }
+            animate={{
+              rotate: [-5, 5, -5, 5, 0],
+              y: [0, -6, 0],
+            }}
+            transition={{
+              rotate: { repeat: Infinity, duration: 0.45, repeatDelay: 2.5 },
+              y: { repeat: Infinity, duration: 2.2, ease: "easeInOut" },
+            }}
             style={{ position: "relative" }}
           >
             {/* Blue glow halo */}
@@ -145,14 +128,14 @@ export function ReferralGift() {
             animate={{ opacity: 1, clipPath: "circle(150% at 95% 95%)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 95% 95%)" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ position: "fixed", inset: 0, zIndex: 99999, background: "white", overflowY: "auto" }}
-            className="flex flex-col items-center py-12 px-4 sm:px-8 text-slate-900"
+            style={{ position: "fixed", inset: 0, zIndex: 99999, background: "#03060d", overflowY: "auto" }}
+            className="flex flex-col items-center py-12 px-4 sm:px-8 text-white selection:bg-blue-600 selection:text-white"
           >
             {/* CLOSE BUTTON */}
             <button
               onClick={handleClose}
               style={{ position: "absolute", top: 24, right: 24, zIndex: 100000 }}
-              className="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-900 transition-colors shadow-lg cursor-pointer"
+              className="w-12 h-12 bg-slate-900 border border-slate-800 hover:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 transition-colors shadow-lg cursor-pointer"
             >
               <X className="w-6 h-6 stroke-[3]" />
             </button>
@@ -176,10 +159,10 @@ export function ReferralGift() {
                     position: "absolute",
                     left: `${10 + i * 15}%`,
                     top: "-20%",
-                    opacity: 0.08,
+                    opacity: 0.04,
                   }}
                 >
-                  <Trophy className="w-28 h-28 text-amber-500" />
+                  <Trophy className="w-28 h-28 text-blue-500" />
                 </motion.div>
               ))}
               {["GIFTS", "REWARDS", "WIN", "REFER", "PRIZES", "GIFTS", "SHARE", "WIN"].map((word, i) => (
@@ -196,10 +179,10 @@ export function ReferralGift() {
                     position: "absolute",
                     left: `${5 + i * 12}%`,
                     bottom: "-20%",
-                    opacity: 0.04,
+                    opacity: 0.02,
                     fontSize: "3rem",
                     fontWeight: 900,
-                    color: "#92400e",
+                    color: "#3b82f6",
                     letterSpacing: "0.15em",
                     textTransform: "uppercase",
                   }}
@@ -212,21 +195,21 @@ export function ReferralGift() {
             {/* MODAL CONTENT */}
             <div className="relative max-w-3xl w-full mt-4 flex flex-col items-center" style={{ zIndex: 10 }}>
               <div className="flex items-center gap-3 mb-6">
-                <h2 className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-tight text-center uppercase">
+                <h2 className="text-4xl sm:text-5xl font-black font-heading text-white tracking-tight text-center uppercase drop-shadow-md">
                   Referral Rewards
                 </h2>
               </div>
 
-              <div className="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 text-amber-900 px-6 py-4 rounded-2xl shadow-xl mb-10 text-center font-bold font-sans w-full">
-                <span className="text-lg sm:text-xl block">You are going to get super cool rewards! 🎁</span>
-                <span className="text-sm opacity-80 mt-1 block">Keep referring and unlock massive surprises.</span>
+              <div className="bg-gradient-to-r from-blue-900/40 to-indigo-900/40 border border-blue-500/30 text-blue-100 px-6 py-4 rounded-2xl shadow-[0_0_30px_rgba(59,130,246,0.15)] backdrop-blur-md mb-10 text-center font-bold font-sans w-full">
+                <span className="text-lg sm:text-xl block text-white drop-shadow">You are going to get super cool rewards! 🎁</span>
+                <span className="text-sm text-blue-300 mt-1 block">Keep referring and unlock massive surprises.</span>
               </div>
 
-              <div className="w-full bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-2xl text-slate-700 text-sm sm:text-base font-sans leading-relaxed space-y-5">
-                <h3 className="text-2xl font-black text-slate-900 uppercase border-b-2 border-slate-200 pb-3 mb-6 flex items-center gap-2">
-                  <Trophy className="w-6 h-6 text-amber-500" /> Referral Gift Rules
+              <div className="w-full bg-[#060c1d] border border-blue-500/20 rounded-3xl p-6 sm:p-10 shadow-2xl text-slate-300 text-sm sm:text-base font-sans leading-relaxed space-y-5">
+                <h3 className="text-2xl font-black text-white uppercase border-b-2 border-slate-800 pb-3 mb-6 flex items-center gap-2">
+                  <Trophy className="w-6 h-6 text-amber-400" /> Referral Gift Rules
                 </h3>
-                <ol className="list-decimal pl-5 space-y-4 font-medium">
+                <ol className="list-decimal pl-5 space-y-4 font-medium text-slate-300">
                   <li>Each team receives a unique referral code.</li>
                   <li>Other participants can register for the hackathon using a team's referral code.</li>
                   <li>The team with the highest number of valid referrals is eligible to receive the referral gift.</li>
@@ -236,22 +219,30 @@ export function ReferralGift() {
                   <li>The organizers reserve the right to verify referral registrations before declaring the winner.</li>
                 </ol>
 
-                <div className="mt-8 bg-white border border-slate-200 p-6 rounded-2xl shadow-inner">
-                  <h4 className="font-bold text-slate-900 uppercase mb-4 text-lg flex items-center gap-2">
-                    <Info className="w-5 h-5 text-blue-500" /> Example
+                <div className="mt-8 bg-[#0a1226] border border-slate-800 p-6 rounded-2xl shadow-inner">
+                  <h4 className="font-bold text-white uppercase mb-4 text-lg flex items-center gap-2">
+                    <Info className="w-5 h-5 text-blue-400" /> Example
                   </h4>
-                  <ul className="space-y-3 font-mono text-sm bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <li><span className="font-bold text-slate-900">Team A</span> — 50 valid referrals — shortlisted ✅</li>
-                    <li><span className="font-bold text-slate-900">Team B</span> — 70 valid referrals — not shortlisted ❌</li>
+                  <ul className="space-y-3 font-mono text-sm bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                    <li><span className="font-bold text-blue-400">Team A</span> — 50 valid referrals — shortlisted ✅</li>
+                    <li><span className="font-bold text-slate-400">Team B</span> — 70 valid referrals — not shortlisted ❌</li>
                   </ul>
-                  <p className="mt-4 font-black text-emerald-600 bg-emerald-50 px-4 py-3 rounded-lg border border-emerald-200 inline-block">
+                  <p className="mt-4 font-black text-emerald-400 bg-emerald-950/40 px-4 py-3 rounded-lg border border-emerald-900/60 inline-block">
                     Winner: Team A, because Team B is not shortlisted.
                   </p>
                 </div>
 
-                <p className="mt-8 pt-6 border-t border-slate-200 text-center font-bold text-slate-800 text-lg">
-                  Each team gets a unique referral code. Participants can share their code to bring new registrations to the hackathon. The shortlisted team with the highest number of valid referrals will receive a special gift.
-                </p>
+                <div className="mt-8 pt-8 border-t border-slate-800 text-center flex flex-col items-center">
+                  <p className="font-bold text-slate-300 text-base mb-6">
+                    In order to refer your friends and earn rewards, you must first register your team to receive your unique referral code.
+                  </p>
+                  <button
+                    onClick={handleRegister}
+                    className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-mono text-sm font-black tracking-widest uppercase transition-all shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_50px_rgba(59,130,246,0.6)] hover:scale-105 active:scale-95 cursor-pointer"
+                  >
+                    REGISTER NOW TO GET REFERRAL LINK
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
