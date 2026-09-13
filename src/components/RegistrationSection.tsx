@@ -681,7 +681,100 @@ export function RegistrationSection({ selectedTrack = "Healthcare AI", onOpenRef
                   </p>
                 </div>
 
+                {/* WARRIOR REFERRAL CODE FIELD WITH (i) INFO BUTTON */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
+                      <Gift className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Warrior Referral Code (Optional)</span>
+                    </label>
 
+                    {/* CIRCULAR (i) INFO BUTTON */}
+                    <button
+                      type="button"
+                      onClick={() => setShowReferralInfo(!showReferralInfo)}
+                      className="w-6 h-6 sm:w-auto sm:h-auto p-0 sm:px-2 rounded-full bg-blue-950 border border-blue-500/40 text-blue-400 hover:text-white hover:border-blue-400 transition-all flex items-center justify-center gap-1 text-[11px] font-mono cursor-pointer"
+                      title="Why use a referral code?"
+                    >
+                      <Info className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="hidden sm:inline text-[10px] font-bold">Why refer?</span>
+                    </button>
+                  </div>
+
+                  {/* EXPANDABLE REFERRAL BENEFIT BRIEF */}
+                  {showReferralInfo && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mb-3 p-3.5 rounded-2xl bg-blue-950/80 border border-blue-400/40 text-xs font-mono text-blue-200 space-y-1.5 leading-relaxed shadow-lg"
+                    >
+                      <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                        <Gift className="w-4 h-4 text-amber-400" />
+                        <span>Why enter a Warrior Referral Code?</span>
+                      </div>
+                      <p className="text-[11px] text-slate-200">
+                        • <strong>Fee Discount:</strong> Shortlisted teams using a valid Warrior Referral Code get an exclusive discount on their final registration fee upon selection.
+                      </p>
+                      <p className="text-[11px] text-slate-200">
+                        • <strong>Bonus Swag & Rewards:</strong> Gives your team higher eligibility for special innovation gifts, mentor support packs, and ambassador perks!
+                      </p>
+                    </motion.div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                    <div className="relative flex-1 w-full">
+                      <input
+                        type="text"
+                        value={usedReferralCode}
+                        onChange={(e) => {
+                          const val = e.target.value.toUpperCase();
+                          setUsedReferralCode(val);
+                          if (!val.trim()) setReferralCheckState({ status: "idle" });
+                        }}
+                        placeholder="e.g. WARR-X8K9"
+                        className={`w-full px-4 py-3 bg-slate-900 border rounded-2xl text-sm font-mono text-white uppercase focus:outline-none transition-all ${
+                          referralCheckState.status === "valid"
+                            ? "border-emerald-400 bg-emerald-950/20 text-emerald-300 pr-11 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
+                            : referralCheckState.status === "invalid"
+                            ? "border-rose-500 bg-rose-950/20 text-rose-300"
+                            : "border-blue-500/30 focus:border-blue-400"
+                        }`}
+                      />
+                      {referralCheckState.status === "valid" && (
+                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-slate-950 shadow-[0_0_10px_rgba(52,211,153,0.8)]">
+                          <Check className="w-4 h-4 stroke-[3]" />
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleVerifyReferralCode(usedReferralCode)}
+                      disabled={referralCheckState.status === "checking"}
+                      className={`w-full sm:w-auto px-6 py-3 font-mono text-xs font-bold uppercase rounded-2xl flex items-center justify-center gap-2 border cursor-pointer shrink-0 transition-all active:scale-95 ${
+                        referralCheckState.status === "valid"
+                          ? "bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.4)]"
+                          : "bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white border-blue-400/40 shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+                      }`}
+                    >
+                      {referralCheckState.status === "checking" ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      ) : referralCheckState.status === "valid" ? (
+                        <CheckCircle2 className="w-4 h-4 text-white" />
+                      ) : (
+                        <ShieldCheck className="w-4 h-4 text-white" />
+                      )}
+                      <span>{referralCheckState.status === "valid" ? "VERIFIED ✓" : "VERIFY"}</span>
+                    </button>
+                  </div>
+                  {referralCheckState.message && (
+                    <p className={`text-xs font-mono mt-1.5 flex items-center gap-1.5 ${referralCheckState.status === "valid" ? "text-emerald-400 font-bold" : "text-rose-400"}`}>
+                      {referralCheckState.status === "valid" && <Check className="w-4 h-4 text-emerald-400" />}
+                      <span>{referralCheckState.message}</span>
+                    </p>
+                  )}
+                </div>
 
                 {/* INLINE PROBLEM STATEMENT SELECTOR (NO POPUPS) */}
                 <div className="pt-4 border-t border-blue-500/20">
