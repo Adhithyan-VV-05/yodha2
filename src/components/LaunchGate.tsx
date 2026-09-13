@@ -15,7 +15,7 @@ export function LaunchGate({ onLaunch }: LaunchGateProps) {
 
   useEffect(() => {
     let isMounted = true;
-    const TRAILER_FILE = "/final trailer.MP4";
+    const TRAILER_FILE = "/trailer.MP4";
     const CACHE_KEY = "yodha_final_trailer_v1";
 
     const initPreload = async () => {
@@ -62,7 +62,7 @@ export function LaunchGate({ onLaunch }: LaunchGateProps) {
   }, []);
 
   const handleClick = () => {
-    const targetUrl = videoBlobUrl || "/final trailer.MP4";
+    const targetUrl = videoBlobUrl || "/trailer.MP4";
     onLaunch(targetUrl);
   };
 

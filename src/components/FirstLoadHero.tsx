@@ -28,7 +28,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
 
   useEffect(() => {
     let isMounted = true;
-    const TRAILER_FILE = "/final trailer.MP4";
+    const TRAILER_FILE = "/trailer.MP4";
     const CACHE_KEY = "yodha_final_trailer_v1";
 
     const initPreload = async () => {
@@ -79,7 +79,7 @@ export function FirstLoadHero({ onOpenRegister: _, onOpenTrailer }: FirstLoadHer
   }, []);
 
   const handleTrailerClick = () => {
-    const targetUrl = videoBlobUrl || "/final trailer.MP4";
+    const targetUrl = videoBlobUrl || "/trailer.MP4";
     if (onOpenTrailer) {
       onOpenTrailer(targetUrl);
     }
